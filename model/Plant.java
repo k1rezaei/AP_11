@@ -10,18 +10,18 @@ public class Plant extends Entity {
         this.type = "Plant";
     }
 
-    boolean turn(){
+    void turn(){
         if(inUse){
             timer --;
             if(timer == 0){
                 inUse = false;
-                return true;
+                destory();
             }
         }
-        return false;
     }
 
     void startTimer(){
+        if(inUse) return;
         timer = 5;
     }
 }
