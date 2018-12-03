@@ -35,7 +35,7 @@ public abstract class Entity {
         this.cell = cell;
     }
 
-    abstract protected void turn();
+    abstract void turn();
 
 
     void destroy() {
@@ -44,4 +44,11 @@ public abstract class Entity {
 
     //TODO getNewEntity
 
+    Entity getNewEntity(String type) {
+        if(type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
+            return new FarmAnimal(type);
+        else if(type.equals("Lion") || type.equals("Beer")))
+            return new WildAnimal(type);
+        return new Item(type);
+    }
 }

@@ -105,14 +105,19 @@ public class Item extends Entity {
         }
     }
 
+    Item(String type, Cell cell) {
+        this(type);
+        this.cell = cell;
+    }
+
     private void fix(int size, int buyCost, int sellCost) {
         this.size = size;
         this.sellPrice = sellCost;
         this.buyPrice = buyCost;
     }
 
-    Item(String type, Cell cell) {
-        this(type);
-        this.cell = cell;
+    @Override
+    void turn() {
+        return ;
     }
 }
