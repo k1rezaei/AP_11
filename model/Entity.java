@@ -1,5 +1,5 @@
-public class Entity {
-    private Cell cell;
+public abstract class Entity {
+    protected Cell cell;
     protected int sellPrice, buyPrice;
     protected String type;
 
@@ -26,18 +26,22 @@ public class Entity {
     Entity() {
     }
 
-    Entity (String tyoe) {
+    Entity (String type) {
         this.type = type;
     }
 
-    Entity (String name, Cell cell) {
+    Entity (String type, Cell cell) {
         this.type = type;
         this.cell = cell;
     }
 
+    abstract protected void turn();
 
+
+    void destroy() {
+        cell = null;
+    }
 
     //TODO getNewEntity
-
 
 }
