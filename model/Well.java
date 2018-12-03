@@ -9,10 +9,10 @@ public class Well implements Upgradable{
         currentAmount = 5;
     }
 
-    int getCurrentAmount(){ return currentAmount; }
-    int getFillCost(){ return fillCost; }
-    int getUpgradeCost(){ return 500*level; }
-    int getCapacity(){ return 5*level; }
+    public int getCurrentAmount(){ return currentAmount; }
+    public int getFillCost(){ return fillCost; }
+    public int getUpgradeCost(){ return 500*level; }
+    public int getCapacity(){ return 5*level; }
 
     public boolean isItEmpty(){
         return currentAmount == 0;
