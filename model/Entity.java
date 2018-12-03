@@ -47,7 +47,7 @@ public abstract class Entity {
     Entity getNewEntity(String type) {
         if(type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
             return new FarmAnimal(type);
-        else if(type.equals("Lion") || type.equals("Beer")))
+        else if(type.equals("Lion") || type.equals("Beer"))
             return new WildAnimal(type);
         return new Item(type);
     }
