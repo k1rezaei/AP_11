@@ -1,7 +1,7 @@
 public class Entity {
     private Cell cell;
     protected int sellPrice, buyPrice;
-    private String type;
+    protected String type;
 
     public Cell getCell() {
         return cell;
