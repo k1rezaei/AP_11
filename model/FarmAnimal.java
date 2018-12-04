@@ -1,42 +1,57 @@
-public class FarmAnimal extends Animal{
+public class FarmAnimal extends Animal {
     private String produceType;
     private int rateOfHunger;
     static private int RATE_OF_HUNGER = 100;
-    FarmAnimal(String type){
+    int baseRemainTime;
+    int remainTime;
+
+    FarmAnimal(String type) {
         super(type);
         rateOfHunger = RATE_OF_HUNGER;
-        if(type.equalsIgnoreCase("cow")){
-            buyPrice = 1000;
+        if (type.equalsIgnoreCase("cow")) {
+            buyPrice = 10000;
+            remainTime = baseRemainTime = 100;
             produceType = "Milk";
-        }else if(type.equalsIgnoreCase("chicken")){
+        } else if (type.equalsIgnoreCase("chicken")) {
             buyPrice = 400;
+            remainTime = baseRemainTime = 20;
             produceType = "Egg";
-        }else{
+        } else {
             buyPrice = 1500;
+            remainTime = baseRemainTime = 50;
             produceType = "Wool";
         }
     }
-    FarmAnimal(String type, Cell cell){
+
+    FarmAnimal(String type, Cell cell) {
         this(type);
         this.cell = cell;
     }
 
-    void turn(){
-        rateOfHunger --;
-        if(rateOfHunger == 0){
+
+    Item turn() {
+        rateOfHunger--;
+        if (rateOfHunger == 0) {
             destroy();
-            return;
+            return null;
         }
         move();
+        remainTime--;
+        if (remainTime == 0) {
+            remainTime = baseRemainTime;
+            return produce();
+        }
+        return null;
     }
-    void collide(Entity entity){
-        if(entity instanceof Plant){
-            ((Plant)(entity)).startTimer();
-            rateOfHunger = RATE_OF_HUNGER;
 
+    void collide(Entity entity) {
+        if (entity instanceof Plant) {
+            ((Plant) (entity)).startTimer();
+            rateOfHunger = RATE_OF_HUNGER;
         }
     }
-    Item produce(){
+
+    Item produce() {
         return new Item(produceType);
     }
 }
