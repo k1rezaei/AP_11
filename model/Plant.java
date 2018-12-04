@@ -15,7 +15,8 @@ public class Plant extends Entity {
             timer --;
             if(timer == 0){
                 inUse = false;
-                destory();
+                destroy();
+
             }
         }
     }
@@ -25,3 +26,4 @@ public class Plant extends Entity {
         timer = 5;
     }
 }
+
