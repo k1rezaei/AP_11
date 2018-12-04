@@ -1,5 +1,12 @@
 
 public class WildAnimal extends Animal {
+
+    private int size = 0;
+
+    int getSize() {
+        return size;
+    }
+
     void collide(Entity entity) {
         if(entity instanceof FarmAnimal) {
             entity.destroy();
