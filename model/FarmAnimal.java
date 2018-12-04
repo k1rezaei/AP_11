@@ -29,19 +29,16 @@ public class FarmAnimal extends Animal {
     }
 
 
-    Item turn() {
+    void turn() {
         rateOfHunger--;
         if (rateOfHunger == 0) {
             destroy();
-            return null;
         }
         move();
-        remainTime--;
         if (remainTime == 0) {
             remainTime = baseRemainTime;
-            return produce();
         }
-        return null;
+        remainTime--;
     }
 
     void collide(Entity entity) {
@@ -52,7 +49,8 @@ public class FarmAnimal extends Animal {
     }
 
     Item produce() {
-        return new Item(produceType);
+        if(remainTime == 0) return new Item(produceType);
+        return null;
     }
 }
 
