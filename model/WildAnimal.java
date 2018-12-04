@@ -9,7 +9,7 @@ public class WildAnimal extends Animal {
 
     WildAnimal(String type) {
         super(type);
-        if(type.equalsIgnoreCase("beer")) {
+        if(type.equalsIgnoreCase("bear")) {
             sellPrice = 2000;
         }else if(type.equalsIgnoreCase("lion")){
             sellPrice = 3000;

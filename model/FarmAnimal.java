@@ -1,10 +1,10 @@
 public class FarmAnimal extends Animal{
     private String produceType;
     private int rateOfHunger;
-    static private int RATEOFHUNGER = 100;
+    static private int RATE_OF_HUNGER = 100;
     FarmAnimal(String type){
         super(type);
-        rateOfHunger = RATEOFHUNGER;
+        rateOfHunger = RATE_OF_HUNGER;
         if(type.equalsIgnoreCase("cow")){
             buyPrice = 1000;
             produceType = "Milk";
@@ -32,7 +32,7 @@ public class FarmAnimal extends Animal{
     void collide(Entity entity){
         if(entity instanceof Plant){
             ((Plant)(entity)).startTimer();
-            rateOfHunger = RATEOFHUNGER;
+            rateOfHunger = RATE_OF_HUNGER;
         }
     }
     Item produce(){
