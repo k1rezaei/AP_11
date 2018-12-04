@@ -1,5 +1,3 @@
-import javax.swing.text.html.parser.Entity;
-
 abstract public class Animal extends Entity {
     static private int[] dx = {+1,0,-1,0};
     static private int[] dy = {0,+1,0,-1};
