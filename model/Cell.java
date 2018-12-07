@@ -34,4 +34,18 @@ public class Cell {
     public boolean isInside() {
         return x >= 0 && y >= 0 && x < n && y < m;
     }
+
+    void move(Cell targetCell) {
+        int tX = targetCell.getX();
+        int tY = targetCell.getY();
+        if(tX > getX()){
+            setX(x+1);
+        }else if(tX < getX()){
+            setX(x-1);
+        }else if(tY > getY()){
+            setY(y+1);
+        }else if(tY < getY()){
+            setY(y-1);
+        }
+    }
 }
