@@ -1,9 +1,9 @@
 public class FarmAnimal extends Animal {
-    private String produceType;
-    private int rateOfHunger;
     static private int RATE_OF_HUNGER = 100;
     int baseRemainTime;
     int remainTime;
+    private String produceType;
+    private int rateOfHunger;
 
     FarmAnimal(String type) {
         super(type);
@@ -49,7 +49,7 @@ public class FarmAnimal extends Animal {
     }
 
     Item produce() {
-        if(remainTime == 0) return new Item(produceType);
+        if (remainTime == 0) return new Item(produceType);
         return null;
     }
 }

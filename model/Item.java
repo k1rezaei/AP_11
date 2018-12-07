@@ -118,6 +118,6 @@ public class Item extends Entity {
 
     @Override
     void turn() {
-        return ;
+        return;
     }
 }

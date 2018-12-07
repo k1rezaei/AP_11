@@ -1,8 +1,9 @@
 public class Map {
-    Cell getCloset(){
+    Cell getCloset() {
         return null;
     }
-    Cell getClosetWildAnimal(){
+
+    Cell getClosetWildAnimal() {
         return null;
     }
 }
