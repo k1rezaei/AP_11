@@ -6,7 +6,25 @@ abstract public class Vehicle implements Upgradable {
     private int upgradeCost;
     private int remainingTime;
     private int goTime;
+    private int level;
+    private int maxLevel;
     private ArrayList<Entity> items = new ArrayList<>();
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public void setMaxLevel(int maxLevel) {
+        this.maxLevel = maxLevel;
+    }
 
     public int getCurrentCapacity() {
         return currentCapacity;
@@ -33,7 +51,7 @@ abstract public class Vehicle implements Upgradable {
     }
 
     public int getUpgradeCost() {
-        return upgradeCost;
+        return upgradeCost * level;
     }
 
     public void setUpgradeCost(int upgradeCost) {
@@ -79,20 +97,27 @@ abstract public class Vehicle implements Upgradable {
         return false;
     }
 
-    public void go(){
-        if(remainingTime>0){
+    public void go() {
+        if (remainingTime > 0) {
             throw new RuntimeException("Vehicle in use");
         }
-        remainingTime=goTime;
+        remainingTime = goTime;
     }
 
     public void upgrade() {
-        capacity++;
-        currentCapacity++;
-        goTime--;
+        if (level < maxLevel) {
+            capacity++;
+            currentCapacity++;
+            goTime--;
+            level++;
+        } else {
+            throw new RuntimeException("Already at max level");
+        }
         //TODO actual upgrade numbers
     }
-    public void clear(){
-        items.clear();;
+
+    public void clear() {
+        items.clear();
+        ;
     }
 }
