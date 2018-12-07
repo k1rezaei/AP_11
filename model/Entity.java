@@ -1,6 +1,6 @@
 public abstract class Entity {
     protected Cell cell;
-    protected int sellPrice, buyPrice;
+    protected int sellPrice, buyPrice, size;
     protected String type;
 
     public Cell getCell() {
@@ -26,11 +26,11 @@ public abstract class Entity {
     Entity() {
     }
 
-    Entity (String type) {
+    Entity(String type) {
         this.type = type;
     }
 
-    Entity (String type, Cell cell) {
+    Entity(String type, Cell cell) {
         this.type = type;
         this.cell = cell;
     }
@@ -45,10 +45,15 @@ public abstract class Entity {
     //TODO getNewEntity
 
     static Entity getNewEntity(String type) {
-        if(type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
+        if (type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
             return new FarmAnimal(type);
-        else if(type.equals("Lion") || type.equals("Bear"))
+        else if (type.equals("Lion") || type.equals("Bear"))
             return new WildAnimal(type);
         return new Item(type);
     }
+
+    public int getSize() {
+        return size;
+    }
 }
+
