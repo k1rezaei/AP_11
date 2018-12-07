@@ -26,4 +26,3 @@ public class Dog extends Animal{
         move();
     }
 }
->>>>>>> origin/keivan
