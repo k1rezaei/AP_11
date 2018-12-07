@@ -58,6 +58,7 @@ public class FarmAnimal extends Animal{
         if(entity instanceof Plant){
             ((Plant)(entity)).startTimer();
             rateOfHunger = RATE_OF_HUNGER;
+
         }
     }
 
@@ -67,3 +68,4 @@ public class FarmAnimal extends Animal{
         return null;
     }
 }
+

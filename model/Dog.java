@@ -21,9 +21,9 @@ public class Dog extends Animal{
     }
     void turn(){
         if(targetCell == null) {
-            Map map = Game.getInstance().getMap();
-            targetCell = map.getClosetWildAnimal();
+            Map map = Game.getInstance().getMap();targetCell = map.getClosetWildAnimal();
         }
         move();
     }
 }
+>>>>>>> origin/keivan
