@@ -34,7 +34,7 @@ public class FarmAnimal extends Animal{
         if(rateOfHunger > RATE_OF_HUNGER/2) super.move();
         else {
             if(targetCell == null)
-                targetCell = Game.getInstance().getMap().getCloset(new Plant(null));
+                targetCell = Game.getInstance().getMap().getCloset(new Plant(-1,-1));
             cell.move(targetCell);
         }
     }
