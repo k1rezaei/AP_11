@@ -1,6 +1,14 @@
 import java.util.ArrayList;
 
 public class Hellicopter extends Vehicle {
+    public Hellicopter() {
+        //TODO actual numbers
+        setCapacity(5);
+        setCurrentCapacity(5);
+        setGoTime(7);
+        setUpgradeCost(100);//TODO
+    }
+
     public void go() {
         super.go();
         //TODO bebin hamin basse ya na
