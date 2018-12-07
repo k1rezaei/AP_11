@@ -1,27 +1,31 @@
-public class Dog extends Animal{
-    Dog(){
+public class Dog extends Animal {
+    Dog() {
         super("Dog");
     }
-    Dog(Cell cell){
+
+    Dog(Cell cell) {
         super("Dog", cell);
     }
-    void move(){
+
+    void move() {
         Map map = Game.getInstance().getMap();
         Cell targetCell = map.getClosetWildAnimal();
-        if(targetCell == null){
+        if (targetCell == null) {
             super.move();
-        }else{
+        } else {
             cell.moveCloser(targetCell);
         }
     }
+
     /// bad az collid momkene Dogemoo Destroy she!!!
-    void collide(Entity entity){
-        if(entity instanceof WildAnimal){
+    void collide(Entity entity) {
+        if (entity instanceof WildAnimal) {
             entity.destroy();
             destroy();
         }
     }
-    void turn(){
+
+    void turn() {
         move();
     }
 }

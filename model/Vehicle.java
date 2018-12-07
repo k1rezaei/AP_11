@@ -1,8 +1,29 @@
 import java.util.ArrayList;
 
 abstract public class Vehicle implements Upgradable {
-    private int capacity, currentCapacity, upgradeCost, remainingTime;
+    private int capacity;
+    private int currentCapacity;
+    private int upgradeCost;
+    private int remainingTime;
+    private int goTime;
     private ArrayList<Entity> items = new ArrayList<>();
+
+    public int getCurrentCapacity() {
+        return currentCapacity;
+    }
+
+    public void setCurrentCapacity(int currentCapacity) {
+        this.currentCapacity = currentCapacity;
+    }
+
+    public int getGoTime() {
+        return goTime;
+    }
+
+    public void setGoTime(int goTime) {
+        this.goTime = goTime;
+    }
+
     public int getCapacity() {
         return capacity;
     }
@@ -58,11 +79,20 @@ abstract public class Vehicle implements Upgradable {
         return false;
     }
 
-    abstract public void go();
+    public void go(){
+        if(remainingTime>0){
+            throw new RuntimeException("Vehicle in use");
+        }
+        remainingTime=goTime;
+    }
 
     public void upgrade() {
         capacity++;
         currentCapacity++;
+        goTime--;
         //TODO actual upgrade numbers
+    }
+    public void clear(){
+        items.clear();;
     }
 }

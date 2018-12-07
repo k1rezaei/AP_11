@@ -41,14 +41,14 @@ public class Cell {
         int tY = targetCell.getY();
         int x = this.getX();
         int y = this.getY();
-        if(tX > x){
-            this.setX(x+1);
-        }else if(tX < x){
-            this.setX(x-1);
-        }else if(tY > y){
-            this.setY(y+1);
-        }else if(tY < y){
-            this.setY(y-1);
+        if (tX > x) {
+            this.setX(x + 1);
+        } else if (tX < x) {
+            this.setX(x - 1);
+        } else if (tY > y) {
+            this.setY(y + 1);
+        } else if (tY < y) {
+            this.setY(y - 1);
         }
     }
 }

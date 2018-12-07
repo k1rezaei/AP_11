@@ -3,8 +3,32 @@ public abstract class Entity {
     protected int sellPrice, buyPrice, size;
     protected String type;
 
+    Entity() {
+    }
+
+    Entity(String type) {
+        this.type = type;
+    }
+
+    Entity(String type, Cell cell) {
+        this.type = type;
+        this.cell = cell;
+    }
+
+    static Entity getNewEntity(String type) {
+        if (type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
+            return new FarmAnimal(type);
+        else if (type.equals("Lion") || type.equals("Bear"))
+            return new WildAnimal(type);
+        return new Item(type);
+    }
+
     public Cell getCell() {
         return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 
     public int getSellPrice() {
@@ -19,37 +43,12 @@ public abstract class Entity {
         return type;
     }
 
-    public void setCell(Cell cell) {
-        this.cell = cell;
-    }
-
-    Entity() {
-    }
-
-    Entity(String type) {
-        this.type = type;
-    }
-
-    Entity(String type, Cell cell) {
-        this.type = type;
-        this.cell = cell;
-    }
-
     abstract void turn();
-
-
-    void destroy() {
-        cell = null;
-    }
 
     //TODO getNewEntity
 
-    static Entity getNewEntity(String type) {
-        if (type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
-            return new FarmAnimal(type);
-        else if (type.equals("Lion") || type.equals("Bear"))
-            return new WildAnimal(type);
-        return new Item(type);
+    void destroy() {
+        cell = null;
     }
 
     public int getSize() {

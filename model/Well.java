@@ -1,7 +1,7 @@
 public class Well implements Upgradable {
-    private int currentAmount;
-    int level;
     static private int fillCost = 100;
+    int level;
+    private int currentAmount;
 
 
     Well() {
