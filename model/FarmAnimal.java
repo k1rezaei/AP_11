@@ -1,11 +1,14 @@
 public class FarmAnimal extends Animal {
     static private int RATE_OF_HUNGER = 100;
-    int baseRemainTime;
-    int remainTime;
+    
+    
     private String produceType;
     private int rateOfHunger;
 
-    Cell targetCell;
+    private int baseRemainTime;
+    private int remainTime;
+    
+
 
     FarmAnimal(String type){
         super(type);
@@ -31,12 +34,13 @@ public class FarmAnimal extends Animal {
     }
 
     void move() {
-        if(rateOfHunger > RATE_OF_HUNGER/2) super.move();
-        else {
-            if(targetCell == null)
-                targetCell = Game.getInstance().getMap().getCloset(new Plant(new Cell(-1, -1)));
-            cell.move(targetCell);
+        if(rateOfHunger < RATE_OF_HUNGER/2){
+            setTargetCell(Game.getInstance().getMap().getCloset("plant",cell));
+        }else{
+            setTargetCell(Game.getInstance().getMap().getRandom());
         }
+        for(int i = 0; i < speed; i++) super.move();
+
     }
 
     //produce ro ghabl az turn bayad seda koni
@@ -52,6 +56,7 @@ public class FarmAnimal extends Animal {
         }
         remainTime--;
     }
+
 
     void collide(Entity entity) {
         if (entity instanceof Plant) {
