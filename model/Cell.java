@@ -1,5 +1,9 @@
 public class Cell {
     private static int n, m;
+
+    public static int getN(){ return n;}
+    public static int getM(){ return m;}
+
     private int x, y;
 
     Cell(int x, int y) {
@@ -49,4 +53,9 @@ public class Cell {
             setY(y-1);
         }
     }
+
+    int getDistance(Cell cell){
+        return Math.abs(cell.getX() - x) + Math.abs(cell.getY() - y);
+    }
+
 }
