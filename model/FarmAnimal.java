@@ -1,12 +1,14 @@
 public class FarmAnimal extends Animal {
     static private int RATE_OF_HUNGER = 100;
-    int baseRemainTime;
-    int remainTime;
+    
+    
     private String produceType;
     private int rateOfHunger;
+
     private int baseRemainTime;
     private int remainTime;
-    static private int RATE_OF_HUNGER = 100;
+    
+
 
     FarmAnimal(String type){
         super(type);
@@ -38,6 +40,7 @@ public class FarmAnimal extends Animal {
             setTargetCell(Game.getInstance().getMap().getRandom());
         }
         for(int i = 0; i < speed; i++) super.move();
+
     }
 
     //produce ro ghabl az turn bayad seda koni

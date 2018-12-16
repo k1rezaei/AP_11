@@ -14,7 +14,6 @@ public class WildAnimal extends Animal {
         this.cell = cell;
     }
 
-
     void collide(Entity entity) {
         if (entity instanceof FarmAnimal) {
             entity.destroy();
