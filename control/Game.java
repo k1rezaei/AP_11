@@ -10,7 +10,7 @@ public class Game {
     private Truck truck;
     private Well well;
     private Warehouse warehouse;
-
+    private ArrayList<Upgradable> upgradables=new ArrayList<>();//TODO add upgradables
     private Game() {
     }
 
@@ -72,21 +72,13 @@ public class Game {
     }
 
     public void upgrade(String type) {
-        switch (type) {
-            case "cat":
-            case "dog":
-                //TODO what the **** should we do about these?
-                break;
-            case "warehouse":
-                if(warehouse.getUpgradeCost()<=money){//TODO check warehouse isnt at max level
-                    money-=warehouse.getUpgradeCost();
-                    warehouse.upgrade();
+        for(Upgradable upgradable:upgradables){
+            if(upgradable.getName().equals(type)){
+                if(money>=upgradable.getUpgradeCost()){//TODO check level is less than max level
+                    money-=upgradable.getUpgradeCost();
+                    upgradable.upgrade();
                 }
-                break;
-            case "truck":
-                if(truck.getUpgradeCost()<=money){
-                    money-=truck.getUpgradeCost();
-                }
+            }
         }
     }
 
