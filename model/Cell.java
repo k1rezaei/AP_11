@@ -23,6 +23,7 @@ public class Cell {
         this.y = y;
     }
 
+    @Override
     public boolean equals(Object object) {
         if (!(object instanceof Cell)) {
             return false;

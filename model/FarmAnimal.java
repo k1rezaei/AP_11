@@ -1,9 +1,9 @@
-public class FarmAnimal extends Animal{
+public class FarmAnimal extends Animal {
+    static private int RATE_OF_HUNGER = 100;
+    int baseRemainTime;
+    int remainTime;
     private String produceType;
     private int rateOfHunger;
-    private int baseRemainTime;
-    private int remainTime;
-    static private int RATE_OF_HUNGER = 100;
 
     Cell targetCell;
 
@@ -25,7 +25,7 @@ public class FarmAnimal extends Animal{
         }
     }
 
-    FarmAnimal(String type, Cell cell){
+    FarmAnimal(String type, Cell cell) {
         this(type);
         this.cell = cell;
     }
@@ -39,7 +39,7 @@ public class FarmAnimal extends Animal{
         }
     }
 
-    //produce ro ghabl az turn bayad seda koni.
+    //produce ro ghabl az turn bayad seda koni
 
     void turn() {
         rateOfHunger--;
@@ -53,12 +53,10 @@ public class FarmAnimal extends Animal{
         remainTime--;
     }
 
-
-    void collide(Entity entity){
-        if(entity instanceof Plant){
-            ((Plant)(entity)).startTimer();
+    void collide(Entity entity) {
+        if (entity instanceof Plant) {
+            ((Plant) (entity)).startTimer();
             rateOfHunger = RATE_OF_HUNGER;
-
         }
     }
 
