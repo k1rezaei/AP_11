@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Warehouse {
+public class Warehouse implements Upgradable{
     Map<String, Integer> storables = new HashMap<>();
     private int capacity = 10000;
     private int upgradeCost = 1000;

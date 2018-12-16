@@ -10,6 +10,7 @@ public class Game {
     private Truck truck;
     private Well well;
     private Warehouse warehouse;
+
     private Game() {
     }
 
@@ -37,50 +38,81 @@ public class Game {
 
     public void addPlant(int x, int y) {
         if (well.getCurrentAmount() > 0) {
-            Entity entity = new Plant(new Cell(x, y));
             well.decreaseWater();
-            map.addEntity(entity);
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    Entity entity = new Plant(new Cell(x + i, y + j));
+                    map.addEntity(entity);
+                }
+            }
         } else {
             throw new RuntimeException("not enough water");
         }
     }
 
-    public void cage(int x,int y){
-        WildAnimal wildAnimal=map.cage(new Cell(x,y));
-        if(wildAnimal!=null){
+    public void cage(int x, int y) {
+        WildAnimal wildAnimal = map.cage(new Cell(x, y));
+        if (wildAnimal != null) {
             warehouse.add(wildAnimal);
         }
     }
-    public void pickUp(int x,int y){
-        Item item=map.pickUp(new Cell(x,y));
-        if(item!=null){
+
+    public void pickUp(int x, int y) {
+        Item item = map.pickUp(new Cell(x, y));
+        if (item != null) {
             warehouse.add(item);
         }
     }
-    public void well(){
-        if(well.getFillCost()<=money){
-            money-=well.getFillCost();
+
+    public void well() {
+        if (well.getFillCost() <= money) {
+            money -= well.getFillCost();
             well.fill();
         }
     }
 
-    public void upgrade(String type){
-
+    public void upgrade(String type) {
+        switch (type) {
+            case "cat":
+            case "dog":
+                //TODO what the **** should we do about these?
+                break;
+            case "warehouse":
+                if(warehouse.getUpgradeCost()<=money){//TODO check warehouse isnt at max level
+                    money-=warehouse.getUpgradeCost();
+                    warehouse.upgrade();
+                }
+                break;
+            case "truck":
+                if(truck.getUpgradeCost()<=money){
+                    money-=truck.getUpgradeCost();
+                }
+        }
     }
-    public void addEntity(Entity entity){
+
+    public void addEntity(Entity entity) {
         map.addEntity(entity);
     }
-    public boolean checkLevel(){
-        return money>=level.getGoalMoney() && warehouse.getNumber(level.getGoalEntity())>0;
+
+    public boolean checkLevel() {
+        return money >= level.getGoalMoney() && warehouse.getNumber(level.getGoalEntity()) > 0;
     }
-    public void turn(){
+
+    public void turn(int n) {
+        for (int i = 0; i < n; i++) {
+            turn();
+        }
+    }
+
+    public void turn() {
         map.turn();
         truck.turn();
         helicopter.turn();
-        for(Workshop workshop:workshops){
+        for (Workshop workshop : workshops) {
             workshop.turn()
         }
     }
+
     public Map getMap() {
         return map;
     }
