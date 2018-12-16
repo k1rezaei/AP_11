@@ -1,6 +1,6 @@
 public interface Upgradable {
 
-    String getNmae();
+    String getName();
 
     int getUpgradeCost();
 
