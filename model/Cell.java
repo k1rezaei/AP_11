@@ -36,19 +36,17 @@ public class Cell {
         return x >= 0 && y >= 0 && x < n && y < m;
     }
 
-    public void moveCloser(Cell targetCell) {
+    void move(Cell targetCell) {
         int tX = targetCell.getX();
         int tY = targetCell.getY();
-        int x = this.getX();
-        int y = this.getY();
-        if (tX > x) {
-            this.setX(x + 1);
-        } else if (tX < x) {
-            this.setX(x - 1);
-        } else if (tY > y) {
-            this.setY(y + 1);
-        } else if (tY < y) {
-            this.setY(y - 1);
+        if(tX > getX()){
+            setX(x+1);
+        }else if(tX < getX()){
+            setX(x-1);
+        }else if(tY > getY()){
+            setY(y+1);
+        }else if(tY < getY()){
+            setY(y-1);
         }
     }
 }
