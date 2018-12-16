@@ -3,16 +3,21 @@ import java.util.Map;
 
 public class Workshop {
     private Map<String, Integer> inputs = new HashMap<>();
-    private String output;
+    private String output, name;
     private int duration, remainTime = -1, level = 1;
     private int x, y, upgradeCost;
 
-    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost) {
+    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, String name) {
         this.output = output;
         this.inputs = inputs;
         this.x = x; this.y = y;
         this.duration = duration;
         this.upgradeCost = upgradeCost;
+        this.name = name;
+    }
+
+    String getName() {
+        return name;
     }
 
     void start() {
@@ -21,9 +26,9 @@ public class Workshop {
         int buildNumber = Math.min(level, warehouse.getNumber(inputs));
         for (int i=0; i<buildNumber; i++) {
             warehouse.remove(inputs);
-            remainTime = duration;
         }
         if(buildNumber == 0) throw new RuntimeException("Cant Build Anything");
+        remainTime = duration;
     }
 
     void turn() {
