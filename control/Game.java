@@ -71,7 +71,15 @@ public class Game {
         map.addEntity(entity);
     }
     public boolean checkLevel(){
-        return money>=level.getGoalMoney() && warehouse.number(level.getGoalEntity());
+        return money>=level.getGoalMoney() && warehouse.getNumber(level.getGoalEntity())>0;
+    }
+    public void turn(){
+        map.turn();
+        truck.turn();
+        helicopter.turn();
+        for(Workshop workshop:workshops){
+            workshop.turn()
+        }
     }
     public Map getMap() {
         return map;
