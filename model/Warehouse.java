@@ -37,4 +37,20 @@ public class Warehouse {
         return Entity.getNewEntity(type);
     }
 
+    int getNumber(Map<String, Integer> test) {
+        int ans = 1000 * 1000;
+        for (String str : test.keySet()) {
+            ans = Math.min(ans, storables.get(str) / test.get(str));
+        }
+        return ans;
+    }
+
+    void remove(Map<String, Integer> test) {
+        for (String str : test.keySet()) {
+            int curr = storables.get(str);
+            curr -= test.get(str);
+            storables.put(str, curr);
+        }
+    }
+
 }
