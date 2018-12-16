@@ -2,6 +2,7 @@
 public class Game {
     static Game game = new Game();
     private Map map = new Map();
+    private Warehouse warehouse;
 
     public static Game getInstance() {
         return game;
@@ -13,4 +14,7 @@ public class Game {
         return map;
     }
 
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
 }
