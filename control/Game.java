@@ -9,7 +9,7 @@ public class Game {
     private Helicopter helicopter;
     private Truck truck;
     private Well well;
-
+    private Warehouse warehouse;
     private Game() {
     }
 
@@ -45,7 +45,34 @@ public class Game {
         }
     }
 
+    public void cage(int x,int y){
+        WildAnimal wildAnimal=map.cage(new Cell(x,y));
+        if(wildAnimal!=null){
+            warehouse.add(wildAnimal);
+        }
+    }
+    public void pickUp(int x,int y){
+        Item item=map.pickUp(new Cell(x,y));
+        if(item!=null){
+            warehouse.add(item);
+        }
+    }
+    public void well(){
+        if(well.getFillCost()<=money){
+            money-=well.getFillCost();
+            well.fill();
+        }
+    }
 
+    public void upgrade(String type){
+
+    }
+    public void addEntity(Entity entity){
+        map.addEntity(entity);
+    }
+    public boolean checkLevel(){
+        return money>=level.getGoalMoney() && warehouse.number(level.getGoalEntity());
+    }
     public Map getMap() {
         return map;
     }
