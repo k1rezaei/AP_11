@@ -4,9 +4,6 @@ public class FarmAnimal extends Animal {
     int remainTime;
     private String produceType;
     private int rateOfHunger;
-    private int baseRemainTime;
-    private int remainTime;
-    static private int RATE_OF_HUNGER = 100;
 
     Cell targetCell;
 
@@ -55,11 +52,6 @@ public class FarmAnimal extends Animal {
         }
         remainTime--;
     }
-
-    void collide(Entity entity){
-        if(entity instanceof Plant){
-            ((Plant)(entity)).startTimer();
-            rateOfHunger = RATE_OF_HUNGER;
 
     void collide(Entity entity) {
         if (entity instanceof Plant) {
