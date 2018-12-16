@@ -25,15 +25,26 @@ public class Game {
 
     }
 
-    public void buyAnimal(String name){
-        try {
-            Entity animal = Entity.getNewEntity(name);
+    public void buyAnimal(String name) {
+        Entity animal = Entity.getNewEntity(name);
+        if (animal.getBuyPrice() <= money) {
+            money -= animal.getBuyPrice();
             map.addEntity(animal);
-        }
-        catch (Exception e){
-            throw new RuntimeException("Invalid type");
+        } else {
+            throw new RuntimeException("not enough money");
         }
     }
+
+    public void addPlant(int x, int y) {
+        if (well.getCurrentAmount() > 0) {
+            Entity entity = new Plant(new Cell(x, y));
+            well.decreaseWater();
+            map.addEntity(entity);
+        } else {
+            throw new RuntimeException("not enough water");
+        }
+    }
+
 
     public Map getMap() {
         return map;
