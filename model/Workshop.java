@@ -1,7 +1,7 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Workshop {
+public class Workshop implements Upgradable{
     private Map<String, Integer> inputs = new HashMap<>();
     private String output, name;
     private int duration, remainTime = -1, level = 1;
@@ -16,7 +16,7 @@ public class Workshop {
         this.name = name;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
@@ -41,11 +41,11 @@ public class Workshop {
         else remainTime --;
     }
 
-    int getUpgradeCost() {
+    public int getUpgradeCost() {
         return upgradeCost;
     }
 
-    void upgrade() {
+    public void upgrade() {
         level ++;
     }
 

@@ -1,5 +1,5 @@
 public interface Upgradable {
-    public int getUpgradeCost();
+    int getUpgradeCost();
 
-    public void upgrade();
+    void upgrade();
 }

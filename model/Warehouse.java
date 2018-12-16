@@ -1,11 +1,16 @@
 import java.util.HashMap;
 import java.util.Map;
 
-public class Warehouse {
+public class Warehouse implements Upgradable {
     Map<String, Integer> storables = new HashMap<>();
     private int capacity = 10000;
     private int upgradeCost = 1000;
     private int CAPACITY_RATE_CHANGE = 500;
+    private String name = "warehouse";
+
+    public String getName() {
+        return name;
+    }
 
     public int getCapacity() {
         return capacity;
@@ -15,7 +20,7 @@ public class Warehouse {
         return upgradeCost;
     }
 
-    void upgrade() {
+    public void upgrade() {
         capacity += CAPACITY_RATE_CHANGE;
     }
 
