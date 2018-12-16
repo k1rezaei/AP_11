@@ -32,6 +32,7 @@ public class Workshop implements Upgradable{
     }
 
     void turn() {
+        if(remainTime == -1) return ;
         if(remainTime == 0) {
             Entity entity = new Item(output, new Cell(x, y));
             Game.getInstance().addEntity(entity);
