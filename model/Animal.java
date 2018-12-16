@@ -4,7 +4,6 @@ abstract public class Animal extends Entity {
 
     int speed;
     Cell targetCell;
-
     Animal(String type) {
         super(type);
     }
@@ -12,6 +11,7 @@ abstract public class Animal extends Entity {
     Animal(String type, Cell cell) {
         super(type, cell);
     }
+
 
     void setTargetCell(Cell newTargetCell){
         if(newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
