@@ -21,7 +21,7 @@ public class Warehouse {
 
     void add(String type) {
         int count = storables.get(type);
-        count ++;
+        count++;
         storables.put(type, count);
     }
 
@@ -32,7 +32,7 @@ public class Warehouse {
 
     Entity remove(String type) {
         int count = storables.get(type);
-        count --;
+        count--;
         storables.put(type, count);
         return Entity.getNewEntity(type);
     }
