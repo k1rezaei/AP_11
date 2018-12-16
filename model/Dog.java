@@ -1,5 +1,6 @@
 public class Dog extends Animal{
 
+
     Cell targetCell;
 
     Dog(){
@@ -12,6 +13,7 @@ public class Dog extends Animal{
         cell.move(targetCell);
     }
 
+
     /// bad az collid momkene Dogemoo Destroy she!!!
     void collide(Entity entity){
         if(entity instanceof WildAnimal){
@@ -19,10 +21,12 @@ public class Dog extends Animal{
             destroy();
         }
     }
+
+    void move(){
+        setTargetCell(Game.getInstance().getMap().getCloset("wildanimal"));
+        for(int i = 0; i < speed; i++) super.move();
+    }
     void turn(){
-        if(targetCell == null) {
-            Map map = Game.getInstance().getMap();targetCell = map.getClosetWildAnimal();
-        }
         move();
     }
 }
