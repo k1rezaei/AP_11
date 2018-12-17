@@ -1,21 +1,15 @@
 public class Dog extends Animal {
+
     Dog() {
         super("Dog");
+        speed = 6;
     }
 
     Dog(Cell cell) {
         super("Dog", cell);
+        speed = 6;
     }
 
-    void move() {
-        Map map = Game.getInstance().getMap();
-        Cell targetCell = map.getClosetWildAnimal();
-        if (targetCell == null) {
-            super.move();
-        } else {
-            cell.moveCloser(targetCell);
-        }
-    }
 
     /// bad az collid momkene Dogemoo Destroy she!!!
     void collide(Entity entity) {
@@ -25,7 +19,13 @@ public class Dog extends Animal {
         }
     }
 
+    void move() {
+        setTargetCell(Game.getInstance().getMap().getCloset(Entity.WILD_ANIMAL, cell));
+        super.move();
+    }
+
     void turn() {
         move();
     }
 }
+

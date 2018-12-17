@@ -1,7 +1,8 @@
 public interface Upgradable {
-    public int getUpgradeCost();
 
-    public void upgrade();
+    String getName();
 
-    public String getName();
+    int getUpgradeCost();
+
+    void upgrade();
 }

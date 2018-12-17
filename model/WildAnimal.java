@@ -1,7 +1,5 @@
 public class WildAnimal extends Animal {
 
-    private int size = 0;
-
     WildAnimal(String type) {
         super(type);
         if (type.equalsIgnoreCase("bear")) {
@@ -16,15 +14,16 @@ public class WildAnimal extends Animal {
         this.cell = cell;
     }
 
-    int getSize() {
-        return size;
-    }
-
     void collide(Entity entity) {
         if (entity instanceof FarmAnimal) {
             entity.destroy();
         }
         return;
+    }
+
+    void move(){
+        setTargetCell(Game.getInstance().getMap().getRandom());
+        super.move();
     }
 
     @Override

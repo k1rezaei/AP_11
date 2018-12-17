@@ -1,24 +1,36 @@
 public class FarmAnimal extends Animal {
     static private int RATE_OF_HUNGER = 100;
-    int baseRemainTime;
-    int remainTime;
+    
+    
     private String produceType;
     private int rateOfHunger;
+    private int hungrySpeed;
 
-    FarmAnimal(String type) {
+    private int baseRemainTime;
+    private int remainTime;
+    
+
+
+    FarmAnimal(String type){
         super(type);
         rateOfHunger = RATE_OF_HUNGER;
         if (type.equalsIgnoreCase("cow")) {
+            speed = 4;
             buyPrice = 10000;
-            remainTime = baseRemainTime = 100;
+            hungrySpeed = 6;
+            remainTime = baseRemainTime = 20;
             produceType = "Milk";
         } else if (type.equalsIgnoreCase("chicken")) {
-            buyPrice = 400;
+            speed = 5;
+            buyPrice = 100;
+            hungrySpeed = 1;
             remainTime = baseRemainTime = 20;
             produceType = "Egg";
         } else {
-            buyPrice = 1500;
-            remainTime = baseRemainTime = 50;
+            speed = 5;
+            buyPrice = 1000;
+            hungrySpeed = 3;
+            remainTime = baseRemainTime = 20;
             produceType = "Wool";
         }
     }
@@ -28,9 +40,22 @@ public class FarmAnimal extends Animal {
         this.cell = cell;
     }
 
+    void move() {
+        if(rateOfHunger < RATE_OF_HUNGER/2){
+            setTargetCell(Game.getInstance().getMap().getCloset(Entity.PLANT,cell));
+            super.move();
+            super.move();
+        }else{
+            setTargetCell(Game.getInstance().getMap().getRandom());
+            super.move();
+        }
+
+    }
+
+    //produce ro ghabl az turn bayad seda koni
 
     void turn() {
-        rateOfHunger--;
+        rateOfHunger -= 5;
         if (rateOfHunger == 0) {
             destroy();
         }
@@ -41,15 +66,18 @@ public class FarmAnimal extends Animal {
         remainTime--;
     }
 
+
     void collide(Entity entity) {
         if (entity instanceof Plant) {
             ((Plant) (entity)).startTimer();
-            rateOfHunger = RATE_OF_HUNGER;
+            rateOfHunger += RATE_OF_HUNGER/hungrySpeed;
+            if(rateOfHunger > RATE_OF_HUNGER) rateOfHunger = RATE_OF_HUNGER;
         }
     }
 
+
     Item produce() {
-        if (remainTime == 0) return new Item(produceType);
+        if(remainTime == 0) return new Item(produceType);
         return null;
     }
 }

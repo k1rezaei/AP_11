@@ -2,6 +2,8 @@ abstract public class Animal extends Entity {
     static private int[] dx = {+1, 0, -1, 0};
     static private int[] dy = {0, +1, 0, -1};
 
+    int speed;
+    Cell targetCell;
     Animal(String type) {
         super(type);
     }
@@ -10,17 +12,19 @@ abstract public class Animal extends Entity {
         super(type, cell);
     }
 
-    void move() {
-        while (true) {
-            int dir = (int) (Math.random() * 4);
-            cell.setX(cell.getX() + dx[dir]);
-            cell.setY(cell.getY() + dy[dir]);
-            if (cell.isInside()) {
-                break;
-            }
-            cell.setX(cell.getX() - dx[dir]);
-            cell.setY(cell.getY() - dy[dir]);
+
+    void setTargetCell(Cell newTargetCell){
+        if(newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
+        if(targetCell == null || cell.equals(targetCell)){
+            targetCell = newTargetCell;
         }
+    }
+
+    void move() {
+        if(targetCell == null){
+            throw new RuntimeException("targetCell is null");
+        }
+        for(int i = 0; i < speed; i++) cell.move(targetCell);
     }
 
     abstract void collide(Entity entity);
