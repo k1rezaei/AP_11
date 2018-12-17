@@ -10,7 +10,8 @@ public class Game {
     private Truck truck;
     private Well well;
     private Warehouse warehouse;
-    private ArrayList<Upgradable> upgradables=new ArrayList<>();//TODO add upgradables
+    private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
+
     private Game() {
     }
 
@@ -95,7 +96,7 @@ public class Game {
     }
 
     public void cage(int x, int y) {
-        WildAnimal wildAnimal = map.cage(new Cell(x, y));
+        WildAnimal wildAnimal = (WildAnimal) map.cage(new Cell(x, y));
         if (wildAnimal != null) {
             warehouse.add(wildAnimal);
         }
@@ -116,10 +117,10 @@ public class Game {
     }
 
     public void upgrade(String type) {
-        for(Upgradable upgradable:upgradables){
-            if(upgradable.getName().equals(type)){
-                if(money>=upgradable.getUpgradeCost()){//TODO check level is less than max level
-                    money-=upgradable.getUpgradeCost();
+        for (Upgradable upgradable : upgradables) {
+            if (upgradable.getName().equals(type)) {
+                if (money >= upgradable.getUpgradeCost()) {//TODO check level is less than max level
+                    money -= upgradable.getUpgradeCost();
                     upgradable.upgrade();
                 }
             }
@@ -145,7 +146,7 @@ public class Game {
         truck.turn();
         helicopter.turn();
         for (Workshop workshop : workshops) {
-            workshop.turn()
+            workshop.turn();
         }
     }
 
@@ -203,5 +204,13 @@ public class Game {
 
     public void setWell(Well well) {
         this.well = well;
+    }
+    
+    public Warehouse getWarehouse() {
+        return warehouse;
+    }
+
+    public void setWarehouse(Warehouse warehouse) {
+        this.warehouse = warehouse;
     }
 }

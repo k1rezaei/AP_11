@@ -1,15 +1,17 @@
 public class Truck extends Vehicle {
-    public void go() {
-        super.go();
-        //TODO bebin hamin basse ya na
-    }
-    public Truck(){
+    public Truck() {
         //TODO actual numbers
         setCapacity(5);
         setCurrentCapacity(5);
         setGoTime(7);
         setUpgradeCost(100);//TODO
     }
+
+    public void go() {
+        super.go();
+        //TODO bebin hamin basse ya na
+    }
+
     public int getResult() {
         int priceSum = 0;
         for (Entity entity : getItems()) {
@@ -23,7 +25,8 @@ public class Truck extends Vehicle {
         super.upgrade();
         //TODO bebin hamin bayad bashe ya na
     }
-    public String getName(){
+
+    public String getName() {
         return "truck";
     }
 }

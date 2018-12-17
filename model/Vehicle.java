@@ -4,10 +4,10 @@ abstract public class Vehicle implements Upgradable {
     private int capacity;
     private int currentCapacity;
     private int upgradeCost;
-    private int remainingTime=0;
+    private int remainingTime = 0;
     private int goTime;
-    private int level=0;
-    private int maxLevel=5;
+    private int level = 0;
+    private int maxLevel = 5;
     private ArrayList<Entity> items = new ArrayList<>();
 
     public int getLevel() {

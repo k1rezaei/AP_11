@@ -32,7 +32,8 @@ public class Helicopter extends Vehicle {
         }
         return priceSum;
     }
-    public String getName(){
+
+    public String getName() {
         return "helicopter";
     }
 }

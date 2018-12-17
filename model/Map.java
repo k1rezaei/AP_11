@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Map {
-    private ArrayList<Entity> entities = new ArrayList<Entity>();
     final private static int BASE_DISTANCE = 6;
+    private ArrayList<Entity> entities = new ArrayList<Entity>();
 
     void relax() {
         for (int i = entities.size() - 1; i >= 0; i--) {
