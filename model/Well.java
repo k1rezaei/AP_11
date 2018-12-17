@@ -1,11 +1,15 @@
 public class Well implements Upgradable {
-    static private int fillCost = 100;
-    int level;
+    static private int[] fillCost = {19, 17, 15, 7};
+    static private int[] capacity = {5, 7, 10, 100};
+    static private int[] upgradeCost = {30, 35, 100};
+    private int level;
     private int currentAmount;
+
+    public String getName(){ return "Well";}
 
 
     Well() {
-        level = 1;
+        level = 0;
         currentAmount = 5;
     }
 
@@ -18,18 +22,18 @@ public class Well implements Upgradable {
     }
 
     public int getFillCost() {
-        return fillCost;
+        return fillCost[level];
     }
 
     public int getUpgradeCost() {
-        if (level == 5) {
+        if (level == 3) {
             throw new RuntimeException("Max level");
         }
-        return 1000 * level;
+        return upgradeCost[level];
     }
 
     public int getCapacity() {
-        return 5 * level;
+        return capacity[level];
     }
 
     public boolean isItEmpty() {
@@ -48,7 +52,7 @@ public class Well implements Upgradable {
     }
 
     public void upgrade() {
-        if (level == 5) throw new RuntimeException("Max level");
+        if (level == 3) throw new RuntimeException("Max level");
         level++;
         fill();
     }
