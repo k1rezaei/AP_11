@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
-public class Hellicopter extends Vehicle {
-    public Hellicopter() {
+public class Helicopter extends Vehicle {
+    public Helicopter() {
         //TODO actual numbers
         setCapacity(5);
         setCurrentCapacity(5);
@@ -31,5 +31,8 @@ public class Hellicopter extends Vehicle {
             priceSum += entity.buyPrice;
         }
         return priceSum;
+    }
+    public String getName(){
+        return "helicopter";
     }
 }

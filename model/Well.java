@@ -56,4 +56,7 @@ public class Well implements Upgradable {
         level++;
         fill();
     }
+    public String getName(){
+        return "well";
+    }
 }

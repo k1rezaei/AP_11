@@ -3,9 +3,6 @@ public class Plant extends Entity {
     private boolean inUse;
 
     Plant(Cell cell) {
-        if (cell == null) {
-            throw new RuntimeException("cell is NULL");
-        }
         this.cell = cell;
         this.type = "Plant";
     }

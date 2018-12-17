@@ -23,4 +23,7 @@ public class Truck extends Vehicle {
         super.upgrade();
         //TODO bebin hamin bayad bashe ya na
     }
+    public String getName(){
+        return "truck";
+    }
 }
