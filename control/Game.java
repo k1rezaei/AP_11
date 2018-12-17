@@ -22,8 +22,52 @@ public class Game {
 
     }*/
     public void run(String command) {
-
-
+        String[] commands = command.split("(\\s)*");
+        try {
+            switch (commands[0]) {
+                case "run":
+                    //TODO
+                    break;
+                case "save":
+                    //TODO
+                    break;
+                case "load":
+                    //TODO
+                    break;
+                case "print":
+                    //TODO
+                    break;
+                case "turn":
+                    turn(Integer.parseInt(commands[1]));
+                    break;
+                case "buy":
+                    buyAnimal(commands[1]);
+                    break;
+                case "pickup":
+                    pickUp(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                    break;
+                case "cage":
+                    cage(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
+                    break;
+                case "well":
+                    well();
+                    break;
+                case "start":
+                    for (Workshop workshop : workshops) {
+                        if (workshop.getName().equals(commands[1])) {
+                            workshop.start();
+                        }
+                    }
+                    break;
+                case "upgrade":
+                    upgrade(commands[1]);
+                    break;
+            }
+            //TODO rest of commands
+        } catch (Exception e) {
+            //TODO view
+            System.out.println(e.getMessage());
+        }
     }
 
     public void buyAnimal(String name) {
