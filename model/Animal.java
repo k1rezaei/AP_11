@@ -24,7 +24,7 @@ abstract public class Animal extends Entity {
         if(targetCell == null){
             throw new RuntimeException("targetCell is null");
         }
-        cell.move(targetCell);
+        for(int i = 0; i < speed; i++) cell.move(targetCell);
     }
 
     abstract void collide(Entity entity);
