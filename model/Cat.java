@@ -1,5 +1,5 @@
 public class Cat extends Animal implements Upgradable {
-    int level;
+    private int level;
 
     Cat() {
         super("Cat");
