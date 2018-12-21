@@ -9,19 +9,26 @@ public class Game {
     private Helicopter helicopter;
     private Truck truck;
     private Well well;
-    private Warehouse warehouse;
+    private Warehouse warehouse=new Warehouse();
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
 
     private Game() {
+        upgradables.add(warehouse);
+        for(Workshop workshop:workshops){
+            upgradables.add(workshop);
+        }
+        upgradables.add(well);
+        upgradables.add(truck);
+        upgradables.add(helicopter);
     }
 
     public static Game getInstance() {
         return game;
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    }*/
+    }
     public void run(String command) {
         String[] commands = command.split("(\\s)*");
         try {
@@ -63,8 +70,25 @@ public class Game {
                 case "upgrade":
                     upgrade(commands[1]);
                     break;
+                case "truck":
+                    Vehicle vehicle=truck;
+                case "helicopter":
+                    vehicle = helicopter;
+                    switch (commands[1]){
+                        case "go":
+                            vehicle.go();
+                            //TODO change inside vehicle
+                            break;
+                        case "clear":
+                            vehicle.clear();
+                            break;
+                        case "add":
+                            vehicle.add(commands[2],Integer.parseInt(commands[3]));
+                            break;
+                    }
+                    break;
             }
-            //TODO rest of commands
+
         } catch (Exception e) {
             //TODO view
             System.out.println(e.getMessage());
@@ -205,7 +229,7 @@ public class Game {
     public void setWell(Well well) {
         this.well = well;
     }
-    
+
     public Warehouse getWarehouse() {
         return warehouse;
     }
