@@ -74,6 +74,14 @@ abstract public class Vehicle implements Upgradable {
         this.items = items;
     }
 
+    abstract public int getNeededMoney();
+
+    abstract public ArrayList<Entity> getNeededItems();
+
+    abstract public int getResultMoney();
+
+    abstract public ArrayList<Entity> getResultItems();
+
     public void add(String type, int count) {
         if (remainingTime > 0) {
             throw new RuntimeException("Vehicle in use");

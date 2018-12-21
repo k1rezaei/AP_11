@@ -5,21 +5,21 @@ public class Game {
     private Map map;
     private int money;
     private Level level;
-    private ArrayList<Workshop> workshops;
-    private Helicopter helicopter;
-    private Truck truck;
-    private Well well;
-    private Warehouse warehouse=new Warehouse();
+    private ArrayList<Workshop> workshops = new ArrayList<>();
+    private Helicopter helicopter = new Helicopter();
+    private Truck truck = new Truck();
+    private Well well = new Well();
+    private Warehouse warehouse = new Warehouse();
+    private ArrayList<Vehicle> vehicles = new ArrayList<>();
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
 
     private Game() {
+        vehicles.add(truck);
+        vehicles.add(helicopter);
         upgradables.add(warehouse);
-        for(Workshop workshop:workshops){
-            upgradables.add(workshop);
-        }
+        upgradables.addAll(workshops);
         upgradables.add(well);
-        upgradables.add(truck);
-        upgradables.add(helicopter);
+        upgradables.addAll(vehicles);
     }
 
     public static Game getInstance() {
@@ -29,8 +29,10 @@ public class Game {
     public static void main(String[] args) {
 
     }
+
     public void run(String command) {
         String[] commands = command.split("(\\s)*");
+        Vehicle vehicle = null;
         try {
             switch (commands[0]) {
                 case "run":
@@ -71,19 +73,25 @@ public class Game {
                     upgrade(commands[1]);
                     break;
                 case "truck":
-                    Vehicle vehicle=truck;
+                    vehicle = truck;
                 case "helicopter":
-                    vehicle = helicopter;
-                    switch (commands[1]){
+                    if (vehicle == null) {
+                        vehicle = helicopter;
+                    }
+                    switch (commands[1]) {
                         case "go":
-                            vehicle.go();
+                            if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
+                                money -= vehicle.getNeededMoney();
+                                warehouse.remove(vehicle.getNeededItems());
+                                vehicle.go();
+                            }
                             //TODO change inside vehicle
                             break;
                         case "clear":
                             vehicle.clear();
                             break;
                         case "add":
-                            vehicle.add(commands[2],Integer.parseInt(commands[3]));
+                            vehicle.add(commands[2], Integer.parseInt(commands[3]));
                             break;
                     }
                     break;
@@ -167,8 +175,12 @@ public class Game {
 
     public void turn() {
         map.turn();
-        truck.turn();
-        helicopter.turn();
+        for (Vehicle vehicle : vehicles) {
+            if (vehicle.turn()) {
+                money += vehicle.getResultMoney();
+                warehouse.add(vehicle.getResultItems());//TODO add ba arraylist
+            }
+        }
         for (Workshop workshop : workshops) {
             workshop.turn();
         }

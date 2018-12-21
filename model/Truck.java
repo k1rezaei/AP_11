@@ -1,4 +1,6 @@
-public class Truck extends Vehicle {
+import java.util.ArrayList;
+
+public class Truck extends Vehicle implements Upgradable {
     public Truck() {
         //TODO actual numbers
         setCapacity(5);
@@ -12,13 +14,32 @@ public class Truck extends Vehicle {
         //TODO bebin hamin basse ya na
     }
 
-    public int getResult() {
+    public int getResultMoney() {
         int priceSum = 0;
         for (Entity entity : getItems()) {
             priceSum += entity.getSellPrice();
         }
         clear();
         return priceSum;
+    }
+
+    @Override
+    public ArrayList<Entity> getResultItems() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public ArrayList<Entity> getNeededItems() {
+        return getItems();
+    }
+
+    @Override
+    public int getNeededMoney() {
+        return 0;
+    }
+
+    public int getUpgradeCost() {
+        return super.getUpgradeCost();
     }
 
     public void upgrade() {
