@@ -21,7 +21,7 @@ public class WildAnimal extends Animal {
         return;
     }
 
-    void move(){
+    void move() {
         setTargetCell(Game.getInstance().getMap().getRandom());
         super.move();
     }
