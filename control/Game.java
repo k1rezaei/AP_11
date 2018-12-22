@@ -1,8 +1,9 @@
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class Game {
     private static Game game = new Game();
-    private Map map;
+    private Map map = new Map();
     private int money;
     private Level level;
     private ArrayList<Workshop> workshops = new ArrayList<>();
@@ -12,6 +13,7 @@ public class Game {
     private Warehouse warehouse = new Warehouse();
     private ArrayList<Vehicle> vehicles = new ArrayList<>();
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
+    private int currentTurn;
 
     private Game() {
         vehicles.add(truck);
@@ -27,7 +29,11 @@ public class Game {
     }
 
     public static void main(String[] args) {
-
+        Scanner input = new Scanner(System.in);
+        while (true) {
+            String command = input.nextLine();
+            game.run(command);
+        }
     }
 
     public void run(String command) {
@@ -82,8 +88,12 @@ public class Game {
                         case "go":
                             if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
                                 money -= vehicle.getNeededMoney();
-                                warehouse.remove(vehicle.getNeededItems());
+                                for (Entity entity : vehicle.getNeededItems()) {
+                                    warehouse.remove(entity.type);
+                                }
                                 vehicle.go();
+                            } else {
+                                throw new RuntimeException("vehicle requirements not met");
                             }
                             //TODO change inside vehicle
                             break;
@@ -178,12 +188,23 @@ public class Game {
         for (Vehicle vehicle : vehicles) {
             if (vehicle.turn()) {
                 money += vehicle.getResultMoney();
-                warehouse.add(vehicle.getResultItems());//TODO add ba arraylist
+                for (Entity entity : vehicle.getResultItems()) {
+                    map.addEntity(entity);
+                }
             }
         }
         for (Workshop workshop : workshops) {
             workshop.turn();
         }
+        currentTurn++;
+        if (currentTurn % 60 == 0) {
+            if (Math.random() > 0.5) {
+                map.addEntity(Entity.getNewEntity("Bear"));
+            } else {
+                map.addEntity(Entity.getNewEntity("Lion"));
+            }
+        }
+        //TODO ye seri chiza bayad random spawn shan??
     }
 
     public Map getMap() {
