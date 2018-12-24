@@ -1,4 +1,11 @@
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
+
+import java.io.*;
+import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Formatter;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
@@ -14,7 +21,9 @@ public class Game {
     private ArrayList<Vehicle> vehicles = new ArrayList<>();
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
     private int currentTurn;
+    private HashMap<String, Level> levels = new HashMap<>();
 
+    //TODO levels
     private Game() {
         vehicles.add(truck);
         vehicles.add(helicopter);
@@ -33,25 +42,68 @@ public class Game {
         while (true) {
             String command = input.nextLine();
             game.run(command);
+            if (game.checkLevel()) {
+                System.out.println("Level completed");//TODO
+            }
         }
     }
 
     public void run(String command) {
         String[] commands = command.split("(\\s)*");
         Vehicle vehicle = null;
+        Gson gson = new Gson();
         try {
             switch (commands[0]) {
                 case "run":
-                    //TODO
+                    level = levels.get(commands[1]);
                     break;
                 case "save":
-                    //TODO
+                    OutputStream outputStream = new FileOutputStream(commands[2]);
+                    Formatter formatter = new Formatter(outputStream);
+                    formatter.format(gson.toJson(game));
+                    formatter.close();
+                    outputStream.close();
                     break;
                 case "load":
-                    //TODO
+                    if (commands[1].equals("game")) {
+                        JsonReader reader = new JsonReader(new FileReader(commands[2]));
+                        game = gson.fromJson(reader,Game.class);
+                    }
+                    else{
+                        //TODO
+                    }
                     break;
                 case "print":
-                    //TODO
+                    switch (commands[1]){
+                        case "info":
+                            //TODO
+                            break;
+                        case "map":
+                            //TODO
+                            break;
+                        case "levels":
+                            //TODO
+                            break;
+                        case "warehouse":
+                            //TODO
+                            break;
+                        case "well":
+                            //TODO
+                            break;
+                        case "workshops":
+                            //TODO
+                            break;
+                        case "truck":
+                            vehicle = truck;
+                        case "helicopter":
+                            if(vehicle == null){
+                                vehicle = helicopter;
+                            }
+                            System.out.println(vehicle);
+                            break;
+                        default:
+                            throw new RuntimeException("invalid input");
+                    }
                     break;
                 case "turn":
                     turn(Integer.parseInt(commands[1]));
