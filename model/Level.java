@@ -3,7 +3,8 @@ import java.util.HashMap;
 public class Level {
     private int goalMoney;
     private HashMap<String, Integer> goalEntity = new HashMap<>();
-
+    private int n,m;
+    //TODO Initial Entities
     public Level(int goalMoney, HashMap<String, Integer> goalEntity) {
         this.goalMoney = goalMoney;
         this.goalEntity = goalEntity;
