@@ -8,7 +8,7 @@ public class Cell {
     }
 
     public static Cell getRandomCell() {
-        return new Cell((int) (Math.random() * Cell.getN()), (int) (Cell.getM()));
+        return new Cell((int) (Math.random() * Cell.getN()), (int) (Math.random() * Cell.getM()));
     }
 
     public static int getN() {

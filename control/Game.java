@@ -33,7 +33,6 @@ public class Game {
         upgradables.add(well);
         upgradables.addAll(vehicles);
     }
-
     public static Game getInstance() {
         return game;
     }
@@ -43,14 +42,14 @@ public class Game {
         while (true) {
             String command = input.nextLine();
             game.run(command);
-            if (game.checkLevel()) {
+            if (game.level!=null && game.checkLevel()) {
                 System.out.println("Level completed");//TODO clear ?
             }
         }
     }
 
     public void run(String command) {
-        String[] commands = command.split("(\\s)*");
+        String[] commands = command.split("(\\s)+");
         Vehicle vehicle = null;
         Gson gson = new Gson();
         try {
@@ -59,6 +58,7 @@ public class Game {
                     level = levels.get(commands[1]);
                     Cell.setN(level.getN());
                     Cell.setM(level.getM());
+                    this.money = level.getStartMoney();
                     //TODO initialize and clear
                     break;
                 case "save":
@@ -75,7 +75,7 @@ public class Game {
                     } else {
                         for (int i = 0; i < 6; i++) {
                             try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "workshop" + i));
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\workshop" + i+".json"));
                                 workshops.add(gson.fromJson(reader, Workshop.class));
                             } catch (Exception e) {
                                 System.out.println("File not found");
@@ -84,8 +84,9 @@ public class Game {
                         int i = 0;
                         while (true) {
                             try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "level" + i));
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\level" + i+".json"));
                                 levels.put("level" + i, gson.fromJson(reader, Level.class));
+                                i++;
                             } catch (Exception e) {
                                 break;
                             }
@@ -95,16 +96,16 @@ public class Game {
                 case "print":
                     switch (commands[1]) {
                         case "info":
-                            System.out.println(this);
+                            System.out.println(game);
                             break;
                         case "map":
                             System.out.println(map);//TODO
                             break;
                         case "levels":
                             for (String levelName : levels.keySet()) {
-                                System.out.println(levelName + "{\n");
-                                System.out.println(level);
-                                System.out.println("}\n");
+                                System.out.println(levelName + "{");
+                                System.out.println(levels.get(levelName));
+                                System.out.println("}");
                             }
                             break;
                         case "warehouse":
@@ -134,7 +135,7 @@ public class Game {
                     turn(Integer.parseInt(commands[1]));
                     break;
                 case "buy":
-                    buyAnimal(commands[1]);
+                    buyAnimal(commands[2]);
                     break;
                 case "pickup":
                     pickUp(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
@@ -156,7 +157,7 @@ public class Game {
                     upgrade(commands[1]);
                     break;
                 case "plant":
-                    addPlant(Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
+                    addPlant(Integer.parseInt(commands[1]), Integer.parseInt(commands[2]));
                     break;
                 case "truck":
                     vehicle = truck;
@@ -186,10 +187,14 @@ public class Game {
                     }
                     break;
             }
-
         } catch (Exception e) {
             //TODO view
-            System.out.println(e.getMessage());
+            if(e.getMessage()!=null) {
+                System.out.println(e.getMessage());
+            }
+            else{
+                e.printStackTrace();
+            }
         }
     }
 
@@ -241,23 +246,22 @@ public class Game {
     public void upgrade(String type) {
         for (Upgradable upgradable : upgradables) {
             if (upgradable.getName().equals(type)) {
-                if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {//TODO check level is less than max level
+                if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
                     try {
                         upgradable.upgrade();
                         money -= upgradable.getUpgradeCost();
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                 }
             }
         }
-        if(type.equals("cat")){
-            if(money>= Cat.getUpgradeCost()){
-                try{
+        if (type.equals("cat")) {
+            if (money >= Cat.getUpgradeCost()) {
+                try {
                     Cat.upgrade();
-                    money-=Cat.getUpgradeCost();
-                }catch (Exception e){
+                    money -= Cat.getUpgradeCost();
+                } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
@@ -304,18 +308,18 @@ public class Game {
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Money:\n");
-        stringBuilder.append(money + "\n");
-        stringBuilder.append("Required Money:\n");
-        stringBuilder.append(level.getGoalMoney() + "\n");
-        stringBuilder.append("Time elapsed:\n");
-        stringBuilder.append(currentTurn + "\n");
-        for (String needed : level.getGoalEntity().keySet()) {
-            stringBuilder.append(needed).append(":\n");
-            stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
-            stringBuilder.append("Available: ").append(warehouse.getNumber(needed)).append("\n");
+        stringBuilder.append("Money: ").append(money).append("\n");
+        stringBuilder.append("Time elapsed: ").append(currentTurn).append("\n");
+        if(level!=null) {
+            stringBuilder.append("Required Money: ").append(level.getGoalMoney()).append("\n");
+            for (String needed : level.getGoalEntity().keySet()) {
+                stringBuilder.append(needed).append("{\n");
+                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+                stringBuilder.append("Available: ").append(warehouse.getNumber(needed)).append("\n");
+                stringBuilder.append("}\n");
+            }
         }
-        return stringBuilder.toString();
+        return stringBuilder.substring(0, stringBuilder.length()-1);
     }
 
     public Map getMap() {
