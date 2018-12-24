@@ -19,6 +19,14 @@ public class Cell {
         return m;
     }
 
+    public static void setN(int n) {
+        Cell.n = n;
+    }
+
+    public static void setM(int m) {
+        Cell.m = m;
+    }
+
     public int getX() {
         return x;
     }

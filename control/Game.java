@@ -44,7 +44,7 @@ public class Game {
             String command = input.nextLine();
             game.run(command);
             if (game.checkLevel()) {
-                System.out.println("Level completed");//TODO
+                System.out.println("Level completed");//TODO clear ?
             }
         }
     }
@@ -57,7 +57,9 @@ public class Game {
             switch (commands[0]) {
                 case "run":
                     level = levels.get(commands[1]);
-
+                    Cell.setN(level.getN());
+                    Cell.setM(level.getM());
+                    //TODO initialize and clear
                     break;
                 case "save":
                     OutputStream outputStream = new FileOutputStream(commands[2]);
