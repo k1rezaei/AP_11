@@ -62,12 +62,12 @@ public class Warehouse implements Upgradable {
 
     int getNumber(Map<String, Integer> test) {
         int ans = INF;
-        for (String str : test.keySet()) {
+        for (String type : test.keySet()) {
 
             int cnt = 0;
-            if(storables.get(str) != null) cnt = storables.get(str);
+            if(storables.get(type) != null) cnt = storables.get(type);
 
-            ans = Math.min(ans, cnt / test.get(str));
+            ans = Math.min(ans, cnt / test.get(type));
         }
         return ans;
     }
