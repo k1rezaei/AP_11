@@ -114,6 +114,8 @@ public class Item extends Entity {
             case "CagedWhiteBear":
                 fix(20, 100, 100);
                 break;
+            default:
+                throw new RuntimeException("Item Not Found");
         }
     }
 
