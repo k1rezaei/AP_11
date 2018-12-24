@@ -2,7 +2,7 @@ abstract public class Animal extends Entity {
     static private int[] dx = {+1, 0, -1, 0};
     static private int[] dy = {0, +1, 0, -1};
 
-    private int speed;
+    protected int speed;
     private Cell targetCell;
 
     Animal(String type) {
@@ -15,7 +15,7 @@ abstract public class Animal extends Entity {
 
 
     void setTargetCell(Cell newTargetCell) {
-        if (newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
+        if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
         if (targetCell == null || cell.equals(targetCell)) {
             targetCell = newTargetCell;
         }

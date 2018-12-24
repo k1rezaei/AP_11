@@ -45,13 +45,12 @@ public class FarmAnimal extends Animal {
             super.move();
             super.move();
         } else {
-            setTargetCell(Game.getInstance().getMap().getRandom());
+            setTargetCell(Cell.getRandomCell());
             super.move();
         }
 
     }
 
-    //produce ro ghabl az turn bayad seda koni
 
     void turn() {
         rateOfHunger -= 5;
@@ -77,6 +76,7 @@ public class FarmAnimal extends Animal {
 
     Item produce() {
         if (remainTime == 0) return new Item(produceType);
+
         return null;
     }
 }
