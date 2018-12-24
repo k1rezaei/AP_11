@@ -4,7 +4,19 @@ public class Item extends Entity {
 
     Item(String type) {
         super(type);
+
+        //TODO for Costume, Decoration, Cloth.
+
         switch (type) {
+            case "Decoration" :
+                fix(5, 200, 400);
+                break ;
+            case "Costume":
+                fix(5, 200, 200);
+                break ;
+            case "Cloth":
+                fix(10, 1000, 2000);
+                break;
             case "Egg":
                 fix(1, 20, 10);
                 break;
@@ -23,6 +35,8 @@ public class Item extends Entity {
             case "DriedEggs":
                 fix(4, 100, 50);
                 break;
+            case "EggPowder" :
+                fix(4, 100, 50);
             case "Cake":
                 fix(5, 200, 100);
                 break;
