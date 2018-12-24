@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Helicopter extends Vehicle {
+public class Helicopter extends Vehicle implements Upgradable {
     public Helicopter() {
         //TODO actual numbers
         setCapacity(5);
@@ -14,10 +14,28 @@ public class Helicopter extends Vehicle {
         //TODO bebin hamin basse ya na
     }
 
-    public ArrayList<Entity> getResult() {
+    public ArrayList<Entity> getResultItems() {
         ArrayList<Entity> result = (ArrayList<Entity>) getItems().clone();
         clear();
         return result;
+    }
+
+    public int getResultMoney() {
+        return 0;
+    }
+
+    @Override
+    public ArrayList<Entity> getNeededItems() {
+        return new ArrayList<>();
+    }
+
+    @Override
+    public int getNeededMoney() {
+        int priceSum = 0;
+        for (Entity entity : getItems()) {
+            priceSum += entity.buyPrice;
+        }
+        return priceSum;
     }
 
     public void upgrade() {
@@ -25,14 +43,7 @@ public class Helicopter extends Vehicle {
         //TODO bebin hamin bayad bashe ya na
     }
 
-    public int getCost() {
-        int priceSum = 0;
-        for (Entity entity : getItems()) {
-            priceSum += entity.buyPrice;
-        }
-        return priceSum;
-    }
-    public String getName(){
+    public String getName() {
         return "helicopter";
     }
 }

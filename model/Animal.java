@@ -4,6 +4,7 @@ abstract public class Animal extends Entity {
 
     private int speed;
     private Cell targetCell;
+
     Animal(String type) {
         super(type);
     }
@@ -13,18 +14,18 @@ abstract public class Animal extends Entity {
     }
 
 
-    void setTargetCell(Cell newTargetCell){
-        if(newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
-        if(targetCell == null || cell.equals(targetCell)){
+    void setTargetCell(Cell newTargetCell) {
+        if (newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
+        if (targetCell == null || cell.equals(targetCell)) {
             targetCell = newTargetCell;
         }
     }
 
     void move() {
-        if(targetCell == null){
+        if (targetCell == null) {
             throw new RuntimeException("targetCell is null");
         }
-        for(int i = 0; i < speed; i++) cell.move(targetCell);
+        for (int i = 0; i < speed; i++) cell.move(targetCell);
     }
 
     abstract void collide(Entity entity);

@@ -5,9 +5,6 @@ public class Well implements Upgradable {
     private int level;
     private int currentAmount;
 
-    public String getName(){ return "Well";}
-
-
     Well() {
         level = 0;
         currentAmount = 5;
@@ -56,7 +53,8 @@ public class Well implements Upgradable {
         level++;
         fill();
     }
-    public String getName(){
+
+    public String getName() {
         return "well";
     }
 }

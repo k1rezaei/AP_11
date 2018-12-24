@@ -1,11 +1,10 @@
 public abstract class Entity {
-    protected Cell cell;
-    protected int sellPrice, buyPrice, size;
-    protected String type;
-
     final public static String WILD_ANIMAL = "WildAnimal";
     final public static String PLANT = "Plant";
     final public static String ITEM = "Item";
+    protected Cell cell;
+    protected int sellPrice, buyPrice, size;
+    protected String type;
 
     Entity() {
     }
