@@ -5,7 +5,7 @@ import java.util.Map;
 public class Warehouse implements Upgradable {
     public static final int INF = 1000 * 1000 * 10;
     public static final int MAX_LEVEL = 10;
-    private static int CAPACITY_RATE_CHANGE = 500;
+    private static int CAPACITY_RATE_CHANGE = 200;
 
     private Map<String, Integer> storables = new HashMap<>();
     private int capacity = 10000;
