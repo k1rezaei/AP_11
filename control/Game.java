@@ -235,9 +235,24 @@ public class Game {
     public void upgrade(String type) {
         for (Upgradable upgradable : upgradables) {
             if (upgradable.getName().equals(type)) {
-                if (money >= upgradable.getUpgradeCost()) {//TODO check level is less than max level
-                    money -= upgradable.getUpgradeCost();
-                    upgradable.upgrade();
+                if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {//TODO check level is less than max level
+                    try {
+                        upgradable.upgrade();
+                        money -= upgradable.getUpgradeCost();
+                    }
+                    catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                }
+            }
+        }
+        if(type.equals("cat")){
+            if(money>= Cat.getUpgradeCost()){
+                try{
+                    Cat.upgrade();
+                    money-=Cat.getUpgradeCost();
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
                 }
             }
         }
