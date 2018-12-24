@@ -1,8 +1,9 @@
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import java.io.*;
-import java.text.Normalizer;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -60,43 +61,48 @@ public class Game {
                 case "save":
                     OutputStream outputStream = new FileOutputStream(commands[2]);
                     Formatter formatter = new Formatter(outputStream);
-                    formatter.format(gson.toJson(game));
+                    formatter.format(gson.toJson(this));
                     formatter.close();
                     outputStream.close();
                     break;
                 case "load":
                     if (commands[1].equals("game")) {
                         JsonReader reader = new JsonReader(new FileReader(commands[2]));
-                        game = gson.fromJson(reader,Game.class);
-                    }
-                    else{
+                        game = gson.fromJson(reader, Game.class);
+                    } else {
                         //TODO
                     }
                     break;
                 case "print":
-                    switch (commands[1]){
+                    switch (commands[1]) {
                         case "info":
-                            //TODO
+                            System.out.println(this);
                             break;
                         case "map":
-                            //TODO
+                            System.out.println(map);//TODO
                             break;
                         case "levels":
-                            //TODO
+                            for(String levelName:levels.keySet()){
+                                System.out.println(levelName+"{\n");
+                                System.out.println(level);
+                                System.out.println("}\n");
+                            }
                             break;
                         case "warehouse":
-                            //TODO
+                            System.out.println(warehouse);//TODO
                             break;
                         case "well":
-                            //TODO
+                            System.out.println(well);//TODO
                             break;
                         case "workshops":
-                            //TODO
+                            for(Workshop workshop:workshops){
+                                System.out.println(workshop);//TODO
+                            }
                             break;
                         case "truck":
                             vehicle = truck;
                         case "helicopter":
-                            if(vehicle == null){
+                            if (vehicle == null) {
                                 vehicle = helicopter;
                             }
                             System.out.println(vehicle);
@@ -257,6 +263,22 @@ public class Game {
             }
         }
         //TODO ye seri chiza bayad random spawn shan??
+    }
+
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Money:\n");
+        stringBuilder.append(money+"\n");
+        stringBuilder.append("Required Money:\n");
+        stringBuilder.append(level.getGoalMoney()+"\n");
+        stringBuilder.append("Time elapsed:\n");
+        stringBuilder.append(currentTurn+"\n");
+        for(String needed:level.getGoalEntity().keySet()){
+            stringBuilder.append(needed).append(":\n");
+            stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+            stringBuilder.append("Available: ").append(warehouse.getNumber(needed).append("\n");
+        }
+        return stringBuilder.toString();
     }
 
     public Map getMap() {
