@@ -5,7 +5,7 @@ import java.util.Map;
 public class Warehouse implements Upgradable {
     public static final int INF = 1000 * 1000 * 10;
     public static final int MAX_LEVEL = 10;
-    private static int CAPACITY_RATE_CHANGE = 500;
+    private static int CAPACITY_RATE_CHANGE = 200;
 
     private Map<String, Integer> storables = new HashMap<>();
     private int capacity = 10000;
@@ -104,5 +104,16 @@ public class Warehouse implements Upgradable {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("warehouse is level : " + getLevel() + "\n");
+        result.append("warehouse has this items : \n");
+        for(Map.Entry<String, Integer> entry : storables.entrySet()) {
+            result.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");
+        }
+        return result.toString();
     }
 }

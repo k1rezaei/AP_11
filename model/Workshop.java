@@ -2,20 +2,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Workshop implements Upgradable {
-    public static final int MAX_LEVEL = 10;
+    public static final int MAX_LEVEL = 5;
     private Map<String, Integer> inputs;
     private String output, name;
     private int duration, remainTime = -1, level = 1;
-    private int x, y, upgradeCost;
+    private int x, y, upgradeCost, startCost;
 
-    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, String name) {
+    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, int startCost, String name) {
         this.output = output;
         this.inputs = inputs;
         this.x = x;
         this.y = y;
         this.duration = duration;
         this.upgradeCost = upgradeCost;
+        this.startCost = startCost;
         this.name = name;
+    }
+
+    public int getStartCost() {
+        return startCost;
     }
 
     public String getName() {
@@ -60,5 +65,21 @@ public class Workshop implements Upgradable {
     @Override
     public int getLevel() {
         return level;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        result.append(name).append(" is level : ").append(getLevel()).append('\n');
+        if(remainTime == -1) result.append(name + " is free now.\n");
+        else result.append(name).append(" is working now.");
+
+        result.append(name).append(" Makes ").append(output).append(" from these Items : \n");
+        for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
+            result.append(entry.getValue()).append(" *  ").append(entry.getKey()).append("\n");
+        }
+
+        return result.toString();
     }
 }
