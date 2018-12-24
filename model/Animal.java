@@ -2,8 +2,8 @@ abstract public class Animal extends Entity {
     static private int[] dx = {+1, 0, -1, 0};
     static private int[] dy = {0, +1, 0, -1};
 
-    int speed;
-    Cell targetCell;
+    private int speed;
+    private Cell targetCell;
 
     Animal(String type) {
         super(type);
