@@ -70,7 +70,23 @@ public class Game {
                         JsonReader reader = new JsonReader(new FileReader(commands[2]));
                         game = gson.fromJson(reader, Game.class);
                     } else {
-                        //TODO
+                        for (int i = 0; i < 6; i++) {
+                            try {
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "workshop" + i));
+                                workshops.add(gson.fromJson(reader, Workshop.class));
+                            } catch (Exception e) {
+                                System.out.println("File not found");
+                            }
+                        }
+                        int i = 0;
+                        while (true) {
+                            try {
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "level" + i));
+                                levels.put("level" + i, gson.fromJson(reader, Level.class));
+                            } catch (Exception e) {
+                                break;
+                            }
+                        }
                     }
                     break;
                 case "print":
@@ -82,8 +98,8 @@ public class Game {
                             System.out.println(map);//TODO
                             break;
                         case "levels":
-                            for(String levelName:levels.keySet()){
-                                System.out.println(levelName+"{\n");
+                            for (String levelName : levels.keySet()) {
+                                System.out.println(levelName + "{\n");
                                 System.out.println(level);
                                 System.out.println("}\n");
                             }
@@ -95,7 +111,7 @@ public class Game {
                             System.out.println(well);//TODO
                             break;
                         case "workshops":
-                            for(Workshop workshop:workshops){
+                            for (Workshop workshop : workshops) {
                                 System.out.println(workshop);//TODO
                             }
                             break;
@@ -265,15 +281,15 @@ public class Game {
         //TODO ye seri chiza bayad random spawn shan??
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Money:\n");
-        stringBuilder.append(money+"\n");
+        stringBuilder.append(money + "\n");
         stringBuilder.append("Required Money:\n");
-        stringBuilder.append(level.getGoalMoney()+"\n");
+        stringBuilder.append(level.getGoalMoney() + "\n");
         stringBuilder.append("Time elapsed:\n");
-        stringBuilder.append(currentTurn+"\n");
-        for(String needed:level.getGoalEntity().keySet()){
+        stringBuilder.append(currentTurn + "\n");
+        for (String needed : level.getGoalEntity().keySet()) {
             stringBuilder.append(needed).append(":\n");
             stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
             stringBuilder.append("Available: ").append(warehouse.getNumber(needed).append("\n");

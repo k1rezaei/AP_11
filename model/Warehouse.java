@@ -33,14 +33,14 @@ public class Warehouse implements Upgradable {
     }
 
     void add(Entity entity) {
-        if(entity.getSize() > getCapacity()) throw new RuntimeException("WareHouse does not have enough capacity.");
+        if (entity.getSize() > getCapacity()) throw new RuntimeException("WareHouse does not have enough capacity.");
         capacity -= entity.getSize();
         String type = entity.getType();
         add(type);
     }
 
     Entity remove(String type) {
-        if(storables.get(type) == null) throw new RuntimeException("Item is Not in WareHouse.");
+        if (storables.get(type) == null) throw new RuntimeException("Item is Not in WareHouse.");
         int count = storables.get(type);
         count--;
         Entity entity = Entity.getNewEntity(type);
@@ -51,7 +51,7 @@ public class Warehouse implements Upgradable {
 
     void remove(Map<String, Integer> test) {
         for (String type : test.keySet()) {
-            if(storables.get(type) == null)  throw new RuntimeException("Item is Not in WareHouse");
+            if (storables.get(type) == null) throw new RuntimeException("Item is Not in WareHouse");
             int count = storables.get(type);
             count -= test.get(type);
             Entity entity = Entity.getNewEntity(type);
@@ -65,7 +65,7 @@ public class Warehouse implements Upgradable {
         for (String type : test.keySet()) {
 
             int cnt = 0;
-            if(storables.get(type) != null) cnt = storables.get(type);
+            if (storables.get(type) != null) cnt = storables.get(type);
 
             ans = Math.min(ans, cnt / test.get(type));
         }
@@ -78,8 +78,8 @@ public class Warehouse implements Upgradable {
             String type = entity.getType();
 
             int cnt = 0;
-            if(map.get(type) != null) cnt = map.get(type);
-            cnt ++;
+            if (map.get(type) != null) cnt = map.get(type);
+            cnt++;
 
             map.put(type, cnt);
         }
