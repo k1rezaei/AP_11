@@ -2,7 +2,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Workshop implements Upgradable {
-    public static final int MAX_LEVEL = 10;
+    public static final int MAX_LEVEL = 5;
     private Map<String, Integer> inputs;
     private String output, name;
     private int duration, remainTime = -1, level = 1;
