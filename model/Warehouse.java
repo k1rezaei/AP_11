@@ -4,26 +4,17 @@ import java.util.Map;
 
 public class Warehouse implements Upgradable {
     public static final int INF = 1000 * 1000 * 10;
-    Map<String, Integer> storables = new HashMap<>();
+    public static final int MAX_LEVEL = 10;
+    private static int CAPACITY_RATE_CHANGE = 500;
+
+    private Map<String, Integer> storables = new HashMap<>();
     private int capacity = 10000;
     private int upgradeCost = 1000;
-    private int CAPACITY_RATE_CHANGE = 500;
+    private int level = 0;
     private String name = "warehouse";
-
-    public String getName() {
-        return name;
-    }
 
     public int getCapacity() {
         return capacity;
-    }
-
-    public int getUpgradeCost() {
-        return upgradeCost;
-    }
-
-    public void upgrade() {
-        capacity += CAPACITY_RATE_CHANGE;
     }
 
     void add(String type) {
@@ -60,6 +51,12 @@ public class Warehouse implements Upgradable {
         }
     }
 
+    int getNumber(String type) {
+        int count = 0;
+        if(storables.get(type) != null) count = storables.get(type);
+        return count;
+    }
+
     int getNumber(Map<String, Integer> test) {
         int ans = INF;
         for (String type : test.keySet()) {
@@ -86,5 +83,27 @@ public class Warehouse implements Upgradable {
         return getNumber(map);
     }
 
+    public int getUpgradeCost() {
+        return upgradeCost;
+    }
 
+    public void upgrade() {
+        capacity += CAPACITY_RATE_CHANGE;
+        level ++;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return MAX_LEVEL;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
 }
