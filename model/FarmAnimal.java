@@ -54,7 +54,7 @@ public class FarmAnimal extends Animal {
 
     void turn() {
         rateOfHunger -= 5;
-        if (rateOfHunger == 0) {
+        if (rateOfHunger <= 0) {
             destroy();
         }
         move();
