@@ -105,4 +105,15 @@ public class Warehouse implements Upgradable {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        result.append("warehouse is level : " + getLevel() + "\n");
+        result.append("warehouse has this items : \n");
+        for(Map.Entry<String, Integer> entry : storables.entrySet()) {
+            result.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");
+        }
+        return result.toString();
+    }
 }

@@ -6,16 +6,21 @@ public class Workshop implements Upgradable {
     private Map<String, Integer> inputs;
     private String output, name;
     private int duration, remainTime = -1, level = 1;
-    private int x, y, upgradeCost;
+    private int x, y, upgradeCost, startCost;
 
-    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, String name) {
+    Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, int startCost, String name) {
         this.output = output;
         this.inputs = inputs;
         this.x = x;
         this.y = y;
         this.duration = duration;
         this.upgradeCost = upgradeCost;
+        this.startCost = startCost;
         this.name = name;
+    }
+
+    public int getStartCost() {
+        return startCost;
     }
 
     public String getName() {
