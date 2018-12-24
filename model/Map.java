@@ -21,6 +21,14 @@ public class Map {
                         ((Animal) entity).collide(entity2);
                     }
                 }
+        for(Entity entity : entities){
+            if(entity instanceof FarmAnimal){
+                Item item = ((FarmAnimal) entity).produce();
+                if(item != null){
+                    addEntity(item);
+                }
+            }
+        }
 
     }
 
@@ -37,11 +45,11 @@ public class Map {
         return res;
     }
 
-    Cell getRandom() {
-        return new Cell((int) (Math.random() * Cell.getN()), (int) (Math.random() * Cell.getM()));
-    }
-
     void addEntity(Entity entity) {
+        if(entity.getCell() == null){
+            entity.setCell(Cell.getRandomCell());
+        }
+        if(!entity.getCell().isInside()) throw new RuntimeException("Cell is not inside");
         entities.add(entity);
     }
 
@@ -69,6 +77,5 @@ public class Map {
             }
         return null;
     }
-    /// to do upgrade
 }
 

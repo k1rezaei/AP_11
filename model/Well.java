@@ -24,7 +24,7 @@ public class Well implements Upgradable {
 
     public int getUpgradeCost() {
         if (level == 3) {
-            throw new RuntimeException("Max level");
+            throw Upgradable.MAX_LEVEL_EXCEPTION;
         }
         return upgradeCost[level];
     }
@@ -49,7 +49,7 @@ public class Well implements Upgradable {
     }
 
     public void upgrade() {
-        if (level == 3) throw new RuntimeException("Max level");
+        if (level == 3) throw Upgradable.MAX_LEVEL_EXCEPTION;
         level++;
         fill();
     }
@@ -57,4 +57,7 @@ public class Well implements Upgradable {
     public String getName() {
         return "well";
     }
+
+    public int getMaxLevel(){ return 3;}
+
 }

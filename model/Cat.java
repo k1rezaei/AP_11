@@ -1,5 +1,5 @@
-public class Cat extends Animal implements Upgradable {
-    private int level;
+public class Cat extends Animal {
+    static private int level;
 
     Cat() {
         super("Cat");
@@ -13,13 +13,13 @@ public class Cat extends Animal implements Upgradable {
         speed = 4;
     }
 
-    public void upgrade() {
-        if (level == 1) throw new RuntimeException("Max Level");
+    static public void upgrade() {
+        if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         level = 1;
     }
 
-    public int getUpgradeCost() {
-        if (level == 1) throw new RuntimeException("Max Level");
+    static public int getUpgradeCost() {
+        if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         return 500;
     }
 
@@ -29,14 +29,13 @@ public class Cat extends Animal implements Upgradable {
 
     void collide(Entity entity) {
         if (entity instanceof Item) {
-            entity.destroy();
-            /// inja bayad chi kar konam??:(
+            Game.getInstance().pickUp(entity.getCell().getX(), entity.getCell().getY());
         }
     }
 
     void move() {
         if (level == 0) {
-            setTargetCell(Game.getInstance().getMap().getRandom());
+            setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, Cell.getRandomCell()));
         } else {
             setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, cell));
         }
@@ -46,4 +45,9 @@ public class Cat extends Animal implements Upgradable {
     void turn() {
         move();
     }
+
+    static public int getMaxLevel(){
+        return 1;
+    }
+    static public int getLevel(){ return level;}
 }
