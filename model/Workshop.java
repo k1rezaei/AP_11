@@ -3,7 +3,7 @@ import java.util.Map;
 
 public class Workshop implements Upgradable {
     public static final int MAX_LEVEL = 5;
-    private Map<String, Integer> inputs;
+    private Map<String, Integer> inputs = new HashMap<>();
     private String output, name;
     private int duration, remainTime = -1, level = 1;
     private int x, y, upgradeCost, startCost;
