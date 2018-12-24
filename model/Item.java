@@ -1,7 +1,5 @@
 public class Item extends Entity {
 
-    private int size;
-
     Item(String type) {
         super(type);
 
