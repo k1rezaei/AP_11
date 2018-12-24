@@ -7,6 +7,8 @@ public interface Upgradable {
     int getLevel();
     int getMaxLevel();
 
+    RuntimeException MAX_LEVEL_EXCEPTION = new RuntimeException("MAX LEVEL EXCEPTION");
+
     default boolean canUpgrade() {
         return getLevel() < getMaxLevel();
     }
