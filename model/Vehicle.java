@@ -127,4 +127,19 @@ abstract public class Vehicle implements Upgradable {
     public void clear() {
         items.clear();
     }
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Item:\n");
+        for(Entity entity:items){
+            stringBuilder.append(entity.getType()+"\n");
+        }
+        if(remainingTime > 0){
+            stringBuilder.append("Remaining time:\n");
+            stringBuilder.append(remainingTime);
+        }
+        else{
+            stringBuilder.append("Ready to go\n");
+        }
+        return stringBuilder.toString();
+    }
 }
