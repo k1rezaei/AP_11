@@ -66,4 +66,20 @@ public class Workshop implements Upgradable {
     public int getLevel() {
         return level;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        result.append(name).append(" is level : ").append(getLevel()).append('\n');
+        if(remainTime == -1) result.append(name + " is free now.\n");
+        else result.append(name).append(" is working now.");
+
+        result.append(name).append(" Makes ").append(output).append(" from these Items : \n");
+        for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
+            result.append(entry.getValue()).append(" *  ").append(entry.getKey()).append("\n");
+        }
+
+        return result.toString();
+    }
 }
