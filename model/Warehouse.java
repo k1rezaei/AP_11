@@ -18,9 +18,8 @@ public class Warehouse implements Upgradable {
     }
 
     void add(String type) {
-        int count = storables.get(type);
-        count++;
-        storables.put(type, count);
+        Entity entity = Entity.getNewEntity(type);
+        add(entity);
     }
 
     void add(Entity entity) {

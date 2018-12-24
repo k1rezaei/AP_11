@@ -2,7 +2,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Workshop implements Upgradable {
-    private Map<String, Integer> inputs = new HashMap<>();
+    public static final int MAX_LEVEL = 10;
+    private Map<String, Integer> inputs;
     private String output, name;
     private int duration, remainTime = -1, level = 1;
     private int x, y, upgradeCost;
@@ -48,6 +49,16 @@ public class Workshop implements Upgradable {
 
     public void upgrade() {
         level++;
+        //TODO duration
     }
 
+    @Override
+    public int getMaxLevel() {
+        return MAX_LEVEL;
+    }
+
+    @Override
+    public int getLevel() {
+        return level;
+    }
 }
