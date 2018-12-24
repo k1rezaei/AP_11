@@ -1,13 +1,14 @@
 public interface Upgradable {
 
     String getName();
-
     int getUpgradeCost();
 
     void upgrade();
-
-    int getMaxLevel();
     int getLevel();
+    int getMaxLevel();
 
-    static public RuntimeException MAX_LEVEL_EXCEPTION = new RuntimeException("Max LeveL");
+    default boolean canUpgrade() {
+        return getLevel() < getMaxLevel();
+    }
+
 }
