@@ -11,7 +11,6 @@ public class Map {
     }
 
     void turn() {
-        relax();
         for (Entity entity : entities) entity.turn();
         for (Entity entity : entities)
             for (Entity entity2 : entities)
@@ -21,6 +20,7 @@ public class Map {
                         ((Animal) entity).collide(entity2);
                     }
                 }
+        relax();
         for(Entity entity : entities){
             if(entity instanceof FarmAnimal){
                 Item item = ((FarmAnimal) entity).produce();
@@ -54,6 +54,7 @@ public class Map {
     }
 
     void addEntity(Cell cell, Entity entity) {
+        if(cell == null) throw new RuntimeException("Cell is null");
         entity.setCell(cell);
         addEntity(entity);
     }
@@ -76,6 +77,15 @@ public class Map {
                 return (Item) entity;
             }
         return null;
+    }
+
+    @Override
+    public String toString(){
+        String res = new String();
+        for(Entity entity : entities) if(entity.getCell() != null){
+            res += (entity.type + " : " + entity.getCell().getX() + " " + entity.getCell().getY());
+        }
+        return res;
     }
 }
 
