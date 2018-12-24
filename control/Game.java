@@ -57,6 +57,7 @@ public class Game {
             switch (commands[0]) {
                 case "run":
                     level = levels.get(commands[1]);
+
                     break;
                 case "save":
                     OutputStream outputStream = new FileOutputStream(commands[2]);
@@ -151,6 +152,9 @@ public class Game {
                     break;
                 case "upgrade":
                     upgrade(commands[1]);
+                    break;
+                case "plant":
+                    addPlant(Integer.parseInt(commands[1]),Integer.parseInt(commands[2]));
                     break;
                 case "truck":
                     vehicle = truck;
@@ -307,7 +311,7 @@ public class Game {
         for (String needed : level.getGoalEntity().keySet()) {
             stringBuilder.append(needed).append(":\n");
             stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
-            stringBuilder.append("Available: ").append(warehouse.getNumber(needed).append("\n");
+            stringBuilder.append("Available: ").append(warehouse.getNumber(needed)).append("\n");
         }
         return stringBuilder.toString();
     }
