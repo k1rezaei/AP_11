@@ -75,8 +75,12 @@ public class FarmAnimal extends Animal {
 
 
     Item produce() {
-        if (remainTime == 0) return new Item(produceType);
-
+        if (remainTime == 0) {
+            Item item = new Item(produceType);
+            Cell cell = new Cell(this.cell.getX(), this.cell.getY());
+            item.setCell(cell);
+            return item;
+        }
         return null;
     }
 }
