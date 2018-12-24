@@ -21,9 +21,9 @@ public class WildAnimal extends Animal {
         return;
     }
 
-    void move(){
-        setTargetCell(Game.getInstance().getMap().getRandom());
-        for(int i = 0; i < speed; i++) super.move();
+    void move() {
+        setTargetCell(Cell.getRandomCell());
+        super.move();
     }
 
     @Override

@@ -1,14 +1,22 @@
 public class Cell {
     private static int n, m;
-
-    public static int getN(){ return n;}
-    public static int getM(){ return m;}
-
     private int x, y;
 
     Cell(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public static Cell getRandomCell(){
+        return new Cell((int) (Math.random() * Cell.getN()), (int) (Cell.getM()));
+    }
+
+    public static int getN() {
+        return n;
+    }
+
+    public static int getM() {
+        return m;
     }
 
     public int getX() {
@@ -43,18 +51,18 @@ public class Cell {
     void move(Cell targetCell) {
         int tX = targetCell.getX();
         int tY = targetCell.getY();
-        if(tX > getX()){
-            setX(x+1);
-        }else if(tX < getX()){
-            setX(x-1);
-        }else if(tY > getY()){
-            setY(y+1);
-        }else if(tY < getY()){
-            setY(y-1);
+        if (tX > getX()) {
+            setX(x + 1);
+        } else if (tX < getX()) {
+            setX(x - 1);
+        } else if (tY > getY()) {
+            setY(y + 1);
+        } else if (tY < getY()) {
+            setY(y - 1);
         }
     }
 
-    int getDistance(Cell cell){
+    int getDistance(Cell cell) {
         return Math.abs(cell.getX() - x) + Math.abs(cell.getY() - y);
     }
 

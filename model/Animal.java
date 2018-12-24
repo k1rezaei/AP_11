@@ -12,7 +12,9 @@ abstract public class Animal extends Entity {
 
 
     void setTargetCell(Cell newTargetCell) {
-        if (newTargetCell == null) newTargetCell = Game.getInstance().getMap().getRandom();
+
+      if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
+      
         if (targetCell == null || cell.equals(targetCell)) {
             targetCell = newTargetCell;
         }

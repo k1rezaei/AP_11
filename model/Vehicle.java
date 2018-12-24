@@ -4,10 +4,10 @@ abstract public class Vehicle implements Upgradable {
     private int capacity;
     private int currentCapacity;
     private int upgradeCost;
-    private int remainingTime=0;
+    private int remainingTime = 0;
     private int goTime;
-    private int level=0;
-    private int maxLevel=5;
+    private int level = 0;
+    private int maxLevel = 5;
     private ArrayList<Entity> items = new ArrayList<>();
 
     public int getLevel() {
@@ -74,6 +74,14 @@ abstract public class Vehicle implements Upgradable {
         this.items = items;
     }
 
+    abstract public int getNeededMoney();
+
+    abstract public ArrayList<Entity> getNeededItems();
+
+    abstract public int getResultMoney();
+
+    abstract public ArrayList<Entity> getResultItems();
+
     public void add(String type, int count) {
         if (remainingTime > 0) {
             throw new RuntimeException("Vehicle in use");
@@ -118,5 +126,20 @@ abstract public class Vehicle implements Upgradable {
 
     public void clear() {
         items.clear();
+    }
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Item:\n");
+        for(Entity entity:items){
+            stringBuilder.append(entity.getType()+"\n");
+        }
+        if(remainingTime > 0){
+            stringBuilder.append("Remaining time:\n");
+            stringBuilder.append(remainingTime);
+        }
+        else{
+            stringBuilder.append("Ready to go\n");
+        }
+        return stringBuilder.toString();
     }
 }

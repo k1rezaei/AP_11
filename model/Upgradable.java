@@ -10,4 +10,5 @@ public interface Upgradable {
     default boolean canUpgrade() {
         return getLevel() < getMaxLevel();
     }
+
 }
