@@ -33,7 +33,7 @@ public class Well implements Upgradable {
         return capacity[level];
     }
 
-    public boolean isItEmpty() {
+    public boolean isEmpty() {
         return currentAmount == 0;
     }
 
@@ -45,6 +45,7 @@ public class Well implements Upgradable {
     }
 
     public void fill() {
+        if(currentAmount != 0) throw new RuntimeException("Well is not empty");
         currentAmount = getCapacity();
     }
 
@@ -60,4 +61,8 @@ public class Well implements Upgradable {
 
     public int getMaxLevel(){ return 3;}
 
+    @Override
+    public String toString(){
+        return "ٌٍLevel : " + level + " | currentAmount : " + currentAmount + "\n";
+    }
 }
