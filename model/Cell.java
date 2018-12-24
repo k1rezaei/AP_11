@@ -7,7 +7,7 @@ public class Cell {
         this.y = y;
     }
 
-    public static Cell getRandomCell(){
+    public static Cell getRandomCell() {
         return new Cell((int) (Math.random() * Cell.getN()), (int) (Cell.getM()));
     }
 
@@ -17,6 +17,14 @@ public class Cell {
 
     public static int getM() {
         return m;
+    }
+
+    public static void setN(int n) {
+        Cell.n = n;
+    }
+
+    public static void setM(int m) {
+        Cell.m = m;
     }
 
     public int getX() {

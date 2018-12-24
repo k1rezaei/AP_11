@@ -1,7 +1,4 @@
 abstract public class Animal extends Entity {
-    static private int[] dx = {+1, 0, -1, 0};
-    static private int[] dy = {0, +1, 0, -1};
-
     protected int speed;
     private Cell targetCell;
 
@@ -15,7 +12,9 @@ abstract public class Animal extends Entity {
 
 
     void setTargetCell(Cell newTargetCell) {
-        if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
+
+      if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
+      
         if (targetCell == null || cell.equals(targetCell)) {
             targetCell = newTargetCell;
         }
