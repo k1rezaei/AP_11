@@ -52,7 +52,7 @@ public class Well implements Upgradable {
     public void upgrade() {
         if (level == 3) throw Upgradable.MAX_LEVEL_EXCEPTION;
         level++;
-        fill();
+        currentAmount = getCapacity();
     }
 
     public String getName() {
