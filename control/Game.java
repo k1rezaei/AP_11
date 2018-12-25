@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -100,82 +98,20 @@ public class Game {
         try {
             switch (commands[0]) {
                 case "run":
-                    level = levels.get(commands[1]);
-                    Cell.setN(level.getN());
-                    Cell.setM(level.getM());
-                    this.money = level.getStartMoney();
-                    //TODO initialize and clear
+                    runMap(commands[1]);
                     break;
                 case "save":
-                    OutputStream outputStream = new FileOutputStream(commands[2]);
-                    Formatter formatter = new Formatter(outputStream);
-                    formatter.format(gson.toJson(new Saver(this)));
-                    formatter.close();
-                    outputStream.close();
+                    saveGame(commands[2]);
                     break;
                 case "load":
                     if (commands[1].equals("game")) {
-                        JsonReader reader = new JsonReader(new FileReader(commands[2]));
-                        Saver save = gson.fromJson(reader, Saver.class);
-                        game = new Game(save);
+                        loadGame(commands[2]);
                     } else {
-                        for (int i = 0; i < 6; i++) {
-                            try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\workshop" + i + ".json"));
-                                workshops.add(gson.fromJson(reader, Workshop.class));
-                            } catch (Exception e) {
-                                System.out.println("File not found");
-                            }
-                        }
-                        int i = 0;
-                        while (true) {
-                            try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\level" + i + ".json"));
-                                levels.put("level" + i, gson.fromJson(reader, Level.class));
-                                i++;
-                            } catch (Exception e) {
-                                break;
-                            }
-                        }
+                        loadCustom(commands[2]);
                     }
                     break;
                 case "print":
-                    switch (commands[1]) {
-                        case "info":
-                            System.out.println(game);
-                            break;
-                        case "map":
-                            System.out.println(map);
-                            break;
-                        case "levels":
-                            for (String levelName : levels.keySet()) {
-                                System.out.println(levelName + "{");
-                                System.out.println(levels.get(levelName));
-                                System.out.println("}");
-                            }
-                            break;
-                        case "warehouse":
-                            System.out.println(warehouse);
-                            break;
-                        case "well":
-                            System.out.println(well);
-                            break;
-                        case "workshops":
-                            for (Workshop workshop : workshops) {
-                                System.out.println(workshop);
-                            }
-                            break;
-                        case "truck":
-                            vehicle = truck;
-                        case "helicopter":
-                            if (vehicle == null) {
-                                vehicle = helicopter;
-                            }
-                            System.out.println(vehicle);
-                            break;
-                        default:
-                            throw new RuntimeException("invalid input");
-                    }
+                    print(commands[1]);
                     break;
                 case "turn":
                     turn(Integer.parseInt(commands[1]));
@@ -232,6 +168,92 @@ public class Game {
             } else {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void runMap(String mapName) {
+        level = levels.get(mapName);
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        this.money = level.getStartMoney();
+        //TODO initialize and clear
+    }
+
+    private void saveGame(String command) throws IOException {
+        Gson gson = new Gson();
+        OutputStream outputStream = new FileOutputStream(command);
+        Formatter formatter = new Formatter(outputStream);
+        formatter.format(gson.toJson(new Saver(this)));
+        formatter.close();
+        outputStream.close();
+    }
+
+    private void loadGame(String address) throws FileNotFoundException {
+        Gson gson = new Gson();
+        JsonReader reader = new JsonReader(new FileReader(address));
+        Saver save = gson.fromJson(reader, Saver.class);
+        game = new Game(save);
+    }
+
+    private void loadCustom(String address) {
+        Gson gson = new Gson();
+        for (int i = 0; i < 6; i++) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "\\workshop" + i + ".json"));
+                workshops.add(gson.fromJson(reader, Workshop.class));
+            } catch (Exception e) {
+                System.out.println("File not found");
+            }
+        }
+        int i = 0;
+        while (true) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "\\level" + i + ".json"));
+                levels.put("level" + i, gson.fromJson(reader, Level.class));
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+    }
+
+    private void print(String name) {
+        Vehicle vehicle = null;
+        switch (name) {
+            case "info":
+                System.out.println(game);
+                break;
+            case "map":
+                System.out.println(map);
+                break;
+            case "levels":
+                for (String levelName : levels.keySet()) {
+                    System.out.println(levelName + "{");
+                    System.out.println(levels.get(levelName));
+                    System.out.println("}");
+                }
+                break;
+            case "warehouse":
+                System.out.println(warehouse);
+                break;
+            case "well":
+                System.out.println(well);
+                break;
+            case "workshops":
+                for (Workshop workshop : workshops) {
+                    System.out.println(workshop);
+                }
+                break;
+            case "truck":
+                vehicle = truck;
+            case "helicopter":
+                if (vehicle == null) {
+                    vehicle = helicopter;
+                }
+                System.out.println(vehicle);
+                break;
+            default:
+                throw new RuntimeException("invalid input");
         }
     }
 
@@ -385,7 +407,7 @@ public class Game {
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
                 stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
-                stringBuilder.append("Available: ").append(warehouse.getNumber(needed)+map.getNumber(needed)).append("\n");
+                stringBuilder.append("Available: ").append(warehouse.getNumber(needed) + map.getNumber(needed)).append("\n");
                 stringBuilder.append("}\n");
             }
         }
