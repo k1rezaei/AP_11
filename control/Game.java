@@ -224,6 +224,8 @@ public class Game {
                             break;
                     }
                     break;
+                    default:
+                        throw new RuntimeException("Invalid command");
             }
         } catch (Exception e) {
             //TODO view

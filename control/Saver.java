@@ -39,7 +39,7 @@ public class Saver {
             } else if (entity instanceof Item) {
                 items.add((Item) entity);
             } else {
-                plants.add((Plant)entity);
+                plants.add((Plant) entity);
             }
         }
     }
