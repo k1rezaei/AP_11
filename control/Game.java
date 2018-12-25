@@ -163,7 +163,6 @@ public class Game {
         } catch (Exception e) {
             //TODO view
             if (e.getMessage() != null) {
-                e.printStackTrace();
                 System.out.println(e.getMessage());
             } else {
                 e.printStackTrace();
@@ -261,7 +260,7 @@ public class Game {
     }
 
     private void go(Vehicle vehicle) {
-        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
+        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {
             money -= vehicle.getNeededMoney();
             for (Entity entity : vehicle.getNeededItems()) {
                 warehouse.remove(entity.type);
@@ -299,6 +298,7 @@ public class Game {
     }
 
     public void addPlant(int x, int y) {
+        //TODO age kamel birun bud ab kam nashe?
         if (well.getCurrentAmount() > 0) {
             well.decreaseWater();
             for (int i = -1; i < 2; i++) {
@@ -307,6 +307,7 @@ public class Game {
                         Entity entity = new Plant(new Cell(x + i, y + j));
                         map.addEntity(entity);
                     } catch (Exception e) {
+
                     }
                 }
             }
@@ -411,7 +412,7 @@ public class Game {
             stringBuilder.append("Required Money: ").append(level.getGoalMoney()).append("\n");
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
-                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");
                 stringBuilder.append("Available: ").append(warehouse.getNumber(needed) + map.getNumber(needed)).append("\n");
                 stringBuilder.append("}\n");
             }

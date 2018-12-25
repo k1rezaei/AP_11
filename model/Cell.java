@@ -8,6 +8,9 @@ public class Cell {
     Cell(int x, int y) {
         this.x = x;
         this.y = y;
+        if (!isInside()) {
+            throw new RuntimeException("Cell out of boundaries");
+        }
     }
 
     public static Cell getRandomCell() {
