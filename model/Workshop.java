@@ -8,6 +8,8 @@ public class Workshop implements Upgradable {
     private int duration, remainTime = -1, level = 1;
     private int x, y, upgradeCost, startCost;
 
+    private int numberOfOutputs;
+
     Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, int startCost, String name) {
         this.output = output;
         this.inputs = inputs;
@@ -36,13 +38,16 @@ public class Workshop implements Upgradable {
         }
         if (buildNumber == 0) throw new RuntimeException("Cant Build Anything");
         remainTime = duration;
+        numberOfOutputs = buildNumber;
     }
 
     void turn() {
         if (remainTime == -1) return;
         if (remainTime == 0) {
-            Entity entity = new Item(output, new Cell(x, y));
-            Game.getInstance().addEntity(entity);
+            for (int i=0; i<numberOfOutputs; i++) {
+                Entity entity = new Item(output, new Cell(x, y));
+                Game.getInstance().addEntity(entity);
+            }
             remainTime = -1;
             return;
         } else remainTime--;
