@@ -194,11 +194,13 @@ public class Game {
                     break;
                 case "start":
                     for (Workshop workshop : workshops) {
-                        if (workshop.getName().equals(commands[1]) && getMoney() >= workshop.getStartCost()) {
-                            workshop.start();
-                            money -= workshop.getStartCost();
-                        } else {
-                            System.out.println("not enough money");
+                        if (workshop.getName().equals(commands[1])) {
+                            if (getMoney() >= workshop.getStartCost()) {
+                                workshop.start();
+                                money -= workshop.getStartCost();
+                            } else {
+                                System.out.println("not enough money");
+                            }
                         }
                     }
                     break;
@@ -356,7 +358,6 @@ public class Game {
         }
         currentTurn++;
         if (currentTurn % 60 == 0) {
-            System.out.println(currentTurn);
             if (Math.random() > 0.5) {
                 map.addEntity(Entity.getNewEntity("Bear"));
             } else {
