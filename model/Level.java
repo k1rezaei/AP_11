@@ -56,7 +56,6 @@ public class Level {
     }
 
     public String toString() {
-        //return (new Gson()).toJson(this);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Required Money: ").append(getGoalMoney()).append("\n");
         for (String needed : getGoalEntity().keySet()) {
