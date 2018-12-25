@@ -20,6 +20,8 @@ public class WildAnimal extends Animal {
         if (entity instanceof FarmAnimal) {
             entity.destroy();
         }
+        if(entity instanceof Cat)
+            entity.destroy();
         return;
     }
 
