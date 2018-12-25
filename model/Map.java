@@ -11,7 +11,7 @@ public class Map {
     }
 
     void turn() {
-        for (Entity entity : entities) entity.turn();
+        for (Entity entity : entities) if(entity.getCell() != null) entity.turn();
         for (Entity entity : entities)
             for (Entity entity2 : entities)
                 if (entity != entity2 && entity instanceof Animal) {
@@ -85,6 +85,7 @@ public class Map {
         for(Entity entity : entities) if(entity.getCell() != null){
             res += (entity.type + " : " + entity.getCell().getX() + " " + entity.getCell().getY() + "\n");
         }
+        if(res == null) return "Map is empty";
         return res.substring(0,res.length()-1);
     }
 }
