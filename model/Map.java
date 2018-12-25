@@ -11,9 +11,11 @@ public class Map {
         this.entities = entities;
     }
 
-    int getNumber() {
-        relax();
-        return entities.size();
+    int getNumber(String type) {
+        int cnt = 0;
+
+        for(Entity entity : entities) if(entity.getCell() != null && entity.getType().equalsIgnoreCase(type)) cnt++;
+        return cnt;
     }
 
     void relax() {
