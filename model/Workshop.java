@@ -73,7 +73,10 @@ public class Workshop implements Upgradable {
 
         result.append(name).append(" is level : ").append(getLevel()).append('\n');
         if(remainTime == -1) result.append(name + " is free now.\n");
-        else result.append(name).append(" is working now.");
+        else {
+            result.append(name).append(" is working now.\n");
+            result.append(name + "will finish it's work in next " + remainTime + "\n");
+        }
 
         result.append(name).append(" Makes ").append(output).append(" from these Items : \n");
         for (Map.Entry<String, Integer> entry : inputs.entrySet()) {
