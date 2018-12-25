@@ -207,6 +207,7 @@ public class Game {
                 throw new RuntimeException("File not found");
             }
         }
+        levels.clear();
         int i = 0;
         while (true) {
             try {
@@ -223,7 +224,7 @@ public class Game {
         Vehicle vehicle = null;
         switch (name) {
             case "info":
-                System.out.println(game);
+                System.out.println(this);
                 break;
             case "map":
                 System.out.println(map);
@@ -278,7 +279,7 @@ public class Game {
                     workshop.start();
                     money -= workshop.getStartCost();
                 } else {
-                    System.out.println("not enough money");
+                    throw new RuntimeException("not enough money");
                 }
             }
         }
@@ -286,6 +287,9 @@ public class Game {
 
     public void buyAnimal(String name) {
         Entity animal = Entity.getNewEntity(name);
+        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)){
+            throw new RuntimeException("Invalid animal");
+        }
         if (animal.getBuyPrice() <= money) {
             money -= animal.getBuyPrice();
             map.addEntity(animal);
@@ -349,12 +353,8 @@ public class Game {
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                try {
-                    Cat.upgrade();
-                    money -= Cat.getUpgradeCost();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                Cat.upgrade();
+                money -= Cat.getUpgradeCost();
                 catLevel = Cat.getLevel();
             } else {
                 throw new RuntimeException("not enough money");
@@ -367,8 +367,7 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        boolean
-                result = money >= level.getGoalMoney();
+        boolean result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
             result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
         }
