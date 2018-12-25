@@ -13,6 +13,10 @@ public class Cat extends Animal {
         speed = 4;
     }
 
+    static public void setLevel(int level) {
+        Cat.level = level;
+    }
+
     static public void upgrade() {
         if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         level = 1;

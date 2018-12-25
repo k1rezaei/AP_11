@@ -1,14 +1,27 @@
+import com.google.gson.Gson;
+
 import java.util.HashMap;
 
 public class Level {
+    private int startMoney;
     private int goalMoney;
     private HashMap<String, Integer> goalEntity = new HashMap<>();
     private int n, m;
-
     //TODO Initial Entities
-    public Level(int goalMoney, HashMap<String, Integer> goalEntity) {
+    public Level(int n, int m, int startMoney, int goalMoney, HashMap<String, Integer> goalEntity) {
         this.goalMoney = goalMoney;
         this.goalEntity = goalEntity;
+        this.n = n;
+        this.m = m;
+        this.startMoney = startMoney;
+    }
+
+    public int getStartMoney() {
+        return startMoney;
+    }
+
+    public void setStartMoney(int startMoney) {
+        this.startMoney = startMoney;
     }
 
     public int getN() {
@@ -44,15 +57,13 @@ public class Level {
     }
 
     public String toString() {
-
+        //return (new Gson()).toJson(this);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Required Money:\n");
-        stringBuilder.append(getGoalMoney() + "\n");
+        stringBuilder.append("Required Money: ").append(getGoalMoney()).append( "\n");
         for (String needed : getGoalEntity().keySet()) {
-            stringBuilder.append(needed).append(":\n");
-            stringBuilder.append("Needed : ").append(getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+            stringBuilder.append(needed).append(": ").append(getNumber(needed)).append("\n");//TODO khode level get dashte bashe
         }
-        return stringBuilder.toString();
+        return stringBuilder.substring(0, stringBuilder.length()-1);
     }
 
     public int getNumber(String item) {

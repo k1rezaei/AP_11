@@ -56,6 +56,7 @@ public class FarmAnimal extends Animal {
         rateOfHunger -= 5;
         if (rateOfHunger <= 0) {
             destroy();
+            return;
         }
         move();
         if (remainTime == 0) {
