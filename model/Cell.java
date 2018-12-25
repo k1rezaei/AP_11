@@ -1,10 +1,16 @@
+import java.util.ArrayList;
+
 public class Cell {
     private static int n, m;
+    private static int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
     private int x, y;
 
     Cell(int x, int y) {
         this.x = x;
         this.y = y;
+        if (!isInside()) {
+            throw new RuntimeException("Cell out of boundaries");
+        }
     }
 
     public static Cell getRandomCell() {
@@ -57,16 +63,25 @@ public class Cell {
     }
 
     void move(Cell targetCell) {
-        int tX = targetCell.getX();
-        int tY = targetCell.getY();
-        if (tX > getX()) {
-            setX(x + 1);
-        } else if (tX < getX()) {
-            setX(x - 1);
-        } else if (tY > getY()) {
-            setY(y + 1);
-        } else if (tY < getY()) {
-            setY(y - 1);
+        int targetX = targetCell.getX();
+        int targetY = targetCell.getY();
+        ArrayList<Integer> possible = new ArrayList<>();
+        if (targetX > getX()) {
+            possible.add(0);
+        }
+        if (targetX < getX()) {
+            possible.add(1);
+        }
+        if (targetY > getY()) {
+            possible.add(2);
+        }
+        if (targetY < getY()) {
+            possible.add(3);
+        }
+        if (!possible.isEmpty()) {
+            int index = possible.get((int) (Math.random() * possible.size()));
+            x += d[index][0];
+            y += d[index][1];
         }
     }
 
