@@ -6,8 +6,7 @@ public abstract class Entity {
     protected int sellPrice, buyPrice, size;
     protected String type;
 
-    Entity() {
-    }
+    public Entity() {}
 
     Entity(String type) {
         this.type = type;
