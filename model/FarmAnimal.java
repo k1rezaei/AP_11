@@ -9,6 +9,7 @@ public class FarmAnimal extends Animal {
     private int baseRemainTime;
     private int remainTime;
 
+    FarmAnimal(){};
 
     FarmAnimal(String type) {
         super(type);
