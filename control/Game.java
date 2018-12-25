@@ -279,9 +279,10 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        boolean result = money >= level.getGoalMoney();
+        boolean
+                result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
-            result &= level.getNumber(name) <= warehouse.getNumber(name) ;//TODO + map.getNumber(name);
+            result &= level.getNumber(name) <= warehouse.getNumber(name);//TODO + map.getNumber(name);
         }
         return result;
     }
@@ -394,5 +395,13 @@ public class Game {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public int getCatLevel() {
+        return catLevel;
     }
 }
