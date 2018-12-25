@@ -279,7 +279,11 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        return money >= level.getGoalMoney() && warehouse.getNumber(level.getGoalEntity()) > 0;
+        boolean result = money >= level.getGoalMoney();
+        for (String name : level.getGoalEntity().keySet()) {
+            result &= level.getNumber(name) <= warehouse.getNumber(name) ;//TODO + map.getNumber(name);
+        }
+        return result;
     }
 
     public void turn(int n) {
