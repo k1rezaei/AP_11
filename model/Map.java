@@ -101,6 +101,16 @@ public class Map {
 
     @Override
     public String toString() {
+        char [][] map = new char[100][100];
+        for(int i = 0; i < 100; i++) for(int j = 0; j < 100; j++) map[i][j] = '.';
+        for(Entity entity : entities) if(entity.getCell() != null) map[entity.getCell().getX()][entity.getCell().getY()] = entity.getType().charAt(0);
+        for(int i = 0; i < 100; i++){
+            for(int j = 0; j < 100; j++) System.out.print(map[i][j]);
+            System.out.println();
+        }
+
+        //return "";
+
         String res = new String();
         for (Entity entity : entities)
             if (entity.getCell() != null) {
