@@ -45,6 +45,8 @@ public class Game {
         this.well = save.getWell();
         this.warehouse = save.getWarehouse();
         this.catLevel = save.getCatLevel();
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
         Cat.setLevel(catLevel);
         this.currentTurn = save.getCurrentTurn();
         map = new Map();
@@ -66,6 +68,14 @@ public class Game {
         for (Plant plant : save.getPlants()) {
             map.addEntity(plant);
         }
+        vehicles = new ArrayList<>();
+        upgradables = new ArrayList<>();
+        vehicles.add(truck);
+        vehicles.add(helicopter);
+        upgradables.add(warehouse);
+        upgradables.addAll(workshops);
+        upgradables.add(well);
+        upgradables.addAll(vehicles);
     }
 
     public static Game getInstance() {
@@ -224,12 +234,12 @@ public class Game {
                             break;
                     }
                     break;
-                    default:
-                        throw new RuntimeException("Invalid command");
+                default:
+                    throw new RuntimeException("Invalid command");
             }
         } catch (Exception e) {
             //TODO view
-            if(e.getMessage()!=null) {
+            if (e.getMessage() != null) {
                 e.printStackTrace();
                 System.out.println(e.getMessage());
             } else {
