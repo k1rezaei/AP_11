@@ -1,5 +1,3 @@
-import com.google.gson.Gson;
-
 import java.util.HashMap;
 
 public class Level {
@@ -7,6 +5,7 @@ public class Level {
     private int goalMoney;
     private HashMap<String, Integer> goalEntity = new HashMap<>();
     private int n, m;
+
     //TODO Initial Entities
     public Level(int n, int m, int startMoney, int goalMoney, HashMap<String, Integer> goalEntity) {
         this.goalMoney = goalMoney;
@@ -59,11 +58,11 @@ public class Level {
     public String toString() {
         //return (new Gson()).toJson(this);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Required Money: ").append(getGoalMoney()).append( "\n");
+        stringBuilder.append("Required Money: ").append(getGoalMoney()).append("\n");
         for (String needed : getGoalEntity().keySet()) {
             stringBuilder.append(needed).append(": ").append(getNumber(needed)).append("\n");//TODO khode level get dashte bashe
         }
-        return stringBuilder.substring(0, stringBuilder.length()-1);
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
     public int getNumber(String item) {

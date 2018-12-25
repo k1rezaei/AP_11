@@ -1,6 +1,9 @@
 public class WildAnimal extends Animal {
 
-    WildAnimal() {};
+    WildAnimal() {
+    }
+
+    ;
 
     WildAnimal(String type) {
         super(type);
@@ -20,7 +23,7 @@ public class WildAnimal extends Animal {
         if (entity instanceof FarmAnimal) {
             entity.destroy();
         }
-        if(entity instanceof Cat)
+        if (entity instanceof Cat)
             entity.destroy();
         return;
     }

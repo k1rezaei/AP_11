@@ -197,18 +197,21 @@ public class Game {
 
     private void loadCustom(String address) {
         Gson gson = new Gson();
+        workshops.clear();
         for (int i = 0; i < 6; i++) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\workshop" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
                 workshops.add(gson.fromJson(reader, Workshop.class));
             } catch (Exception e) {
-                System.out.println("File not found");
+                workshops.clear();
+                throw new RuntimeException("File not found");
             }
         }
+        levels.clear();
         int i = 0;
         while (true) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\level" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
                 levels.put("level" + i, gson.fromJson(reader, Level.class));
                 i++;
             } catch (Exception e) {
@@ -221,7 +224,7 @@ public class Game {
         Vehicle vehicle = null;
         switch (name) {
             case "info":
-                System.out.println(game);
+                System.out.println(this);
                 break;
             case "map":
                 System.out.println(map);
@@ -276,7 +279,7 @@ public class Game {
                     workshop.start();
                     money -= workshop.getStartCost();
                 } else {
-                    System.out.println("not enough money");
+                    throw new RuntimeException("not enough money");
                 }
             }
         }
@@ -284,6 +287,9 @@ public class Game {
 
     public void buyAnimal(String name) {
         Entity animal = Entity.getNewEntity(name);
+        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)) {
+            throw new RuntimeException("Invalid animal");
+        }
         if (animal.getBuyPrice() <= money) {
             money -= animal.getBuyPrice();
             map.addEntity(animal);
@@ -347,12 +353,8 @@ public class Game {
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                try {
-                    Cat.upgrade();
-                    money -= Cat.getUpgradeCost();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                Cat.upgrade();
+                money -= Cat.getUpgradeCost();
                 catLevel = Cat.getLevel();
             } else {
                 throw new RuntimeException("not enough money");
@@ -365,8 +367,7 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        boolean
-                result = money >= level.getGoalMoney();
+        boolean result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
             result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
         }
