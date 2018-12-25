@@ -1,5 +1,7 @@
 public class Item extends Entity {
 
+    Item() {};
+
     Item(String type) {
         super(type);
 

@@ -2,6 +2,8 @@ abstract public class Animal extends Entity {
     protected int speed;
     private Cell targetCell;
 
+    Animal() {};
+
     Animal(String type) {
         super(type);
     }

@@ -1,5 +1,7 @@
 public class WildAnimal extends Animal {
 
+    WildAnimal() {};
+
     WildAnimal(String type) {
         super(type);
         if (type.equalsIgnoreCase("bear")) {
