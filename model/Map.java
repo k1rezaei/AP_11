@@ -4,6 +4,9 @@ public class Map {
     final private static int BASE_DISTANCE = 6;
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
+    Map(){
+    }
+
     Map(ArrayList<Entity> entities) {
         this.entities = entities;
     }
