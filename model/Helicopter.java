@@ -1,17 +1,21 @@
 import java.util.ArrayList;
 
 public class Helicopter extends Vehicle implements Upgradable {
+    private static final int INITIAL_CAPACITY = 1000;
+    private static final int CAPACITY_INCREASE = 200;
+    private static final int GO_TIME = 7;
+    private static final int UPGRADE_COST = 200;
+
     public Helicopter() {
-        //TODO actual numbers
-        setCapacity(5);
-        setCurrentCapacity(5);
-        setGoTime(7);
-        setUpgradeCost(100);//TODO
+        setCapacity(INITIAL_CAPACITY);
+        setCurrentCapacity(getCapacity());
+        setCapacityIncrease(CAPACITY_INCREASE);
+        setGoTime(GO_TIME);
+        setUpgradeCost(UPGRADE_COST);
     }
 
     public void go() {
         super.go();
-        //TODO bebin hamin basse ya na
     }
 
     public ArrayList<Entity> getResultItems() {
@@ -40,7 +44,6 @@ public class Helicopter extends Vehicle implements Upgradable {
 
     public void upgrade() {
         super.upgrade();
-        //TODO bebin hamin bayad bashe ya na
     }
 
     public String getName() {

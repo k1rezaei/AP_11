@@ -2,7 +2,10 @@ abstract public class Animal extends Entity {
     protected int speed;
     private Cell targetCell;
 
-    Animal() {};
+    Animal() {
+    }
+
+    ;
 
     Animal(String type) {
         super(type);
@@ -15,8 +18,8 @@ abstract public class Animal extends Entity {
 
     void setTargetCell(Cell newTargetCell) {
 
-      if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
-      
+        if (newTargetCell == null) newTargetCell = Cell.getRandomCell();
+
         if (targetCell == null || cell.equals(targetCell)) {
             targetCell = newTargetCell;
         }

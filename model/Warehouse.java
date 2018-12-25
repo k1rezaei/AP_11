@@ -19,10 +19,10 @@ public class Warehouse implements Upgradable {
 
     void add(String type) {
         int count = 0;
-        if(storables.get(type) != null) count = storables.get(type);
-        count ++;
+        if (storables.get(type) != null) count = storables.get(type);
+        count++;
         storables.put(type, count);
-        return ;
+        return;
     }
 
     void add(Entity entity) {
@@ -55,7 +55,7 @@ public class Warehouse implements Upgradable {
 
     int getNumber(String type) {
         int count = 0;
-        if(storables.get(type) != null) count = storables.get(type);
+        if (storables.get(type) != null) count = storables.get(type);
         return count;
     }
 
@@ -91,7 +91,7 @@ public class Warehouse implements Upgradable {
 
     public void upgrade() {
         capacity += CAPACITY_RATE_CHANGE;
-        level ++;
+        level++;
     }
 
     @Override
@@ -114,7 +114,7 @@ public class Warehouse implements Upgradable {
         StringBuilder result = new StringBuilder();
         result.append("warehouse is level : " + getLevel() + "\n");
         result.append("warehouse has this items : \n");
-        for(Map.Entry<String, Integer> entry : storables.entrySet()) {
+        for (Map.Entry<String, Integer> entry : storables.entrySet()) {
             result.append(entry.getKey()).append(" : ").append(entry.getValue()).append("\n");
         }
         return result.toString();

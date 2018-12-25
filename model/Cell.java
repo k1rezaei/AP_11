@@ -15,12 +15,12 @@ public class Cell {
         return n;
     }
 
-    public static int getM() {
-        return m;
-    }
-
     public static void setN(int n) {
         Cell.n = n;
+    }
+
+    public static int getM() {
+        return m;
     }
 
     public static void setM(int m) {
