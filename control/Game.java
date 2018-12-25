@@ -373,7 +373,7 @@ public class Game {
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
                 stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
-                stringBuilder.append("Available: ").append(warehouse.getNumber(needed)).append("\n");
+                stringBuilder.append("Available: ").append(warehouse.getNumber(needed)+map.getNumber(needed)).append("\n");
                 stringBuilder.append("}\n");
             }
         }

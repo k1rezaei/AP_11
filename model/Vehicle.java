@@ -125,6 +125,7 @@ abstract public class Vehicle implements Upgradable {
     }
 
     public void clear() {
+        setCurrentCapacity(capacity);
         items.clear();
     }
     public String toString(){
