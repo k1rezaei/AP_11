@@ -5,8 +5,6 @@ abstract public class Animal extends Entity {
     Animal() {
     }
 
-    ;
-
     Animal(String type) {
         super(type);
     }

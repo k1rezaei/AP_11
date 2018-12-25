@@ -14,11 +14,6 @@ public class Truck extends Vehicle implements Upgradable {
         setUpgradeCost(UPGRADE_COST);
     }
 
-    public void go() {
-        super.go();
-        //TODO bebin hamin basse ya na
-    }
-
     public int getResultMoney() {
         int priceSum = 0;
         for (Entity entity : getItems()) {
@@ -41,15 +36,6 @@ public class Truck extends Vehicle implements Upgradable {
     @Override
     public int getNeededMoney() {
         return 0;
-    }
-
-    public int getUpgradeCost() {
-        return super.getUpgradeCost();
-    }
-
-    public void upgrade() {
-        super.upgrade();
-        //TODO bebin hamin bayad bashe ya na
     }
 
     public String getName() {

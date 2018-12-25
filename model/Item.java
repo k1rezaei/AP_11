@@ -3,8 +3,6 @@ public class Item extends Entity {
     Item() {
     }
 
-    ;
-
     Item(String type) {
         super(type);
 
@@ -135,8 +133,4 @@ public class Item extends Entity {
         this.buyPrice = buyCost;
     }
 
-    @Override
-    void turn() {
-        return;
-    }
 }
