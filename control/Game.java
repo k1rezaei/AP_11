@@ -287,7 +287,7 @@ public class Game {
 
     public void buyAnimal(String name) {
         Entity animal = Entity.getNewEntity(name);
-        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)){
+        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)) {
             throw new RuntimeException("Invalid animal");
         }
         if (animal.getBuyPrice() <= money) {
