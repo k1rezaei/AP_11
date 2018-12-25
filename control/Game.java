@@ -193,16 +193,7 @@ public class Game {
                     well();
                     break;
                 case "start":
-                    for (Workshop workshop : workshops) {
-                        if (workshop.getName().equals(commands[1])) {
-                            if (getMoney() >= workshop.getStartCost()) {
-                                workshop.start();
-                                money -= workshop.getStartCost();
-                            } else {
-                                System.out.println("not enough money");
-                            }
-                        }
-                    }
+                    startWorkshop(commands[1]);
                     break;
                 case "upgrade":
                     upgrade(commands[1]);
@@ -218,15 +209,7 @@ public class Game {
                     }
                     switch (commands[1]) {
                         case "go":
-                            if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
-                                money -= vehicle.getNeededMoney();
-                                for (Entity entity : vehicle.getNeededItems()) {
-                                    warehouse.remove(entity.type);
-                                }
-                                vehicle.go();
-                            } else {
-                                throw new RuntimeException("vehicle requirements not met");
-                            }
+                            go(vehicle);
                             break;
                         case "clear":
                             vehicle.clear();
@@ -234,6 +217,8 @@ public class Game {
                         case "add":
                             vehicle.add(commands[2], Integer.parseInt(commands[3]));
                             break;
+                        default:
+                            throw new RuntimeException("Invalid command");
                     }
                     break;
                 default:
@@ -246,6 +231,31 @@ public class Game {
                 System.out.println(e.getMessage());
             } else {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void go(Vehicle vehicle) {
+        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
+            money -= vehicle.getNeededMoney();
+            for (Entity entity : vehicle.getNeededItems()) {
+                warehouse.remove(entity.type);
+            }
+            vehicle.go();
+        } else {
+            throw new RuntimeException("vehicle requirements not met");
+        }
+    }
+
+    private void startWorkshop(String workshopName) {
+        for (Workshop workshop : workshops) {
+            if (workshop.getName().equals(workshopName)) {
+                if (getMoney() >= workshop.getStartCost()) {
+                    workshop.start();
+                    money -= workshop.getStartCost();
+                } else {
+                    System.out.println("not enough money");
+                }
             }
         }
     }
