@@ -338,8 +338,10 @@ public class Game {
                         upgradable.upgrade();
                         money -= upgradable.getUpgradeCost();
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        throw e;
                     }
+                } else {
+                    throw new RuntimeException("not enough money");
                 }
             }
         }
@@ -352,6 +354,8 @@ public class Game {
                     System.out.println(e.getMessage());
                 }
                 catLevel = Cat.getLevel();
+            } else {
+                throw new RuntimeException("not enough money");
             }
         }
     }
