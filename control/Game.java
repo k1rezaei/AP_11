@@ -329,7 +329,7 @@ public class Game {
         boolean
                 result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
-            result &= level.getNumber(name) <= warehouse.getNumber(name);//TODO + map.getNumber(name);
+            result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
         }
         return result;
     }
