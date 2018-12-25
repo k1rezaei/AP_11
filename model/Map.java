@@ -101,6 +101,10 @@ public class Map {
 
     @Override
     public String toString() {
+        g
+
+        //return "";
+
         String res = new String();
         for (Entity entity : entities)
             if (entity.getCell() != null) {
