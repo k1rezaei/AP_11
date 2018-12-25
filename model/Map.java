@@ -83,9 +83,9 @@ public class Map {
     public String toString(){
         String res = new String();
         for(Entity entity : entities) if(entity.getCell() != null){
-            res += (entity.type + " : " + entity.getCell().getX() + " " + entity.getCell().getY());
+            res += (entity.type + " : " + entity.getCell().getX() + " " + entity.getCell().getY() + "\n");
         }
-        return res;
+        return res.substring(0,res.length()-1);
     }
 }
 
