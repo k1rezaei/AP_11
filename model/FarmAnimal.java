@@ -1,5 +1,5 @@
 public class FarmAnimal extends Animal {
-    static private int RATE_OF_HUNGER = 100;
+    static private int RATE_OF_HUNGER = 250;
 
 
     private String produceType;
@@ -56,6 +56,7 @@ public class FarmAnimal extends Animal {
         rateOfHunger -= 5;
         if (rateOfHunger <= 0) {
             destroy();
+            return;
         }
         move();
         if (remainTime == 0) {
