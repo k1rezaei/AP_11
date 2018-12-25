@@ -221,7 +221,6 @@ public class Game {
                         map.addEntity(entity);
                     } catch (Exception e) {
                     }
-                    ;
                 }
             }
         } else {
