@@ -25,14 +25,47 @@ public class Game {
     private HashMap<String, Level> levels = new HashMap<>();
     private int catLevel;
 
-    //TODO levels
     private Game() {
+        vehicles = new ArrayList<>();
+        upgradables = new ArrayList<>();
         vehicles.add(truck);
         vehicles.add(helicopter);
         upgradables.add(warehouse);
         upgradables.addAll(workshops);
         upgradables.add(well);
         upgradables.addAll(vehicles);
+    }
+
+    private Game(Saver save) {
+        this.money = save.getMoney();
+        this.level = save.getLevel();
+        this.workshops = save.getWorkshops();
+        this.helicopter = save.getHelicopter();
+        this.truck = save.getTruck();
+        this.well = save.getWell();
+        this.warehouse = save.getWarehouse();
+        this.catLevel = save.getCatLevel();
+        Cat.setLevel(catLevel);
+        this.currentTurn = save.getCurrentTurn();
+        map = new Map();
+        for (FarmAnimal farmAnimal : save.getFarmAnimals()) {
+            map.addEntity(farmAnimal);
+        }
+        for (WildAnimal wildAnimal : save.getWildAnimals()) {
+            map.addEntity(wildAnimal);
+        }
+        for (Dog dog : save.getDogs()) {
+            map.addEntity(dog);
+        }
+        for (Cat cat : save.getCats()) {
+            map.addEntity(cat);
+        }
+        for (Item item : save.getItems()) {
+            map.addEntity(item);
+        }
+        for (Plant plant : save.getPlants()) {
+            map.addEntity(plant);
+        }
     }
 
     public static Game getInstance() {
@@ -66,14 +99,15 @@ public class Game {
                 case "save":
                     OutputStream outputStream = new FileOutputStream(commands[2]);
                     Formatter formatter = new Formatter(outputStream);
-                    formatter.format(gson.toJson(this));
+                    formatter.format(gson.toJson(new Saver(this)));
                     formatter.close();
                     outputStream.close();
                     break;
                 case "load":
                     if (commands[1].equals("game")) {
                         JsonReader reader = new JsonReader(new FileReader(commands[2]));
-                        game = gson.fromJson(reader, Game.class);
+                        Saver save = gson.fromJson(reader, Saver.class);
+                        game = new Game(save);
                     } else {
                         for (int i = 0; i < 6; i++) {
                             try {
