@@ -190,6 +190,7 @@ public class Game {
         } catch (Exception e) {
             //TODO view
             if(e.getMessage()!=null) {
+                e.printStackTrace();
                 System.out.println(e.getMessage());
             }
             else{
