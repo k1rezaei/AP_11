@@ -23,6 +23,7 @@ public class Game {
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
     private int currentTurn;
     private HashMap<String, Level> levels = new HashMap<>();
+    private int catLevel;
 
     //TODO levels
     private Game() {
@@ -33,6 +34,7 @@ public class Game {
         upgradables.add(well);
         upgradables.addAll(vehicles);
     }
+
     public static Game getInstance() {
         return game;
     }
@@ -42,7 +44,7 @@ public class Game {
         while (true) {
             String command = input.nextLine();
             game.run(command);
-            if (game.level!=null && game.checkLevel()) {
+            if (game.level != null && game.checkLevel()) {
                 System.out.println("Level completed");//TODO clear ?
             }
         }
@@ -75,7 +77,7 @@ public class Game {
                     } else {
                         for (int i = 0; i < 6; i++) {
                             try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\workshop" + i+".json"));
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\workshop" + i + ".json"));
                                 workshops.add(gson.fromJson(reader, Workshop.class));
                             } catch (Exception e) {
                                 System.out.println("File not found");
@@ -84,7 +86,7 @@ public class Game {
                         int i = 0;
                         while (true) {
                             try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\level" + i+".json"));
+                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\level" + i + ".json"));
                                 levels.put("level" + i, gson.fromJson(reader, Level.class));
                                 i++;
                             } catch (Exception e) {
@@ -99,7 +101,7 @@ public class Game {
                             System.out.println(game);
                             break;
                         case "map":
-                            System.out.println(map);//TODO
+                            System.out.println(map);
                             break;
                         case "levels":
                             for (String levelName : levels.keySet()) {
@@ -109,14 +111,14 @@ public class Game {
                             }
                             break;
                         case "warehouse":
-                            System.out.println(warehouse);//TODO
+                            System.out.println(warehouse);
                             break;
                         case "well":
-                            System.out.println(well);//TODO
+                            System.out.println(well);
                             break;
                         case "workshops":
                             for (Workshop workshop : workshops) {
-                                System.out.println(workshop);//TODO
+                                System.out.println(workshop);
                             }
                             break;
                         case "truck":
@@ -148,9 +150,11 @@ public class Game {
                     break;
                 case "start":
                     for (Workshop workshop : workshops) {
-                        if (workshop.getName().equals(commands[1]) && getMoney()>=workshop.getStartCost()) {
+                        if (workshop.getName().equals(commands[1]) && getMoney() >= workshop.getStartCost()) {
                             workshop.start();
-                            money-=workshop.getStartCost();
+                            money -= workshop.getStartCost();
+                        } else {
+                            System.out.println("not enough money");
                         }
                     }
                     break;
@@ -177,7 +181,6 @@ public class Game {
                             } else {
                                 throw new RuntimeException("vehicle requirements not met");
                             }
-                            //TODO change inside vehicle
                             break;
                         case "clear":
                             vehicle.clear();
@@ -190,10 +193,9 @@ public class Game {
             }
         } catch (Exception e) {
             //TODO view
-            if(e.getMessage()!=null) {
+            if (e.getMessage() != null) {
                 System.out.println(e.getMessage());
-            }
-            else{
+            } else {
                 e.printStackTrace();
             }
         }
@@ -214,8 +216,12 @@ public class Game {
             well.decreaseWater();
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    Entity entity = new Plant(new Cell(x + i, y + j));
-                    map.addEntity(entity);
+                    try {
+                        Entity entity = new Plant(new Cell(x + i, y + j));
+                        map.addEntity(entity);
+                    } catch (Exception e) {
+                    }
+                    ;
                 }
             }
         } else {
@@ -305,14 +311,13 @@ public class Game {
                 map.addEntity(Entity.getNewEntity("Lion"));
             }
         }
-        //TODO ye seri chiza bayad random spawn shan??
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Money: ").append(money).append("\n");
         stringBuilder.append("Time elapsed: ").append(currentTurn).append("\n");
-        if(level!=null) {
+        if (level != null) {
             stringBuilder.append("Required Money: ").append(level.getGoalMoney()).append("\n");
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
@@ -321,7 +326,7 @@ public class Game {
                 stringBuilder.append("}\n");
             }
         }
-        return stringBuilder.substring(0, stringBuilder.length()-1);
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
     public Map getMap() {
