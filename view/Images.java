@@ -48,11 +48,11 @@ public class Images {
             loadImage(type, images,1, new int[]{1});
         }
 
-        /*
+
         ArrayList<Image> images = new ArrayList<>();
         images.add(new Image(BASE + "plant/plant.png"));
         loadImage("plant", images, 1, new int[]{1});
-        */
+
 
         //loadImage("plant", images, 1, new int[]{1});
 
