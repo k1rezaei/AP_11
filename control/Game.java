@@ -271,7 +271,7 @@ public class Game {
         }
     }
 
-    private void startWorkshop(String workshopName) {
+    public void startWorkshop(String workshopName) {
         for (Workshop workshop : workshops) {
             if (workshop.getName().equals(workshopName)) {
                 if (getMoney() >= workshop.getStartCost()) {
