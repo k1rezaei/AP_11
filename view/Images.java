@@ -48,6 +48,12 @@ public class Images {
             loadImage(type, images,1, new int[]{1});
         }
 
+
+        ArrayList<Image> images = new ArrayList<>();
+        images.add(new Image(BASE + "plant/plant.png"));
+        loadImage("plant", images, 1, new int[]{1});
+
+
         //loadImage("plant", images, 1, new int[]{1});
 
         loadImage("helicopter", 4, 1, new int[] {1, 1, 1, 1});
@@ -83,11 +89,11 @@ public class Images {
         map.put(type, new LoadedImage(images, count, column));
     }
 
-    SpriteAnimation getSpriteAnimation(Entity entity) {
+    static SpriteAnimation getSpriteAnimation(Entity entity) {
         return new SpriteAnimation(map.get(entity.getType()));
     }
 
-    ImageView getIcon(Entity entity) {
+    static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/" + entity.getType() + ".png"));
     }
 

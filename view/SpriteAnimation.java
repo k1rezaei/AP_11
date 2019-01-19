@@ -25,6 +25,7 @@ public class SpriteAnimation extends Transition {
         this.imageViews = imageViews;
         this.counts = counts;
         this.columns = columns;
+
         this.widths = widths;
         this.heights = heights;
 
@@ -32,6 +33,7 @@ public class SpriteAnimation extends Transition {
 
             this.widths.set(i, widths.get(i) / (columns.get(i)));
             this.heights.set(i, heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
+
         }
 
         setCycleDuration(duration);
@@ -47,7 +49,6 @@ public class SpriteAnimation extends Transition {
             imageViews.add(new ImageView(image));
 
     }
-
     @Override
     protected void interpolate(double k) {
         final int index = Math.min((int) Math.floor(k * counts.get(state)), counts.get(state) - 1);
