@@ -44,7 +44,7 @@ public class Workshop implements Upgradable {
     void turn() {
         if (remainTime == -1) return;
         if (remainTime == 0) {
-            for (int i=0; i<numberOfOutputs; i++) {
+            for (int i = 0; i < numberOfOutputs; i++) {
                 Entity entity = new Item(output, new Cell(x, y));
                 Game.getInstance().addEntity(entity);
             }
@@ -77,7 +77,7 @@ public class Workshop implements Upgradable {
         StringBuilder result = new StringBuilder();
 
         result.append(name).append(" is level : ").append(getLevel()).append('\n');
-        if(remainTime == -1) result.append(name + " is free now.\n");
+        if (remainTime == -1) result.append(name + " is free now.\n");
         else {
             result.append(name).append(" is working now.\n");
             result.append(name + "will finish it's work in next " + remainTime + "\n");

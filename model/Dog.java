@@ -22,7 +22,7 @@ public class Dog extends Animal {
     }
 
     void move() {
-        setTargetCell(Game.getInstance().getMap().getCloset(Entity.WILD_ANIMAL, cell));
+        setTargetCell(Game.getInstance().getMap().getClosest(Entity.WILD_ANIMAL, cell));
         super.move();
     }
 
