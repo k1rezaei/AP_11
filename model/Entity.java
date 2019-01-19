@@ -21,6 +21,9 @@ public abstract class Entity {
         this.cell = cell;
     }
 
+    public int getState(){
+        return 0;
+    }
 
     static Entity getNewEntity(String type) {
         if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equals("Chicken"))
