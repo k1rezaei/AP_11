@@ -341,12 +341,8 @@ public class Game {
         for (Upgradable upgradable : upgradables) {
             if (upgradable.getName().equals(type)) {
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
-                    try {
-                        upgradable.upgrade();
-                        money -= upgradable.getUpgradeCost();
-                    } catch (Exception e) {
-                        throw e;
-                    }
+                    upgradable.upgrade();
+                    money -= upgradable.getUpgradeCost();
                 } else {
                     throw new RuntimeException("not enough money");
                 }

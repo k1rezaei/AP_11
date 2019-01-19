@@ -14,10 +14,6 @@ public class Helicopter extends Vehicle implements Upgradable {
         setUpgradeCost(UPGRADE_COST);
     }
 
-    public void go() {
-        super.go();
-    }
-
     public ArrayList<Entity> getResultItems() {
         ArrayList<Entity> result = (ArrayList<Entity>) getItems().clone();
         clear();
@@ -40,10 +36,6 @@ public class Helicopter extends Vehicle implements Upgradable {
             priceSum += entity.buyPrice;
         }
         return priceSum;
-    }
-
-    public void upgrade() {
-        super.upgrade();
     }
 
     public String getName() {

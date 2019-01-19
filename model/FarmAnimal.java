@@ -12,8 +12,6 @@ public class FarmAnimal extends Animal {
     FarmAnimal() {
     }
 
-    ;
-
     FarmAnimal(String type) {
         super(type);
         rateOfHunger = RATE_OF_HUNGER;
