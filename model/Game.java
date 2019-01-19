@@ -17,8 +17,8 @@ public class Game {
     private Truck truck = new Truck();
     private Well well = new Well();
     private Warehouse warehouse = new Warehouse();
-    private ArrayList<Vehicle> vehicles ;
-    private ArrayList<Upgradable> upgradables ;
+    private ArrayList<Vehicle> vehicles;
+    private ArrayList<Upgradable> upgradables;
     private int currentTurn;
     private HashMap<String, Level> levels = new HashMap<>();
     private int catLevel;
