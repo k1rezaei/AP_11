@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Cell {
     private static int n, m;
-    private static int[][] d = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    private static int[][] d = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     private int x, y;
 
     Cell(int x, int y) {
@@ -62,27 +62,29 @@ public class Cell {
         return x >= 0 && y >= 0 && x < n && y < m;
     }
 
-    void move(Cell targetCell) {
+    int move(Cell targetCell) {
         int targetX = targetCell.getX();
         int targetY = targetCell.getY();
         ArrayList<Integer> possible = new ArrayList<>();
         if (targetX > getX()) {
-            possible.add(0);
+            possible.add(1);
         }
         if (targetX < getX()) {
-            possible.add(1);
+            possible.add(3);
         }
         if (targetY > getY()) {
             possible.add(2);
         }
         if (targetY < getY()) {
-            possible.add(3);
+            possible.add(0);
         }
         if (!possible.isEmpty()) {
-            int index = possible.get((int) (Math.random() * possible.size()));
+            int index = possible.get(0);//(int) (Math.random() * possible.size())); //TODO MAKE RANDOM
             x += d[index][0];
             y += d[index][1];
+            return index;
         }
+        return 0;
     }
 
     int getDistance(Cell cell) {

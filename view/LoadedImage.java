@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class LoadedImage {
     ArrayList<Image> images;
-    ArrayList<Integer> count, column, width, height;
+    ArrayList<Integer> count = new ArrayList<>(), column = new ArrayList<>(), width = new ArrayList<>(), height = new ArrayList<>();
 
     public LoadedImage(ArrayList<Image> images, int count, int[] column) {
         this.images = images;

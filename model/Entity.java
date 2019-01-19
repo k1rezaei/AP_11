@@ -1,6 +1,8 @@
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
+import java.util.Objects;
+
 public abstract class Entity {
     final public static String WILD_ANIMAL = "WildAnimal";
     final public static String PLANT = "Plant";
@@ -65,6 +67,23 @@ public abstract class Entity {
 
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entity entity = (Entity) o;
+        return sellPrice == entity.sellPrice &&
+                buyPrice == entity.buyPrice &&
+                size == entity.size &&
+                Objects.equals(cell, entity.cell) &&
+                Objects.equals(type, entity.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;//Objects.hash(cell, sellPrice, buyPrice, size, type);
     }
 }
 

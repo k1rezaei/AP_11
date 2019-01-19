@@ -34,7 +34,7 @@ public class View extends Application {
 
     private void initGame() {
         GAME.loadCustom("workshops");
-        //Images.init();
+        Images.init();
         runGame("level0"); //TODO create menu and more levels
     }
 
@@ -43,6 +43,12 @@ public class View extends Application {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
+        /*Entity lion = Entity.getNewEntity("lion");
+        lion.setCell(new Cell(300,300));
+        SpriteAnimation sprite = Images.getSpriteAnimation(lion);
+        sprite.getImageView().relocate(300,300);
+        root.getChildren().add(sprite.getImageView());
+        sprite.play();*/
         AnimationTimer game = new AnimationTimer() {
             private long lastTime;
             private static final int SECOND = 1000000000;
@@ -50,19 +56,23 @@ public class View extends Application {
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
-                if (now > lastTime + SECOND / 24) {
+                if (now > lastTime + SECOND / 10) {
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.cell != null) {
                             if (!sprites.containsKey(entity)) {
-                                sprites.put(entity, Images.getSpriteAnimation(entity));
-                                sprites.get(entity).play();
+                                SpriteAnimation newSprite = Images.getSpriteAnimation(entity);
+                                sprites.put(entity, newSprite);
+                                newSprite.play();
+                                root.getChildren().add(newSprite.getImageView());
                             }
                             SpriteAnimation sprite = sprites.get(entity);
-                            root.getChildren().remove(sprite.getImageView());
-                            sprite.setState(entity.getState());
+                            if(sprite.getState()!=entity.getState()) {
+                                root.getChildren().remove(sprite.getImageView());
+                                sprite.setState(entity.getState());
+                                root.getChildren().add(sprite.getImageView());
+                            }
                             sprite.getImageView().relocate(entity.getCell().getX(), entity.getCell().getY());
-                            root.getChildren().add(sprite.getImageView());
                         } else {
                             if (!sprites.containsKey(entity)) continue;
                             SpriteAnimation sprite = sprites.get(entity);

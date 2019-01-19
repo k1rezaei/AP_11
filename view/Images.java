@@ -38,11 +38,11 @@ public class Images {
                 "CagedJaguar.png", "Curd.png", "MegaPie.png", "SpruceJaguar.png",
                 "CagedLion.png", "Egg.png", "Milk.png", "SpruceLion.png",
                 "CagedWhiteBear.png", "EggPowder.png", "Plume.png", "SpruceWhiteBear.png",
-                "Cake.png Fabric.png", "Sewing.png", "Varnish.png",
+                "Cake.png","Fabric.png", "Sewing.png", "Varnish.png",
                 "CarnivalDress.png", "Flour.png", "SourCream.png", "Wool.png"};
 
         for (int i=0; i<items.length; i++) {
-            String type = items[i].split(".")[0];
+            String type = items[i].split("\\.")[0];
             ArrayList<Image> images = new ArrayList<>();
             images.add(new Image(BASE + "item/" + items[i]));
             loadImage(type, images,1, new int[]{1});
