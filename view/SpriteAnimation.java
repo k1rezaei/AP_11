@@ -31,8 +31,9 @@ public class SpriteAnimation extends Transition {
 
         for(int i = 0; i < width.size(); i++) {
 
-            this.width.set(i, width.get(i) / (columns.get(i)));
-            this.height.set(i, height.get(i) / (count.get(i) / columns.get(i)));
+            this.widths.set(i, widths.get(i) / (columns.get(i)));
+            this.heights.set(i, heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
+
         }
 
         setCycleDuration(duration);
@@ -48,5 +49,9 @@ public class SpriteAnimation extends Transition {
             imageView.get(state).setViewport(new Rectangle2D(x, y, width.get(state), height.get(state)));
             lastIndex = index;
         }
+    }
+    void shutDown(){
+        stop();
+        imageViews.get(state).setViewport(new Rectangle2D(0, 0, widths.get(state), heights.get(state)));
     }
 }
