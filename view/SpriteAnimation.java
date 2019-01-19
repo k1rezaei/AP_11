@@ -1,31 +1,39 @@
-package sample;
-
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
+
 public class SpriteAnimation extends Transition {
-    private final ImageView imageView;
-    private final int count;
-    private final int columns;
-    private final int width;
-    private final int height;
+    private final ArrayList<ImageView> imageView;
+    private final ArrayList<Integer> count;
+    private final ArrayList<Integer> columns;
+    private final ArrayList<Integer> width;
+    private final ArrayList<Integer> height;
+    private int state = 0;
 
     private int lastIndex;
 
+    public void setState(int state){ this.state = state; }
+
     public SpriteAnimation(
-            ImageView imageView,
+            ArrayList<ImageView> imageView,
             Duration duration,
-            int count, int columns,
-            int width, int height) {
+            ArrayList<Integer> count, ArrayList<Integer> columns,
+            ArrayList<Integer> width, ArrayList<Integer> height) {
         this.imageView = imageView;
         this.count = count;
         this.columns = columns;
+        this.width = width;
+        this.height = height;
 
-        this.width = width / columns;
-        this.height = height / (count/columns);
+        for(int i = 0; i < width.size(); i++) {
+
+            this.width.set(i, width.get(i) / (columns.get(i)));
+            this.height.set(i, height.get(i) / (count.get(i) / columns.get(i)));
+        }
 
         setCycleDuration(duration);
         setInterpolator(Interpolator.LINEAR);
@@ -33,11 +41,11 @@ public class SpriteAnimation extends Transition {
 
     @Override
     protected void interpolate(double k) {
-        final int index = Math.min((int) Math.floor(k * count), count - 1);
+        final int index = Math.min((int) Math.floor(k * count.get(state)), count.get(state) - 1);
         if (index != lastIndex) {
-            final int x = (index % columns) * width;
-            final int y = (index / columns) * height;
-            imageView.setViewport(new Rectangle2D(x, y, width, height));
+            final int x = (index % columns.get(state)) * width.get(state);
+            final int y = (index / columns.get(state)) * height.get(state);
+            imageView.get(state).setViewport(new Rectangle2D(x, y, width.get(state), height.get(state)));
             lastIndex = index;
         }
     }
