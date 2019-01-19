@@ -1,6 +1,7 @@
 abstract public class Animal extends Entity {
     protected int speed;
     private Cell targetCell;
+    private int state = 0;
 
     Animal() {
     }
@@ -27,10 +28,14 @@ abstract public class Animal extends Entity {
         if (targetCell == null) {
             throw new RuntimeException("targetCell is null");
         }
-        for (int i = 0; i < speed; i++) cell.move(targetCell);
+        for (int i = 0; i < speed; i++) state = cell.move(targetCell);
     }
 
     abstract void collide(Entity entity);
 
     abstract void turn();
+
+    public int getState() {
+        return state;
+    }
 }

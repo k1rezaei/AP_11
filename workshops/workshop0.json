@@ -1,1 +1,14 @@
-{"inputs":{"Wool":1},"output":"Sewing","name":"workshop0","duration":15,"remainTime":-1,"level":1,"x":10,"y":10,"upgradeCost":100,"startCost":150}
+{
+  "inputs": {
+    "Wool": 1
+  },
+  "output": "Sewing",
+  "name": "workshop0",
+  "duration": 15,
+  "remainTime": -1,
+  "level": 1,
+  "x": 10,
+  "y": 10,
+  "upgradeCost": 100,
+  "startCost": 150
+}

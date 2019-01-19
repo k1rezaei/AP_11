@@ -13,10 +13,6 @@ public class Menu {
     View view;
     private Group menuGroup = new Group();
 
-    Menu(View view) {
-        this.view = view;
-    }
-
     {
 
         VBox vBox = new VBox();
@@ -92,5 +88,9 @@ public class Menu {
                 }
             }
         });
+    }
+
+    Menu(View view) {
+        this.view = view;
     }
 }

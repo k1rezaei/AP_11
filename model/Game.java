@@ -200,7 +200,7 @@ public class Game {
             try {
                 JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
                 workshops.add(gson.fromJson(reader, Workshop.class));
-                workshops.get(i).setName("workshop"+i);
+                workshops.get(i).setName("workshop" + i);
             } catch (Exception e) {
                 workshops.clear();
                 throw new RuntimeException("File not found");
@@ -391,11 +391,11 @@ public class Game {
             workshop.turn();
         }
         currentTurn++;
-        if (currentTurn % 60 == 0) {
+        if (currentTurn % 60 == 0) { //TODO FIX
             if (Math.random() > 0.5) {
-                map.addEntity(Entity.getNewEntity("Bear"));
+                map.addEntity(Entity.getNewEntity("bear"));
             } else {
-                map.addEntity(Entity.getNewEntity("Lion"));
+                map.addEntity(Entity.getNewEntity("lion"));
             }
         }
     }

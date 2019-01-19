@@ -1,5 +1,3 @@
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 public class Cat extends Animal {
     static private int level;
 
