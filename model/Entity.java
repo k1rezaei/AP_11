@@ -1,6 +1,3 @@
-import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
-
 import java.util.Objects;
 
 public abstract class Entity {
@@ -23,10 +20,6 @@ public abstract class Entity {
         this.cell = cell;
     }
 
-    public int getState(){
-        return 0;
-    }
-
     static Entity getNewEntity(String type) {
         if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equals("Chicken"))
             return new FarmAnimal(type);
@@ -37,6 +30,10 @@ public abstract class Entity {
         else if (type.equalsIgnoreCase("Dog"))
             return new Dog();
         return new Item(type);
+    }
+
+    public int getState() {
+        return 0;
     }
 
     public Cell getCell() {

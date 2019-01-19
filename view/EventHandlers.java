@@ -1,8 +1,5 @@
 import javafx.event.EventHandler;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-
-import static javafx.scene.input.MouseButton.*;
 
 public class EventHandlers {
 
@@ -10,7 +7,7 @@ public class EventHandlers {
         return event -> {
             if (entity instanceof WildAnimal) {
                 Game.getInstance().cage(entity.getCell().getX(), entity.getCell().getY());
-            }else if(entity instanceof Item){
+            } else if (entity instanceof Item) {
                 Game.getInstance().pickUp(entity.getCell().getX(), entity.getCell().getY());
             }
         };
@@ -18,7 +15,7 @@ public class EventHandlers {
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Workshop workshop) {
         return event -> {
-            switch (event.getButton()){
+            switch (event.getButton()) {
                 case PRIMARY:
                     Game.getInstance().startWorkshop(workshop.getName());
                     break;

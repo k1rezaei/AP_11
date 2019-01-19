@@ -24,8 +24,16 @@ public class Workshop implements Upgradable {
         return startCost;
     }
 
+    public void setStartCost(int startCost) {
+        this.startCost = startCost;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     void start() {
@@ -56,6 +64,10 @@ public class Workshop implements Upgradable {
         return upgradeCost;
     }
 
+    public void setUpgradeCost(int upgradeCost) {
+        this.upgradeCost = upgradeCost;
+    }
+
     public void upgrade() {
         level++;
         //TODO duration
@@ -69,6 +81,10 @@ public class Workshop implements Upgradable {
     @Override
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     @Override
@@ -106,10 +122,6 @@ public class Workshop implements Upgradable {
         this.output = output;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public int getDuration() {
         return duration;
     }
@@ -126,10 +138,6 @@ public class Workshop implements Upgradable {
         this.remainTime = remainTime;
     }
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
     public int getX() {
         return x;
     }
@@ -144,14 +152,6 @@ public class Workshop implements Upgradable {
 
     public void setY(int y) {
         this.y = y;
-    }
-
-    public void setUpgradeCost(int upgradeCost) {
-        this.upgradeCost = upgradeCost;
-    }
-
-    public void setStartCost(int startCost) {
-        this.startCost = startCost;
     }
 
     public int getNumberOfOutputs() {

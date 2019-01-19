@@ -1,1 +1,9 @@
-{"startMoney":5000,"goalMoney":20000,"goalEntity":{"Sheep":3},"n":800,"m":600}
+{
+  "startMoney": 5000,
+  "goalMoney": 20000,
+  "goalEntity": {
+    "Sheep": 3
+  },
+  "n": 800,
+  "m": 600
+}

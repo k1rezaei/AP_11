@@ -1,1 +1,15 @@
-{"inputs":{"Cookie":1,"Flour":1},"output":"Cake","name":"workshop3","duration":20,"remainTime":-1,"level":1,"x":30,"y":30,"upgradeCost":150,"startCost":250}
+{
+  "inputs": {
+    "Cookie": 1,
+    "Flour": 1
+  },
+  "output": "Cake",
+  "name": "workshop3",
+  "duration": 20,
+  "remainTime": -1,
+  "level": 1,
+  "x": 30,
+  "y": 30,
+  "upgradeCost": 150,
+  "startCost": 250
+}

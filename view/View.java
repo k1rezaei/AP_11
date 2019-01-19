@@ -10,17 +10,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class View extends Application {
-    Group root = new Group();
-
     private static final Game GAME = Game.getInstance();
-    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
+    Group root = new Group();
     ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
+    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
+    private Stage primaryStage;
 
     public static void main(String[] args) {
         launch(args);
     }
-
-    private Stage primaryStage;
 
     @Override
     public void start(Stage primaryStage) {
@@ -43,15 +41,9 @@ public class View extends Application {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
-        /*Entity lion = Entity.getNewEntity("lion");
-        lion.setCell(new Cell(300,300));
-        SpriteAnimation sprite = Images.getSpriteAnimation(lion);
-        sprite.getImageView().relocate(300,300);
-        root.getChildren().add(sprite.getImageView());
-        sprite.play();*/
         AnimationTimer game = new AnimationTimer() {
-            private long lastTime;
             private static final int SECOND = 1000000000;
+            private long lastTime;
 
             @Override
             public void handle(long now) {
@@ -67,7 +59,7 @@ public class View extends Application {
                                 root.getChildren().add(newSprite.getImageView());
                             }
                             SpriteAnimation sprite = sprites.get(entity);
-                            if(sprite.getState()!=entity.getState()) {
+                            if (sprite.getState() != entity.getState()) {
                                 root.getChildren().remove(sprite.getImageView());
                                 sprite.setState(entity.getState());
                                 root.getChildren().add(sprite.getImageView());

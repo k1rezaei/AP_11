@@ -1,51 +1,48 @@
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Images {
 
-    private static HashMap<String, LoadedImage> map = new HashMap<>();
     private final static String BASE = "file:textures/";
+    private static HashMap<String, LoadedImage> map = new HashMap<>();
 
     public static void init() {
 
 
         //added 0->3 Animals
 
-        loadImage("cat", 4, 24, new int[] {6, 4, 6, 4});
+        loadImage("cat", 4, 24, new int[]{6, 4, 6, 4});
 
-        loadImage("chicken", 5, 24, new int[] {5, 5, 5, 5, 5});
+        loadImage("chicken", 5, 24, new int[]{5, 5, 5, 5, 5});
 
-        loadImage("sheep", 5, 24, new int[] {5, 4, 5, 4, 4});
+        loadImage("sheep", 5, 24, new int[]{5, 4, 5, 4, 4});
 
-        loadImage("cow", 5, 24, new int[] {4, 3, 3, 3, 4});
+        loadImage("cow", 5, 24, new int[]{4, 3, 3, 3, 4});
 
-        loadImage("dog", 4, 24, new int[] {6, 6, 6, 6});
+        loadImage("dog", 4, 24, new int[]{6, 6, 6, 6});
 
-        loadImage("lion", 4, 24, new int[] {6, 3, 5, 3});
+        loadImage("lion", 4, 24, new int[]{6, 3, 5, 3});
 
         loadImage("bear", 4, 24, new int[]{4, 4, 4, 4});
 
 
-        String[] items = new String[] {"Adornment.png", "CheeseFerment.png", "FlouryCake.png", "Souvenir.png",
+        String[] items = new String[]{"Adornment.png", "CheeseFerment.png", "FlouryCake.png", "Souvenir.png",
                 "Bear.png", "Cheese.png", "Horn.png", "SpruceBrownBear.png",
                 "BrightHorn.png", "ColoredPlume.png", "Intermediate.png", "SpruceGrizzly.png",
                 "CagedJaguar.png", "Curd.png", "MegaPie.png", "SpruceJaguar.png",
                 "CagedLion.png", "Egg.png", "Milk.png", "SpruceLion.png",
                 "CagedWhiteBear.png", "EggPowder.png", "Plume.png", "SpruceWhiteBear.png",
-                "Cake.png","Fabric.png", "Sewing.png", "Varnish.png",
+                "Cake.png", "Fabric.png", "Sewing.png", "Varnish.png",
                 "CarnivalDress.png", "Flour.png", "SourCream.png", "Wool.png"};
 
-        for (int i=0; i<items.length; i++) {
+        for (int i = 0; i < items.length; i++) {
             String type = items[i].split("\\.")[0];
             ArrayList<Image> images = new ArrayList<>();
             images.add(new Image(BASE + "item/" + items[i]));
-            loadImage(type, images,1, new int[]{1});
+            loadImage(type, images, 1, new int[]{1});
         }
 
 
@@ -56,26 +53,26 @@ public class Images {
 
         //loadImage("plant", images, 1, new int[]{1});
 
-        loadImage("helicopter", 4, 1, new int[] {1, 1, 1, 1});
+        loadImage("helicopter", 4, 1, new int[]{1, 1, 1, 1});
 
-        loadImage("truck", 4, 1, new int[] {1, 1, 1, 1});
+        loadImage("truck", 4, 1, new int[]{1, 1, 1, 1});
 
-        loadImage("warehouse", 4, 1, new int[] {1, 1, 1, 1});
+        loadImage("warehouse", 4, 1, new int[]{1, 1, 1, 1});
 
-        loadImage("well", 4, 16, new int[] {4, 4, 4, 4});
+        loadImage("well", 4, 16, new int[]{4, 4, 4, 4});
 
-        for (int i=0; i<6; i++)
-            loadImage("workshop" + i, 5, 16, new int[] {4, 4, 4 , 4, 4});
+        for (int i = 0; i < 6; i++)
+            loadImage("workshop" + i, 5, 16, new int[]{4, 4, 4, 4, 4});
 
     }
 
     static void addImages(ArrayList<Image> images, String type, int n) {
         String address = BASE;
-        if(type.startsWith("workshop"))
+        if (type.startsWith("workshop"))
             address = BASE + "workshop/" + type.charAt(type.length() - 1) + "/";
         else address = BASE + type + "/";
 
-        for (int i=0; i<n; i++)
+        for (int i = 0; i < n; i++)
             images.add(new Image(address + i + ".png"));
     }
 

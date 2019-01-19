@@ -1,7 +1,8 @@
 abstract public class Animal extends Entity {
     protected int speed;
     private Cell targetCell;
-    private int state =0;
+    private int state = 0;
+
     Animal() {
     }
 
@@ -34,7 +35,7 @@ abstract public class Animal extends Entity {
 
     abstract void turn();
 
-    public int getState(){
+    public int getState() {
         return state;
     }
 }

@@ -9,11 +9,11 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class SpriteAnimation extends Transition {
-    private ArrayList<ImageView> imageViews = new ArrayList<>();
     private final ArrayList<Integer> counts;
     private final ArrayList<Integer> columns;
     private final ArrayList<Integer> widths = new ArrayList<>();
     private final ArrayList<Integer> heights = new ArrayList<>();
+    private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int state = 0;
 
     private int lastIndex;
@@ -65,11 +65,11 @@ public class SpriteAnimation extends Transition {
         return imageViews.get(state);
     }
 
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public int getState() {
         return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }
