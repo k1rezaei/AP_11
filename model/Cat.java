@@ -47,9 +47,9 @@ public class Cat extends Animal {
 
     void move() {
         if (level == 0) {
-            setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, Cell.getRandomCell()));
+            setTargetCell(Game.getInstance().getMap().getClosest(Entity.ITEM, Cell.getRandomCell()));
         } else {
-            setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, cell));
+            setTargetCell(Game.getInstance().getMap().getClosest(Entity.ITEM, cell));
         }
         super.move();
     }

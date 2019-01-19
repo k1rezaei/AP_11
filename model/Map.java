@@ -49,7 +49,7 @@ public class Map {
 
     }
 
-    Cell getCloset(String type, Cell cell) {
+    Cell getClosest(String type, Cell cell) {
         if (cell == null) throw new RuntimeException("cell is null");
         if (type == null) throw new RuntimeException("type is null");
         Cell res = null;
