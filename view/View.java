@@ -15,12 +15,16 @@ public class View extends Application {
     private static final Game GAME = Game.getInstance();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
+
     public static void main(String[] args) {
         launch(args);
     }
 
+    private Stage primaryStage;
+
     @Override
     public void start(Stage primaryStage) {
+        this.primaryStage = primaryStage;
         Scene scene = new Scene(root, 800, 600);
         initGame();
         primaryStage.setScene(scene);
@@ -39,7 +43,7 @@ public class View extends Application {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
-        /*AnimationTimer game = new AnimationTimer() {
+        AnimationTimer game = new AnimationTimer() {
             private long lastTime;
             private static final int SECOND = 1000000000;
 
@@ -50,8 +54,10 @@ public class View extends Application {
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.cell != null) {
-                            if (!sprites.containsKey(entity))
+                            if (!sprites.containsKey(entity)) {
                                 sprites.put(entity, Images.getSpriteAnimation(entity));
+                                sprites.get(entity).play();
+                            }
                             SpriteAnimation sprite = sprites.get(entity);
                             root.getChildren().remove(sprite.getImageView());
                             sprite.setState(entity.getState());
@@ -72,6 +78,10 @@ public class View extends Application {
                 }
             }
         };
-        game.start();*/
+        game.start();
+    }
+
+    public void close() {
+        primaryStage.close();
     }
 }
