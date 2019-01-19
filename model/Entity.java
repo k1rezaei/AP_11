@@ -6,7 +6,7 @@ public abstract class Entity {
     protected int sellPrice, buyPrice, size;
     protected String type;
 
-    Entity() {
+    public Entity() {
     }
 
     Entity(String type) {
@@ -19,10 +19,14 @@ public abstract class Entity {
     }
 
     static Entity getNewEntity(String type) {
-        if (type.equals("Sheep") || type.equals("Cow") || type.equals("Chicken"))
+        if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equals("Chicken"))
             return new FarmAnimal(type);
-        else if (type.equals("Lion") || type.equals("Bear"))
+        else if (type.equalsIgnoreCase("Lion") || type.equalsIgnoreCase("Bear"))
             return new WildAnimal(type);
+        else if (type.equalsIgnoreCase("Cat"))
+            return new Cat();
+        else if (type.equalsIgnoreCase("Dog"))
+            return new Dog();
         return new Item(type);
     }
 

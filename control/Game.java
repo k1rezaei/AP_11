@@ -1,9 +1,7 @@
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -23,9 +21,11 @@ public class Game {
     private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
     private int currentTurn;
     private HashMap<String, Level> levels = new HashMap<>();
+    private int catLevel;
 
-    //TODO levels
     private Game() {
+        vehicles = new ArrayList<>();
+        upgradables = new ArrayList<>();
         vehicles.add(truck);
         vehicles.add(helicopter);
         upgradables.add(warehouse);
@@ -33,6 +33,49 @@ public class Game {
         upgradables.add(well);
         upgradables.addAll(vehicles);
     }
+
+    private Game(Saver save) {
+        this.money = save.getMoney();
+        this.level = save.getLevel();
+        this.workshops = save.getWorkshops();
+        this.helicopter = save.getHelicopter();
+        this.truck = save.getTruck();
+        this.well = save.getWell();
+        this.warehouse = save.getWarehouse();
+        this.catLevel = save.getCatLevel();
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        Cat.setLevel(catLevel);
+        this.currentTurn = save.getCurrentTurn();
+        map = new Map();
+        for (FarmAnimal farmAnimal : save.getFarmAnimals()) {
+            map.addEntity(farmAnimal);
+        }
+        for (WildAnimal wildAnimal : save.getWildAnimals()) {
+            map.addEntity(wildAnimal);
+        }
+        for (Dog dog : save.getDogs()) {
+            map.addEntity(dog);
+        }
+        for (Cat cat : save.getCats()) {
+            map.addEntity(cat);
+        }
+        for (Item item : save.getItems()) {
+            map.addEntity(item);
+        }
+        for (Plant plant : save.getPlants()) {
+            map.addEntity(plant);
+        }
+        vehicles = new ArrayList<>();
+        upgradables = new ArrayList<>();
+        vehicles.add(truck);
+        vehicles.add(helicopter);
+        upgradables.add(warehouse);
+        upgradables.addAll(workshops);
+        upgradables.add(well);
+        upgradables.addAll(vehicles);
+    }
+
     public static Game getInstance() {
         return game;
     }
@@ -42,7 +85,7 @@ public class Game {
         while (true) {
             String command = input.nextLine();
             game.run(command);
-            if (game.level!=null && game.checkLevel()) {
+            if (game.level != null && game.checkLevel()) {
                 System.out.println("Level completed");//TODO clear ?
             }
         }
@@ -55,81 +98,20 @@ public class Game {
         try {
             switch (commands[0]) {
                 case "run":
-                    level = levels.get(commands[1]);
-                    Cell.setN(level.getN());
-                    Cell.setM(level.getM());
-                    this.money = level.getStartMoney();
-                    //TODO initialize and clear
+                    runMap(commands[1]);
                     break;
                 case "save":
-                    OutputStream outputStream = new FileOutputStream(commands[2]);
-                    Formatter formatter = new Formatter(outputStream);
-                    formatter.format(gson.toJson(this));
-                    formatter.close();
-                    outputStream.close();
+                    saveGame(commands[2]);
                     break;
                 case "load":
                     if (commands[1].equals("game")) {
-                        JsonReader reader = new JsonReader(new FileReader(commands[2]));
-                        game = gson.fromJson(reader, Game.class);
+                        loadGame(commands[2]);
                     } else {
-                        for (int i = 0; i < 6; i++) {
-                            try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\workshop" + i+".json"));
-                                workshops.add(gson.fromJson(reader, Workshop.class));
-                            } catch (Exception e) {
-                                System.out.println("File not found");
-                            }
-                        }
-                        int i = 0;
-                        while (true) {
-                            try {
-                                JsonReader reader = new JsonReader(new FileReader(commands[2] + "\\level" + i+".json"));
-                                levels.put("level" + i, gson.fromJson(reader, Level.class));
-                                i++;
-                            } catch (Exception e) {
-                                break;
-                            }
-                        }
+                        loadCustom(commands[2]);
                     }
                     break;
                 case "print":
-                    switch (commands[1]) {
-                        case "info":
-                            System.out.println(game);
-                            break;
-                        case "map":
-                            System.out.println(map);//TODO
-                            break;
-                        case "levels":
-                            for (String levelName : levels.keySet()) {
-                                System.out.println(levelName + "{");
-                                System.out.println(levels.get(levelName));
-                                System.out.println("}");
-                            }
-                            break;
-                        case "warehouse":
-                            System.out.println(warehouse);//TODO
-                            break;
-                        case "well":
-                            System.out.println(well);//TODO
-                            break;
-                        case "workshops":
-                            for (Workshop workshop : workshops) {
-                                System.out.println(workshop);//TODO
-                            }
-                            break;
-                        case "truck":
-                            vehicle = truck;
-                        case "helicopter":
-                            if (vehicle == null) {
-                                vehicle = helicopter;
-                            }
-                            System.out.println(vehicle);
-                            break;
-                        default:
-                            throw new RuntimeException("invalid input");
-                    }
+                    print(commands[1]);
                     break;
                 case "turn":
                     turn(Integer.parseInt(commands[1]));
@@ -147,11 +129,7 @@ public class Game {
                     well();
                     break;
                 case "start":
-                    for (Workshop workshop : workshops) {
-                        if (workshop.getName().equals(commands[1])) {
-                            workshop.start();
-                        }
-                    }
+                    startWorkshop(commands[1]);
                     break;
                 case "upgrade":
                     upgrade(commands[1]);
@@ -167,16 +145,7 @@ public class Game {
                     }
                     switch (commands[1]) {
                         case "go":
-                            if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
-                                money -= vehicle.getNeededMoney();
-                                for (Entity entity : vehicle.getNeededItems()) {
-                                    warehouse.remove(entity.type);
-                                }
-                                vehicle.go();
-                            } else {
-                                throw new RuntimeException("vehicle requirements not met");
-                            }
-                            //TODO change inside vehicle
+                            go(vehicle);
                             break;
                         case "clear":
                             vehicle.clear();
@@ -184,23 +153,142 @@ public class Game {
                         case "add":
                             vehicle.add(commands[2], Integer.parseInt(commands[3]));
                             break;
+                        default:
+                            throw new RuntimeException("Invalid command");
                     }
                     break;
+                default:
+                    throw new RuntimeException("Invalid command");
             }
         } catch (Exception e) {
             //TODO view
-            if(e.getMessage()!=null) {
-                e.printStackTrace();
+            if (e.getMessage() != null) {
                 System.out.println(e.getMessage());
-            }
-            else{
+            } else {
                 e.printStackTrace();
+            }
+        }
+    }
+
+    private void runMap(String mapName) {
+        level = levels.get(mapName);
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        this.money = level.getStartMoney();
+        //TODO initialize and clear
+    }
+
+    private void saveGame(String command) throws IOException {
+        Gson gson = new Gson();
+        OutputStream outputStream = new FileOutputStream(command);
+        Formatter formatter = new Formatter(outputStream);
+        formatter.format(gson.toJson(new Saver(this)));
+        formatter.close();
+        outputStream.close();
+    }
+
+    private void loadGame(String address) throws FileNotFoundException {
+        Gson gson = new Gson();
+        JsonReader reader = new JsonReader(new FileReader(address));
+        Saver save = gson.fromJson(reader, Saver.class);
+        game = new Game(save);
+    }
+
+    private void loadCustom(String address) {
+        Gson gson = new Gson();
+        workshops.clear();
+        for (int i = 0; i < 6; i++) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
+                workshops.add(gson.fromJson(reader, Workshop.class));
+            } catch (Exception e) {
+                workshops.clear();
+                throw new RuntimeException("File not found");
+            }
+        }
+        levels.clear();
+        int i = 0;
+        while (true) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
+                levels.put("level" + i, gson.fromJson(reader, Level.class));
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+    }
+
+    private void print(String name) {
+        Vehicle vehicle = null;
+        switch (name) {
+            case "info":
+                System.out.println(this);
+                break;
+            case "map":
+                System.out.println(map);
+                break;
+            case "levels":
+                for (String levelName : levels.keySet()) {
+                    System.out.println(levelName + "{");
+                    System.out.println(levels.get(levelName));
+                    System.out.println("}");
+                }
+                break;
+            case "warehouse":
+                System.out.println(warehouse);
+                break;
+            case "well":
+                System.out.println(well);
+                break;
+            case "workshops":
+                for (Workshop workshop : workshops) {
+                    System.out.println(workshop);
+                }
+                break;
+            case "truck":
+                vehicle = truck;
+            case "helicopter":
+                if (vehicle == null) {
+                    vehicle = helicopter;
+                }
+                System.out.println(vehicle);
+                break;
+            default:
+                throw new RuntimeException("invalid input");
+        }
+    }
+
+    private void go(Vehicle vehicle) {
+        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {
+            money -= vehicle.getNeededMoney();
+            for (Entity entity : vehicle.getNeededItems()) {
+                warehouse.remove(entity.type);
+            }
+            vehicle.go();
+        } else {
+            throw new RuntimeException("vehicle requirements not met");
+        }
+    }
+
+    private void startWorkshop(String workshopName) {
+        for (Workshop workshop : workshops) {
+            if (workshop.getName().equals(workshopName)) {
+                if (getMoney() >= workshop.getStartCost()) {
+                    workshop.start();
+                    money -= workshop.getStartCost();
+                } else {
+                    throw new RuntimeException("not enough money");
+                }
             }
         }
     }
 
     public void buyAnimal(String name) {
         Entity animal = Entity.getNewEntity(name);
+        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)) {
+            throw new RuntimeException("Invalid animal");
+        }
         if (animal.getBuyPrice() <= money) {
             money -= animal.getBuyPrice();
             map.addEntity(animal);
@@ -210,12 +298,17 @@ public class Game {
     }
 
     public void addPlant(int x, int y) {
+        //TODO age kamel birun bud ab kam nashe?
         if (well.getCurrentAmount() > 0) {
             well.decreaseWater();
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
-                    Entity entity = new Plant(new Cell(x + i, y + j));
-                    map.addEntity(entity);
+                    try {
+                        Entity entity = new Plant(new Cell(x + i, y + j));
+                        map.addEntity(entity);
+                    } catch (Exception e) {
+
+                    }
                 }
             }
         } else {
@@ -252,19 +345,20 @@ public class Game {
                         upgradable.upgrade();
                         money -= upgradable.getUpgradeCost();
                     } catch (Exception e) {
-                        System.out.println(e.getMessage());
+                        throw e;
                     }
+                } else {
+                    throw new RuntimeException("not enough money");
                 }
             }
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                try {
-                    Cat.upgrade();
-                    money -= Cat.getUpgradeCost();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                Cat.upgrade();
+                money -= Cat.getUpgradeCost();
+                catLevel = Cat.getLevel();
+            } else {
+                throw new RuntimeException("not enough money");
             }
         }
     }
@@ -274,7 +368,11 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        return money >= level.getGoalMoney() && warehouse.getNumber(level.getGoalEntity()) > 0;
+        boolean result = money >= level.getGoalMoney();
+        for (String name : level.getGoalEntity().keySet()) {
+            result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
+        }
+        return result;
     }
 
     public void turn(int n) {
@@ -304,23 +402,22 @@ public class Game {
                 map.addEntity(Entity.getNewEntity("Lion"));
             }
         }
-        //TODO ye seri chiza bayad random spawn shan??
     }
 
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Money: ").append(money).append("\n");
         stringBuilder.append("Time elapsed: ").append(currentTurn).append("\n");
-        if(level!=null) {
+        if (level != null) {
             stringBuilder.append("Required Money: ").append(level.getGoalMoney()).append("\n");
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
-                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
-                stringBuilder.append("Available: ").append(warehouse.getNumber(needed)).append("\n");
+                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");
+                stringBuilder.append("Available: ").append(warehouse.getNumber(needed) + map.getNumber(needed)).append("\n");
                 stringBuilder.append("}\n");
             }
         }
-        return stringBuilder.substring(0, stringBuilder.length()-1);
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 
     public Map getMap() {
@@ -385,5 +482,13 @@ public class Game {
 
     public void setWarehouse(Warehouse warehouse) {
         this.warehouse = warehouse;
+    }
+
+    public int getCurrentTurn() {
+        return currentTurn;
+    }
+
+    public int getCatLevel() {
+        return catLevel;
     }
 }
