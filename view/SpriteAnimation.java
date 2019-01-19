@@ -7,11 +7,11 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class SpriteAnimation extends Transition {
-    private final ArrayList<ImageView> imageView;
-    private final ArrayList<Integer> count;
+    private final ArrayList<ImageView> imageViews;
+    private final ArrayList<Integer> counts;
     private final ArrayList<Integer> columns;
-    private final ArrayList<Integer> width;
-    private final ArrayList<Integer> height;
+    private final ArrayList<Integer> widths;
+    private final ArrayList<Integer> heights;
     private int state = 0;
 
     private int lastIndex;
@@ -19,17 +19,17 @@ public class SpriteAnimation extends Transition {
     public void setState(int state){ this.state = state; }
 
     public SpriteAnimation(
-            ArrayList<ImageView> imageView,
+            ArrayList<ImageView> imageViews,
             Duration duration,
-            ArrayList<Integer> count, ArrayList<Integer> columns,
-            ArrayList<Integer> width, ArrayList<Integer> height) {
-        this.imageView = imageView;
-        this.count = count;
+            ArrayList<Integer> counts, ArrayList<Integer> columns,
+            ArrayList<Integer> widths, ArrayList<Integer> heights) {
+        this.imageViews = imageViews;
+        this.counts = counts;
         this.columns = columns;
-        this.width = width;
-        this.height = height;
+        this.widths = widths;
+        this.heights = heights;
 
-        for(int i = 0; i < width.size(); i++) {
+        for(int i = 0; i < widths.size(); i++) {
 
             this.widths.set(i, widths.get(i) / (columns.get(i)));
             this.heights.set(i, heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
@@ -42,11 +42,11 @@ public class SpriteAnimation extends Transition {
 
     @Override
     protected void interpolate(double k) {
-        final int index = Math.min((int) Math.floor(k * count.get(state)), count.get(state) - 1);
+        final int index = Math.min((int) Math.floor(k * counts.get(state)), counts.get(state) - 1);
         if (index != lastIndex) {
-            final int x = (index % columns.get(state)) * width.get(state);
-            final int y = (index / columns.get(state)) * height.get(state);
-            imageView.get(state).setViewport(new Rectangle2D(x, y, width.get(state), height.get(state)));
+            final int x = (index % columns.get(state)) * widths.get(state);
+            final int y = (index / columns.get(state)) * heights.get(state);
+            imageViews.get(state).setViewport(new Rectangle2D(x, y, widths.get(state), heights.get(state)));
             lastIndex = index;
         }
     }
