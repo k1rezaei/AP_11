@@ -17,8 +17,8 @@ public class Game {
     private Truck truck = new Truck();
     private Well well = new Well();
     private Warehouse warehouse = new Warehouse();
-    private ArrayList<Vehicle> vehicles = new ArrayList<>();
-    private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
+    private ArrayList<Vehicle> vehicles;
+    private ArrayList<Upgradable> upgradables;
     private int currentTurn;
     private HashMap<String, Level> levels = new HashMap<>();
     private int catLevel;
@@ -94,7 +94,6 @@ public class Game {
     public void run(String command) {
         String[] commands = command.split("(\\s)+");
         Vehicle vehicle = null;
-        Gson gson = new Gson();
         try {
             switch (commands[0]) {
                 case "run":
@@ -170,7 +169,7 @@ public class Game {
         }
     }
 
-    private void runMap(String mapName) {
+    public void runMap(String mapName) {
         level = levels.get(mapName);
         Cell.setN(level.getN());
         Cell.setM(level.getM());
@@ -178,7 +177,7 @@ public class Game {
         //TODO initialize and clear
     }
 
-    private void saveGame(String command) throws IOException {
+    public void saveGame(String command) throws IOException {
         Gson gson = new Gson();
         OutputStream outputStream = new FileOutputStream(command);
         Formatter formatter = new Formatter(outputStream);
@@ -187,20 +186,21 @@ public class Game {
         outputStream.close();
     }
 
-    private void loadGame(String address) throws FileNotFoundException {
+    public void loadGame(String address) throws FileNotFoundException {
         Gson gson = new Gson();
         JsonReader reader = new JsonReader(new FileReader(address));
         Saver save = gson.fromJson(reader, Saver.class);
         game = new Game(save);
     }
 
-    private void loadCustom(String address) {
+    public void loadCustom(String address) {
         Gson gson = new Gson();
         workshops.clear();
         for (int i = 0; i < 6; i++) {
             try {
                 JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
                 workshops.add(gson.fromJson(reader, Workshop.class));
+                workshops.get(i).setName("workshop"+i);
             } catch (Exception e) {
                 workshops.clear();
                 throw new RuntimeException("File not found");
@@ -219,7 +219,7 @@ public class Game {
         }
     }
 
-    private void print(String name) {
+    public void print(String name) {
         Vehicle vehicle = null;
         switch (name) {
             case "info":
@@ -259,7 +259,7 @@ public class Game {
         }
     }
 
-    private void go(Vehicle vehicle) {
+    public void go(Vehicle vehicle) {
         if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {
             money -= vehicle.getNeededMoney();
             for (Entity entity : vehicle.getNeededItems()) {
