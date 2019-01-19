@@ -48,6 +48,8 @@ public class Images {
             loadImage(type, images,1, new int[]{1});
         }
 
+        //loadImage("plant", images, 1, new int[]{1});
+
         loadImage("helicopter", 4, 1, new int[] {1, 1, 1, 1});
 
         loadImage("truck", 4, 1, new int[] {1, 1, 1, 1});
