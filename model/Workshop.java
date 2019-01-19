@@ -3,11 +3,10 @@ import java.util.Map;
 
 public class Workshop implements Upgradable {
     public static final int MAX_LEVEL = 5;
-    private Map<String, Integer> inputs = new HashMap<>();
+    private Map<String, Integer> inputs;
     private String output, name;
     private int duration, remainTime = -1, level = 1;
     private int x, y, upgradeCost, startCost;
-
     private int numberOfOutputs;
 
     Workshop(HashMap<String, Integer> inputs, String output, int x, int y, int duration, int upgradeCost, int startCost, String name) {
@@ -89,5 +88,77 @@ public class Workshop implements Upgradable {
         }
 
         return result.toString();
+    }
+
+    public Map<String, Integer> getInputs() {
+        return inputs;
+    }
+
+    public void setInputs(Map<String, Integer> inputs) {
+        this.inputs = inputs;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public int getRemainTime() {
+        return remainTime;
+    }
+
+    public void setRemainTime(int remainTime) {
+        this.remainTime = remainTime;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public void setUpgradeCost(int upgradeCost) {
+        this.upgradeCost = upgradeCost;
+    }
+
+    public void setStartCost(int startCost) {
+        this.startCost = startCost;
+    }
+
+    public int getNumberOfOutputs() {
+        return numberOfOutputs;
+    }
+
+    public void setNumberOfOutputs(int numberOfOutputs) {
+        this.numberOfOutputs = numberOfOutputs;
     }
 }
