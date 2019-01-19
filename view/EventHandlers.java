@@ -1,5 +1,8 @@
 import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+
+import static javafx.scene.input.MouseButton.*;
 
 public class EventHandlers {
 
@@ -20,7 +23,14 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().startWorkshop(workshop.getName());
+                switch (event.getButton()){
+                    case PRIMARY:
+                        Game.getInstance().startWorkshop(workshop.getName());
+                        break;
+                    case SECONDARY:
+                        Game.getInstance().upgrade(workshop.getName());
+                        break;
+                }
             }
         };
     }
@@ -29,6 +39,12 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                switch (event.getButton()) {
+                    case PRIMARY:
+                        break;
+                    case SECONDARY:
+                        break;
+                }
                 /**
                  *
                  *
@@ -41,6 +57,12 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                switch (event.getButton()) {
+                    case PRIMARY:
+                        break;
+                    case SECONDARY:
+                        break;
+                }
                 /**
                  *
                  *
@@ -53,6 +75,12 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                switch (event.getButton()) {
+                    case PRIMARY:
+                        break;
+                    case SECONDARY:
+                        break;
+                }
                 /**
                  *
                  *
@@ -65,7 +93,14 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().well();
+                switch (event.getButton()) {
+                    case PRIMARY:
+                        Game.getInstance().well();
+                        break;
+                    case SECONDARY:
+                        Game.getInstance().upgrade("well");
+                        break;
+                }
             }
         };
     }
