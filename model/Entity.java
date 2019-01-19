@@ -6,7 +6,8 @@ public abstract class Entity {
     protected int sellPrice, buyPrice, size;
     protected String type;
 
-    public Entity() {}
+    public Entity() {
+    }
 
     Entity(String type) {
         this.type = type;
@@ -22,9 +23,9 @@ public abstract class Entity {
             return new FarmAnimal(type);
         else if (type.equalsIgnoreCase("Lion") || type.equalsIgnoreCase("Bear"))
             return new WildAnimal(type);
-        else if(type.equalsIgnoreCase("Cat"))
+        else if (type.equalsIgnoreCase("Cat"))
             return new Cat();
-        else if(type.equalsIgnoreCase("Dog"))
+        else if (type.equalsIgnoreCase("Dog"))
             return new Dog();
         return new Item(type);
     }

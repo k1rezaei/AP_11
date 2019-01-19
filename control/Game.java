@@ -163,7 +163,6 @@ public class Game {
         } catch (Exception e) {
             //TODO view
             if (e.getMessage() != null) {
-                e.printStackTrace();
                 System.out.println(e.getMessage());
             } else {
                 e.printStackTrace();
@@ -197,18 +196,21 @@ public class Game {
 
     private void loadCustom(String address) {
         Gson gson = new Gson();
+        workshops.clear();
         for (int i = 0; i < 6; i++) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\workshop" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
                 workshops.add(gson.fromJson(reader, Workshop.class));
             } catch (Exception e) {
-                System.out.println("File not found");
+                workshops.clear();
+                throw new RuntimeException("File not found");
             }
         }
+        levels.clear();
         int i = 0;
         while (true) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\level" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
                 levels.put("level" + i, gson.fromJson(reader, Level.class));
                 i++;
             } catch (Exception e) {
@@ -221,7 +223,7 @@ public class Game {
         Vehicle vehicle = null;
         switch (name) {
             case "info":
-                System.out.println(game);
+                System.out.println(this);
                 break;
             case "map":
                 System.out.println(map);
@@ -258,7 +260,7 @@ public class Game {
     }
 
     private void go(Vehicle vehicle) {
-        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {//TODO warehouse.number ba arraylist entity
+        if (money >= vehicle.getNeededMoney() && warehouse.getNumber(vehicle.getNeededItems()) > 0) {
             money -= vehicle.getNeededMoney();
             for (Entity entity : vehicle.getNeededItems()) {
                 warehouse.remove(entity.type);
@@ -276,7 +278,7 @@ public class Game {
                     workshop.start();
                     money -= workshop.getStartCost();
                 } else {
-                    System.out.println("not enough money");
+                    throw new RuntimeException("not enough money");
                 }
             }
         }
@@ -284,6 +286,9 @@ public class Game {
 
     public void buyAnimal(String name) {
         Entity animal = Entity.getNewEntity(name);
+        if (!(animal instanceof Animal) || (animal instanceof WildAnimal)) {
+            throw new RuntimeException("Invalid animal");
+        }
         if (animal.getBuyPrice() <= money) {
             money -= animal.getBuyPrice();
             map.addEntity(animal);
@@ -293,6 +298,7 @@ public class Game {
     }
 
     public void addPlant(int x, int y) {
+        //TODO age kamel birun bud ab kam nashe?
         if (well.getCurrentAmount() > 0) {
             well.decreaseWater();
             for (int i = -1; i < 2; i++) {
@@ -301,6 +307,7 @@ public class Game {
                         Entity entity = new Plant(new Cell(x + i, y + j));
                         map.addEntity(entity);
                     } catch (Exception e) {
+
                     }
                 }
             }
@@ -347,12 +354,8 @@ public class Game {
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                try {
-                    Cat.upgrade();
-                    money -= Cat.getUpgradeCost();
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                Cat.upgrade();
+                money -= Cat.getUpgradeCost();
                 catLevel = Cat.getLevel();
             } else {
                 throw new RuntimeException("not enough money");
@@ -365,8 +368,7 @@ public class Game {
     }
 
     public boolean checkLevel() {
-        boolean
-                result = money >= level.getGoalMoney();
+        boolean result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
             result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
         }
@@ -410,7 +412,7 @@ public class Game {
             stringBuilder.append("Required Money: ").append(level.getGoalMoney()).append("\n");
             for (String needed : level.getGoalEntity().keySet()) {
                 stringBuilder.append(needed).append("{\n");
-                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+                stringBuilder.append("Needed : ").append(level.getNumber(needed)).append("\n");
                 stringBuilder.append("Available: ").append(warehouse.getNumber(needed) + map.getNumber(needed)).append("\n");
                 stringBuilder.append("}\n");
             }

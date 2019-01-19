@@ -8,7 +8,16 @@ abstract public class Vehicle implements Upgradable {
     private int goTime;
     private int level = 0;
     private int maxLevel = 5;
+    private int capacityIncrease;
     private ArrayList<Entity> items = new ArrayList<>();
+
+    public int getCapacityIncrease() {
+        return capacityIncrease;
+    }
+
+    public void setCapacityIncrease(int capacityIncrease) {
+        this.capacityIncrease = capacityIncrease;
+    }
 
     public int getLevel() {
         return level;
@@ -114,33 +123,31 @@ abstract public class Vehicle implements Upgradable {
 
     public void upgrade() {
         if (level < maxLevel) {
-            capacity++;
-            currentCapacity++;
+            capacity += capacityIncrease;
+            currentCapacity += capacityIncrease;
             goTime--;
             level++;
         } else {
             throw new RuntimeException("Already at max level");
         }
-        //TODO actual upgrade numbers
     }
 
     public void clear() {
         setCurrentCapacity(capacity);
         items.clear();
     }
-    public String toString(){
+
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Item:\n");
-        for(Entity entity:items){
-            stringBuilder.append(entity.getType()+"\n");
+        for (Entity entity : items) {
+            stringBuilder.append(entity.getType()).append("\n");
         }
-        if(remainingTime > 0){
-            stringBuilder.append("Remaining time:\n");
-            stringBuilder.append(remainingTime);
+        if (remainingTime > 0) {
+            stringBuilder.append("Remaining time: ").append(remainingTime).append("\n");
+        } else if (items.size() > 0) {
+            stringBuilder.append("Ready to go!\n");
         }
-        else{
-            stringBuilder.append("Ready to go\n");
-        }
-        return stringBuilder.toString();
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
     }
 }

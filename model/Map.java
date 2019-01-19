@@ -4,7 +4,7 @@ public class Map {
     final private static int BASE_DISTANCE = 6;
     private ArrayList<Entity> entities = new ArrayList<Entity>();
 
-    Map(){
+    Map() {
     }
 
     Map(ArrayList<Entity> entities) {
@@ -14,7 +14,7 @@ public class Map {
     int getNumber(String type) {
         int cnt = 0;
 
-        for(Entity entity : entities) if(entity.getCell() != null && entity.getType().equalsIgnoreCase(type)) cnt++;
+        for (Entity entity : entities) if (entity.getCell() != null && entity.getType().equalsIgnoreCase(type)) cnt++;
         return cnt;
     }
 
@@ -49,11 +49,11 @@ public class Map {
 
     }
 
-    Cell getCloset(String type, Cell cell) {
+    Cell getClosest(String type, Cell cell) {
         if (cell == null) throw new RuntimeException("cell is null");
         if (type == null) throw new RuntimeException("type is null");
         Cell res = null;
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             if (entity.getClass().getName().equalsIgnoreCase(type)) {
                 if (entity.getCell() == null) continue;
                 if (res == null) res = entity.getCell();
@@ -78,7 +78,7 @@ public class Map {
     }
 
     Entity cage(Cell cell) {
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             if (entity.getCell() != null) {
                 if (entity.getCell().equals(cell) && entity instanceof WildAnimal) {
                     entity.destroy();
@@ -90,7 +90,7 @@ public class Map {
     }
 
     Item pickUp(Cell cell) {
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             if (cell.equals(entity.getCell()) && entity instanceof Item) {
                 entity.destroy();
                 return (Item) entity;
@@ -101,11 +101,13 @@ public class Map {
 
     @Override
     public String toString() {
-        char [][] map = new char[100][100];
-        for(int i = 0; i < 100; i++) for(int j = 0; j < 100; j++) map[i][j] = '.';
-        for(Entity entity : entities) if(entity.getCell() != null) map[entity.getCell().getX()][entity.getCell().getY()] = entity.getType().charAt(0);
-        for(int i = 0; i < 100; i++){
-            for(int j = 0; j < 100; j++) System.out.print(map[i][j]);
+        char[][] map = new char[100][100];
+        for (int i = 0; i < 100; i++) for (int j = 0; j < 100; j++) map[i][j] = '.';
+        for (Entity entity : entities)
+            if (entity.getCell() != null)
+                map[entity.getCell().getX()][entity.getCell().getY()] = entity.getType().charAt(0);
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 100; j++) System.out.print(map[i][j]);
             System.out.println();
         }
 
@@ -120,6 +122,8 @@ public class Map {
         return res.substring(0, res.length() - 1);
     }
 
-    public ArrayList<Entity> getEntities(){ return  entities; }
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
 }
 

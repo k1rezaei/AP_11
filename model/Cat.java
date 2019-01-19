@@ -13,10 +13,6 @@ public class Cat extends Animal {
         speed = 4;
     }
 
-    static public void setLevel(int level) {
-        Cat.level = level;
-    }
-
     static public void upgrade() {
         if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         level = 1;
@@ -25,6 +21,18 @@ public class Cat extends Animal {
     static public int getUpgradeCost() {
         if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         return 500;
+    }
+
+    static public int getMaxLevel() {
+        return 1;
+    }
+
+    static public int getLevel() {
+        return level;
+    }
+
+    static public void setLevel(int level) {
+        Cat.level = level;
     }
 
     public String getName() {
@@ -39,9 +47,9 @@ public class Cat extends Animal {
 
     void move() {
         if (level == 0) {
-            setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, Cell.getRandomCell()));
+            setTargetCell(Game.getInstance().getMap().getClosest(Entity.ITEM, Cell.getRandomCell()));
         } else {
-            setTargetCell(Game.getInstance().getMap().getCloset(Entity.ITEM, cell));
+            setTargetCell(Game.getInstance().getMap().getClosest(Entity.ITEM, cell));
         }
         super.move();
     }
@@ -49,9 +57,4 @@ public class Cat extends Animal {
     void turn() {
         move();
     }
-
-    static public int getMaxLevel(){
-        return 1;
-    }
-    static public int getLevel(){ return level;}
 }
