@@ -197,9 +197,10 @@ public class Game {
 
     private void loadCustom(String address) {
         Gson gson = new Gson();
+
         for (int i = 0; i < 6; i++) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\workshop" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
                 workshops.add(gson.fromJson(reader, Workshop.class));
             } catch (Exception e) {
                 System.out.println("File not found");
@@ -208,7 +209,7 @@ public class Game {
         int i = 0;
         while (true) {
             try {
-                JsonReader reader = new JsonReader(new FileReader(address + "\\level" + i + ".json"));
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
                 levels.put("level" + i, gson.fromJson(reader, Level.class));
                 i++;
             } catch (Exception e) {
