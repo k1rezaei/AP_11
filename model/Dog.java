@@ -1,3 +1,6 @@
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+
 public class Dog extends Animal {
 
     Dog() {
@@ -5,6 +8,7 @@ public class Dog extends Animal {
         speed = 6;
         buyPrice = 1000;
     }
+
 
     Dog(Cell cell) {
         super("Dog", cell);
