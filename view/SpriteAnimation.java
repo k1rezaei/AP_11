@@ -29,8 +29,6 @@ public class SpriteAnimation extends Transition {
         this.widths = widths;
         this.heights = heights;
 
-        this.widths = widths;
-        this.heights = heights;
         for (int i = 0; i < widths.size(); i++) {
 
             this.widths.set(i, widths.get(i) / (columns.get(i)));
