@@ -1,3 +1,5 @@
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 public class Cat extends Animal {
     static private int level;
 
@@ -6,6 +8,7 @@ public class Cat extends Animal {
         buyPrice = 2500;
         speed = 4;
     }
+
 
     Cat(Cell cell) {
         super("Cat", cell);

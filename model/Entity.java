@@ -1,3 +1,6 @@
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
+
 public abstract class Entity {
     final public static String WILD_ANIMAL = "WildAnimal";
     final public static String PLANT = "Plant";
@@ -17,6 +20,7 @@ public abstract class Entity {
         this.type = type;
         this.cell = cell;
     }
+
 
     static Entity getNewEntity(String type) {
         if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equals("Chicken"))
@@ -51,8 +55,6 @@ public abstract class Entity {
     }
 
     abstract void turn();
-
-    //TODO getNewEntity
 
     void destroy() {
         cell = null;
