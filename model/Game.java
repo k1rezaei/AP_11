@@ -17,8 +17,8 @@ public class Game {
     private Truck truck = new Truck();
     private Well well = new Well();
     private Warehouse warehouse = new Warehouse();
-    private ArrayList<Vehicle> vehicles = new ArrayList<>();
-    private ArrayList<Upgradable> upgradables = new ArrayList<>();//TODO add upgradables
+    private ArrayList<Vehicle> vehicles ;
+    private ArrayList<Upgradable> upgradables ;
     private int currentTurn;
     private HashMap<String, Level> levels = new HashMap<>();
     private int catLevel;
@@ -94,7 +94,6 @@ public class Game {
     public void run(String command) {
         String[] commands = command.split("(\\s)+");
         Vehicle vehicle = null;
-        Gson gson = new Gson();
         try {
             switch (commands[0]) {
                 case "run":
