@@ -61,7 +61,7 @@ public class Workshop implements Upgradable {
     }
 
     public int getUpgradeCost() {
-        return upgradeCost;
+        return (level + 1) * upgradeCost;
     }
 
     public void setUpgradeCost(int upgradeCost) {

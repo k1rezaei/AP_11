@@ -7,9 +7,9 @@
   "name": "workshop3",
   "duration": 20,
   "remainTime": -1,
-  "level": 1,
+  "level": 0,
   "x": 30,
   "y": 30,
-  "upgradeCost": 150,
+  "upgradeCost": 450,
   "startCost": 250
 }
