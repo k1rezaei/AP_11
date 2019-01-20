@@ -80,6 +80,7 @@ public class GameView {
         setUpHelicopter();
         setUpSaveButton();
         setUpExitButton();
+      
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
