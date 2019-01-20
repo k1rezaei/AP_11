@@ -2,10 +2,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Workshop implements Upgradable {
-    public static final int MAX_LEVEL = 5;
+    public static final int MAX_LEVEL = 4;
     private Map<String, Integer> inputs;
     private String output, name;
-    private int duration, remainTime = -1, level = 1;
+    private int duration, remainTime = -1, level = 0;
     private int x, y, upgradeCost, startCost;
     private int numberOfOutputs;
 
@@ -39,7 +39,7 @@ public class Workshop implements Upgradable {
     void start() {
         if (remainTime != -1) throw new RuntimeException("Workshop is Working");
         Warehouse warehouse = Game.getInstance().getWarehouse();
-        int buildNumber = Math.min(level, warehouse.getNumber(inputs));
+        int buildNumber = Math.min(level + 1, warehouse.getNumber(inputs));
         for (int i = 0; i < buildNumber; i++) {
             warehouse.remove(inputs);
         }

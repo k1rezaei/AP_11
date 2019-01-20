@@ -25,6 +25,7 @@ public class EventHandlers {
                 case SECONDARY:
                     try {
                         SpriteAnimation sprite = GameView.getInstance().getWorkshop(workshop);
+                        System.out.println(workshop.getName());
                         Game.getInstance().upgrade(workshop.getName());
                         GameView.getInstance().update(sprite, workshop);
                     } catch(Exception e) {}
