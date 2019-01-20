@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -8,41 +9,35 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 public class BuyMenu {
-    private Group buyGroup = new Group();
-    final int WIDTH = 300;
-
     View view;
+
+    BuyMenu(View view) {
+        this.view = view;
+    }
+
+    private Group buyGroup = new Group();
+    final int WIDTH = 100;
+    final int HEIGHT = 70;
+
     Group getBuyGroup() {
-        update();
+        init();
         return buyGroup;
     }
 
-    BuyMenu(View view){
-        this.view = view;
-    }
     static Image one = new Image("file:textures/sell/one.png");
-    static Image all = new Image("file:textures/sell/all.png");
 
-
-    HashMap<String, Integer> truck = new HashMap<>();
-
-
-    void update() {
-        buyGroup.getChildren().clear();
-        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
+    void init() {
+        ArrayList<String> items = Game.getInstance().getLevel().getItemList();
         VBox vBox = new VBox();
-        vBox.setMinWidth(WIDTH);
-        buyGroup.getChildren().add(vBox);
-
+        vBox.setMinWidth(WIDTH*3);
 
         Button ok = new Button("OK");
         Button cancel = new Button("Cancel");
-        ok.setMinSize(50, 100);
-        cancel.setMinSize(50, 100);
+        ok.setMinSize(50, HEIGHT);
+        cancel.setMinSize(50, HEIGHT);
 
         vBox.getChildren().add(ok);
         vBox.getChildren().add(cancel);
@@ -50,8 +45,7 @@ public class BuyMenu {
         cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().getTruck().clear();
-                truck.clear();
+                Game.getInstance().getHelicopter().clear();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -59,83 +53,49 @@ public class BuyMenu {
         ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().go(Game.getInstance().getTruck());
-                truck.clear();
+                try {
+                    Game.getInstance().go(Game.getInstance().getHelicopter());
+                    GameView.getInstance().getTruck().getImageView().setVisible(false);
+                    new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
+                                GameView.getInstance().getTruck().getImageView().setVisible(true);
+                            }
+                        }
+                    }.start();
+                }catch (Exception e){
+                    Game.getInstance().getHelicopter().clear();
+                }
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
-        {
+
+        for (String type : items) {
             HBox hBox = new HBox();
-            hBox.setMinWidth(WIDTH);
-            hBox.setMinHeight(60);
-
-            Label[] labels = new Label[3];
-
-            labels[0] = new Label("Goods");
-            labels[1] = new Label("Price");
-            labels[2] = new Label("Ship");
-
-            for (Label label : labels) label.setMaxWidth(WIDTH / 3);
-            hBox.getChildren().addAll(labels);
-
-            vBox.getChildren().add(hBox);
-        }
-
-        for (Map.Entry<String, Integer> pair : storables.entrySet()) {
-            int tmp = pair.getValue();
-            if (truck.get(pair.getKey()) != null) {
-                tmp -= truck.get(pair.getKey());
-            }
-
-            final int cnt = tmp;
-            if (cnt == 0) continue;
-            HBox hBox = new HBox();
-            hBox.setMinHeight(60);
-            hBox.setMinWidth(WIDTH);
-
-            ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
-            Label label = new Label(new Integer(cnt).toString());
-            label.setMinWidth(52);
+            hBox.setMinWidth(WIDTH );
+            ImageView imageView = Images.getSpriteAnimation(type).getImageView();
+            imageView.setFitHeight(HEIGHT);
+            imageView.setFitWidth(WIDTH);
             hBox.getChildren().add(imageView);
-            hBox.getChildren().add(label);
 
-            Label price = new Label(new Integer(Entity.getNewEntity(pair.getKey()).getSellPrice()).toString());
-            price.setMinWidth(100);
+            Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice());
+            price.setMinSize(WIDTH, HEIGHT);
             hBox.getChildren().add(price);
 
-            ImageView sellOne = new ImageView(one);
-            ImageView sellAll = new ImageView(all);
-
-            sellOne.setFitWidth(50);
-            sellAll.setFitWidth(50);
-            sellOne.setFitHeight(100);
-            sellAll.setFitHeight(100);
-
-            sellOne.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            ImageView buyOne = new ImageView(one);
+            buyOne.setFitWidth(WIDTH);
+            buyOne.setFitHeight(HEIGHT);
+            buyOne.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    Game.getInstance().getTruck().add(pair.getKey(), 1);
-                    if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
-                    truck.put(pair.getKey(), truck.get(pair.getKey()) + 1);
-                    update();
+                    Game.getInstance().getHelicopter().add(type, 1);
                 }
             });
-
-            sellAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Game.getInstance().getTruck().add(pair.getKey(), cnt);
-                    if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
-                    truck.put(pair.getKey(), truck.get(pair.getKey()) + cnt);
-                    update();
-                }
-            });
-
-            hBox.getChildren().add(sellOne);
-            hBox.getChildren().add(sellAll);
+            hBox.getChildren().add(buyOne);
 
             vBox.getChildren().add(hBox);
         }
+        buyGroup.getChildren().add(vBox);
     }
-
 }

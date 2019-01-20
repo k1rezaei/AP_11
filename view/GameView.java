@@ -1,4 +1,5 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -6,8 +7,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
+
 
 import java.util.HashMap;
+import java.util.Optional;
 
 
 public class GameView {
@@ -17,6 +24,9 @@ public class GameView {
     private static final int WELL_Y = 20;
     private static final int TRUCK_X = 200;
     private static final int TRUCK_Y = 460;
+    private static final int HELICOPTER_X = 520;
+    private static final int HELICOPTER_Y = 430;
+
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
@@ -35,6 +45,7 @@ public class GameView {
     private SpriteAnimation well;
 
     private SpriteAnimation truck;
+    private SpriteAnimation helicopter;
 
     private GameView() {
     }
@@ -60,12 +71,55 @@ public class GameView {
     private void runGame(String levelName) {
 
         GAME.runMap(levelName);
+
         setUpBackground();
         setUpBuyIcons();
         Label moneyLabel = setUpMoneyLabel();
         setUpWell();
         setUpTruck();
         setUpWorkshops();
+        
+        helicopter = Images.getSpriteAnimation("helicopter");
+        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
+      
+        Button save = new Button("Save");
+        save.relocate(550, 15);
+        save.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().saveGame("SaveGame");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("^_^");
+                alert.setContentText(null);
+                alert.setHeaderText("Saved Successful");
+                alert.show();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        Button exit = new Button("Exit");
+        exit.relocate(10, 550);
+        exit.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setContentText("Do You Want To Save Before Exit?");
+            //alert.setHeaderText(null);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                try{
+                    Game.getInstance().saveGame("SaveGame");
+                } catch(Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            //view.close();
+
+        });
+
+        root.getChildren().add(save);
+        root.getChildren().add(exit);
 
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -217,7 +271,11 @@ public class GameView {
         return truck;
     }
 
+    public SpriteAnimation getHelicopter() {
+        return helicopter;
+
     public void setView(View view) {
         this.view = view;
+
     }
 }
