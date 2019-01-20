@@ -250,6 +250,7 @@ public class GameView {
 
     public SpriteAnimation getHelicopter() {
         return helicopter;
+    }
 
     public void setView(View view) {
         this.view = view;
