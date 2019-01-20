@@ -340,6 +340,7 @@ public class Game {
     public void upgrade(String type) {
         for (Upgradable upgradable : upgradables) {
             if (upgradable.getName().equals(type)) {
+                System.out.println(type);
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
                     upgradable.upgrade();
                     money -= upgradable.getUpgradeCost();
