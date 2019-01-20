@@ -5,7 +5,7 @@ public class EventHandlers {
 
     static View view;
 
-    static void setView(View view){
+    static void setView(View view) {
         EventHandlers.view = view;
     }
 
@@ -26,7 +26,8 @@ public class EventHandlers {
                     try {
                         Game.getInstance().startWorkshop(workshop.getName());
                         GameView.getInstance().getWorkshop(workshop).play();
-                    } catch (Exception e) {}
+                    } catch (Exception e) {
+                    }
                     break;
                 case SECONDARY:
                     try {
@@ -34,7 +35,7 @@ public class EventHandlers {
                         Game.getInstance().upgrade(workshop.getName());
 
                         GameView.getInstance().update(sprite, workshop);
-                    } catch(Exception e) {
+                    } catch (Exception e) {
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -53,10 +54,10 @@ public class EventHandlers {
                      * */
                     break;
                 case SECONDARY:
-                    try{
+                    try {
                         Game.getInstance().upgrade("helicopter");
-               ///TODO         GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
-                    }catch (Exception e){
+                        ///TODO         GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
+                    } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -75,7 +76,7 @@ public class EventHandlers {
                     try {
                         Game.getInstance().upgrade("truck");
                         GameView.getInstance().getTruck().setState(truck.getLevel());
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -94,8 +95,8 @@ public class EventHandlers {
                     case SECONDARY:
                         try {
                             Game.getInstance().upgrade("warehouse");
-                      /// TODO      GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
-                        }catch (Exception e){
+                            /// TODO      GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
+                        } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
                         break;
@@ -112,7 +113,7 @@ public class EventHandlers {
                     case PRIMARY:
                         try {
                             Game.getInstance().well();
-                        }catch(Exception e) {
+                        } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
 
@@ -126,7 +127,7 @@ public class EventHandlers {
                             sprite.setState(well.getLevel());
                             GameView.getInstance().getRoot().getChildren().add(sprite.getImageView());
                             */
-                        } catch(Exception e) {
+                        } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }
                         break;

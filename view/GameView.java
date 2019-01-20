@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class GameView {
     private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
@@ -68,6 +70,7 @@ public class GameView {
             root.getChildren().add(buyAnimal);
         }
 
+
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
         fixSprite(well, WELL_X, WELL_Y);
@@ -90,9 +93,9 @@ public class GameView {
 
         int cnt = 0;
         for (SpriteAnimation sprite : workshops.values()) {
-            if(cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
+            if (cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
-            cnt ++;
+            cnt++;
         }
 
         AnimationTimer game = new AnimationTimer() {
@@ -148,11 +151,14 @@ public class GameView {
     public static GameView getInstance() {
         return gameView;
     }
+
     public Group getRoot() {
         return root;
     }
 
-    public SpriteAnimation getWell() { return well; }
+    public SpriteAnimation getWell() {
+        return well;
+    }
 
     public SpriteAnimation getTruck() {
         return truck;
