@@ -7,7 +7,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameView {
-    private static GameView gameView = new GameView();
+    private static final GameView gameView = new GameView();
+
     private static final Game GAME = Game.getInstance();
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
@@ -22,21 +23,26 @@ public class GameView {
     private GameView() {
     }
 
-    private void initGame() {
+    public void initGame() {
         GAME.loadCustom("workshops");
         Images.init();
         runGame("level0"); //TODO create menu and more levels
     }
+
 
     public SpriteAnimation getWorkshop(Workshop workshop) {
         return workshops.get(workshop);
     }
 
     private void runGame(String levelName) {
+
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
+
+        ArrayList<ImageView> buyIcons = new ArrayList<>();
+
 
         well = Images.getSpriteAnimation("well");
 
@@ -94,5 +100,11 @@ public class GameView {
         return gameView;
     }
 
+
+    public Group getRoot() {
+        return root;
+    }
+
     public SpriteAnimation getWell() { return well; }
+
 }
