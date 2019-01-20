@@ -5,10 +5,10 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameView {
     private static final GameView gameView = new GameView();
-
     private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
@@ -21,6 +21,7 @@ public class GameView {
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
+    private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
 
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
@@ -53,9 +54,15 @@ public class GameView {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
-
-        ArrayList<ImageView> buyIcons = new ArrayList<>();
-
+        for (int i = 0; i < NON_WILD.length; i++) {
+            String animalName = NON_WILD[i];
+            ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setOnMouseClicked(mouseEvent -> {
+                GAME.buyAnimal(animalName);
+            });
+            buyAnimal.relocate(20 + 45 * i, 20);
+            root.getChildren().add(buyAnimal);
+        }
 
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
@@ -117,6 +124,7 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
+                    GAME.getMap().relax();
                     if (GAME.checkLevel()) {
                         this.stop();
                     }
@@ -135,12 +143,9 @@ public class GameView {
     public static GameView getInstance() {
         return gameView;
     }
-
-
     public Group getRoot() {
         return root;
     }
 
     public SpriteAnimation getWell() { return well; }
-
 }

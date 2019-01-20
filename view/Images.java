@@ -93,10 +93,10 @@ public class Images {
     }
     static SpriteAnimation getSpriteAnimation (String type) {return new SpriteAnimation(map.get(type));}
     static ImageView getIcon(Entity entity) {
-        return new ImageView(new Image(BASE + "ui/Icons/Products" + entity.getType() + ".png"));
+        return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
     static ImageView getIcon(String type){
-        return new ImageView(new Image(BASE + "ui/Icons/" + type + ".png"));
+        return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }
 
