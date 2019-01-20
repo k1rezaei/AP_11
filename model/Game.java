@@ -174,6 +174,7 @@ public class Game {
         Cell.setN(level.getN());
         Cell.setM(level.getM());
         this.money = level.getStartMoney();
+        upgradables.addAll(workshops);
         //TODO initialize and clear
     }
 
@@ -340,9 +341,10 @@ public class Game {
     public void upgrade(String type) {
         for (Upgradable upgradable : upgradables) {
             if (upgradable.getName().equals(type)) {
+                System.out.println(type);
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
-                    upgradable.upgrade();
                     money -= upgradable.getUpgradeCost();
+                    upgradable.upgrade();
                 } else {
                     throw new RuntimeException("not enough money");
                 }

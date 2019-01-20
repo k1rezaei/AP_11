@@ -10,6 +10,12 @@ import java.util.Map;
 public class GameView {
     private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
+    private static final int WELL_X = 360;
+    private static final int WELL_Y = 20;
+    private static final int LEFT_WORKSHOP_X = 50;
+    private static final int RIGHT_WORKSHOP_X = 620;
+    private static final int BASE_WORKSHOP = 80;
+    private static final int WORKSHOP_DIS = 150;
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
@@ -17,7 +23,7 @@ public class GameView {
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
 
-    private HashMap<Workshop, SpriteAnimation> workshops;
+    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
 
@@ -34,6 +40,13 @@ public class GameView {
     public SpriteAnimation getWorkshop(Workshop workshop) {
         return workshops.get(workshop);
     }
+
+    private void fixSprite(SpriteAnimation sprite, int x, int y) {
+        for (ImageView img : sprite.getImageViews())
+            img.relocate(x, y);
+        root.getChildren().add(sprite.getImageView());
+    }
+
 
     private void runGame(String levelName) {
 
@@ -52,13 +65,30 @@ public class GameView {
         }
 
         well = Images.getSpriteAnimation("well");
+        well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+
+
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
+            System.out.println(workshop.getName());
+            System.out.println(Images.getSpriteAnimation(workshop.getName()));
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
+        for (Workshop workshop : workshops.keySet()) {
+            SpriteAnimation sprite = getWorkshop(workshop);
+            sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
+        }
 
+        //addWell(well, x, y)
+        fixSprite(well, WELL_X, WELL_Y);
 
+        int cnt = 0;
+        for (SpriteAnimation sprite : workshops.values()) {
+            if(cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
+            else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
+            cnt ++;
+        }
 
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -102,6 +132,12 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    public void update(SpriteAnimation sprite, Upgradable upgradable) {
+        root.getChildren().remove(sprite.getImageView());
+        sprite.setState(upgradable.getLevel());
+        root.getChildren().add(sprite.getImageView());
     }
 
     public static GameView getInstance() {
