@@ -12,6 +12,8 @@ public class GameView {
     private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
+    private static final int TRUCK_X = 200;
+    private static final int TRUCK_Y = 460;
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
@@ -26,6 +28,8 @@ public class GameView {
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
+
+    private SpriteAnimation truck;
 
     private GameView() {
     }
@@ -66,7 +70,11 @@ public class GameView {
 
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+        fixSprite(well, WELL_X, WELL_Y);
 
+        truck = Images.getSpriteAnimation("truck");
+        truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        fixSprite(truck, TRUCK_X, TRUCK_Y);
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
@@ -79,9 +87,6 @@ public class GameView {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
         }
-
-        //addWell(well, x, y)
-        fixSprite(well, WELL_X, WELL_Y);
 
         int cnt = 0;
         for (SpriteAnimation sprite : workshops.values()) {
@@ -146,7 +151,11 @@ public class GameView {
     public Group getRoot() {
         return root;
     }
-    public SpriteAnimation getWell() {
-        return well;
+
+    public SpriteAnimation getWell() { return well; }
+
+    public SpriteAnimation getTruck() {
+        return truck;
+
     }
 }

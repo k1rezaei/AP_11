@@ -55,7 +55,7 @@ public class EventHandlers {
                 case SECONDARY:
                     try{
                         Game.getInstance().upgrade("helicopter");
-                        GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
+               ///TODO         GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
                     }catch (Exception e){
                         System.err.println(e.getMessage());
                     }
@@ -94,7 +94,7 @@ public class EventHandlers {
                     case SECONDARY:
                         try {
                             Game.getInstance().upgrade("warehouse");
-                            GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
+                      /// TODO      GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
                         }catch (Exception e){
                             System.err.println(e.getMessage());
                         }
