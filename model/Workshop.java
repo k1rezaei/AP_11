@@ -161,15 +161,4 @@ public class Workshop implements Upgradable {
     public void setNumberOfOutputs(int numberOfOutputs) {
         this.numberOfOutputs = numberOfOutputs;
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if(!(obj instanceof Workshop)) return false;
-        return getName().equals(((Workshop) obj).getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return 0;
-    }
 }
