@@ -42,8 +42,8 @@ public class Menu {
 
                 GameView gameView = GameView.getInstance();
                 gameView.initGame();
+                gameView.setView(view);
                 view.setRoot(gameView.getRoot());
-
             }
         });
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
