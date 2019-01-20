@@ -391,7 +391,7 @@ public class Game {
             workshop.turn();
         }
         currentTurn++;
-        if (currentTurn % 60 == 0) { //TODO FIX
+        if (currentTurn % 400 == 50) { //TODO FIX
             if (Math.random() > 0.5) {
                 map.addEntity(Entity.getNewEntity("bear"));
             } else {
