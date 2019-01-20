@@ -76,4 +76,8 @@ public class Level {
     public void setItemList(ArrayList<String> itemList) {
         this.itemList = itemList;
     }
+
+    public ArrayList<String> getItemList() {
+        return itemList;
+    }
 }

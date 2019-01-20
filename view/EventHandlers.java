@@ -52,7 +52,8 @@ public class EventHandlers {
                 case SECONDARY:
                     try {
                         Game.getInstance().upgrade("helicopter");
-                        GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
+                        SpriteAnimation sprite = GameView.getInstance().getHelicopter();
+                        GameView.getInstance().update(sprite, helicopter);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
@@ -71,7 +72,8 @@ public class EventHandlers {
                 case SECONDARY:
                     try {
                         Game.getInstance().upgrade("truck");
-                        GameView.getInstance().getTruck().setState(truck.getLevel());
+                        SpriteAnimation sprite = GameView.getInstance().getTruck();
+                        GameView.getInstance().update(sprite, truck);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }

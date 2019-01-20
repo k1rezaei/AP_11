@@ -157,7 +157,7 @@ public class GameView {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Exit");
             alert.setContentText("Do You Want To Save Before Exit?");
-            //alert.setHeaderText(null);
+            alert.setHeaderText(null);
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.get() == ButtonType.OK) {
@@ -167,7 +167,7 @@ public class GameView {
                     System.err.println(e.getMessage());
                 }
             }
-            //view.close();
+            view.close();
 
         });
 
@@ -250,6 +250,7 @@ public class GameView {
 
     public SpriteAnimation getHelicopter() {
         return helicopter;
+    }
 
     public void setView(View view) {
         this.view = view;
