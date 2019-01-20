@@ -16,6 +16,10 @@ public class GameView {
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
 
+    private HashMap<Workshop, SpriteAnimation> workshops;
+
+    private SpriteAnimation well;
+
     private GameView() {
     }
 
@@ -25,7 +29,13 @@ public class GameView {
         runGame("level0"); //TODO create menu and more levels
     }
 
-    public void runGame(String levelName) {
+
+    public SpriteAnimation getWorkshop(Workshop workshop) {
+        return workshops.get(workshop);
+    }
+
+    private void runGame(String levelName) {
+
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
@@ -39,6 +49,16 @@ public class GameView {
             buyAnimal.relocate(20 + 45 * i, 20);
             root.getChildren().add(buyAnimal);
         }
+
+        well = Images.getSpriteAnimation("well");
+
+        for (Workshop workshop : Game.getInstance().getWorkshops()) {
+            workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
+        }
+
+
+
+
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
@@ -68,8 +88,8 @@ public class GameView {
                         } else {
                             if (!sprites.containsKey(entity)) continue;
                             SpriteAnimation sprite = sprites.get(entity);
-                            root.getChildren().remove(sprite.getImageView());
                             sprite.stop();
+                            root.getChildren().remove(sprite.getImageView());
                             sprites.remove(entity);
                         }
                     }
@@ -90,4 +110,7 @@ public class GameView {
     public Group getRoot() {
         return root;
     }
+
+    public SpriteAnimation getWell() { return well; }
+
 }
