@@ -3,7 +3,7 @@ import java.util.HashMap;
 public class Level {
     private int startMoney;
     private int goalMoney;
-    private HashMap<String, Integer> goalEntity = new HashMap<>();
+    private HashMap<String, Integer> goalEntity;
     private int n, m;
 
     //TODO Initial Entities
@@ -59,7 +59,7 @@ public class Level {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Required Money: ").append(getGoalMoney()).append("\n");
         for (String needed : getGoalEntity().keySet()) {
-            stringBuilder.append(needed).append(": ").append(getNumber(needed)).append("\n");//TODO khode level get dashte bashe
+            stringBuilder.append(needed).append(": ").append(getNumber(needed)).append("\n");
         }
         return stringBuilder.substring(0, stringBuilder.length() - 1);
     }

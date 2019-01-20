@@ -1,52 +1,75 @@
+import javafx.animation.Animation;
 import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
 
 public class SpriteAnimation extends Transition {
-    private final ArrayList<ImageView> imageView;
-    private final ArrayList<Integer> count;
+    private final ArrayList<Integer> counts;
     private final ArrayList<Integer> columns;
-    private final ArrayList<Integer> width;
-    private final ArrayList<Integer> height;
+    private final ArrayList<Integer> widths = new ArrayList<>();
+    private final ArrayList<Integer> heights = new ArrayList<>();
+    private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int state = 0;
 
     private int lastIndex;
 
-    public void setState(int state){ this.state = state; }
-
-    public SpriteAnimation(
-            ArrayList<ImageView> imageView,
-            Duration duration,
-            ArrayList<Integer> count, ArrayList<Integer> columns,
-            ArrayList<Integer> width, ArrayList<Integer> height) {
-        this.imageView = imageView;
-        this.count = count;
+    public SpriteAnimation(Duration duration,
+                           ArrayList<Integer> counts, ArrayList<Integer> columns,
+                           ArrayList<Integer> widths, ArrayList<Integer> heights) {
+        this.counts = counts;
         this.columns = columns;
-        this.width = width;
-        this.height = height;
 
-        for(int i = 0; i < width.size(); i++) {
 
-            this.width.set(i, width.get(i) / (columns.get(i)));
-            this.height.set(i, height.get(i) / (count.get(i) / columns.get(i)));
+        for (int i = 0; i < widths.size(); i++) {
+            this.widths.add(widths.get(i) / (columns.get(i)));
+            this.heights.add(heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
         }
 
         setCycleDuration(duration);
+        setCycleCount(Animation.INDEFINITE);
         setInterpolator(Interpolator.LINEAR);
+    }
+
+    public SpriteAnimation(LoadedImage loadedImage) {
+        this(Duration.millis(1000), loadedImage.count, loadedImage.column, loadedImage.width, loadedImage.height);
+        ArrayList<Image> images = loadedImage.images;
+        for (int i = 0; i < images.size(); i++) {
+            ImageView imageView = new ImageView(images.get(i));
+            imageViews.add(imageView);
+            imageView.setViewport(new Rectangle2D(0, 0, widths.get(i), heights.get(i)));
+        }
     }
 
     @Override
     protected void interpolate(double k) {
-        final int index = Math.min((int) Math.floor(k * count.get(state)), count.get(state) - 1);
+        final int index = Math.min((int) Math.floor(k * counts.get(state)), counts.get(state) - 1);
         if (index != lastIndex) {
-            final int x = (index % columns.get(state)) * width.get(state);
-            final int y = (index / columns.get(state)) * height.get(state);
-            imageView.get(state).setViewport(new Rectangle2D(x, y, width.get(state), height.get(state)));
+            final int x = (index % columns.get(state)) * widths.get(state);
+            final int y = (index / columns.get(state)) * heights.get(state);
+            imageViews.get(state).setViewport(new Rectangle2D(x, y, widths.get(state), heights.get(state)));
             lastIndex = index;
         }
+    }
+
+    public void shutDown() {
+        stop();
+        imageViews.get(state).setViewport(new Rectangle2D(0, 0, widths.get(state), heights.get(state)));
+    }
+
+    public ImageView getImageView() {
+        return imageViews.get(state);
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 }

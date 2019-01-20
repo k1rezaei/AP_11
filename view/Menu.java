@@ -5,23 +5,13 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class Menu {
     View view;
-
-    Menu(View view){
-        this.view = view;
-    }
-
     private Group menuGroup = new Group();
-
-
-
 
     {
 
@@ -78,8 +68,8 @@ public class Menu {
                 alert.setTitle("Info");
                 alert.setHeaderText(null);
                 alert.setContentText("Head : Seyed Mahdi Sadegh Shobeiri\n" +
-                                     "Coder : Mohammad Mahdavi\n"+
-                                     "Copy Paster : Keyvan Rezayi");
+                        "Coder : Mohammad Mahdavi\n" +
+                        "Copy Paster : Keyvan Rezayi");
                 alert.showAndWait();
             }
         });
@@ -93,10 +83,14 @@ public class Menu {
                 alert.setHeaderText(null);
 
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK){
+                if (result.get() == ButtonType.OK) {
                     view.close();
                 }
             }
         });
+    }
+
+    Menu(View view) {
+        this.view = view;
     }
 }

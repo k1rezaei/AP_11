@@ -7,8 +7,10 @@ public class WildAnimal extends Animal {
         super(type);
         if (type.equalsIgnoreCase("bear")) {
             sellPrice = 2000;
+            speed = 4;
         } else if (type.equalsIgnoreCase("lion")) {
             sellPrice = 3000;
+            speed = 5;
         }
     }
 
