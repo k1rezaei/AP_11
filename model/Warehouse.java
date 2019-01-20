@@ -119,4 +119,8 @@ public class Warehouse implements Upgradable {
         }
         return result.toString();
     }
+
+    public Map<String, Integer> getStorables() {
+        return storables;
+    }
 }
