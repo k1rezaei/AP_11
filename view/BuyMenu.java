@@ -16,7 +16,6 @@ public class BuyMenu {
     final int WIDTH = 300;
 
     View view;
-
     Group getBuyGroup() {
         return buyGroup;
     }
@@ -24,7 +23,6 @@ public class BuyMenu {
     BuyMenu(View view){
         this.view = view;
     }
-
     static Image one = new Image("file:texture/sell/one");
     static Image all = new Image("file:texture/sell/all");
 
@@ -34,8 +32,6 @@ public class BuyMenu {
 
     void update() {
         buyGroup.getChildren().clear();
-
-
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         VBox vBox = new VBox();
         vBox.setMinWidth(WIDTH);
@@ -67,7 +63,6 @@ public class BuyMenu {
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
-
         {
             HBox hBox = new HBox();
             hBox.setMinWidth(WIDTH);
@@ -86,8 +81,6 @@ public class BuyMenu {
         }
 
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {
-
-
             int tmp = pair.getValue();
             if (truck.get(pair.getKey()) != null) {
                 tmp -= truck.get(pair.getKey());
@@ -95,7 +88,6 @@ public class BuyMenu {
 
             final int cnt = tmp;
             if (cnt == 0) continue;
-
             HBox hBox = new HBox();
             hBox.setMinHeight(60);
             hBox.setMinWidth(WIDTH);
