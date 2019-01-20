@@ -80,44 +80,6 @@ public class GameView {
         setUpHelicopter();
         setUpSaveButton();
         setUpExitButton();
-      
-        Button save = new Button("Save");
-        save.relocate(550, 15);
-        save.setOnMouseClicked(event -> {
-            try {
-                Game.getInstance().saveGame("SaveGame");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("^_^");
-                alert.setContentText("Saved Successful");
-                alert.setHeaderText(null);
-                alert.show();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        });
-
-        Button exit = new Button("Exit");
-        exit.relocate(10, 550);
-        exit.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exit");
-            alert.setContentText("Do You Want To Save Before Exit?");
-            alert.setHeaderText(null);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                try{
-                    Game.getInstance().saveGame("SaveGame");
-                } catch(Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-            view.close();
-
-        });
-
-        root.getChildren().add(save);
-        root.getChildren().add(exit);
 
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -175,11 +137,13 @@ public class GameView {
     private void setUpHelicopter() {
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        helicopter.setState(Game.getInstance().getHelicopter().getLevel());
         fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
     }
 
     private void setUpSaveButton() {
-        Button save = new Button("Save");
+        Label save = new Label();
+        save.setGraphic(new ImageView(new Image("file:textures/save.png")));
         save.relocate(550, 15);
         save.setOnMouseClicked(event -> {
             try {
@@ -197,7 +161,8 @@ public class GameView {
     }
 
     private void setUpExitButton() {
-        Button exit = new Button("Exit");
+        Label exit = new Label();
+        exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
         exit.relocate(10, 550);
         exit.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -224,6 +189,8 @@ public class GameView {
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
+            sprite.setState(workshop.getLevel());
+            //System.out.println(workshop.getName() + " : " + workshop.getLevel());
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }
@@ -232,12 +199,14 @@ public class GameView {
     private void setUpTruck() {
         truck = Images.getSpriteAnimation("truck");
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        truck.setState(Game.getInstance().getTruck().getLevel());
         fixSprite(truck, TRUCK_X, TRUCK_Y);
     }
 
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+        well.setState(Game.getInstance().getWell().getLevel());
         fixSprite(well, WELL_X, WELL_Y);
         Rectangle waterBar = new Rectangle(12, 50);
         waterBar.setFill(Color.BLUE);

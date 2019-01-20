@@ -197,15 +197,18 @@ public class Game {
 
     public void loadCustom(String address) {
         Gson gson = new Gson();
-        workshops.clear();
-        for (int i = 0; i < 6; i++) {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
-                workshops.add(gson.fromJson(reader, Workshop.class));
-                workshops.get(i).setName("workshop" + i);
-            } catch (Exception e) {
-                workshops.clear();
-                throw new RuntimeException("File not found");
+        //TODO BUG.
+        if (workshops.size() == 0) {
+            workshops.clear();
+            for (int i = 0; i < 6; i++) {
+                try {
+                    JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
+                    workshops.add(gson.fromJson(reader, Workshop.class));
+                    workshops.get(i).setName("workshop" + i);
+                } catch (Exception e) {
+                    workshops.clear();
+                    throw new RuntimeException("File not found");
+                }
             }
         }
         levels.clear();
@@ -348,10 +351,9 @@ public class Game {
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
                     money -= upgradable.getUpgradeCost();
                     upgradable.upgrade();
-                } else if(upgradable.canUpgrade()){
+                } else if (upgradable.canUpgrade()) {
                     throw new RuntimeException("not enough money");
-                }
-                else{
+                } else {
                     throw Upgradable.MAX_LEVEL_EXCEPTION;
                 }
             }
