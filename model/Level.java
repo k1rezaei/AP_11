@@ -7,6 +7,7 @@ public class Level {
     private HashMap<String, Integer> goalEntity;
     private int n, m;
     private ArrayList<String> itemList;
+
     //TODO Initial Entities
     public Level(int n, int m, int startMoney, int goalMoney, HashMap<String, Integer> goalEntity) {
         this.goalMoney = goalMoney;
@@ -75,5 +76,9 @@ public class Level {
 
     public void setItemList(ArrayList<String> itemList) {
         this.itemList = itemList;
+    }
+
+    public ArrayList<String> getItemList() {
+        return itemList;
     }
 }

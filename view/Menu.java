@@ -51,8 +51,10 @@ public class Menu {
             public void handle(MouseEvent event) {
                 try {
                     Game.getInstance().loadGame("SaveGame");
-                    GameView.getInstance().initGame();
-                    view.setRoot(GameView.getInstance().getRoot());
+                    GameView gameView = GameView.getInstance();
+                    gameView.initGame();
+                    gameView.setView(view);
+                    view.setRoot(gameView.getRoot());
 
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

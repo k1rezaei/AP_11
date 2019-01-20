@@ -38,7 +38,7 @@ public class Map {
             }
         }
         for (int i = entities.size() - 1; i >= 0; i--) {
-            if (entities.get(i) instanceof FarmAnimal) {
+            if (entities.get(i) instanceof FarmAnimal && entities.get(i).getCell() != null) {
                 Item item = ((FarmAnimal) entities.get(i)).produce();
                 if (item != null) {
                     addEntity(item);

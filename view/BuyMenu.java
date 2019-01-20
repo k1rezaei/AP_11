@@ -98,4 +98,5 @@ public class BuyMenu {
         }
         buyGroup.getChildren().add(vBox);
     }
+
 }
