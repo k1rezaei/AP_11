@@ -1,17 +1,15 @@
 import javafx.animation.AnimationTimer;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseEvent;
-
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -40,6 +38,7 @@ public class GameView {
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
     private View view;
+    Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
@@ -78,49 +77,10 @@ public class GameView {
         setUpWell();
         setUpTruck();
         setUpWorkshops();
-        
-        helicopter = Images.getSpriteAnimation("helicopter");
-        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
-        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
+        setUpHelicopter();
+        setUpSaveButton();
+        setUpExitButton();
       
-        Button save = new Button("Save");
-        save.relocate(550, 15);
-        save.setOnMouseClicked(event -> {
-            try {
-                Game.getInstance().saveGame("SaveGame");
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("^_^");
-                alert.setContentText(null);
-                alert.setHeaderText("Saved Successful");
-                alert.show();
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        });
-
-        Button exit = new Button("Exit");
-        exit.relocate(10, 550);
-        exit.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exit");
-            alert.setContentText("Do You Want To Save Before Exit?");
-            alert.setHeaderText(null);
-
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                try{
-                    Game.getInstance().saveGame("SaveGame");
-                } catch(Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-            view.close();
-
-        });
-
-        root.getChildren().add(save);
-        root.getChildren().add(exit);
-
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
@@ -162,6 +122,7 @@ public class GameView {
                         }
                     }
                     GAME.getMap().relax();
+                    filled.setHeight(50 - 50 * (1.0 * GAME.getWell().getCurrentAmount() / GAME.getWell().getCapacity()));
                     moneyLabel.setText(Integer.toString(GAME.getMoney()));
                     if (GAME.checkLevel()) {
                         this.stop();
@@ -171,6 +132,52 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    private void setUpHelicopter() {
+        helicopter = Images.getSpriteAnimation("helicopter");
+        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
+    }
+
+    private void setUpSaveButton() {
+        Button save = new Button("Save");
+        save.relocate(550, 15);
+        save.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().saveGame("SaveGame");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("^_^");
+                alert.setContentText(null);
+                alert.setHeaderText("Saved Successful");
+                alert.show();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+        root.getChildren().add(save);
+    }
+
+    private void setUpExitButton() {
+        Button exit = new Button("Exit");
+        exit.relocate(10, 550);
+        exit.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setContentText("Do You Want To Save Before Exit?");
+            //alert.setHeaderText(null);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                try {
+                    Game.getInstance().saveGame("SaveGame");
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            view.close();
+        });
+        root.getChildren().add(exit);
     }
 
     private void setUpWorkshops() {
@@ -194,18 +201,29 @@ public class GameView {
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
         fixSprite(well, WELL_X, WELL_Y);
+        Rectangle waterBar = new Rectangle(12, 50);
+        waterBar.setFill(Color.BLUE);
+        waterBar.relocate(WELL_X, WELL_Y + 65);
+        root.getChildren().add(waterBar);
+        filled.setFill(Color.WHITE);
+        filled.relocate(WELL_X, WELL_Y + 65);
+        root.getChildren().add(filled);
     }
 
     private void setUpBackground() {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         imageView.setOnMouseClicked(mouseEvent -> {
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            try {
-                GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                int x = (int) mouseEvent.getX();
+                int y = (int) mouseEvent.getY();
+                try {
+                    if (new Cell(x - BASE_X - 20, y - BASE_Y - 20).isInside()) {
+                        GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+                    }
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
         });
         root.getChildren().add(imageView);
