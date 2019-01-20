@@ -3,9 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class GameView {
     private static final GameView gameView = new GameView();
@@ -19,7 +17,6 @@ public class GameView {
     private static final int BASE_WORKSHOP = 80;
     private static final int WORKSHOP_DIS = 150;
     private Group root = new Group();
-    private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
@@ -78,8 +75,7 @@ public class GameView {
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
-            System.out.println(workshop.getName());
-            System.out.println(Images.getSpriteAnimation(workshop.getName()));
+            System.err.println(workshop.getName());
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
@@ -90,9 +86,9 @@ public class GameView {
 
         int cnt = 0;
         for (SpriteAnimation sprite : workshops.values()) {
-            if(cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
+            if (cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
-            cnt ++;
+            cnt++;
         }
 
         AnimationTimer game = new AnimationTimer() {
@@ -148,11 +144,14 @@ public class GameView {
     public static GameView getInstance() {
         return gameView;
     }
+
     public Group getRoot() {
         return root;
     }
 
-    public SpriteAnimation getWell() { return well; }
+    public SpriteAnimation getWell() {
+        return well;
+    }
 
     public SpriteAnimation getTruck() {
         return truck;
