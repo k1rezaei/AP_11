@@ -188,6 +188,7 @@ public class GameView {
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
+            sprite.setState(workshop.getLevel());
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }
@@ -202,6 +203,7 @@ public class GameView {
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+        well.setState(Game.getInstance().getWell().getLevel());
         fixSprite(well, WELL_X, WELL_Y);
         Rectangle waterBar = new Rectangle(12, 50);
         waterBar.setFill(Color.BLUE);
