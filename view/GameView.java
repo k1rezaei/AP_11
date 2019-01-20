@@ -3,6 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -62,9 +63,9 @@ public class GameView {
         imageView.setOnMouseClicked(mouseEvent -> {
             int x = (int) mouseEvent.getX();
             int y = (int) mouseEvent.getY();
-            try{
+            try {
                 GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
-            }catch (Exception e){
+            } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
         });
@@ -74,7 +75,19 @@ public class GameView {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
             buyAnimal.setOnMouseClicked(mouseEvent -> {
-                GAME.buyAnimal(animalName);
+                try {
+                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                        GAME.buyAnimal(animalName);
+                    else if(mouseEvent.getButton()==MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")){
+                        GAME.upgrade("cat");
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage() != null) {
+                        System.err.println(e.getMessage());
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
             });
             buyAnimal.relocate(20 + 45 * i, 20);
             root.getChildren().add(buyAnimal);

@@ -348,15 +348,18 @@ public class Game {
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
                     money -= upgradable.getUpgradeCost();
                     upgradable.upgrade();
-                } else {
+                } else if(upgradable.canUpgrade()){
                     throw new RuntimeException("not enough money");
+                }
+                else{
+                    throw Upgradable.MAX_LEVEL_EXCEPTION;
                 }
             }
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                Cat.upgrade();
                 money -= Cat.getUpgradeCost();
+                Cat.upgrade();
                 catLevel = Cat.getLevel();
             } else {
                 throw new RuntimeException("not enough money");
