@@ -17,6 +17,7 @@ public class View extends Application {
     public void start(Stage primaryStage) {
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
+        primaryStage.setResizable(false);
         Menu menu = new Menu(this);
         scene = new Scene(menu.getRoot(), 800, 600);
         primaryStage.setScene(scene);
