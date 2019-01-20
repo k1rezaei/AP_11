@@ -31,6 +31,9 @@ public class GameView {
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
     private static final int WORKSHOP_DIS = 150;
+    public static final int BUY_ANIMAL_Y = 20;
+    public static final int BUY_ANIMAL_BASE_X = 20;
+    public static final int BUY_ANIMAL_X_DIFF = 45;
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
@@ -68,74 +71,18 @@ public class GameView {
     private void runGame(String levelName) {
 
         GAME.runMap(levelName);
-        Image background = new Image("file:textures/back.png");
-        ImageView imageView = new ImageView(background);
 
-        imageView.setOnMouseClicked(mouseEvent -> {
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            try {
-                GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        });
-
-        root.getChildren().add(imageView);
-        for (int i = 0; i < NON_WILD.length; i++) {
-            String animalName = NON_WILD[i];
-            ImageView buyAnimal = Images.getIcon(animalName);
-            buyAnimal.setOnMouseClicked(mouseEvent -> {
-                try {
-                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                        GAME.buyAnimal(animalName);
-                    else if(mouseEvent.getButton()==MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")){
-                        GAME.upgrade("cat");
-                    }
-                } catch (Exception e) {
-                    if (e.getMessage() != null) {
-                        System.err.println(e.getMessage());
-                    } else {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            buyAnimal.relocate(20 + 45 * i, 20);
-            root.getChildren().add(buyAnimal);
-        }
-
-        Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
-        moneyLabel.setTextFill(Color.GOLD);
-        moneyLabel.setFont(Font.font(30));
-        moneyLabel.relocate(700, 20);
-        root.getChildren().add(moneyLabel);
-
-        well = Images.getSpriteAnimation("well");
-        well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
-        fixSprite(well, WELL_X, WELL_Y);
-
-        truck = Images.getSpriteAnimation("truck");
-        truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
-        fixSprite(truck, TRUCK_X, TRUCK_Y);
-
+        setUpBackground();
+        setUpBuyIcons();
+        Label moneyLabel = setUpMoneyLabel();
+        setUpWell();
+        setUpTruck();
+        setUpWorkshops();
+        
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
         fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
-
-
-        for (Workshop workshop : Game.getInstance().getWorkshops()) {
-            workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
-        }
-
-        int cnt = 0;
-        for (Workshop workshop : Game.getInstance().getWorkshops()) {
-            SpriteAnimation sprite = getWorkshop(workshop);
-            sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
-            if (cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
-            else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
-            cnt++;
-        }
-
+      
         Button save = new Button("Save");
         save.relocate(550, 15);
         save.setOnMouseClicked(event -> {
@@ -224,6 +171,80 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    private void setUpWorkshops() {
+        for (int i = 0; i < GAME.getWorkshops().size(); i++) {
+            Workshop workshop = GAME.getWorkshops().get(i);
+            workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
+            SpriteAnimation sprite = getWorkshop(workshop);
+            sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
+            if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
+            else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
+        }
+    }
+
+    private void setUpTruck() {
+        truck = Images.getSpriteAnimation("truck");
+        truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        fixSprite(truck, TRUCK_X, TRUCK_Y);
+    }
+
+    private void setUpWell() {
+        well = Images.getSpriteAnimation("well");
+        well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+        fixSprite(well, WELL_X, WELL_Y);
+    }
+
+    private void setUpBackground() {
+        Image background = new Image("file:textures/back.png");
+        ImageView imageView = new ImageView(background);
+        imageView.setOnMouseClicked(mouseEvent -> {
+            int x = (int) mouseEvent.getX();
+            int y = (int) mouseEvent.getY();
+            try {
+                GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+        root.getChildren().add(imageView);
+    }
+
+    private void setUpBuyIcons() {
+        for (int i = 0; i < NON_WILD.length; i++) {
+            String animalName = NON_WILD[i];
+            ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setOnMouseClicked(mouseEvent -> {
+                try {
+                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                        GAME.buyAnimal(animalName);
+                    else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
+                        GAME.upgrade("cat");
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage() != null) {
+                        System.err.println(e.getMessage());
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            buyAnimal.setOnMouseEntered(mouseEvent -> {
+            });
+            buyAnimal.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i, BUY_ANIMAL_Y);
+            root.getChildren().add(buyAnimal);
+        }
+    }
+
+    private Label setUpMoneyLabel() {
+        Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
+        moneyLabel.setTextFill(Color.GOLD);
+        moneyLabel.setFont(Font.font(30));
+        moneyLabel.relocate(700, 20);
+        root.getChildren().add(moneyLabel);
+        return moneyLabel;
     }
 
     public void update(SpriteAnimation sprite, Upgradable upgradable) {
