@@ -3,21 +3,21 @@ import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
+
 
 public class GameView {
     private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
+    private static final int TRUCK_X = 200;
+    private static final int TRUCK_Y = 460;
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
     private static final int WORKSHOP_DIS = 150;
     private Group root = new Group();
-    private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
@@ -26,6 +26,8 @@ public class GameView {
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
+
+    private SpriteAnimation truck;
 
     private GameView() {
     }
@@ -64,30 +66,28 @@ public class GameView {
             root.getChildren().add(buyAnimal);
         }
 
+
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
+        fixSprite(well, WELL_X, WELL_Y);
 
+        truck = Images.getSpriteAnimation("truck");
+        truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        fixSprite(truck, TRUCK_X, TRUCK_Y);
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
-            System.out.println(workshop.getName());
-            System.out.println(Images.getSpriteAnimation(workshop.getName()));
+            System.err.println(workshop.getName());
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
-        for (Workshop workshop : workshops.keySet()) {
+        int cnt = 0;
+        for (Workshop workshop : Game.getInstance().getWorkshops()) {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
-        }
-
-        //addWell(well, x, y)
-        fixSprite(well, WELL_X, WELL_Y);
-
-        int cnt = 0;
-        for (SpriteAnimation sprite : workshops.values()) {
-            if(cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
+            if (cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
-            cnt ++;
+            cnt++;
         }
 
         AnimationTimer game = new AnimationTimer() {
@@ -124,6 +124,11 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
+                    for (Workshop workshop : GAME.getWorkshops()) {
+                        if (workshop.getRemainTime() == 0) {
+                            getWorkshop(workshop).shutDown();
+                        }
+                    }
                     GAME.getMap().relax();
                     if (GAME.checkLevel()) {
                         this.stop();
@@ -143,9 +148,16 @@ public class GameView {
     public static GameView getInstance() {
         return gameView;
     }
+
     public Group getRoot() {
         return root;
     }
 
-    public SpriteAnimation getWell() { return well; }
+    public SpriteAnimation getWell() {
+        return well;
+    }
+
+    public SpriteAnimation getTruck() {
+        return truck;
+    }
 }

@@ -2,7 +2,7 @@
   "inputs": {
     "Sewing": 1
   },
-  "output": "Cloth",
+  "output": "Fabric",
   "name": "workshop4",
   "duration": 10,
   "remainTime": -1,

@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -14,19 +15,19 @@ import java.util.Map;
 public class BuyMenu {
     private Group buyGroup = new Group();
     final int WIDTH = 300;
+    ///TODI final int HEIGHT = 70;
 
     View view;
-
     Group getBuyGroup() {
+        update();
         return buyGroup;
     }
 
     BuyMenu(View view){
         this.view = view;
     }
-
-    static Image one = new Image("file:texture/sell/one");
-    static Image all = new Image("file:texture/sell/all");
+    static Image one = new Image("file:textures/sell/one.png");
+    static Image all = new Image("file:textures/sell/all.png");
 
 
     HashMap<String, Integer> truck = new HashMap<>();
@@ -34,8 +35,6 @@ public class BuyMenu {
 
     void update() {
         buyGroup.getChildren().clear();
-
-
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         VBox vBox = new VBox();
         vBox.setMinWidth(WIDTH);
@@ -62,12 +61,24 @@ public class BuyMenu {
         ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().getTruck().go();
+                try {
+                    Game.getInstance().go(Game.getInstance().getTruck());
+                    GameView.getInstance().getTruck().getImageView().setVisible(false);
+                    new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
+                                GameView.getInstance().getTruck().getImageView().setVisible(true);
+                            }
+                        }
+                    }.start();
+                }catch (Exception e){
+
+                }
                 truck.clear();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
-
         {
             HBox hBox = new HBox();
             hBox.setMinWidth(WIDTH);
@@ -86,8 +97,6 @@ public class BuyMenu {
         }
 
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {
-
-
             int tmp = pair.getValue();
             if (truck.get(pair.getKey()) != null) {
                 tmp -= truck.get(pair.getKey());
@@ -95,12 +104,12 @@ public class BuyMenu {
 
             final int cnt = tmp;
             if (cnt == 0) continue;
-
             HBox hBox = new HBox();
             hBox.setMinHeight(60);
             hBox.setMinWidth(WIDTH);
 
             ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
+            imageView.setFitWidth(48);
             Label label = new Label(new Integer(cnt).toString());
             label.setMinWidth(52);
             hBox.getChildren().add(imageView);

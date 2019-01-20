@@ -1,3 +1,5 @@
+
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         Menu menu = new Menu(this);
         scene = new Scene(menu.getRoot(), 800, 600);
@@ -20,7 +23,6 @@ public class View extends Application {
         primaryStage.setTitle("Farm Friendzy");
         primaryStage.show();
     }
-
     public void setRoot(Group root) {
         scene.setRoot(root);
     }

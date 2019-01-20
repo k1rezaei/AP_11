@@ -5,5 +5,13 @@
     "Sheep": 3
   },
   "n": 400,
-  "m": 300
+  "m": 300,
+  "itemList":[
+    "Flour",
+    "BrightHorn",
+    "Horn",
+    "Plume",
+    "Adornment",
+    "Souvenir"
+  ]
 }
