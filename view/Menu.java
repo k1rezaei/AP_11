@@ -4,6 +4,9 @@ import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
@@ -22,20 +25,24 @@ public class Menu {
         vBox.setPrefHeight(600);
         menuGroup.getChildren().add(vBox);
 
-        Button start = new Button();
-        start.setText("Start");
-        Button load = new Button();
-        load.setText("Load");
-        Button info = new Button();
-        info.setText("Info");
-        Button exit = new Button();
-        exit.setText("Exit");
+        ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
+        menuGroup.getChildren().add(background);
 
-        vBox.getChildren().add(start);
-        vBox.getChildren().add(load);
-        vBox.getChildren().add(info);
-        vBox.getChildren().add(exit);
 
+        setStart();
+
+        setLoad();
+
+        setInfo();
+
+        setExit();
+
+    }
+
+    private void setStart() {
+        Label start = new Label();
+        start.setGraphic(new ImageView(new Image("file:textures/menu/start.png"))); start.relocate(350, 100);
+        menuGroup.getChildren().add(start);
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -46,6 +53,12 @@ public class Menu {
                 view.setRoot(gameView.getRoot());
             }
         });
+    }
+
+    private void setLoad() {
+        Label load = new Label();
+        load.setGraphic(new ImageView(new Image("file:textures/menu/load.png"))); load.relocate(350, 200);
+        menuGroup.getChildren().add(load);
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -65,33 +78,38 @@ public class Menu {
                 }
             }
         });
-        info.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Info");
-                alert.setHeaderText(null);
-                alert.setContentText("Designed By\n" +
-                        "Seyed Mahdi Sadegh Shobeiri\n" +
-                        "Mohammad Mahdavi\n" +
-                        "Dr Keivan Rezaei");
-                alert.showAndWait();
-            }
+    }
+
+    private void setInfo() {
+        Label info = new Label();
+        info.setGraphic(new ImageView(new Image("file:textures/menu/info.png"))); info.relocate(350, 300);
+        menuGroup.getChildren().add(info);
+        info.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Info");
+            alert.setHeaderText(null);
+            alert.setContentText("Designed By\n" +
+                    "Seyed Mahdi Sadegh Shobeiri\n" +
+                    "Mohammad Mahdavi\n" +
+                    "Keivan Rezaei");
+            alert.showAndWait();
         });
+    }
 
-        exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+    private void setExit() {
+        Label exit = new Label();
+        exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png"))); exit.relocate(350, 400);
+        menuGroup.getChildren().add(exit);
+        exit.setOnMouseClicked(event -> {
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Exit");
-                alert.setContentText("Are You Sure?");
-                alert.setHeaderText(null);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setContentText("Are You Sure?");
+            alert.setHeaderText(null);
 
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    view.close();
-                }
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                view.close();
             }
         });
     }
