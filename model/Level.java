@@ -20,6 +20,10 @@ public class Level {
         return startMoney;
     }
 
+    public ArrayList<String> getItemList() {
+        return itemList;
+    }
+
     public void setStartMoney(int startMoney) {
         this.startMoney = startMoney;
     }
