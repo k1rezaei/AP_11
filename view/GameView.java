@@ -12,8 +12,8 @@ public class GameView {
     private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
-    private static final int TRUCK_X = 260;
-    private static final int TRUCK_Y = 700;
+    private static final int TRUCK_X = 200;
+    private static final int TRUCK_Y = 460;
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
