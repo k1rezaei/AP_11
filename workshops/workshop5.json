@@ -1,9 +1,9 @@
 {
   "inputs": {
-    "Cloth": 1,
-    "Decoration": 1
+    "Fabric": 1,
+    "Adornment": 1
   },
-  "output": "Costume",
+  "output": "CarnivalDress",
   "name": "workshop5",
   "duration": 30,
   "remainTime": -1,
