@@ -6,7 +6,6 @@ import javafx.scene.image.ImageView;
 import java.util.HashMap;
 
 
-
 public class GameView {
     private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
@@ -82,13 +81,10 @@ public class GameView {
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
-        for (Workshop workshop : workshops.keySet()) {
+        int cnt = 0;
+        for (Workshop workshop : Game.getInstance().getWorkshops()) {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
-        }
-
-        int cnt = 0;
-        for (SpriteAnimation sprite : workshops.values()) {
             if (cnt <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * cnt);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
             cnt++;
@@ -126,6 +122,11 @@ public class GameView {
                             sprite.stop();
                             root.getChildren().remove(sprite.getImageView());
                             sprites.remove(entity);
+                        }
+                    }
+                    for (Workshop workshop : GAME.getWorkshops()) {
+                        if (workshop.getRemainTime() == 0) {
+                            getWorkshop(workshop).shutDown();
                         }
                     }
                     GAME.getMap().relax();

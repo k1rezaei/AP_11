@@ -29,7 +29,7 @@ public class Images {
         loadImage("bear", 4, 24, new int[]{4, 4, 4, 4});
 
 
-        String[] items = new String[]{"Adornment.png", "CheeseFerment.png", "FlouryCake.png", "Souvenir.png",
+        String[] items = new String[]{"Adornment.png", "CheeseFerment.png", "Cookie.png", "Souvenir.png",
                 "Bear.png", "Cheese.png", "Horn.png", "SpruceBrownBear.png",
                 "BrightHorn.png", "ColoredPlume.png", "Intermediate.png", "SpruceGrizzly.png",
                 "CagedJaguar.png", "Curd.png", "MegaPie.png", "SpruceJaguar.png",
