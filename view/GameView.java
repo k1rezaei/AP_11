@@ -14,6 +14,7 @@ public class GameView {
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
+    private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
 
     private GameView() {
     }
@@ -29,7 +30,15 @@ public class GameView {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
-        ArrayList<ImageView> buyIcons = new ArrayList<>();
+        for (int i = 0; i < NON_WILD.length; i++) {
+            String animalName = NON_WILD[i];
+            ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setOnMouseClicked(mouseEvent -> {
+                GAME.buyAnimal(animalName);
+            });
+            buyAnimal.relocate(20 + 45 * i, 20);
+            root.getChildren().add(buyAnimal);
+        }
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
@@ -59,11 +68,12 @@ public class GameView {
                         } else {
                             if (!sprites.containsKey(entity)) continue;
                             SpriteAnimation sprite = sprites.get(entity);
-                            sprite.stop();
                             root.getChildren().remove(sprite.getImageView());
+                            sprite.stop();
                             sprites.remove(entity);
                         }
                     }
+                    GAME.getMap().relax();
                     if (GAME.checkLevel()) {
                         this.stop();
                     }

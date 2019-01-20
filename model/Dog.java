@@ -1,14 +1,14 @@
 public class Dog extends Animal {
 
     Dog() {
-        super("Dog");
+        super("dog");
         speed = 6;
         buyPrice = 1000;
     }
 
 
     Dog(Cell cell) {
-        super("Dog", cell);
+        super("dog", cell);
         speed = 6;
         buyPrice = 1000;
     }

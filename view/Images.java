@@ -87,14 +87,15 @@ public class Images {
     }
 
     static SpriteAnimation getSpriteAnimation(Entity entity) {
+        System.err.println(entity.getType());
         return new SpriteAnimation(map.get(entity.getType()));
     }
 
     static ImageView getIcon(Entity entity) {
-        return new ImageView(new Image(BASE + "ui/Icons/" + entity.getType() + ".png"));
+        return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
     static ImageView getIcon(String type){
-        return new ImageView(new Image(BASE + "ui/Icons/" + type + ".png"));
+        return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }
 
