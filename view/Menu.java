@@ -52,6 +52,7 @@ public class Menu {
                 try {
                     Game.getInstance().loadGame("SaveGame");
                     GameView.getInstance().initGame();
+                    GameView.getInstance().setView(view);
                     view.setRoot(GameView.getInstance().getRoot());
 
                 } catch (Exception e) {
