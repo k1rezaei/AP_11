@@ -6,7 +6,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.util.Optional;
 
 public class Menu {
@@ -14,6 +17,15 @@ public class Menu {
     private Group menuGroup = new Group();
 
     {
+
+
+        Media sound = new Media(new File("rabana.mp3").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+             mediaPlayer.play();
+
+
+
+
 
         VBox vBox = new VBox();
 
