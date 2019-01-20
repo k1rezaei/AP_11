@@ -21,7 +21,7 @@ public abstract class Entity {
     }
 
     static Entity getNewEntity(String type) {
-        if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equals("Chicken"))
+        if (type.equalsIgnoreCase("Sheep") || type.equalsIgnoreCase("Cow") || type.equalsIgnoreCase("Chicken"))
             return new FarmAnimal(type);
         else if (type.equalsIgnoreCase("Lion") || type.equalsIgnoreCase("Bear"))
             return new WildAnimal(type);
