@@ -1,12 +1,17 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+
 
 import java.util.HashMap;
 import java.util.Optional;
@@ -28,7 +33,7 @@ public class GameView {
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
-
+    private View view;
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
@@ -61,17 +66,45 @@ public class GameView {
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
+
+        imageView.setOnMouseClicked(mouseEvent -> {
+            int x = (int) mouseEvent.getX();
+            int y = (int) mouseEvent.getY();
+            try {
+                GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
         root.getChildren().add(imageView);
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
             buyAnimal.setOnMouseClicked(mouseEvent -> {
-                GAME.buyAnimal(animalName);
+                try {
+                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                        GAME.buyAnimal(animalName);
+                    else if(mouseEvent.getButton()==MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")){
+                        GAME.upgrade("cat");
+                    }
+                } catch (Exception e) {
+                    if (e.getMessage() != null) {
+                        System.err.println(e.getMessage());
+                    } else {
+                        e.printStackTrace();
+                    }
+                }
             });
             buyAnimal.relocate(20 + 45 * i, 20);
             root.getChildren().add(buyAnimal);
         }
 
+        Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
+        moneyLabel.setTextFill(Color.GOLD);
+        moneyLabel.setFont(Font.font(30));
+        moneyLabel.relocate(700, 20);
+        root.getChildren().add(moneyLabel);
 
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
@@ -83,7 +116,6 @@ public class GameView {
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
-            System.err.println(workshop.getName());
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
@@ -164,6 +196,7 @@ public class GameView {
                             if (!sprites.containsKey(entity)) continue;
                             SpriteAnimation sprite = sprites.get(entity);
                             sprite.stop();
+                            sprite.getImageView().setVisible(false);
                             root.getChildren().remove(sprite.getImageView());
                             sprites.remove(entity);
                         }
@@ -174,8 +207,10 @@ public class GameView {
                         }
                     }
                     GAME.getMap().relax();
+                    moneyLabel.setText(Integer.toString(GAME.getMoney()));
                     if (GAME.checkLevel()) {
                         this.stop();
+                        //TODO go back to menu
                     }
                 }
             }
@@ -203,5 +238,9 @@ public class GameView {
 
     public SpriteAnimation getTruck() {
         return truck;
+    }
+
+    public void setView(View view) {
+        this.view = view;
     }
 }
