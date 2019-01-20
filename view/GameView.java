@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameView {
     private static final GameView gameView = new GameView();
@@ -106,11 +107,9 @@ public class GameView {
     public static GameView getInstance() {
         return gameView;
     }
-
     public Group getRoot() {
         return root;
     }
 
     public SpriteAnimation getWell() { return well; }
-
 }
