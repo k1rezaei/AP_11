@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
+    public static final int PLANT_DISTANCE = 20;
     private static Game game = new Game();
     private Map map = new Map();
     private int money;
@@ -305,7 +306,7 @@ public class Game {
             for (int i = -1; i < 2; i++) {
                 for (int j = -1; j < 2; j++) {
                     try {
-                        Entity entity = new Plant(new Cell(x + i, y + j));
+                        Entity entity = new Plant(new Cell(x + i * PLANT_DISTANCE, y + j * PLANT_DISTANCE));
                         map.addEntity(entity);
                     } catch (Exception e) {
 
@@ -332,9 +333,11 @@ public class Game {
     }
 
     public void well() {
-        if (well.getFillCost() <= money) {
+        if (well.isEmpty() && well.getFillCost() <= money) {
             money -= well.getFillCost();
             well.fill();
+        } else {
+            throw new RuntimeException("Well is not Empty");
         }
     }
 
@@ -345,15 +348,18 @@ public class Game {
                 if (money >= upgradable.getUpgradeCost() && upgradable.canUpgrade()) {
                     money -= upgradable.getUpgradeCost();
                     upgradable.upgrade();
-                } else {
+                } else if(upgradable.canUpgrade()){
                     throw new RuntimeException("not enough money");
+                }
+                else{
+                    throw Upgradable.MAX_LEVEL_EXCEPTION;
                 }
             }
         }
         if (type.equals("cat")) {
             if (money >= Cat.getUpgradeCost()) {
-                Cat.upgrade();
                 money -= Cat.getUpgradeCost();
+                Cat.upgrade();
                 catLevel = Cat.getLevel();
             } else {
                 throw new RuntimeException("not enough money");

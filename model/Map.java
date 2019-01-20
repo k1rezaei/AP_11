@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Map {
-    final private static int BASE_DISTANCE = 6;
+    final private static int BASE_DISTANCE = 30;
     private ArrayList<Entity> entities = new ArrayList<>();
 
     Map() {
@@ -13,7 +13,6 @@ public class Map {
 
     int getNumber(String type) {
         int cnt = 0;
-
         for (Entity entity : entities) if (entity.getCell() != null && entity.getType().equalsIgnoreCase(type)) cnt++;
         return cnt;
     }

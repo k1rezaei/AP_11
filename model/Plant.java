@@ -4,7 +4,7 @@ public class Plant extends Entity {
 
     Plant(Cell cell) {
         this.cell = cell;
-        this.type = "Plant";
+        this.type = "plant";
     }
 
     void turn() {

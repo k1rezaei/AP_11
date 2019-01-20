@@ -42,16 +42,17 @@ public class Menu {
 
                 GameView gameView = GameView.getInstance();
                 gameView.initGame();
+                gameView.setView(view);
                 view.setRoot(gameView.getRoot());
-
             }
         });
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    Game.getInstance().loadGame("SaveGame.save");
-                    view.setRoot(menuGroup);
+                    Game.getInstance().loadGame("SaveGame");
+                    GameView.getInstance().initGame();
+                    view.setRoot(GameView.getInstance().getRoot());
 
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

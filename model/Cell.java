@@ -9,7 +9,7 @@ public class Cell {
         this.x = x;
         this.y = y;
         if (!isInside()) {
-            throw new RuntimeException("Cell out of boundaries");
+            throw new RuntimeException("Cell out of bounds");
         }
     }
 
