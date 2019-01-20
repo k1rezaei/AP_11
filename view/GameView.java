@@ -10,19 +10,19 @@ public class GameView {
     private static final GameView gameView = new GameView();
 
     private static final Game GAME = Game.getInstance();
-    private static final int WELL_X = 350;
-    private static final int WELL_Y = 100;
-    private static final int LEFT_WORKSHOP_X = 100;
-    private static final int RIGHT_WORKSHOP_X = 600;
-    private static final int BASE_WORKSHOP = 100;
-    private static final int WORKSHOP_DIS = 200;
+    private static final int WELL_X = 360;
+    private static final int WELL_Y = 30;
+    private static final int LEFT_WORKSHOP_X = 50;
+    private static final int RIGHT_WORKSHOP_X = 620;
+    private static final int BASE_WORKSHOP = 80;
+    private static final int WORKSHOP_DIS = 150;
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
 
-    private HashMap<Workshop, SpriteAnimation> workshops;
+    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
 
     private SpriteAnimation well;
 
@@ -63,6 +63,8 @@ public class GameView {
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
+            System.out.println(workshop.getName());
+            System.out.println(Images.getSpriteAnimation(workshop.getName()));
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
         }
 
