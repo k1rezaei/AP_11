@@ -55,7 +55,6 @@ public class BuyMenu {
             public void handle(MouseEvent event) {
                 Game.getInstance().getTruck().clear();
                 truck.clear();
-                // to do exit buy menu
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });

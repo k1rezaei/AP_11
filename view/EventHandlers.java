@@ -3,6 +3,12 @@ import javafx.scene.input.MouseEvent;
 
 public class EventHandlers {
 
+    static View view;
+
+    static void setView(View view){
+        EventHandlers.view = view;
+    }
+
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
             if (entity instanceof WildAnimal) {
@@ -25,7 +31,6 @@ public class EventHandlers {
                 case SECONDARY:
                     try {
                         Game.getInstance().upgrade(workshop.getName());
-                        //GameView.getInstance().
                         GameView.getInstance().getWorkshop(workshop).setState(workshop.getLevel() - 1); //TODO level 1 based.
                     } catch(Exception e) {}
                     break;
@@ -37,14 +42,22 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
+                    /**
+                     *
+                     * TODO
+                     *
+                     * */
                     break;
                 case SECONDARY:
+                    try{
+                        Game.getInstance().upgrade("helicopter");
+                        GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
             }
-            /**
-             *
-             *
-             * */
+
         };
     }
 
@@ -52,14 +65,17 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
+                    view.setRoot(new BuyMenu(view).getBuyGroup());
                     break;
                 case SECONDARY:
+                    try {
+                        Game.getInstance().upgrade("truck");
+                        GameView.getInstance().getTruck().setState(truck.getLevel());
+                    }catch (Exception e){
+                        System.err.println(e.getMessage());
+                    }
                     break;
             }
-            /**
-             *
-             *
-             * */
         };
     }
 
@@ -69,14 +85,17 @@ public class EventHandlers {
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
+                        view.setRoot(new BuyMenu(view).getBuyGroup());
                         break;
                     case SECONDARY:
+                        try {
+                            Game.getInstance().upgrade("warehouse");
+                            GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
+                        }catch (Exception e){
+                            System.err.println(e.getMessage());
+                        }
                         break;
                 }
-                /**
-                 *
-                 *
-                 * */
             }
         };
     }
@@ -89,7 +108,6 @@ public class EventHandlers {
                     case PRIMARY:
                         try {
                             Game.getInstance().well();
-
                         }catch(Exception e) {
                             System.err.println(e.getMessage());
                         }
