@@ -5,6 +5,7 @@ import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class GameView {
     private GameView gameView = new GameView();
@@ -76,4 +77,14 @@ public class GameView {
     public GameView getInstance() {
         return gameView;
     }
+
+
+/**
+    void showWareHouse(){
+        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
+        for (Map.Entry<String, Integer> pair : storables.entrySet()){
+
+        }
+
+    }*/
 }
