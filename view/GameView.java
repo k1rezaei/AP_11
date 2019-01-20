@@ -155,6 +155,5 @@ public class GameView {
 
     public SpriteAnimation getTruck() {
         return truck;
-
     }
 }
