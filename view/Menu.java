@@ -65,6 +65,8 @@ public class Menu {
                 try {
                     Game.getInstance().loadGame("SaveGame");
                     GameView gameView = GameView.getInstance();
+                    for (Workshop workshop : Game.getInstance().getWorkshops())
+                        System.out.println(workshop.getName() + "," + workshop.getLevel());
                     gameView.initGame();
                     gameView.setView(view);
                     view.setRoot(gameView.getRoot());

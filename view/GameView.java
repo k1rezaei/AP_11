@@ -137,6 +137,7 @@ public class GameView {
     private void setUpHelicopter() {
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        helicopter.setState(Game.getInstance().getHelicopter().getLevel());
         fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
     }
 
@@ -189,6 +190,7 @@ public class GameView {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
             sprite.setState(workshop.getLevel());
+            //System.out.println(workshop.getName() + " : " + workshop.getLevel());
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }
@@ -197,6 +199,7 @@ public class GameView {
     private void setUpTruck() {
         truck = Images.getSpriteAnimation("truck");
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        truck.setState(Game.getInstance().getTruck().getLevel());
         fixSprite(truck, TRUCK_X, TRUCK_Y);
     }
 
