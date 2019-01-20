@@ -71,6 +71,8 @@ public class SpriteAnimation extends Transition {
         return imageViews.get(state);
     }
 
+    public ArrayList<ImageView> getImageViews() {return imageViews;}
+
     public int getState() {
         return state;
     }
