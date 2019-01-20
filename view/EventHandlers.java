@@ -75,7 +75,8 @@ public class EventHandlers {
                 case SECONDARY:
                     try {
                         Game.getInstance().upgrade("truck");
-                        GameView.getInstance().getTruck().setState(truck.getLevel());
+                        SpriteAnimation sprite = GameView.getInstance().getTruck();
+                        GameView.getInstance().update(sprite, truck);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
