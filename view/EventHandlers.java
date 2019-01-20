@@ -47,16 +47,12 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    /**
-                     *
-                     * TODO
-                     *
-                     * */
+                     view.setRoot(new BuyMenu(view).getBuyGroup());
                     break;
                 case SECONDARY:
                     try {
                         Game.getInstance().upgrade("helicopter");
-                        ///TODO         GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
+                        GameView.getInstance().getHelicopter().setState(helicopter.getLevel());
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
@@ -70,7 +66,7 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    view.setRoot(new BuyMenu(view).getBuyGroup());
+                    view.setRoot(new SellMenu(view).getSellGroup());
                     break;
                 case SECONDARY:
                     try {
@@ -90,7 +86,7 @@ public class EventHandlers {
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
-                        view.setRoot(new BuyMenu(view).getBuyGroup());
+                        view.setRoot(new SellMenu(view).getSellGroup());
                         break;
                     case SECONDARY:
                         try {
