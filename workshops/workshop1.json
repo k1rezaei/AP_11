@@ -7,8 +7,8 @@
   "duration": 70,
   "remainTime": -1,
   "level": 0,
-  "x": 20,
-  "y": 20,
+  "x": 0,
+  "y": 180,
   "upgradeCost": 300,
   "startCost": 200
 }
