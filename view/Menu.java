@@ -50,8 +50,9 @@ public class Menu {
             @Override
             public void handle(MouseEvent event) {
                 try {
-                    Game.getInstance().loadGame("SaveGame.save");
-                    view.setRoot(menuGroup);
+                    Game.getInstance().loadGame("SaveGame");
+                    GameView.getInstance().initGame();
+                    view.setRoot(GameView.getInstance().getRoot());
 
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);

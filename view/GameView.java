@@ -1,9 +1,15 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 
 public class GameView {
@@ -89,6 +95,44 @@ public class GameView {
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (cnt - 3));
             cnt++;
         }
+
+        Button save = new Button("Save");
+        save.relocate(550, 15);
+        save.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().saveGame("SaveGame");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("^_^");
+                alert.setContentText(null);
+                alert.setHeaderText("Saved Successful");
+                alert.show();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        Button exit = new Button("Exit");
+        exit.relocate(10, 550);
+        exit.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setContentText("Do You Want To Save Before Exit?");
+            //alert.setHeaderText(null);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                try{
+                    Game.getInstance().saveGame("SaveGame");
+                } catch(Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            //view.close();
+
+        });
+
+        root.getChildren().add(save);
+        root.getChildren().add(exit);
 
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
