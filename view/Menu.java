@@ -71,9 +71,10 @@ public class Menu {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("Info");
                 alert.setHeaderText(null);
-                alert.setContentText("Head : Seyed Mahdi Sadegh Shobeiri\n" +
-                        "Coder : Mohammad Mahdavi\n" +
-                        "Copy Paster : Keyvan Rezayi");
+                alert.setContentText("Designed By\n" +
+                        "Seyed Mahdi Sadegh Shobeiri\n" +
+                        "Mohammad Mahdavi\n" +
+                        "Dr Keivan Rezaei");
                 alert.showAndWait();
             }
         });

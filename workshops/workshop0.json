@@ -4,11 +4,11 @@
   },
   "output": "Sewing",
   "name": "workshop0",
-  "duration": 15,
+  "duration": 70,
   "remainTime": -1,
   "level": 0,
-  "x": 10,
-  "y": 10,
+  "x": 0,
+  "y": 30,
   "upgradeCost": 200,
   "startCost": 150
 }

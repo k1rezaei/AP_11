@@ -81,6 +81,44 @@ public class GameView {
         setUpSaveButton();
         setUpExitButton();
       
+        Button save = new Button("Save");
+        save.relocate(550, 15);
+        save.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().saveGame("SaveGame");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("^_^");
+                alert.setContentText("Saved Successful");
+                alert.setHeaderText(null);
+                alert.show();
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
+        });
+
+        Button exit = new Button("Exit");
+        exit.relocate(10, 550);
+        exit.setOnMouseClicked(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setContentText("Do You Want To Save Before Exit?");
+            alert.setHeaderText(null);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                try{
+                    Game.getInstance().saveGame("SaveGame");
+                } catch(Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+            view.close();
+
+        });
+
+        root.getChildren().add(save);
+        root.getChildren().add(exit);
+
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;

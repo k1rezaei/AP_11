@@ -5,10 +5,10 @@
   },
   "output": "Cake",
   "name": "workshop3",
-  "duration": 20,
+  "duration": 110,
   "remainTime": -1,
   "level": 0,
-  "x": 30,
+  "x": 390,
   "y": 30,
   "upgradeCost": 450,
   "startCost": 250
