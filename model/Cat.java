@@ -1,5 +1,5 @@
 public class Cat extends Animal {
-    static private int level;
+    static private int level = 0;
 
     Cat() {
         super("cat");
