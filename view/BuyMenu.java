@@ -18,7 +18,7 @@ public class BuyMenu {
     }
 
     static Image one = new Image("file:texture/sell/one");
-    static Image all = newImage("file:texture/sell/all");
+    static Image all = new Image("file:texture/sell/all");
 
 
 
@@ -51,7 +51,7 @@ public class BuyMenu {
             hBox.setMinHeight(60);
             hBox.setMinWidth(WIDTH);
 
-            ImageView imageView = getSpriteAnimation(pair.getKey()).getImageView();
+            ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
             Label label = new Label(pair.getValue().toString());
             label.setMinWidth(52);
             hBox.getChildren().add(imageView);
@@ -85,7 +85,6 @@ public class BuyMenu {
 
             hBox.getChildren().add(sellOne);
             hBox.getChildren().add(sellAll);
-
 
             vBox.getChildren().add(hBox);
         }
