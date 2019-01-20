@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GameView {
-    private GameView gameView = new GameView();
+    private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
@@ -18,18 +18,18 @@ public class GameView {
     private GameView() {
     }
 
-    private void initGame() {
+    public void initGame() {
         GAME.loadCustom("workshops");
         Images.init();
         runGame("level0"); //TODO create menu and more levels
     }
 
-    private void runGame(String levelName) {
+    public void runGame(String levelName) {
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
-
+        ArrayList<ImageView> buyIcons = new ArrayList<>();
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
@@ -73,7 +73,11 @@ public class GameView {
         game.start();
     }
 
-    public GameView getInstance() {
+    public static GameView getInstance() {
         return gameView;
+    }
+
+    public Group getRoot() {
+        return root;
     }
 }

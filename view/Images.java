@@ -93,7 +93,9 @@ public class Images {
     static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/" + entity.getType() + ".png"));
     }
-
+    static ImageView getIcon(String type){
+        return new ImageView(new Image(BASE + "ui/Icons/" + type + ".png"));
+    }
 }
 
 

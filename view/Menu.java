@@ -16,10 +16,10 @@ public class Menu {
     {
 
         VBox vBox = new VBox();
-        {
-            vBox.setAlignment(Pos.CENTER);
-            menuGroup.getChildren().add(vBox);
-        }
+        vBox.setAlignment(Pos.CENTER);
+        vBox.setPrefWidth(800);
+        vBox.setPrefHeight(600);
+        menuGroup.getChildren().add(vBox);
 
         Button start = new Button();
         start.setText("Start");
@@ -29,12 +29,6 @@ public class Menu {
         info.setText("Info");
         Button exit = new Button();
         exit.setText("Exit");
-        /*
-        ArrayList<Button> buttons = new ArrayList<>();
-        buttons.add(start);
-        buttons.add(load);
-        buttons.add(info);
-        buttons.add(exit);*/
 
         vBox.getChildren().add(start);
         vBox.getChildren().add(load);
@@ -44,7 +38,9 @@ public class Menu {
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                view.setRoot(menuGroup);
+                GameView gameView = GameView.getInstance();
+                gameView.initGame();
+                view.setRoot(gameView.getRoot());
             }
         });
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
