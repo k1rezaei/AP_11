@@ -16,6 +16,8 @@ public class View extends Application {
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private Stage primaryStage;
 
+    private SpriteAnimation well;
+
     public static void main(String[] args) {
         launch(args);
     }
@@ -36,19 +38,27 @@ public class View extends Application {
         runGame("level0"); //TODO create menu and more levels
     }
 
+    public SpriteAnimation getWell() {
+        return well;
+    }
+
     private void runGame(String levelName) {
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
+
+        well = Images.getSpriteAnimation("well");
+
         AnimationTimer game = new AnimationTimer() {
-            private static final int SECOND = 1000000000;
+            private static final int SECOND = 100000000;
             private long lastTime;
 
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
-                if (now > lastTime + SECOND / 10) {
+                if (now > lastTime + SECOND/3) {
+                    lastTime = now;
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.cell != null) {

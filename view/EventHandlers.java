@@ -80,7 +80,13 @@ public class EventHandlers {
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
-                        Game.getInstance().well();
+                        try {
+                            Game.getInstance().well();
+
+                        }catch(Exception e) {
+                            System.err.println(e.getMessage());
+                        }
+
                         break;
                     case SECONDARY:
                         Game.getInstance().upgrade("well");
