@@ -2,14 +2,14 @@ public class Cat extends Animal {
     static private int level;
 
     Cat() {
-        super("Cat");
+        super("cat");
         buyPrice = 2500;
         speed = 4;
     }
 
 
     Cat(Cell cell) {
-        super("Cat", cell);
+        super("cat", cell);
         buyPrice = 2500;
         speed = 4;
     }

@@ -26,7 +26,7 @@ public class Map {
 
     void turn() {
         for (int i = entities.size() - 1; i >= 0; i--) if (entities.get(i).getCell() != null) entities.get(i).turn();
-        for (int i = entities.size() - 1; i >= 0; i--)
+        for (int i = entities.size() - 1; i >= 0; i--) {
             for (int j = entities.size() - 1; j >= 0; j--) {
                 Entity entity = entities.get(i);
                 Entity entity2 = entities.get(j);
@@ -37,7 +37,7 @@ public class Map {
                     }
                 }
             }
-        relax();
+        }
         for (int i = entities.size() - 1; i >= 0; i--) {
             if (entities.get(i) instanceof FarmAnimal) {
                 Item item = ((FarmAnimal) entities.get(i)).produce();

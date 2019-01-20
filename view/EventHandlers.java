@@ -17,10 +17,17 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    Game.getInstance().startWorkshop(workshop.getName());
+                    try {
+                        Game.getInstance().startWorkshop(workshop.getName());
+                        GameView.getInstance().getWorkshop(workshop).play();
+                    } catch (Exception e) {}
                     break;
                 case SECONDARY:
-                    Game.getInstance().upgrade(workshop.getName());
+                    try {
+                        Game.getInstance().upgrade(workshop.getName());
+                        //GameView.getInstance().
+                        GameView.getInstance().getWorkshop(workshop).setState(workshop.getLevel() - 1); //TODO level 1 based.
+                    } catch(Exception e) {}
                     break;
             }
         };
@@ -80,10 +87,21 @@ public class EventHandlers {
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
-                        Game.getInstance().well();
+                        try {
+                            Game.getInstance().well();
+
+                        }catch(Exception e) {
+                            System.err.println(e.getMessage());
+                        }
+
                         break;
                     case SECONDARY:
-                        Game.getInstance().upgrade("well");
+                        try {
+                            Game.getInstance().upgrade("well");
+                            GameView.getInstance().getWell().setState(well.getLevel());
+                        } catch(Exception e) {
+                            System.err.println(e.getMessage());
+                        }
                         break;
                 }
             }

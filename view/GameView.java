@@ -8,28 +8,57 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GameView {
-    private GameView gameView = new GameView();
+    private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
+    private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
+
+    private HashMap<Workshop, SpriteAnimation> workshops;
+
+    private SpriteAnimation well;
 
     private GameView() {
     }
 
-    private void initGame() {
+    public void initGame() {
         GAME.loadCustom("workshops");
         Images.init();
         runGame("level0"); //TODO create menu and more levels
     }
 
+
+    public SpriteAnimation getWorkshop(Workshop workshop) {
+        return workshops.get(workshop);
+    }
+
     private void runGame(String levelName) {
+
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
+        for (int i = 0; i < NON_WILD.length; i++) {
+            String animalName = NON_WILD[i];
+            ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setOnMouseClicked(mouseEvent -> {
+                GAME.buyAnimal(animalName);
+            });
+            buyAnimal.relocate(20 + 45 * i, 20);
+            root.getChildren().add(buyAnimal);
+        }
+
+        well = Images.getSpriteAnimation("well");
+
+        for (Workshop workshop : Game.getInstance().getWorkshops()) {
+            workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
+        }
+
+
+
 
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -65,6 +94,7 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
+                    GAME.getMap().relax();
                     if (GAME.checkLevel()) {
                         this.stop();
                     }
@@ -74,17 +104,12 @@ public class GameView {
         game.start();
     }
 
-    public GameView getInstance() {
+    public static GameView getInstance() {
         return gameView;
     }
+    public Group getRoot() {
+        return root;
+    }
 
-
-/**
-    void showWareHouse(){
-        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
-        for (Map.Entry<String, Integer> pair : storables.entrySet()){
-
-        }
-
-    }*/
+    public SpriteAnimation getWell() { return well; }
 }
