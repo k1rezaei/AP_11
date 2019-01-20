@@ -16,10 +16,12 @@ public class Menu {
     {
 
         VBox vBox = new VBox();
+
         vBox.setAlignment(Pos.CENTER);
         vBox.setPrefWidth(800);
         vBox.setPrefHeight(600);
         menuGroup.getChildren().add(vBox);
+
 
         Button start = new Button();
         start.setText("Start");
@@ -38,9 +40,11 @@ public class Menu {
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
                 GameView gameView = GameView.getInstance();
                 gameView.initGame();
                 view.setRoot(gameView.getRoot());
+
             }
         });
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {

@@ -8,12 +8,17 @@ import java.util.HashMap;
 
 public class GameView {
     private static final GameView gameView = new GameView();
+
     private static final Game GAME = Game.getInstance();
     private Group root = new Group();
     private ArrayList<SpriteAnimation> workshopSprites = new ArrayList<>();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
+
+    private HashMap<Workshop, SpriteAnimation> workshops;
+
+    private SpriteAnimation well;
 
     private GameView() {
     }
@@ -24,12 +29,30 @@ public class GameView {
         runGame("level0"); //TODO create menu and more levels
     }
 
-    public void runGame(String levelName) {
+
+    public SpriteAnimation getWorkshop(Workshop workshop) {
+        return workshops.get(workshop);
+    }
+
+    private void runGame(String levelName) {
+
         GAME.runMap(levelName);
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         root.getChildren().add(imageView);
+
         ArrayList<ImageView> buyIcons = new ArrayList<>();
+
+
+        well = Images.getSpriteAnimation("well");
+
+        for (Workshop workshop : Game.getInstance().getWorkshops()) {
+            workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
+        }
+
+
+
+
         AnimationTimer game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
@@ -77,7 +100,11 @@ public class GameView {
         return gameView;
     }
 
+
     public Group getRoot() {
         return root;
     }
+
+    public SpriteAnimation getWell() { return well; }
+
 }
