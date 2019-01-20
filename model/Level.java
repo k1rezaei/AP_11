@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Level {
@@ -5,7 +6,7 @@ public class Level {
     private int goalMoney;
     private HashMap<String, Integer> goalEntity;
     private int n, m;
-
+    private ArrayList<String> itemList;
     //TODO Initial Entities
     public Level(int n, int m, int startMoney, int goalMoney, HashMap<String, Integer> goalEntity) {
         this.goalMoney = goalMoney;
@@ -70,5 +71,13 @@ public class Level {
         } else {
             return goalEntity.get(item);
         }
+    }
+
+    public ArrayList<String> getItemList() {
+        return itemList;
+    }
+
+    public void setItemList(ArrayList<String> itemList) {
+        this.itemList = itemList;
     }
 }

@@ -13,11 +13,9 @@ import java.util.ArrayList;
 public class SpriteAnimation extends Transition {
     private final ArrayList<Integer> counts;
     private final ArrayList<Integer> columns;
-
     private final ArrayList<Integer> widths = new ArrayList<>();
     private final ArrayList<Integer> heights = new ArrayList<>();
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-
     private int state = 0;
 
     private int lastIndex;

@@ -9,7 +9,6 @@ public class Images {
     private final static String BASE = "file:textures/";
     private static HashMap<String, LoadedImage> map = new HashMap<>();
 
-
     public static void init() {
 
 
@@ -30,7 +29,7 @@ public class Images {
         loadImage("bear", 4, 24, new int[]{4, 4, 4, 4});
 
 
-        String[] items = new String[]{"Adornment.png", "CheeseFerment.png", "FlouryCake.png", "Souvenir.png",
+        String[] items = new String[]{"Adornment.png", "CheeseFerment.png", "Cookie.png", "Souvenir.png",
                 "Bear.png", "Cheese.png", "Horn.png", "SpruceBrownBear.png",
                 "BrightHorn.png", "ColoredPlume.png", "Intermediate.png", "SpruceGrizzly.png",
                 "CagedJaguar.png", "Curd.png", "MegaPie.png", "SpruceJaguar.png",
@@ -69,10 +68,9 @@ public class Images {
 
     static void addImages(ArrayList<Image> images, String type, int n) {
         String address = BASE;
-        if (type.startsWith("workshop")) {
+        if (type.startsWith("workshop"))
             address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
-            System.out.println("KIF : " + address);
-        } else address = BASE + type + "/";
+        else address = BASE + type + "/";
 
         for (int i = 0; i < n; i++)
             images.add(new Image(address + i + ".png"));
@@ -99,8 +97,7 @@ public class Images {
     static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
-
-    static ImageView getIcon(String type) {
+    static ImageView getIcon(String type){
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }
