@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox;
 import java.util.Optional;
 
 public class Menu {
-    View view;
+    private View view;
     private Group menuGroup = new Group();
 
     {
@@ -18,7 +18,7 @@ public class Menu {
         VBox vBox = new VBox();
         {
             vBox.setAlignment(Pos.CENTER);
-            menuGroup.getChildren().addAll(vBox);
+            menuGroup.getChildren().add(vBox);
         }
 
         Button start = new Button();
@@ -36,29 +36,30 @@ public class Menu {
         buttons.add(info);
         buttons.add(exit);*/
 
-        vBox.getChildren().addAll(start);
-        vBox.getChildren().addAll(load);
-        vBox.getChildren().addAll(info);
-        vBox.getChildren().addAll(exit);
+        vBox.getChildren().add(start);
+        vBox.getChildren().add(load);
+        vBox.getChildren().add(info);
+        vBox.getChildren().add(exit);
 
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                /**
-                 *
-                 *
-                 *
-                 */
+                view.setRoot(menuGroup);
             }
         });
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                /**
-                 *
-                 *
-                 *
-                 */
+                try {
+                    Game.getInstance().loadGame("SaveGame.save");
+                    view.setRoot(menuGroup);
+                } catch (Exception e) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Can't LoadGame");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Can't Find SaveGame");
+                    alert.showAndWait();
+                }
             }
         });
         info.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -73,6 +74,7 @@ public class Menu {
                 alert.showAndWait();
             }
         });
+
         exit.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -93,4 +95,9 @@ public class Menu {
     Menu(View view) {
         this.view = view;
     }
+
+    Group getRoot() {
+        return menuGroup;
+    }
+
 }
