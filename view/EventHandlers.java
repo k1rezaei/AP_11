@@ -30,9 +30,13 @@ public class EventHandlers {
                     break;
                 case SECONDARY:
                     try {
+                        SpriteAnimation sprite = GameView.getInstance().getWorkshop(workshop);
                         Game.getInstance().upgrade(workshop.getName());
-                        GameView.getInstance().getWorkshop(workshop).setState(workshop.getLevel() - 1); //TODO level 1 based.
-                    } catch(Exception e) {}
+
+                        GameView.getInstance().update(sprite, workshop);
+                    } catch(Exception e) {
+                        System.out.println(e.getMessage());
+                    }
                     break;
             }
         };
@@ -116,7 +120,12 @@ public class EventHandlers {
                     case SECONDARY:
                         try {
                             Game.getInstance().upgrade("well");
-                            GameView.getInstance().getWell().setState(well.getLevel());
+                            SpriteAnimation sprite = GameView.getInstance().getWell();
+                            GameView.getInstance().update(sprite, well);
+                            /*GameView.getInstance().getRoot().getChildren().remove(sprite.getImageView());
+                            sprite.setState(well.getLevel());
+                            GameView.getInstance().getRoot().getChildren().add(sprite.getImageView());
+                            */
                         } catch(Exception e) {
                             System.err.println(e.getMessage());
                         }
