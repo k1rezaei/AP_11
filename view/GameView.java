@@ -143,8 +143,8 @@ public class GameView {
                 Game.getInstance().saveGame("SaveGame");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("^_^");
-                alert.setContentText(null);
-                alert.setHeaderText("Saved Successful");
+                alert.setContentText("Saved Successful");
+                alert.setHeaderText(null);
                 alert.show();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
