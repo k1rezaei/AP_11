@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import java.util.Map;
 public class BuyMenu {
     private Group buyGroup = new Group();
     final int WIDTH = 300;
+    ///TODI final int HEIGHT = 70;
 
     View view;
 
@@ -62,7 +64,20 @@ public class BuyMenu {
         ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().go(Game.getInstance().getTruck());
+                try {
+                    Game.getInstance().go(Game.getInstance().getTruck());
+                    GameView.getInstance().getTruck().getImageView().setVisible(false);
+                    new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
+                                GameView.getInstance().getTruck().getImageView().setVisible(true);
+                            }
+                        }
+                    }.start();
+                }catch (Exception e){
+
+                }
                 truck.clear();
                 view.setRoot(GameView.getInstance().getRoot());
             }
@@ -101,6 +116,7 @@ public class BuyMenu {
             hBox.setMinWidth(WIDTH);
 
             ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
+            imageView.setFitWidth(48);
             Label label = new Label(new Integer(cnt).toString());
             label.setMinWidth(52);
             hBox.getChildren().add(imageView);

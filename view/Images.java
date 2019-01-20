@@ -9,7 +9,6 @@ public class Images {
     private final static String BASE = "file:textures/";
     private static HashMap<String, LoadedImage> map = new HashMap<>();
 
-
     public static void init() {
 
 
@@ -72,7 +71,8 @@ public class Images {
         if (type.startsWith("workshop")) {
             address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
             System.out.println("KIF : " + address);
-        } else address = BASE + type + "/";
+        }
+        else address = BASE + type + "/";
 
         for (int i = 0; i < n; i++)
             images.add(new Image(address + i + ".png"));
@@ -91,16 +91,11 @@ public class Images {
     static SpriteAnimation getSpriteAnimation(Entity entity) {
         return new SpriteAnimation(map.get(entity.getType()));
     }
-
-    static SpriteAnimation getSpriteAnimation(String type) {
-        return new SpriteAnimation(map.get(type));
-    }
-
+    static SpriteAnimation getSpriteAnimation (String type) {return new SpriteAnimation(map.get(type));}
     static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
-
-    static ImageView getIcon(String type) {
+    static ImageView getIcon(String type){
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }

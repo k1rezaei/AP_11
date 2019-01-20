@@ -68,19 +68,12 @@ public abstract class Entity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Entity entity = (Entity) o;
-        return sellPrice == entity.sellPrice &&
-                buyPrice == entity.buyPrice &&
-                size == entity.size &&
-                Objects.equals(cell, entity.cell) &&
-                Objects.equals(type, entity.type);
+        return (this == o);
     }
 
     @Override
     public int hashCode() {
-        return 0;//Objects.hash(cell, sellPrice, buyPrice, size, type);
+        return 0;
     }
 }
 
