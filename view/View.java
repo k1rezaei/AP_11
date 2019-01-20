@@ -23,7 +23,6 @@ public class View extends Application {
         primaryStage.setTitle("Farm Friendzy");
         primaryStage.show();
     }
-
     public void setRoot(Group root) {
         scene.setRoot(root);
     }
