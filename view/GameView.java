@@ -24,6 +24,9 @@ public class GameView {
     private static final int WELL_Y = 20;
     private static final int TRUCK_X = 200;
     private static final int TRUCK_Y = 460;
+    private static final int HELICOPTER_X = 520;
+    private static final int HELICOPTER_Y = 430;
+
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
@@ -39,6 +42,7 @@ public class GameView {
     private SpriteAnimation well;
 
     private SpriteAnimation truck;
+    private SpriteAnimation helicopter;
 
     private GameView() {
     }
@@ -113,6 +117,10 @@ public class GameView {
         truck = Images.getSpriteAnimation("truck");
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
         fixSprite(truck, TRUCK_X, TRUCK_Y);
+
+        helicopter = Images.getSpriteAnimation("helicopter");
+        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
 
 
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
@@ -240,7 +248,11 @@ public class GameView {
         return truck;
     }
 
+    public SpriteAnimation getHelicopter() {
+        return helicopter;
+
     public void setView(View view) {
         this.view = view;
+
     }
 }
