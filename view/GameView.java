@@ -146,6 +146,7 @@ public class GameView {
     public Group getRoot() {
         return root;
     }
-
-    public SpriteAnimation getWell() { return well; }
+    public SpriteAnimation getWell() {
+        return well;
+    }
 }

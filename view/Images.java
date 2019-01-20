@@ -68,10 +68,8 @@ public class Images {
 
     static void addImages(ArrayList<Image> images, String type, int n) {
         String address = BASE;
-        if (type.startsWith("workshop")) {
-            address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
-            System.out.println("KIF : " + address);
-        }
+        if (type.startsWith("workshop"))
+            address = BASE + "workshop/" + type.charAt(type.length() - 1) + "/";
         else address = BASE + type + "/";
 
         for (int i = 0; i < n; i++)
