@@ -5,6 +5,8 @@ import javafx.scene.image.ImageView;
 
 import java.util.HashMap;
 
+
+
 public class GameView {
     private static final GameView gameView = new GameView();
     private static final Game GAME = Game.getInstance();
@@ -64,6 +66,7 @@ public class GameView {
             buyAnimal.relocate(20 + 45 * i, 20);
             root.getChildren().add(buyAnimal);
         }
+
 
         well = Images.getSpriteAnimation("well");
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));

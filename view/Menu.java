@@ -22,7 +22,6 @@ public class Menu {
         vBox.setPrefHeight(600);
         menuGroup.getChildren().add(vBox);
 
-
         Button start = new Button();
         start.setText("Start");
         Button load = new Button();
@@ -53,6 +52,7 @@ public class Menu {
                 try {
                     Game.getInstance().loadGame("SaveGame.save");
                     view.setRoot(menuGroup);
+
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setTitle("Can't LoadGame");
