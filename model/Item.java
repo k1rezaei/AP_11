@@ -38,10 +38,10 @@ public class Item extends Entity {
                 break;
             case "EggPowder":
                 fix(4, 100, 50);
-            case "Cake":
+            case "Cookie":
                 fix(5, 200, 100);
                 break;
-            case "FlouryCake":
+            case "Cake":
                 fix(6, 400, 200);
                 break;
             case "Sewing":

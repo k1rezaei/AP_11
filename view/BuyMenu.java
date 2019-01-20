@@ -18,6 +18,7 @@ public class BuyMenu {
     View view;
 
     Group getBuyGroup() {
+        update();
         return buyGroup;
     }
 
@@ -25,8 +26,8 @@ public class BuyMenu {
         this.view = view;
     }
 
-    static Image one = new Image("file:texture/sell/one");
-    static Image all = new Image("file:texture/sell/all");
+    static Image one = new Image("file:textures/sell/one.png");
+    static Image all = new Image("file:textures/sell/all.png");
 
 
     HashMap<String, Integer> truck = new HashMap<>();
@@ -34,7 +35,6 @@ public class BuyMenu {
 
     void update() {
         buyGroup.getChildren().clear();
-
 
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         VBox vBox = new VBox();
@@ -62,7 +62,7 @@ public class BuyMenu {
         ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().getTruck().go();
+                Game.getInstance().go(Game.getInstance().getTruck());
                 truck.clear();
                 view.setRoot(GameView.getInstance().getRoot());
             }

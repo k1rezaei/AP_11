@@ -1,3 +1,5 @@
+
+
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,6 +15,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         Menu menu = new Menu(this);
         scene = new Scene(menu.getRoot(), 800, 600);
