@@ -146,12 +146,14 @@ public class GameView {
         Image background = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(background);
         imageView.setOnMouseClicked(mouseEvent -> {
-            int x = (int) mouseEvent.getX();
-            int y = (int) mouseEvent.getY();
-            try {
-                GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                int x = (int) mouseEvent.getX();
+                int y = (int) mouseEvent.getY();
+                try {
+                    GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
             }
         });
         root.getChildren().add(imageView);
