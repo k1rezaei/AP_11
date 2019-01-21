@@ -67,7 +67,7 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    view.setRoot(new SellMenu(view).getSellGroup());
+                    new SellMenu(view).getSellGroup();
                     break;
                 case SECONDARY:
                     try {

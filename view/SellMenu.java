@@ -6,19 +6,23 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SellMenu {
+    public static final int BASE_X = 30;
+    public static final int DIS_X = 240;
+    public static final int NUM_IN_COL = 8;
+    public static final int BASE_Y = 60;
+    public static final int DIS_Y = 70;
     private Group sellGroup = new Group();
     final int WIDTH = 300;
     final int HEIGHT = 70;
 
     View view;
     Group getSellGroup() {
+        view.setRoot(sellGroup);
         update();
         return sellGroup;
     }
@@ -36,18 +40,20 @@ public class SellMenu {
     void update() {
         sellGroup.getChildren().clear();
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
-        VBox vBox = new VBox();
-        vBox.setMinWidth(WIDTH);
-        sellGroup.getChildren().add(vBox);
 
 
-        Button ok = new Button("OK");
+        Button ok = new Button("Sell");
         Button cancel = new Button("Cancel");
-        ok.setMinSize(50, HEIGHT);
-        cancel.setMinSize(50, HEIGHT);
+        ok.relocate(350, 20);
+        cancel.relocate(400, 20);
 
-        vBox.getChildren().add(ok);
-        vBox.getChildren().add(cancel);
+
+        //ok.setMinSize(50, HEIGHT);
+        //cancel.setMinSize(50, HEIGHT);
+
+        sellGroup.getChildren().add(ok);
+        sellGroup.getChildren().add(cancel);
+
 
         cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -79,25 +85,8 @@ public class SellMenu {
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
-        {
-            HBox hBox = new HBox();
-            hBox.setMinWidth(WIDTH);
-            hBox.setMinHeight(HEIGHT);
 
-            Label[] labels = new Label[3];
-
-            labels[0] = new Label("Goods");
-            labels[1] = new Label("Price");
-            labels[2] = new Label("Ship");
-
-            for (Label label : labels){
-                label.setMinWidth(WIDTH / 3);
-                label.setMinHeight(HEIGHT);
-            }
-            hBox.getChildren().addAll(labels);
-
-            vBox.getChildren().add(hBox);
-        }
+        int numberOfItems = 0;
 
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {
             int tmp = pair.getValue();
@@ -107,31 +96,29 @@ public class SellMenu {
 
             final int cnt = tmp;
             if (cnt == 0) continue;
-            HBox hBox = new HBox();
-            hBox.setMinHeight(HEIGHT);
-            hBox.setMinWidth(WIDTH);
 
             ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
-            imageView.setFitWidth(48);
-            imageView.setFitHeight(HEIGHT);
-            Label label = new Label(new Integer(cnt).toString());
-            label.setMinWidth(52);
-            label.setMinHeight(HEIGHT);
-            hBox.getChildren().add(imageView);
-            hBox.getChildren().add(label);
+            imageView.setFitWidth(30); imageView.setFitHeight(30);
 
-            Label price = new Label(new Integer(Entity.getNewEntity(pair.getKey()).getSellPrice()).toString());
-            price.setMinWidth(100);
-            price.setMinHeight(HEIGHT);
-            hBox.getChildren().add(price);
+            Label label = new Label(Integer.toString(cnt));
 
-            ImageView sellOne = new ImageView(one);
-            ImageView sellAll = new ImageView(all);
+            Label price = new Label(Integer.toString(Entity.getNewEntity(pair.getKey()).getSellPrice()));
 
-            sellOne.setFitWidth(50);
-            sellAll.setFitWidth(50);
-            sellOne.setFitHeight(HEIGHT);
-            sellAll.setFitHeight(HEIGHT);
+            ImageView sellOne = new ImageView(one); sellOne.setFitHeight(30); sellOne.setFitWidth(25);
+            ImageView sellAll = new ImageView(all); sellAll.setFitHeight(30); sellAll.setFitWidth(25);
+
+            int baseX = numberOfItems / NUM_IN_COL * DIS_X + BASE_X;
+            int baseY = (numberOfItems % NUM_IN_COL) * DIS_Y + BASE_Y;
+
+            imageView.relocate(baseX, baseY);
+            label.relocate(baseX + 30, baseY);
+            price.relocate(baseX + 95, baseY + 10);
+            sellOne.relocate(baseX + 130, baseY);
+            sellAll.relocate(baseX + 160, baseY);
+
+            sellGroup.getChildren().addAll(imageView, label, price, sellAll, sellOne);
+
+            numberOfItems ++;
 
             sellOne.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -153,10 +140,6 @@ public class SellMenu {
                 }
             });
 
-            hBox.getChildren().add(sellOne);
-            hBox.getChildren().add(sellAll);
-
-            vBox.getChildren().add(hBox);
         }
     }
 
