@@ -1,9 +1,14 @@
 
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+
+import java.io.File;
 
 public class View extends Application {
     private Stage primaryStage;
@@ -22,7 +27,15 @@ public class View extends Application {
         scene = new Scene(menu.getRoot(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
+
+        Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.setCycleCount(10000);
+
         primaryStage.show();
+
+        /// TODO Fix this
+        mediaPlayer.play();
     }
     public void setRoot(Group root) {
         scene.setRoot(root);
