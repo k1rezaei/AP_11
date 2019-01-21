@@ -115,7 +115,6 @@ public class BuyMenu {
                 GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
-            view.setRoot(GameView.getInstance().getRoot());
         });
 
         int numberOfItems = 0;
