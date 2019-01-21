@@ -222,11 +222,13 @@ public class GameView {
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
+                pause();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("^_^");
                 alert.setContentText(null);
                 alert.setHeaderText("Saved Successful");
-                alert.show();
+                alert.showAndWait();
+                resume();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
