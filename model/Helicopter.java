@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Helicopter extends Vehicle implements Upgradable {
     private static final int INITIAL_CAPACITY = 20;
     private static final int CAPACITY_INCREASE = 20;
-    private static final int GO_TIME = 7;
+    private static final int GO_TIME = 200;
     private static final int UPGRADE_COST = 200;
 
     public Helicopter() {
