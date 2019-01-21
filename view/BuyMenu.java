@@ -86,25 +86,34 @@ public class BuyMenu {
 
         buyGroup.getChildren().addAll(ok, cancel);
 
-        cancel.setOnMouseClicked(event -> {
-            Game.getInstance().getHelicopter().clear();
-            view.setRoot(GameView.getInstance().getRoot());
+        cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Game.getInstance().getHelicopter().clear();
+                GameView.getInstance().resume();
+                view.setRoot(GameView.getInstance().getRoot());
+            }
         });
 
-        ok.setOnMouseClicked(event -> {
-            try {
-                Game.getInstance().go(Game.getInstance().getHelicopter());
-                GameView.getInstance().getHelicopter().getImageView().setVisible(false);
-                new AnimationTimer() {
-                    @Override
-                    public void handle(long now) {
-                        if (Game.getInstance().getHelicopter().getRemainingTime() == 0 ){
-                            GameView.getInstance().getHelicopter().getImageView().setVisible(true);
+        ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                try {
+                    Game.getInstance().go(Game.getInstance().getHelicopter());
+                    GameView.getInstance().getHelicopter().getImageView().setVisible(false);
+                    new AnimationTimer() {
+                        @Override
+                        public void handle(long now) {
+                            if (Game.getInstance().getHelicopter().getRemainingTime() == 0 ){
+                                GameView.getInstance().getHelicopter().getImageView().setVisible(true);
+                            }
                         }
-                    }
-                }.start();
-            }catch (Exception e){
-                Game.getInstance().getHelicopter().clear();
+                    }.start();
+                }catch (Exception e){
+                    Game.getInstance().getHelicopter().clear();
+                }
+                GameView.getInstance().resume();
+                view.setRoot(GameView.getInstance().getRoot());
             }
             view.setRoot(GameView.getInstance().getRoot());
         });

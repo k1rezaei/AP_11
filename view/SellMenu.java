@@ -61,6 +61,7 @@ public class SellMenu {
             public void handle(MouseEvent event) {
                 Game.getInstance().getTruck().clear();
                 truck.clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -76,6 +77,7 @@ public class SellMenu {
                         public void handle(long now) {
                             if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
                                 GameView.getInstance().getTruck().getImageView().setVisible(true);
+                                stop();
                             }
                         }
                     }.start();
@@ -83,6 +85,7 @@ public class SellMenu {
 
                 }
                 truck.clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });

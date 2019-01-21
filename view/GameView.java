@@ -37,14 +37,36 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static double SPEED = 1;
     private static final double EPS = 0.0001;
+    private static boolean paused = false;
+    private static AnimationTimer game;
     private View view;
     Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
+    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+
+    static {
+        REFRESHER.setVisible(false);
+    }
+
+    public boolean getPaused(){return paused;}
 
     private SpriteAnimation well;
 
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
+
+    public boolean getPause() {
+        return paused;
+    }
+
+    public void pause() {
+        paused = true;
+        game.stop();
+    }
+    public void resume(){
+        paused = false;
+        game.start();
+    }
 
     private GameView() {
     }
@@ -74,8 +96,6 @@ public class GameView {
         }
         return true;
 
-
-        //TODO create menu and more levels
     }
 
 
@@ -105,7 +125,7 @@ public class GameView {
         setUpFastForward();
         setUpExitButton();
 
-        AnimationTimer game = new AnimationTimer() {
+        game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
 
@@ -113,6 +133,10 @@ public class GameView {
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * SPEED)) {
+                    //TODO ye chiz behtar az 2 khat payin bezanim
+                    root.getChildren().add(REFRESHER);
+                    root.getChildren().remove(REFRESHER);
+
                     lastTime = now;
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
@@ -220,6 +244,7 @@ public class GameView {
 
             Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Exit");
+            pause();
 
             ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
@@ -238,6 +263,8 @@ public class GameView {
                 view.close();
             } else if (result.get() == buttonTypeTwo) {
                 view.close();
+            }else{
+                resume();
             }
 
 
@@ -252,7 +279,6 @@ public class GameView {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
             sprite.setState(workshop.getLevel());
-            //System.out.println(workshop.getName() + " : " + workshop.getLevel());
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }
