@@ -4,11 +4,11 @@
   },
   "output": "Fabric",
   "name": "workshop4",
-  "duration": 10,
+  "duration": 110,
   "remainTime": -1,
   "level": 0,
-  "x": 40,
-  "y": 30,
+  "x": 390,
+  "y": 180,
   "upgradeCost": 100,
   "startCost": 300
 }

@@ -4,11 +4,11 @@
   },
   "output": "Cookie",
   "name": "workshop2",
-  "duration": 20,
+  "duration": 100,
   "remainTime": -1,
   "level": 0,
-  "x": 20,
-  "y": 30,
+  "x": 0,
+  "y": 269,
   "upgradeCost": 400,
   "startCost": 250
 }

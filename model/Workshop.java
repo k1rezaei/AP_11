@@ -50,9 +50,13 @@ public class Workshop implements Upgradable {
 
     void turn() {
         if (remainTime == -1) return;
+        int z = 0;
+        if(x > 200) z = -1;
+        else z = 1;
+
         if (remainTime == 0) {
             for (int i = 0; i < numberOfOutputs; i++) {
-                Entity entity = new Item(output, new Cell(x, y));
+                Entity entity = new Item(output, new Cell(x + 20 * i * z, y));
                 Game.getInstance().addEntity(entity);
             }
             remainTime = -1;
