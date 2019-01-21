@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Truck extends Vehicle implements Upgradable {
-    private static final int INITIAL_CAPACITY = 1000;
-    private static final int CAPACITY_INCREASE = 200;
+    private static final int INITIAL_CAPACITY = 30;
+    private static final int CAPACITY_INCREASE = 50;
     private static final int UPGRADE_COST = 300;
     private static final int GO_TIME = 200;
 
@@ -12,6 +12,14 @@ public class Truck extends Vehicle implements Upgradable {
         setCapacityIncrease(CAPACITY_INCREASE);
         setGoTime(GO_TIME);
         setUpgradeCost(UPGRADE_COST);
+    }
+
+    public int getResultMoneyWithoutClear(){
+        int priceSum = 0;
+        for (Entity entity : getItems()) {
+            priceSum += entity.getSellPrice();
+        }
+        return priceSum;
     }
 
     public int getResultMoney() {

@@ -36,7 +36,7 @@ public class BuyMenu {
     }
 
     private Group buyGroup = new Group();
-    private final int WIDTH = 50, DIS_X = 270, DIS_Y = 100, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 60;
+    private final int WIDTH = 50, DIS_X = 270, DIS_Y = 100, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 80;
     private final int HEIGHT = 50;
 
     Group getBuyGroup() {
@@ -81,8 +81,18 @@ public class BuyMenu {
     void init() {
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
 
-        Button ok = new Button("Buy"); ok.relocate(70, 20);
-        Button cancel = new Button("Cancel"); cancel.relocate(120, 20);
+        Label ok = new Label(); ok.relocate(BASE_X, 10);
+        ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
+        okImage.setFitHeight(60);
+        okImage.setFitWidth(100);
+
+        ImageView cancelImage = new ImageView(new Image("file:textures/cancel.png"));
+        cancelImage.setFitHeight(60);
+        cancelImage.setFitWidth(100);
+
+        ok.setGraphic(okImage);
+        Label cancel = new Label(); cancel.relocate(BASE_X+110, 10);
+        cancel.setGraphic(cancelImage);
 
         buyGroup.getChildren().addAll(ok, cancel);
 
