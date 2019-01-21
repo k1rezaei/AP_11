@@ -6,6 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +15,7 @@ import java.util.Map;
 public class SellMenu {
     public static final int BASE_X = 30;
     public static final int DIS_X = 240;
-    public static final int NUM_IN_COL = 8;
+    public static final int NUM_IN_ROW = 8;
     public static final int BASE_Y = 60;
     public static final int DIS_Y = 70;
     private Group sellGroup = new Group();
@@ -46,7 +48,6 @@ public class SellMenu {
         Button cancel = new Button("Cancel");
         ok.relocate(350, 20);
         cancel.relocate(400, 20);
-
 
         //ok.setMinSize(50, HEIGHT);
         //cancel.setMinSize(50, HEIGHT);
@@ -110,14 +111,18 @@ public class SellMenu {
             ImageView sellOne = new ImageView(one); sellOne.setFitHeight(30); sellOne.setFitWidth(25);
             ImageView sellAll = new ImageView(all); sellAll.setFitHeight(30); sellAll.setFitWidth(25);
 
-            int baseX = numberOfItems / NUM_IN_COL * DIS_X + BASE_X;
-            int baseY = (numberOfItems % NUM_IN_COL) * DIS_Y + BASE_Y;
+            int baseX = numberOfItems / NUM_IN_ROW * DIS_X + BASE_X;
+            int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
 
             imageView.relocate(baseX, baseY);
             label.relocate(baseX + 30, baseY);
             price.relocate(baseX + 95, baseY + 10);
             sellOne.relocate(baseX + 130, baseY);
             sellAll.relocate(baseX + 160, baseY);
+
+            //Rectangle rectangle = new Rectangle(baseX, baseY, DIS_X, DIS_Y);
+            //rectangle.setStroke(Color.GOLD); rectangle.setFill(Color.TRANSPARENT);
+
 
             sellGroup.getChildren().addAll(imageView, label, price, sellAll, sellOne);
 
