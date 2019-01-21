@@ -88,6 +88,7 @@ public class BuyMenu {
             @Override
             public void handle(MouseEvent event) {
                 Game.getInstance().getHelicopter().clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -97,18 +98,19 @@ public class BuyMenu {
             public void handle(MouseEvent event) {
                 try {
                     Game.getInstance().go(Game.getInstance().getHelicopter());
-                    GameView.getInstance().getTruck().getImageView().setVisible(false);
+                    GameView.getInstance().getHelicopter().getImageView().setVisible(false);
                     new AnimationTimer() {
                         @Override
                         public void handle(long now) {
-                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
-                                GameView.getInstance().getTruck().getImageView().setVisible(true);
+                            if (Game.getInstance().getHelicopter().getRemainingTime() == 0 ){
+                                GameView.getInstance().getHelicopter().getImageView().setVisible(true);
                             }
                         }
                     }.start();
                 }catch (Exception e){
                     Game.getInstance().getHelicopter().clear();
                 }
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });

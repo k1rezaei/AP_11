@@ -1,3 +1,5 @@
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -52,8 +54,11 @@ public class Menu {
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+
                 GameView gameView = GameView.getInstance();
                 if (gameView.initGame()) {
+
                     gameView.setView(view);
                     view.setRoot(gameView.getRoot());
                 }
