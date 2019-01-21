@@ -18,6 +18,10 @@ public class View extends Application {
         launch(args);
     }
 
+    private static Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
+    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+
+
     @Override
     public void start(Stage primaryStage) {
         EventHandlers.setView(this);
@@ -28,16 +32,14 @@ public class View extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
 
-        Media sound = new Media(new File("sounds/alt_main_theme.mp3").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setCycleCount(10000);
-
-        mediaPlayer.play();
 
         primaryStage.show();
 
-        /// TODO Fix this
+
+        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        mediaPlayer.play();
     }
+
     public void setRoot(Group root) {
         scene.setRoot(root);
     }
