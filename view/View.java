@@ -35,6 +35,7 @@ public class View extends Application {
 
         primaryStage.show();
 
+
         mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
         mediaPlayer.play();
     }

@@ -69,7 +69,7 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     GameView.getInstance().pause();
-                    view.setRoot(new SellMenu(view).getSellGroup());
+                    new SellMenu(view).getSellGroup();
                     break;
                 case SECONDARY:
                     try {
