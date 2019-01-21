@@ -179,6 +179,14 @@ public class Game {
         //TODO initialize and clear
     }
 
+    public void runMap(Level _level){
+        level = _level;
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        this.money = level.getStartMoney();
+        upgradables.addAll(workshops);
+    }
+
     public void saveGame(String command) throws IOException {
         Gson gson = new Gson();
         OutputStream outputStream = new FileOutputStream(command);
@@ -497,4 +505,6 @@ public class Game {
     public int getCatLevel() {
         return catLevel;
     }
+
+    public Level getLevel(String name){ return levels.get(name);}
 }
