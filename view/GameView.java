@@ -141,6 +141,7 @@ public class GameView {
         setUpFastForward();
         setUpExitButton();
         setUpGoals();
+        //setUpMenuButton();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -212,6 +213,7 @@ public class GameView {
             @Override
             public void handle(MouseEvent event) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Goals");
                 alert.setContentText(level.toString());
                 alert.setHeaderText(null);
                 alert.show();
@@ -309,6 +311,39 @@ public class GameView {
 
         });
         root.getChildren().add(exit);
+    }
+
+    private void setUpMenuButton() {
+
+        Label menu = new Label();
+        menu.setGraphic(new ImageView(new Image("file:textures/exit.png")));
+        menu.relocate(70, 550);
+
+        menu.setOnMouseClicked(event -> {
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Back To Menu");
+            pause();
+
+            ButtonType buttonTypeOne = new ButtonType("Save");
+            ButtonType buttonTypeTwo = new ButtonType("Do Not Save");
+            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne) {
+                try {
+                    Game.getInstance().saveGame("SaveGame");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            Menu backMenu = new Menu(view);
+            view.setRoot(backMenu.getRoot());
+
+        });
+        root.getChildren().add(menu);
     }
 
     private void setUpWorkshops() {
