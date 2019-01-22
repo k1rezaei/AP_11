@@ -421,11 +421,15 @@ public class GameView {
 
             ButtonType buttonTypeOne = new ButtonType("Save");
             ButtonType buttonTypeTwo = new ButtonType("Do Not Save");
+            ButtonType buttonTypeThree = new ButtonType("Cancel");
+
             // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
 
-            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeThree);
 
             Optional<ButtonType> result = alert.showAndWait();
+
+
             if (result.get() == buttonTypeOne) {
                 try {
                     Game.getInstance().saveGame("SaveGame");
@@ -433,9 +437,11 @@ public class GameView {
                     System.out.println(e.getMessage());
                 }
             }
-            root.getChildren().clear();
-            Menu backMenu = new Menu(view);
-            view.setRoot(backMenu.getRoot());
+            if (result.get() != buttonTypeThree) {
+                root.getChildren().clear();
+                Menu backMenu = new Menu(view);
+                view.setRoot(backMenu.getRoot());
+            }else resume();
 
         });
         root.getChildren().add(menu);
