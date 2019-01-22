@@ -55,7 +55,7 @@ public class BuyMenu {
 
     {
         cap.setMinSize(50, HEIGHT);
-        cap.setFont(Font.font(20));
+        //cap.setFont(Font.font(20));
         cap.setAlignment(Pos.CENTER);
         cap.relocate(600, 20);
     }
@@ -65,7 +65,7 @@ public class BuyMenu {
     {
 
         money.setMinSize(50, HEIGHT);
-        money.setFont(Font.font(20));
+        //money.setFont(Font.font(20));
         money.setAlignment(Pos.CENTER);
         money.relocate(600, 0);
     }
@@ -75,16 +75,8 @@ public class BuyMenu {
         money.setText("Money : " + currentMoney);
     }
 
-    FlowPane buyList = new FlowPane();
 
-    {
-        buyGroup.getChildren().add(buyList);
-        buyGroup.getChildren().add(money);
-        buyGroup.getChildren().add(cap);
-        buyList.relocate(400, 70);
 
-        update();
-    }
 
     static private Image BG = new Image("file:textures/bglemon.gif");
     static private Image SHELF = new Image("file:textures/3x5shelf.png");
@@ -95,6 +87,9 @@ public class BuyMenu {
         bg.setFitHeight(600);
         bg.setFitWidth(800);
         buyGroup.getChildren().add(bg);
+        buyGroup.getChildren().add(money);
+        buyGroup.getChildren().add(cap);
+        update();
         Rectangle rectangle = new Rectangle(BASE_X-10,BASE_Y-10,DIS_X*2-10,DIS_Y*5);
         rectangle.setFill(Color.BLACK);
         rectangle.setOpacity(0.5);
