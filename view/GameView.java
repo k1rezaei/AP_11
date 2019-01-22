@@ -27,9 +27,9 @@ public class GameView {
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
     private static final int WORKSHOP_DIS = 150;
-    public static final int BUY_ANIMAL_Y = 20;
-    public static final int BUY_ANIMAL_BASE_X = 20;
-    public static final int BUY_ANIMAL_X_DIFF = 45;
+    private static final int BUY_ANIMAL_Y = 20;
+    private static final int BUY_ANIMAL_BASE_X = 20;
+    private static final int BUY_ANIMAL_X_DIFF = 45;
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;

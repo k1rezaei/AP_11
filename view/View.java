@@ -18,8 +18,8 @@ public class View extends Application {
         launch(args);
     }
 
-    private static Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
-    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    //private static Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
+    //MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
     @Override
@@ -36,8 +36,8 @@ public class View extends Application {
         primaryStage.show();
 
 
-        mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-        mediaPlayer.play();
+      //  mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+      //  mediaPlayer.play();
     }
 
     public void setRoot(Group root) {

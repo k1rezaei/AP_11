@@ -15,7 +15,10 @@ public class Helicopter extends Vehicle implements Upgradable {
     }
 
     public ArrayList<Entity> getResultItems() {
-        ArrayList<Entity> result = (ArrayList<Entity>) getItems().clone();
+        ArrayList<Entity> result = new ArrayList<>();
+        for (String type : getItems()) {
+            result.add(Entity.getNewEntity(type));
+        }
         clear();
         return result;
     }
@@ -32,7 +35,8 @@ public class Helicopter extends Vehicle implements Upgradable {
     @Override
     public int getNeededMoney() {
         int priceSum = 0;
-        for (Entity entity : getItems()) {
+        for (String type : getItems()) {
+            Entity entity = Entity.getNewEntity(type);
             priceSum += entity.buyPrice;
         }
         return priceSum;

@@ -71,26 +71,23 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         menuGroup.getChildren().add(load);
-        load.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                try {
-                    Game.getInstance().loadGame("SaveGame");
-                    GameView gameView = GameView.getInstance();
-                    for (Workshop workshop : Game.getInstance().getWorkshops())
-                        System.out.println(workshop.getName() + "," + workshop.getLevel());
-                    gameView.initGame(Game.getInstance().getLevel());
-                    gameView.setView(view);
-                    view.setRoot(gameView.getRoot());
+        load.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().loadGame("SaveGame");
+                GameView gameView = GameView.getInstance();
+                for (Workshop workshop : Game.getInstance().getWorkshops())
+                    System.out.println(workshop.getName() + "," + workshop.getLevel());
+                gameView.initGame(Game.getInstance().getLevel());
+                gameView.setView(view);
+                view.setRoot(gameView.getRoot());
 
-
-                } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Can't LoadGame");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Can't Find SaveGame");
-                    alert.showAndWait();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Can't LoadGame");
+                alert.setHeaderText(null);
+                alert.setContentText("Can't Find SaveGame");
+                alert.showAndWait();
             }
         });
     }
