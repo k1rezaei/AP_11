@@ -21,16 +21,12 @@ public class View extends Application {
         launch(args);
     }
 
-    //private static Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
-    //MediaPlayer mediaPlayer = new MediaPlayer(sound);
+   // private static Media sound = new Media("file:sounds/main_theme.mp3");
+    //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
     @Override
     public void start(Stage primaryStage) {
-
-
-
-
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
@@ -40,13 +36,13 @@ public class View extends Application {
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
         //Sounds.init();
-        Game.getInstance().loadCustom("workshops");
+        Game.loadCustom("workshops");
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"),20,20));
         primaryStage.show();
 
-      //  mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-      //  mediaPlayer.play();
+       // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+       // mediaPlayer.play();
     }
 
     public void setRoot(Group root) {

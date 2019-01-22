@@ -20,6 +20,17 @@ public class Workshop implements Upgradable {
         this.name = name;
     }
 
+    Workshop(Workshop workshop){
+        output = workshop.output;
+        inputs = workshop.inputs;
+        x = workshop.x;
+        y = workshop.y;
+        duration = workshop.duration;
+        upgradeCost = workshop.upgradeCost;
+        startCost = workshop.startCost;
+        name = workshop.name;
+    }
+
     public int getStartCost() {
         return startCost;
     }

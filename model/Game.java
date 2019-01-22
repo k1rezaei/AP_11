@@ -10,6 +10,8 @@ import java.util.Scanner;
 public class Game {
     public static final int PLANT_DISTANCE = 20;
     private static Game game = new Game();
+    private static HashMap<String, Level> levels = new HashMap<>();
+    private static ArrayList<Workshop> workshopTemplates = new ArrayList<>();
     private Map map = new Map();
     private int money;
     private Level level;
@@ -21,10 +23,10 @@ public class Game {
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Upgradable> upgradables;
     private int currentTurn;
-    private HashMap<String, Level> levels = new HashMap<>();
     private int catLevel;
 
     private Game() {
+
         vehicles = new ArrayList<>();
         upgradables = new ArrayList<>();
         vehicles.add(truck);
@@ -171,19 +173,17 @@ public class Game {
     }
 
     public void runMap(String mapName) {
-        level = levels.get(mapName);
-        Cell.setN(level.getN());
-        Cell.setM(level.getM());
-        this.money = level.getStartMoney();
-        upgradables.addAll(workshops);
-        //TODO initialize and clear
+        runMap(levels.get(mapName));
     }
 
-    public void runMap(Level _level) {
-        level = _level;
+    public void runMap(Level level) {
+        this.level = level;
         Cell.setN(level.getN());
         Cell.setM(level.getM());
         this.money = level.getStartMoney();
+        for (Workshop workshop : workshopTemplates) {
+            workshops.add(new Workshop(workshop));
+        }
         upgradables.addAll(workshops);
     }
 
@@ -203,18 +203,18 @@ public class Game {
         game = new Game(save);
     }
 
-    public void loadCustom(String address) {
+    public static void loadCustom(String address) {
         Gson gson = new Gson();
         //TODO BUG.
-        if (workshops.size() == 0) {
-            workshops.clear();
+        if (workshopTemplates.isEmpty()) {
+            workshopTemplates.clear();
             for (int i = 0; i < 6; i++) {
                 try {
                     JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
-                    workshops.add(gson.fromJson(reader, Workshop.class));
-                    workshops.get(i).setName("workshop" + i);
+                    workshopTemplates.add(gson.fromJson(reader, Workshop.class));
+                    workshopTemplates.get(i).setName("workshop" + i);
                 } catch (Exception e) {
-                    workshops.clear();
+                    workshopTemplates.clear();
                     throw new RuntimeException("File not found");
                 }
             }
