@@ -47,20 +47,15 @@ public class GameView {
     private static final int EXIT_Y = 550;
     private static final int MONEY_X = 700;
     private static final int MONEY_Y = 20;
-
     private static final int MENU_X = 90;
     private static final int MENU_Y = 550;
     private static final int MENU_WODTH = 100;
     private static final int MENU_HEIGHT = 50;
-
     private static final int WAREHOUSE_X = 360;
     private static final int WAREHOUSE_Y = 460;
     private static final int WAREHOUSE_CNT_X = 8;
     private static final int WAREHOUSE_CNT_Y = 4;
     private static final double SOUND_PROP = 0.01;
-
-    private Group root = new Group();
-    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
@@ -70,17 +65,19 @@ public class GameView {
     private static boolean paused = false;
     private static AnimationTimer game;
 
-
     static {
         REFRESHER.setVisible(false);
+
     }
 
+    private FlowPane stored = new FlowPane();
+    private Group root = new Group();
+    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private Group entityRoot = new Group();
     private View view;
     private Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
     private SpriteAnimation well;
-
     private SpriteAnimation warehouse;
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
@@ -97,7 +94,6 @@ public class GameView {
         return warehouse;
     }
 
-
     public void pause() {
         paused = true;
         game.stop();
@@ -111,8 +107,6 @@ public class GameView {
     public void initGame() {
         runGame();
     }
-
-    FlowPane stored = new FlowPane();
 
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
