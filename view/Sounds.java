@@ -28,6 +28,7 @@ public class Sounds {
         add("bear");
         add("lion");
         add("dog");
+        add("cat");
     }
 
     public static void play(String type){
