@@ -61,7 +61,7 @@ public class SellMenu {
 
 
         Label ok = new Label(); ok.relocate(BASE_X, 10);
-        ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
+        ImageView okImage = new ImageView(new Image("file:textures/sell.png"));
         okImage.setFitHeight(60);
         okImage.setFitWidth(100);
 
