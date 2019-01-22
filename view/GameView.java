@@ -1,9 +1,11 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -124,6 +126,7 @@ public class GameView {
         setUpSaveButton();
         setUpFastForward();
         setUpExitButton();
+        setUpGoals();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -180,6 +183,23 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    private void setUpGoals() {
+        Level level = Game.getInstance().getLevel();
+        Button goals = new Button("Goals");
+        goals.relocate(720, 550);
+        root.getChildren().add(goals);
+
+        goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setContentText(level.toString());
+                alert.setHeaderText(null);
+                alert.show();
+            }
+        });
     }
 
     private void setUpHelicopter() {
