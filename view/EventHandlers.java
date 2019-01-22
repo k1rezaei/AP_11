@@ -48,7 +48,7 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     GameView.getInstance().pause();
-                     view.setRoot(new BuyMenu(view).getBuyGroup());
+                    view.setRoot(new BuyMenu(view).getBuyGroup());
                     break;
                 case SECONDARY:
                     try {
@@ -124,10 +124,6 @@ public class EventHandlers {
                             Game.getInstance().upgrade("well");
                             SpriteAnimation sprite = GameView.getInstance().getWell();
                             GameView.getInstance().update(sprite, well);
-                            /*GameView.getInstance().getRoot().getChildren().remove(sprite.getImageView());
-                            sprite.setState(well.getLevel());
-                            GameView.getInstance().getRoot().getChildren().add(sprite.getImageView());
-                            */
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                         }

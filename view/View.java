@@ -31,8 +31,8 @@ public class View extends Application {
         scene = new Scene(menu.getRoot(), 800, 600);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
-
-
+        Images.init();
+        Game.getInstance().loadCustom("workshops");
         primaryStage.show();
 
 

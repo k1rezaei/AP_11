@@ -51,17 +51,14 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         menuGroup.getChildren().add(start);
-        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        start.setOnMouseClicked(event -> {
 
 
-                GameView gameView = GameView.getInstance();
-                if (gameView.initGame()) {
+            GameView gameView = GameView.getInstance();
+            if (gameView.initGame()) {
 
-                    gameView.setView(view);
-                    view.setRoot(gameView.getRoot());
-                }
+                gameView.setView(view);
+                view.setRoot(gameView.getRoot());
             }
         });
     }

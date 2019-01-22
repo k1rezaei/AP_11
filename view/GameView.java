@@ -1,6 +1,9 @@
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -30,57 +33,52 @@ public class GameView {
     private static final int BUY_ANIMAL_Y = 20;
     private static final int BUY_ANIMAL_BASE_X = 20;
     private static final int BUY_ANIMAL_X_DIFF = 45;
-    private Group root = new Group();
-    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
-    private static double SPEED = 1;
     private static final double EPS = 0.0001;
+    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+    private static double SPEED = 1;
     private static boolean paused = false;
     private static AnimationTimer game;
-    private View view;
-    Rectangle filled = new Rectangle(12, 0);
-    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
-    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
 
     static {
         REFRESHER.setVisible(false);
     }
 
-    public boolean getPaused(){return paused;}
-
+    private Group root = new Group();
+    private Group entityRoot = new Group();
+    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
+    private View view;
+    private Rectangle filled = new Rectangle(12, 0);
+    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
     private SpriteAnimation well;
-
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
+    private Label moneyLabel;
 
-    public boolean getPause() {
-        return paused;
+    private GameView() {
+    }
+
+    public static GameView getInstance() {
+        return gameView;
     }
 
     public void pause() {
         paused = true;
         game.stop();
     }
-    public void resume(){
+
+    public void resume() {
         paused = false;
         game.start();
     }
 
-    private GameView() {
-    }
-
     public void initGame(Level level) {
-        GAME.loadCustom("workshops");
-        Images.init();
-        runGame(level);
+        runGame();
     }
 
     public boolean initGame() {
-        GAME.loadCustom("workshops");
-        Images.init();
-
         List<String> choices = new ArrayList<>();
         choices.add("level0");
         choices.add("level1");
@@ -90,40 +88,17 @@ public class GameView {
         dialog.setContentText(null);
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            runGame(GAME.getLevel(result.get()));
+            GAME.runMap(GAME.getLevel(result.get()));
+            runGame();
         } else {
             return false;
         }
         return true;
-
     }
 
+    private void runGame() {
 
-    public SpriteAnimation getWorkshop(Workshop workshop) {
-        return workshops.get(workshop);
-    }
-
-    private void fixSprite(SpriteAnimation sprite, int x, int y) {
-        for (ImageView img : sprite.getImageViews())
-            img.relocate(x, y);
-        root.getChildren().add(sprite.getImageView());
-    }
-
-
-    private void runGame(Level level) {
-
-        GAME.runMap(level);
-
-        setUpBackground();
-        setUpBuyIcons();
-        Label moneyLabel = setUpMoneyLabel();
-        setUpWell();
-        setUpTruck();
-        setUpWorkshops();
-        setUpHelicopter();
-        setUpSaveButton();
-        setUpFastForward();
-        setUpExitButton();
+        initializeNodes();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -146,13 +121,16 @@ public class GameView {
                                 sprites.put(entity, newSprite);
                                 newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
                                 newSprite.play();
-                                root.getChildren().add(newSprite.getImageView());
+                                entityRoot.getChildren().add(newSprite.getImageView());
+                                if(entity.getType().equalsIgnoreCase("plant")){
+                                    newSprite.getImageView().toBack();
+                                }
                             }
                             SpriteAnimation sprite = sprites.get(entity);
                             if (sprite.getState() != entity.getState()) {
-                                root.getChildren().remove(sprite.getImageView());
+                                entityRoot.getChildren().remove(sprite.getImageView());
                                 sprite.setState(entity.getState());
-                                root.getChildren().add(sprite.getImageView());
+                                entityRoot.getChildren().add(sprite.getImageView());
                             }
                             sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
                         } else {
@@ -160,7 +138,7 @@ public class GameView {
                             SpriteAnimation sprite = sprites.get(entity);
                             sprite.stop();
                             sprite.getImageView().setVisible(false);
-                            root.getChildren().remove(sprite.getImageView());
+                            entityRoot.getChildren().remove(sprite.getImageView());
                             sprites.remove(entity);
                         }
                     }
@@ -180,6 +158,20 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    private void initializeNodes() {
+        setUpBackground();
+        setUpBuyIcons();
+        setUpMoneyLabel();
+        setUpWell();
+        setUpTruck();
+        setUpWorkshops();
+        setUpHelicopter();
+        setUpSaveButton();
+        setUpFastForward();
+        setUpExitButton();
+        root.getChildren().add(entityRoot);
     }
 
     private void setUpHelicopter() {
@@ -265,7 +257,7 @@ public class GameView {
                 view.close();
             } else if (result.get() == buttonTypeTwo) {
                 view.close();
-            }else{
+            } else {
                 resume();
             }
 
@@ -308,8 +300,8 @@ public class GameView {
     }
 
     private void setUpBackground() {
-        Image background = new Image("file:textures/back.png");
-        ImageView imageView = new ImageView(background);
+        Image backgroundImage = new Image("file:textures/back.png");
+        ImageView imageView = new ImageView(backgroundImage);
         imageView.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 int x = (int) mouseEvent.getX();
@@ -353,13 +345,18 @@ public class GameView {
         }
     }
 
-    private Label setUpMoneyLabel() {
-        Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
+    private void setUpMoneyLabel() {
+        moneyLabel = new Label(Integer.toString(GAME.getMoney()));
         moneyLabel.setTextFill(Color.GOLD);
         moneyLabel.setFont(Font.font(30));
         moneyLabel.relocate(700, 20);
         root.getChildren().add(moneyLabel);
-        return moneyLabel;
+    }
+
+    private void fixSprite(SpriteAnimation sprite, int x, int y) {
+        for (ImageView img : sprite.getImageViews())
+            img.relocate(x, y);
+        root.getChildren().add(sprite.getImageView());
     }
 
     public void update(SpriteAnimation sprite, Upgradable upgradable) {
@@ -368,8 +365,8 @@ public class GameView {
         root.getChildren().add(sprite.getImageView());
     }
 
-    public static GameView getInstance() {
-        return gameView;
+    public SpriteAnimation getWorkshop(Workshop workshop) {
+        return workshops.get(workshop);
     }
 
     public Group getRoot() {
@@ -386,6 +383,10 @@ public class GameView {
 
     public SpriteAnimation getHelicopter() {
         return helicopter;
+    }
+
+    public boolean getPaused() {
+        return paused;
     }
 
     public void setView(View view) {
