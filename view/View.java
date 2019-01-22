@@ -1,17 +1,9 @@
-
-
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class View extends Application {
     private Stage primaryStage;
@@ -21,7 +13,7 @@ public class View extends Application {
         launch(args);
     }
 
-   // private static Media sound = new Media("file:sounds/main_theme.mp3");
+    //private static Media sound = new Media("sounds/main_theme.mp3");
     //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
@@ -38,11 +30,11 @@ public class View extends Application {
         //Sounds.init();
         Game.loadCustom("workshops");
         GameView.getInstance().setView(this);
-        scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"),20,20));
+        scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
         primaryStage.show();
 
-       // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-       // mediaPlayer.play();
+        // mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+        // mediaPlayer.play();
     }
 
     public void setRoot(Group root) {
