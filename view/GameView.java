@@ -471,7 +471,7 @@ public class GameView {
             while (cur * (WAREHOUSE_CNT_X * WAREHOUSE_CNT_Y) > cnt * (Game.getInstance().getWarehouse().getMaximumCapacity())) {
                 cnt++;
                 ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
-                imageView.setFitHeight(70 / WAREHOUSE_CNT_Y);
+                imageView.setFitHeight(80 / WAREHOUSE_CNT_Y);
                 imageView.setFitWidth(100 / WAREHOUSE_CNT_X);
                 Label label = new Label();
                 label.setStyle("-fx-border-color: white;"
@@ -479,7 +479,8 @@ public class GameView {
                         + "-fx-background-color: black;");
                 label.setOpacity(0.5);
                 label.setGraphic(imageView);
-                label.setMaxHeight(70 / WAREHOUSE_CNT_Y);
+                label.setMinHeight(80/WAREHOUSE_CNT_Y);
+                label.setMaxHeight(80/WAREHOUSE_CNT_Y);
 
                 stored.getChildren().add(label);
             }
