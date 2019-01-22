@@ -1,3 +1,5 @@
+import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -9,14 +11,19 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
+import java.io.File;
 import java.util.Optional;
 
 public class Menu {
     private View view;
     private Group menuGroup = new Group();
+    static int OFFSET_X = 320;
 
     {
+
 
         VBox vBox = new VBox();
 
@@ -41,23 +48,28 @@ public class Menu {
 
     private void setStart() {
         Label start = new Label();
-        start.setGraphic(new ImageView(new Image("file:textures/menu/start.png"))); start.relocate(350, 100);
+        start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
+        start.relocate(OFFSET_X, 100);
         menuGroup.getChildren().add(start);
         start.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
 
+
                 GameView gameView = GameView.getInstance();
-                gameView.initGame();
-                gameView.setView(view);
-                view.setRoot(gameView.getRoot());
+                if (gameView.initGame()) {
+
+                    gameView.setView(view);
+                    view.setRoot(gameView.getRoot());
+                }
             }
         });
     }
 
     private void setLoad() {
         Label load = new Label();
-        load.setGraphic(new ImageView(new Image("file:textures/menu/load.png"))); load.relocate(350, 200);
+        load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
+        load.relocate(OFFSET_X, 200);
         menuGroup.getChildren().add(load);
         load.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -67,9 +79,10 @@ public class Menu {
                     GameView gameView = GameView.getInstance();
                     for (Workshop workshop : Game.getInstance().getWorkshops())
                         System.out.println(workshop.getName() + "," + workshop.getLevel());
-                    gameView.initGame();
+                    gameView.initGame(Game.getInstance().getLevel());
                     gameView.setView(view);
                     view.setRoot(gameView.getRoot());
+
 
                 } catch (Exception e) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -84,7 +97,8 @@ public class Menu {
 
     private void setInfo() {
         Label info = new Label();
-        info.setGraphic(new ImageView(new Image("file:textures/menu/info.png"))); info.relocate(350, 300);
+        info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
+        info.relocate(OFFSET_X, 300);
         menuGroup.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -100,7 +114,8 @@ public class Menu {
 
     private void setExit() {
         Label exit = new Label();
-        exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png"))); exit.relocate(350, 400);
+        exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
+        exit.relocate(OFFSET_X, 400);
         menuGroup.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 

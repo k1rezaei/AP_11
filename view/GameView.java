@@ -1,9 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
@@ -11,7 +8,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -24,7 +23,6 @@ public class GameView {
     private static final int TRUCK_Y = 460;
     private static final int HELICOPTER_X = 520;
     private static final int HELICOPTER_Y = 430;
-
     private static final int LEFT_WORKSHOP_X = 50;
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
@@ -36,23 +34,68 @@ public class GameView {
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
-    private static final String[] NON_WILD = {"sheep", "chicken", "cow", "dog", "cat"};
+    private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
+    private static double SPEED = 1;
+    private static final double EPS = 0.0001;
+    private static boolean paused = false;
+    private static AnimationTimer game;
     private View view;
     Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
+    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+
+    static {
+        REFRESHER.setVisible(false);
+    }
+
+    public boolean getPaused(){return paused;}
 
     private SpriteAnimation well;
 
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
 
+    public boolean getPause() {
+        return paused;
+    }
+
+    public void pause() {
+        paused = true;
+        game.stop();
+    }
+    public void resume(){
+        paused = false;
+        game.start();
+    }
+
     private GameView() {
     }
 
-    public void initGame() {
+    public void initGame(Level level) {
         GAME.loadCustom("workshops");
         Images.init();
-        runGame("level0"); //TODO create menu and more levels
+        runGame(level);
+    }
+
+    public boolean initGame() {
+        GAME.loadCustom("workshops");
+        Images.init();
+
+        List<String> choices = new ArrayList<>();
+        choices.add("level0");
+        choices.add("level1");
+        ChoiceDialog<String> dialog = new ChoiceDialog<>("level0", choices);
+        dialog.setTitle("Choose Level");
+        dialog.setHeaderText(null);
+        dialog.setContentText(null);
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            runGame(GAME.getLevel(result.get()));
+        } else {
+            return false;
+        }
+        return true;
+
     }
 
 
@@ -67,9 +110,9 @@ public class GameView {
     }
 
 
-    private void runGame(String levelName) {
+    private void runGame(Level level) {
 
-        GAME.runMap(levelName);
+        GAME.runMap(level);
 
         setUpBackground();
         setUpBuyIcons();
@@ -79,16 +122,21 @@ public class GameView {
         setUpWorkshops();
         setUpHelicopter();
         setUpSaveButton();
+        setUpFastForward();
         setUpExitButton();
 
-        AnimationTimer game = new AnimationTimer() {
+        game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
 
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
-                if (now > lastTime + SECOND / 48) {
+                if (now > lastTime + SECOND / (48 * SPEED)) {
+                    //TODO ye chiz behtar az 2 khat payin bezanim
+                    root.getChildren().add(REFRESHER);
+                    root.getChildren().remove(REFRESHER);
+
                     lastTime = now;
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
@@ -141,6 +189,32 @@ public class GameView {
         fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
     }
 
+    private void setUpFastForward() {
+        Label ff = new Label();
+
+        ImageView ff1 = new ImageView(new Image("file:textures/fastForward/fastForward1.png"));
+        ff1.setFitHeight(50);
+        ff1.setFitWidth(100);
+
+
+        ImageView ff2 = new ImageView(new Image("file:textures/fastForward/fastForward2.png"));
+        ff2.setFitHeight(50);
+        ff2.setFitWidth(100);
+
+        ff.setGraphic(ff1);
+        ff.relocate(450, 15);
+        ff.setOnMouseClicked(event -> {
+            if (SPEED < 1 + EPS) {
+                SPEED = 2;
+                ff.setGraphic(ff2);
+            } else {
+                SPEED = 1;
+                ff.setGraphic(ff1);
+            }
+        });
+        root.getChildren().add(ff);
+    }
+
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
@@ -148,11 +222,13 @@ public class GameView {
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
+                pause();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("^_^");
                 alert.setContentText(null);
                 alert.setHeaderText("Saved Successful");
-                alert.show();
+                alert.showAndWait();
+                resume();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -161,24 +237,39 @@ public class GameView {
     }
 
     private void setUpExitButton() {
+
+
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
         exit.relocate(10, 550);
         exit.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Exit");
-            alert.setContentText("Do You Want To Save Before Exit?");
-            //alert.setHeaderText(null);
+            pause();
+
+            ButtonType buttonTypeOne = new ButtonType("Save & Exit");
+            ButtonType buttonTypeTwo = new ButtonType("Exit");
+            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
+            ButtonType buttonTypeCancel = new ButtonType("Cancel");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
 
             Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            if (result.get() == buttonTypeOne) {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
-                    System.err.println(e.getMessage());
+
                 }
+                view.close();
+            } else if (result.get() == buttonTypeTwo) {
+                view.close();
+            }else{
+                resume();
             }
-            view.close();
+
+
         });
         root.getChildren().add(exit);
     }
@@ -190,7 +281,6 @@ public class GameView {
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
             sprite.setState(workshop.getLevel());
-            //System.out.println(workshop.getName() + " : " + workshop.getLevel());
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }

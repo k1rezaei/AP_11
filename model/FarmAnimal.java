@@ -19,19 +19,19 @@ public class FarmAnimal extends Animal {
             speed = 4;
             buyPrice = 1000;
             hungrySpeed = 6;
-            remainTime = baseRemainTime = 20;
+            remainTime = baseRemainTime = 60;
             produceType = "Milk";
         } else if (type.equalsIgnoreCase("chicken")) {
             speed = 5;
             buyPrice = 100;
             hungrySpeed = 1;
-            remainTime = baseRemainTime = 20;
+            remainTime = baseRemainTime = 40;
             produceType = "Egg";
         } else {
             speed = 5;
             buyPrice = 1000;
             hungrySpeed = 3;
-            remainTime = baseRemainTime = 20;
+            remainTime = baseRemainTime = 50;
             produceType = "Wool";
         }
     }
@@ -55,7 +55,7 @@ public class FarmAnimal extends Animal {
 
 
     void turn() {
-        rateOfHunger -= 5;
+        rateOfHunger -=2;
         if (rateOfHunger <= 0) {
             destroy();
             return;

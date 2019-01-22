@@ -47,6 +47,7 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
+                    GameView.getInstance().pause();
                      view.setRoot(new BuyMenu(view).getBuyGroup());
                     break;
                 case SECONDARY:
@@ -67,7 +68,8 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    view.setRoot(new SellMenu(view).getSellGroup());
+                    GameView.getInstance().pause();
+                    new SellMenu(view).getSellGroup();
                     break;
                 case SECONDARY:
                     try {
@@ -88,6 +90,7 @@ public class EventHandlers {
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
+                        GameView.getInstance().pause();
                         view.setRoot(new SellMenu(view).getSellGroup());
                         break;
                     case SECONDARY:
