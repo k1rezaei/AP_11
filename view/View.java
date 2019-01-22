@@ -32,6 +32,7 @@ public class View extends Application {
         primaryStage.setResizable(false);
         Menu menu = new Menu(this);
         scene = new Scene(menu.getRoot(), 800, 600);
+        scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();

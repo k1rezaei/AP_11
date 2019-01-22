@@ -193,6 +193,7 @@ public class GameView {
     private void setUpGoals() {
         Level level = Game.getInstance().getLevel();
         Label goals = new Label();
+        goals.setId("label_button");
         ImageView goal = new ImageView(new Image("file:textures/goals.png"));
         goal.setFitWidth(GOALS_WIDTH);
         goal.setFitHeight(GOALS_HEIGHT);
@@ -229,6 +230,7 @@ public class GameView {
 
     private void setUpFastForward() {
         Label ff = new Label();
+        ff.setId("label_button");
 
         ImageView ff1 = new ImageView(new Image("file:textures/fastForward/fastForward1.png"));
         ff1.setFitHeight(FF_HEIGHT);
@@ -257,6 +259,7 @@ public class GameView {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
         save.relocate(SAVE_X, SAVE_Y);
+        save.setId("label_button");
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
@@ -280,6 +283,7 @@ public class GameView {
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
         exit.relocate(EXIT_X, EXIT_Y);
+        exit.setId("label_button");
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.NONE);
@@ -318,6 +322,7 @@ public class GameView {
         mn.setFitWidth(MENU_WODTH);
         mn.setFitHeight(MENU_HEIGHT);
         Label menu = new Label();
+        menu.setId("label_button");
         menu.setGraphic(mn);
         menu.relocate(MENU_X, MENU_Y);
 
