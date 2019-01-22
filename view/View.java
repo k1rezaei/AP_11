@@ -14,7 +14,7 @@ public class View extends Application {
         launch(args);
     }
 
-    //private static Media sound = new Media("file://sounds/main_theme.mp3");
+    //private static Media sound = new Media(new File("file:/sounds/main_theme.mp3").toString())   ;
     //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
@@ -25,6 +25,7 @@ public class View extends Application {
         primaryStage.setResizable(false);
         Menu menu = new Menu(this);
         scene = new Scene(menu.getRoot(), 800, 600);
+        scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();

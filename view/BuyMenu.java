@@ -55,7 +55,7 @@ public class BuyMenu {
 
     {
         cap.setMinSize(50, HEIGHT);
-        cap.setFont(Font.font(20));
+        //cap.setFont(Font.font(20));
         cap.setAlignment(Pos.CENTER);
         cap.relocate(600, 20);
     }
@@ -65,7 +65,7 @@ public class BuyMenu {
     {
 
         money.setMinSize(50, HEIGHT);
-        money.setFont(Font.font(20));
+        //money.setFont(Font.font(20));
         money.setAlignment(Pos.CENTER);
         money.relocate(600, 0);
     }
@@ -75,16 +75,8 @@ public class BuyMenu {
         money.setText("Money : " + currentMoney);
     }
 
-    FlowPane buyList = new FlowPane();
 
-    {
-        buyGroup.getChildren().add(buyList);
-        buyGroup.getChildren().add(money);
-        buyGroup.getChildren().add(cap);
-        buyList.relocate(400, 70);
 
-        update();
-    }
 
     static private Image BG = new Image("file:textures/bglemon.gif");
     static private Image SHELF = new Image("file:textures/3x5shelf.png");
@@ -95,6 +87,9 @@ public class BuyMenu {
         bg.setFitHeight(600);
         bg.setFitWidth(800);
         buyGroup.getChildren().add(bg);
+        buyGroup.getChildren().add(money);
+        buyGroup.getChildren().add(cap);
+        update();
         Rectangle rectangle = new Rectangle(BASE_X-10,BASE_Y-10,DIS_X*2-10,DIS_Y*5);
         rectangle.setFill(Color.BLACK);
         rectangle.setOpacity(0.5);
@@ -121,6 +116,7 @@ public class BuyMenu {
         ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
         okImage.setFitHeight(60);
         okImage.setFitWidth(100);
+        ok.setId("label_button");
 
         ImageView cancelImage = new ImageView(new Image("file:textures/cancel.png"));
         cancelImage.setFitHeight(60);
@@ -130,6 +126,7 @@ public class BuyMenu {
         Label cancel = new Label();
         cancel.relocate(BASE_X + 110, 10);
         cancel.setGraphic(cancelImage);
+        cancel.setId("label_button");
 
         buyGroup.getChildren().addAll(ok, cancel);
 
@@ -170,13 +167,17 @@ public class BuyMenu {
             Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice() + " (" + Entity.getNewEntity(type).getSize() + ")");
             price.relocate(baseX + 70, baseY + 10);
 
-            ImageView buyOne = new ImageView(one);
-            buyOne.setFitWidth(WIDTH);
-            buyOne.setFitHeight(HEIGHT);
-
+            ImageView buyOneImage = new ImageView(one);
+            buyOneImage.setFitWidth(WIDTH);
+            buyOneImage.setFitHeight(HEIGHT);
+            Label buyOne = new Label();
+            buyOne.setId("label_button");
             buyOne.relocate(baseX + 150, baseY);
+            buyOne.setGraphic(buyOneImage);
 
             buyGroup.getChildren().addAll(imageView, price, buyOne);
+
+
 
             buyOne.setOnMouseClicked(event -> {
                 if (Game.getInstance().getHelicopter().getCurrentCapacity() >= Entity.getNewEntity(type).getSize()) {
