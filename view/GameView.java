@@ -1,9 +1,11 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -30,6 +32,20 @@ public class GameView {
     public static final int BUY_ANIMAL_Y = 20;
     public static final int BUY_ANIMAL_BASE_X = 20;
     public static final int BUY_ANIMAL_X_DIFF = 45;
+    public static final int GOALS_WIDTH = 70;
+    public static final int GOALS_HEIGHT = 50;
+    public static final int GOALS_X = 720;
+    public static final int GOALS_Y = 550;
+    public static final int FF_HEIGHT = 50;
+    public static final int FF_WIDTH = 100;
+    public static final int FF_X = 450;
+    public static final int FF_Y = 15;
+    public static final int SAVE_X = 550;
+    public static final int SAVE_Y = 15;
+    public static final int EXIT_X = 10;
+    public static final int EXIT_Y = 550;
+    public static final int MONEY_X = 700;
+    public static final int MONEY_Y = 20;
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
@@ -124,6 +140,8 @@ public class GameView {
         setUpSaveButton();
         setUpFastForward();
         setUpExitButton();
+        setUpGoals();
+        //setUpMenuButton();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -191,6 +209,27 @@ public class GameView {
         game.start();
     }
 
+    private void setUpGoals() {
+        Level level = Game.getInstance().getLevel();
+        Label goals = new Label();
+        ImageView goal = new ImageView(new Image("file:textures/goals.png"));
+        goal.setFitWidth(GOALS_WIDTH); goal.setFitHeight(GOALS_HEIGHT);
+        goals.setGraphic(goal);
+        goals.relocate(GOALS_X, GOALS_Y);
+        root.getChildren().add(goals);
+
+        goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Goals");
+                alert.setContentText(level.toString());
+                alert.setHeaderText(null);
+                alert.show();
+            }
+        });
+    }
+
     private void setUpHelicopter() {
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
@@ -202,16 +241,16 @@ public class GameView {
         Label ff = new Label();
 
         ImageView ff1 = new ImageView(new Image("file:textures/fastForward/fastForward1.png"));
-        ff1.setFitHeight(50);
-        ff1.setFitWidth(100);
+        ff1.setFitHeight(FF_HEIGHT);
+        ff1.setFitWidth(FF_WIDTH);
 
 
         ImageView ff2 = new ImageView(new Image("file:textures/fastForward/fastForward2.png"));
-        ff2.setFitHeight(50);
-        ff2.setFitWidth(100);
+        ff2.setFitHeight(FF_HEIGHT);
+        ff2.setFitWidth(FF_WIDTH);
 
         ff.setGraphic(ff1);
-        ff.relocate(450, 15);
+        ff.relocate(FF_X, FF_Y);
         ff.setOnMouseClicked(event -> {
             if (SPEED < 1 + EPS) {
                 SPEED = 2;
@@ -227,7 +266,7 @@ public class GameView {
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
-        save.relocate(550, 15);
+        save.relocate(SAVE_X, SAVE_Y);
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
@@ -250,7 +289,7 @@ public class GameView {
 
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
-        exit.relocate(10, 550);
+        exit.relocate(EXIT_X, EXIT_Y);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.NONE);
@@ -281,6 +320,39 @@ public class GameView {
 
         });
         root.getChildren().add(exit);
+    }
+
+    private void setUpMenuButton() {
+
+        Label menu = new Label();
+        menu.setGraphic(new ImageView(new Image("file:textures/exit.png")));
+        menu.relocate(70, 550);
+
+        menu.setOnMouseClicked(event -> {
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Back To Menu");
+            pause();
+
+            ButtonType buttonTypeOne = new ButtonType("Save");
+            ButtonType buttonTypeTwo = new ButtonType("Do Not Save");
+            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne) {
+                try {
+                    Game.getInstance().saveGame("SaveGame");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            Menu backMenu = new Menu(view);
+            view.setRoot(backMenu.getRoot());
+
+        });
+        root.getChildren().add(menu);
     }
 
     private void setUpWorkshops() {
@@ -366,7 +438,7 @@ public class GameView {
         Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
         moneyLabel.setTextFill(Color.GOLD);
         moneyLabel.setFont(Font.font(30));
-        moneyLabel.relocate(700, 20);
+        moneyLabel.relocate(MONEY_X, MONEY_Y);
         root.getChildren().add(moneyLabel);
         return moneyLabel;
     }
