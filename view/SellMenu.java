@@ -187,8 +187,10 @@ public class SellMenu {
                 public void handle(MouseEvent event) {
 
                     int k = cnt;
-                    if(k >= Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize())
+                    if(Entity.getNewEntity(pair.getKey()).getSize() == 0) k = cnt;
+                    else if(k >= Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize())
                         k = Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize();
+
                     if(k == 0){
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setContentText("Not Enough Space");
