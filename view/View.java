@@ -21,7 +21,7 @@ public class View extends Application {
         launch(args);
     }
 
-   // private static Media sound = new Media("file:sounds/main_theme.mp3");
+    private static Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString())   ;
     //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 

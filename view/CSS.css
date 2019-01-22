@@ -2,6 +2,8 @@
     -fx-text-fill: white;
     -fx-font-size: 18;
     -fx-font-family: "Comic Sans MS";
+    -fx-stroke: firebrick;
+    -fx-stroke-width: 5px;
 }
 
 #label_button:hover{
