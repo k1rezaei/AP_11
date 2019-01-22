@@ -104,17 +104,13 @@ public class GameView {
         game.start();
     }
 
-    public void initGame() {
-        runGame();
-    }
-
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         root.getChildren().remove(stored);
         stored.getChildren().clear();
 
-        int offset_y = Game.getInstance().getWarehouse().getLevel() * 5;
-        stored.relocate(WAREHOUSE_X + 30, offset_y + WAREHOUSE_Y + 40);
+        int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
+        stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
         stored.setMaxHeight(80);
         stored.setMaxWidth(120);
         int cur = 0;
