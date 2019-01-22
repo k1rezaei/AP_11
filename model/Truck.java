@@ -16,17 +16,15 @@ public class Truck extends Vehicle implements Upgradable {
 
     public int getResultMoneyWithoutClear(){
         int priceSum = 0;
-        for (Entity entity : getItems()) {
+        for (String type: getItems()) {
+            Entity entity = Entity.getNewEntity(type);
             priceSum += entity.getSellPrice();
         }
         return priceSum;
     }
 
     public int getResultMoney() {
-        int priceSum = 0;
-        for (Entity entity : getItems()) {
-            priceSum += entity.getSellPrice();
-        }
+        int priceSum = getResultMoneyWithoutClear();
         clear();
         return priceSum;
     }
@@ -38,7 +36,11 @@ public class Truck extends Vehicle implements Upgradable {
 
     @Override
     public ArrayList<Entity> getNeededItems() {
-        return getItems();
+        ArrayList<Entity> neededItems = new ArrayList<>();
+        for(String type: getItems()){
+            neededItems.add(Entity.getNewEntity(type));
+        }
+        return  neededItems;
     }
 
     @Override

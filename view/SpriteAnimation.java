@@ -49,7 +49,7 @@ public class SpriteAnimation extends Transition {
 
     @Override
     protected void interpolate(double k) {
-        if(GameView.getInstance().getPause()){
+        if(GameView.getInstance().getPaused()){
             return;
         }
         final int index = Math.min((int) Math.floor(k * counts.get(state)), counts.get(state) - 1);

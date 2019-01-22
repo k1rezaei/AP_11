@@ -3,10 +3,7 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -15,6 +12,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class Menu {
@@ -51,18 +50,22 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         menuGroup.getChildren().add(start);
-        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        start.setOnMouseClicked(event -> {
+            GameView gameView = GameView.getInstance();
 
-
-                GameView gameView = GameView.getInstance();
-                if (gameView.initGame()) {
-
-                    gameView.setView(view);
-                    view.setRoot(gameView.getRoot());
-                }
-            }
+            List<String> choices = new ArrayList<>();
+            choices.add("level0");
+            choices.add("level1");
+            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
+            dialog.setTitle("Choose Level");
+            dialog.setHeaderText(null);
+            dialog.setContentText(null);
+            Optional<String> result = dialog.showAndWait();
+            result.ifPresent(s -> {
+                Game.getInstance().runMap(Game.getInstance().getLevel(s));
+                gameView.runGame();
+                view.setRoot(gameView.getRoot());
+            });
         });
     }
 
@@ -71,27 +74,22 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         menuGroup.getChildren().add(load);
-        load.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                try {
-                    Game.getInstance().loadGame("SaveGame");
-                    GameView gameView = GameView.getInstance();
-                    for (Workshop workshop : Game.getInstance().getWorkshops())
-                        System.out.println(workshop.getName() + "," + workshop.getLevel());
-                    gameView.initGame(Game.getInstance().getLevel());
-                    gameView.setView(view);
-                    view.setRoot(gameView.getRoot());
+        load.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().loadGame("SaveGame");
+                GameView gameView = GameView.getInstance();
+                for (Workshop workshop : Game.getInstance().getWorkshops())
+                    System.out.println(workshop.getName() + "," + workshop.getLevel());
+                gameView.initGame();
+                view.setRoot(gameView.getRoot());
 
-
-                } catch (Exception e) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Can't LoadGame");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Can't Find SaveGame");
-                    alert.showAndWait();
-                    e.printStackTrace();
-                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Can't LoadGame");
+                alert.setHeaderText(null);
+                alert.setContentText("Can't Find SaveGame");
+                alert.showAndWait();
             }
         });
     }

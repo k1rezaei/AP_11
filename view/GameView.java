@@ -1,31 +1,25 @@
 import javafx.animation.AnimationTimer;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 
 public class GameView {
     private static final GameView gameView = new GameView();
-    //private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
     private static final int TRUCK_X = 200;
@@ -36,69 +30,68 @@ public class GameView {
     private static final int RIGHT_WORKSHOP_X = 620;
     private static final int BASE_WORKSHOP = 80;
     private static final int WORKSHOP_DIS = 150;
-    public static final int BUY_ANIMAL_Y = 20;
-    public static final int BUY_ANIMAL_BASE_X = 20;
-    public static final int BUY_ANIMAL_X_DIFF = 45;
-    public static final int GOALS_WIDTH = 70;
-    public static final int GOALS_HEIGHT = 50;
-    public static final int GOALS_X = 720;
-    public static final int GOALS_Y = 550;
-    public static final int FF_HEIGHT = 50;
-    public static final int FF_WIDTH = 100;
-    public static final int FF_X = 450;
-    public static final int FF_Y = 15;
-    public static final int SAVE_X = 550;
-    public static final int SAVE_Y = 15;
-    public static final int EXIT_X = 10;
-    public static final int EXIT_Y = 550;
-    public static final int MONEY_X = 700;
-    public static final int MONEY_Y = 20;
-
-    public static final int MENU_X = 90;
-    public static final int MENU_Y = 550;
-    public static final int MENU_WODTH = 100;
-    public static final int MENU_HEIGHT = 50;
-
-    public static final int WAREHOUSE_X = 360;
-    public static final int WAREHOUSE_Y = 460;
-    public static final int WAREHOUSE_CNT_X = 8;
-    public static final int WAREHOUSE_CNT_Y = 4;
-    public static final double SOUND_PROP = 0.01;
-
-    private Group root = new Group();
-    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
+    private static final int BUY_ANIMAL_Y = 20;
+    private static final int BUY_ANIMAL_BASE_X = 20;
+    private static final int BUY_ANIMAL_X_DIFF = 45;
+    private static final int GOALS_WIDTH = 70;
+    private static final int GOALS_HEIGHT = 50;
+    private static final int GOALS_X = 720;
+    private static final int GOALS_Y = 550;
+    private static final int FF_HEIGHT = 50;
+    private static final int FF_WIDTH = 100;
+    private static final int FF_X = 450;
+    private static final int FF_Y = 15;
+    private static final int SAVE_X = 550;
+    private static final int SAVE_Y = 15;
+    private static final int EXIT_X = 10;
+    private static final int EXIT_Y = 550;
+    private static final int MONEY_X = 700;
+    private static final int MONEY_Y = 20;
+    private static final int MENU_X = 90;
+    private static final int MENU_Y = 550;
+    private static final int MENU_WODTH = 100;
+    private static final int MENU_HEIGHT = 50;
+    private static final int WAREHOUSE_X = 360;
+    private static final int WAREHOUSE_Y = 460;
+    private static final int WAREHOUSE_CNT_X = 8;
+    private static final int WAREHOUSE_CNT_Y = 4;
+    private static final double SOUND_PROP = 0.01;
     private static final int BASE_X = 180;
-    private static final int  BASE_Y = 130;
+    private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
-    private static double SPEED = 1;
     private static final double EPS = 0.0001;
+    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+    private static double SPEED = 1;
     private static boolean paused = false;
     private static AnimationTimer game;
-    private View view;
-    Rectangle filled = new Rectangle(12, 0);
-    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
-    private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
-
 
     static {
         REFRESHER.setVisible(false);
+
     }
 
-    public boolean getPaused() {
-        return paused;
-    }
-
+    private FlowPane stored = new FlowPane();
+    private Group root = new Group();
+    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
+    private Group entityRoot = new Group();
+    private View view;
+    private Rectangle filled = new Rectangle(12, 0);
+    private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
     private SpriteAnimation well;
     private SpriteAnimation warehouse;
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
+    private Label moneyLabel;
+
+    private GameView() {
+    }
+
+    public static GameView getInstance() {
+        return gameView;
+    }
 
     public SpriteAnimation getWarehouse() {
         return warehouse;
-    }
-
-    public boolean getPause() {
-        return paused;
     }
 
     public void pause() {
@@ -111,58 +104,13 @@ public class GameView {
         game.start();
     }
 
-    private GameView() {
-    }
-
-    public void initGame(Level level) {
-        Game.getInstance().loadCustom("workshops");
-        Images.init();
-        Sounds.init();
-        runGame(level);
-    }
-
-    public boolean initGame() {
-        Game.getInstance().loadCustom("workshops");
-        Images.init();
-        Sounds.init();
-
-        List<String> choices = new ArrayList<>();
-        choices.add("level0");
-        choices.add("level1");
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("level0", choices);
-        dialog.setTitle("Choose Level");
-        dialog.setHeaderText(null);
-        dialog.setContentText(null);
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            runGame(Game.getInstance().getLevel(result.get()));
-        } else {
-            return false;
-        }
-        return true;
-
-    }
-
-
-    public SpriteAnimation getWorkshop(Workshop workshop) {
-        return workshops.get(workshop);
-    }
-
-    private void fixSprite(SpriteAnimation sprite, int x, int y) {
-        for (ImageView img : sprite.getImageViews())
-            img.relocate(x, y);
-        root.getChildren().add(sprite.getImageView());
-    }
-
-    FlowPane stored = new FlowPane();
-
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         root.getChildren().remove(stored);
         stored.getChildren().clear();
 
-        int offset_y = Game.getInstance().getWarehouse().getLevel() * 5;
-        stored.relocate(WAREHOUSE_X + 30, offset_y + WAREHOUSE_Y + 40);
+        int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
+        stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
         stored.setMaxHeight(80);
         stored.setMaxWidth(120);
         int cur = 0;
@@ -189,26 +137,9 @@ public class GameView {
         root.getChildren().add(stored);
     }
 
+    public void runGame() {
 
-
-
-    private void runGame(Level level) {
-
-        Game.getInstance().runMap(level);
-
-        setUpBackground();
-        setUpBuyIcons();
-        Label moneyLabel = setUpMoneyLabel();
-        setUpWell();
-        setUpTruck();
-        setUpWarehouse();
-        setUpWorkshops();
-        setUpHelicopter();
-        setUpSaveButton();
-        setUpFastForward();
-        setUpExitButton();
-        setUpGoals();
-        setUpMenuButton();
+        initializeNodes();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -237,9 +168,9 @@ public class GameView {
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.getCell() != null) {
-                            if(entity instanceof Animal){
-                                if(Math.random() < SOUND_PROP){
-                                    Sounds.play(entity.getType()+"_voice");
+                            if (entity instanceof Animal) {
+                                if (Math.random() < SOUND_PROP) {
+                                    Sounds.play(entity.getType() + "_voice");
                                 }
                             }
                             if (!sprites.containsKey(entity)) {
@@ -247,13 +178,16 @@ public class GameView {
                                 sprites.put(entity, newSprite);
                                 newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
                                 newSprite.play();
-                                root.getChildren().add(newSprite.getImageView());
+                                entityRoot.getChildren().add(newSprite.getImageView());
+                                if (entity.getType().equalsIgnoreCase("plant")) {
+                                    newSprite.getImageView().toBack();
+                                }
                             }
                             SpriteAnimation sprite = sprites.get(entity);
                             if (sprite.getState() != entity.getState()) {
-                                root.getChildren().remove(sprite.getImageView());
+                                entityRoot.getChildren().remove(sprite.getImageView());
                                 sprite.setState(entity.getState());
-                                root.getChildren().add(sprite.getImageView());
+                                entityRoot.getChildren().add(sprite.getImageView());
                             }
                             sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
                         } else {
@@ -262,7 +196,7 @@ public class GameView {
                             SpriteAnimation sprite = sprites.get(entity);
                             sprite.stop();
                             sprite.getImageView().setVisible(false);
-                            root.getChildren().remove(sprite.getImageView());
+                            entityRoot.getChildren().remove(sprite.getImageView());
                             sprites.remove(entity);
                         }
                     }
@@ -282,6 +216,23 @@ public class GameView {
             }
         };
         game.start();
+    }
+
+    private void initializeNodes() {
+        setUpBackground();
+        setUpBuyIcons();
+        setUpMoneyLabel();
+        setUpWell();
+        setUpTruck();
+        setUpWarehouse();
+        setUpWorkshops();
+        setUpHelicopter();
+        setUpSaveButton();
+        setUpFastForward();
+        setUpExitButton();
+        setUpGoals();
+        setUpMenuButton();
+        root.getChildren().add(entityRoot);
     }
 
     private void setUpGoals() {
@@ -408,7 +359,9 @@ public class GameView {
 
     private void setUpMenuButton() {
 
-        ImageView mn = new ImageView(new Image("file:textures/menu.png")); mn.setFitWidth(MENU_WODTH); mn.setFitHeight(MENU_HEIGHT);
+        ImageView mn = new ImageView(new Image("file:textures/menu.png"));
+        mn.setFitWidth(MENU_WODTH);
+        mn.setFitHeight(MENU_HEIGHT);
         Label menu = new Label();
         menu.setGraphic(mn);
         menu.relocate(MENU_X, MENU_Y);
@@ -482,8 +435,8 @@ public class GameView {
     }
 
     private void setUpBackground() {
-        Image background = new Image("file:textures/back.png");
-        ImageView imageView = new ImageView(background);
+        Image backgroundImage = new Image("file:textures/back.png");
+        ImageView imageView = new ImageView(backgroundImage);
         imageView.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 int x = (int) mouseEvent.getX();
@@ -527,13 +480,18 @@ public class GameView {
         }
     }
 
-    private Label setUpMoneyLabel() {
-        Label moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
+    private void setUpMoneyLabel() {
+        moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
         moneyLabel.setTextFill(Color.GOLD);
         moneyLabel.setFont(Font.font(30));
         moneyLabel.relocate(MONEY_X, MONEY_Y);
         root.getChildren().add(moneyLabel);
-        return moneyLabel;
+    }
+
+    private void fixSprite(SpriteAnimation sprite, int x, int y) {
+        for (ImageView img : sprite.getImageViews())
+            img.relocate(x, y);
+        root.getChildren().add(sprite.getImageView());
     }
 
     public void update(SpriteAnimation sprite, Upgradable upgradable) {
@@ -542,8 +500,8 @@ public class GameView {
         root.getChildren().add(sprite.getImageView());
     }
 
-    public static GameView getInstance() {
-        return gameView;
+    public SpriteAnimation getWorkshop(Workshop workshop) {
+        return workshops.get(workshop);
     }
 
     public Group getRoot() {
@@ -560,6 +518,10 @@ public class GameView {
 
     public SpriteAnimation getHelicopter() {
         return helicopter;
+    }
+
+    public boolean getPaused() {
+        return paused;
     }
 
     public void setView(View view) {
