@@ -39,7 +39,7 @@ public class View extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
-        Sounds.init();
+        //Sounds.init();
         Game.getInstance().loadCustom("workshops");
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"),20,20));

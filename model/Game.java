@@ -179,7 +179,7 @@ public class Game {
         //TODO initialize and clear
     }
 
-    public void runMap(Level _level){
+    public void runMap(Level _level) {
         level = _level;
         Cell.setN(level.getN());
         Cell.setM(level.getM());
@@ -338,7 +338,8 @@ public class Game {
 
     public void pickUp(int x, int y) {
         Item item = map.pickUp(new Cell(x, y));
-        if (item != null) {
+        if (item != null && warehouse.getCapacity() >= item.getSize()) {
+            item.destroy();
             warehouse.add(item);
         }
     }
@@ -506,5 +507,7 @@ public class Game {
         return catLevel;
     }
 
-    public Level getLevel(String name){ return levels.get(name);}
+    public Level getLevel(String name) {
+        return levels.get(name);
+    }
 }

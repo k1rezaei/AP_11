@@ -91,7 +91,6 @@ public class Map {
     Item pickUp(Cell cell) {
         for (Entity entity : entities) {
             if (cell.equals(entity.getCell()) && entity instanceof Item) {
-                entity.destroy();
                 return (Item) entity;
             }
         }

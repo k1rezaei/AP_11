@@ -10,15 +10,15 @@ public class EventHandlers {
 
     static View view;
 
-    static private Media sound = new Media(new File("sounds/alert.mp3").toURI().toString());
-    static private MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    //static private Media sound = new Media(new File("sounds/alert.mp3").toURI().toString());
+    //static private MediaPlayer mediaPlayer = new MediaPlayer(sound);
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
     static void alert(){
-        mediaPlayer.stop();
-        mediaPlayer.play();
+    //    mediaPlayer.stop();
+    //    mediaPlayer.play();
     }
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
