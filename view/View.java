@@ -3,6 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.media.Media;
 import javafx.stage.Stage;
 
 public class View extends Application {
@@ -13,7 +14,7 @@ public class View extends Application {
         launch(args);
     }
 
-    //private static Media sound = new Media("sounds/main_theme.mp3");
+    //private static Media sound = new Media("file://sounds/main_theme.mp3");
     //private MediaPlayer mediaPlayer = new MediaPlayer(sound);
 
 
