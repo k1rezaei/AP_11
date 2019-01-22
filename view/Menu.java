@@ -90,6 +90,7 @@ public class Menu {
                     alert.setHeaderText(null);
                     alert.setContentText("Can't Find SaveGame");
                     alert.showAndWait();
+                    e.printStackTrace();
                 }
             }
         });
@@ -107,7 +108,8 @@ public class Menu {
             alert.setContentText("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
                     "Mohammad Mahdavi\n" +
-                    "Keivan Rezaei");
+                    "Keivan Rezaei\n" +
+                    "Music : Hope Prevails (By Jesper Kyd)");
             alert.showAndWait();
         });
     }
