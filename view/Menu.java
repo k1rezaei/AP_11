@@ -40,6 +40,7 @@ public class Menu {
         Label start = new Label();
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
+        start.setId("label_button");
         menuGroup.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             GameView gameView = GameView.getInstance();
@@ -63,6 +64,7 @@ public class Menu {
         Label load = new Label();
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
+        load.setId("label_button");
         menuGroup.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
@@ -87,6 +89,7 @@ public class Menu {
         Label info = new Label();
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.relocate(OFFSET_X, 300);
+        info.setId("label_button");
         menuGroup.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -105,6 +108,7 @@ public class Menu {
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.relocate(OFFSET_X, 400);
+        exit.setId("label_button");
         menuGroup.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 

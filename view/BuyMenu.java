@@ -121,6 +121,7 @@ public class BuyMenu {
         ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
         okImage.setFitHeight(60);
         okImage.setFitWidth(100);
+        ok.setId("label_button");
 
         ImageView cancelImage = new ImageView(new Image("file:textures/cancel.png"));
         cancelImage.setFitHeight(60);
@@ -130,6 +131,7 @@ public class BuyMenu {
         Label cancel = new Label();
         cancel.relocate(BASE_X + 110, 10);
         cancel.setGraphic(cancelImage);
+        cancel.setId("label_button");
 
         buyGroup.getChildren().addAll(ok, cancel);
 
@@ -170,13 +172,17 @@ public class BuyMenu {
             Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice() + " (" + Entity.getNewEntity(type).getSize() + ")");
             price.relocate(baseX + 70, baseY + 10);
 
-            ImageView buyOne = new ImageView(one);
-            buyOne.setFitWidth(WIDTH);
-            buyOne.setFitHeight(HEIGHT);
-
+            ImageView buyOneImage = new ImageView(one);
+            buyOneImage.setFitWidth(WIDTH);
+            buyOneImage.setFitHeight(HEIGHT);
+            Label buyOne = new Label();
+            buyOne.setId("label_button");
             buyOne.relocate(baseX + 150, baseY);
+            buyOne.setGraphic(buyOneImage);
 
             buyGroup.getChildren().addAll(imageView, price, buyOne);
+
+
 
             buyOne.setOnMouseClicked(event -> {
                 if (Game.getInstance().getHelicopter().getCurrentCapacity() >= Entity.getNewEntity(type).getSize()) {
