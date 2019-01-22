@@ -1,18 +1,29 @@
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 
 public class EventHandlers {
 
     static View view;
 
+    static private Media sound = new Media(new File("sounds/alert.mp3").toURI().toString());
+    static private MediaPlayer mediaPlayer = new MediaPlayer(sound);
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
+    static void alert(){
+        mediaPlayer.stop();
+        mediaPlayer.play();
+    }
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
             if (entity instanceof WildAnimal) {
                 Game.getInstance().cage(entity.getCell().getX(), entity.getCell().getY());
+
             } else if (entity instanceof Item) {
                 Game.getInstance().pickUp(entity.getCell().getX(), entity.getCell().getY());
             }
@@ -27,6 +38,7 @@ public class EventHandlers {
                         Game.getInstance().startWorkshop(workshop.getName());
                         GameView.getInstance().getWorkshop(workshop).play();
                     } catch (Exception e) {
+                        alert();
                     }
                     break;
                 case SECONDARY:
@@ -36,6 +48,7 @@ public class EventHandlers {
 
                         GameView.getInstance().update(sprite, workshop);
                     } catch (Exception e) {
+                        alert();
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -48,7 +61,7 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     GameView.getInstance().pause();
-                     view.setRoot(new BuyMenu(view).getBuyGroup());
+                    view.setRoot(new BuyMenu(view).getBuyGroup());
                     break;
                 case SECONDARY:
                     try {
@@ -56,6 +69,7 @@ public class EventHandlers {
                         SpriteAnimation sprite = GameView.getInstance().getHelicopter();
                         GameView.getInstance().update(sprite, helicopter);
                     } catch (Exception e) {
+                        alert();
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -77,6 +91,7 @@ public class EventHandlers {
                         SpriteAnimation sprite = GameView.getInstance().getTruck();
                         GameView.getInstance().update(sprite, truck);
                     } catch (Exception e) {
+                        alert();
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -96,10 +111,14 @@ public class EventHandlers {
                     case SECONDARY:
                         try {
                             Game.getInstance().upgrade("warehouse");
-                            /// TODO      GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
+                            SpriteAnimation sprite = GameView.getInstance().getWarehouse();
+                            GameView.getInstance().update(sprite, warehouse);
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
+                            alert();;
                         }
+
+
                         break;
                 }
             }
@@ -115,6 +134,7 @@ public class EventHandlers {
                         try {
                             Game.getInstance().well();
                         } catch (Exception e) {
+                            alert();
                             System.err.println(e.getMessage());
                         }
 
@@ -129,6 +149,7 @@ public class EventHandlers {
                             GameView.getInstance().getRoot().getChildren().add(sprite.getImageView());
                             */
                         } catch (Exception e) {
+                            alert();
                             System.err.println(e.getMessage());
                         }
                         break;

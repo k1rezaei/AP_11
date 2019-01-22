@@ -8,9 +8,11 @@ public class WildAnimal extends Animal {
         if (type.equalsIgnoreCase("bear")) {
             sellPrice = 2000;
             speed = 4;
+            size = 10;
         } else if (type.equalsIgnoreCase("lion")) {
             sellPrice = 3000;
             speed = 5;
+            size = 7;
         }
     }
 

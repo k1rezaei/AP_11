@@ -27,6 +27,10 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+
+
+
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
