@@ -90,10 +90,6 @@ public class GameView {
         return gameView;
     }
 
-    public SpriteAnimation getWarehouse() {
-        return warehouse;
-    }
-
     public void pause() {
         paused = true;
         game.stop();
@@ -104,41 +100,9 @@ public class GameView {
         game.start();
     }
 
-    public void updateWarehouse() {
-        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
-        root.getChildren().remove(stored);
-        stored.getChildren().clear();
-
-        int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
-        stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
-        stored.setMaxHeight(80);
-        stored.setMaxWidth(120);
-        int cur = 0;
-        int cnt = 0;
-        for (Map.Entry<String, Integer> pair : storables.entrySet()) {
-            Entity entity = Entity.getNewEntity(pair.getKey());
-            cur += entity.getSize() * pair.getValue();
-            while (cur * (WAREHOUSE_CNT_X * WAREHOUSE_CNT_Y) > cnt * (Game.getInstance().getWarehouse().getMaximumCapacity())) {
-                cnt++;
-                ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
-                imageView.setFitHeight(70 / WAREHOUSE_CNT_Y);
-                imageView.setFitWidth(100 / WAREHOUSE_CNT_X);
-                Label label = new Label();
-                label.setStyle("-fx-border-color: white;"
-                        + "-fx-border-style:dashed;"
-                        + "-fx-background-color: black;");
-                label.setOpacity(0.5);
-                label.setGraphic(imageView);
-                label.setMaxHeight(70 / WAREHOUSE_CNT_Y);
-
-                stored.getChildren().add(label);
-            }
-        }
-        root.getChildren().add(stored);
-    }
-
     public void runGame() {
-
+        workshops.clear();
+        sprites.clear();
         initializeNodes();
 
         game = new AnimationTimer() {
@@ -152,18 +116,9 @@ public class GameView {
                     //TODO ye chiz behtar az 2 khat payin bezanim
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
-
                     updateWarehouse();
-
-                    if (Game.getInstance().getTruck().getRemainingTime() != 0) {
-                        truck.getImageView().setVisible(false);
-                    } else truck.getImageView().setVisible(true);
-
-                    if (Game.getInstance().getHelicopter().getRemainingTime() != 0) {
-                        helicopter.getImageView().setVisible(false);
-                    } else helicopter.getImageView().setVisible(true);
-
-
+                    truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime()==0);
+                    helicopter.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime()==0);
                     lastTime = now;
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
@@ -494,18 +449,55 @@ public class GameView {
         root.getChildren().add(sprite.getImageView());
     }
 
+    public void updateWarehouse() {
+        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
+        root.getChildren().remove(stored);
+        stored.getChildren().clear();
+
+        int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
+        stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
+        stored.setMaxHeight(80);
+        stored.setMaxWidth(120);
+        int cur = 0;
+        int cnt = 0;
+        for (Map.Entry<String, Integer> pair : storables.entrySet()) {
+            Entity entity = Entity.getNewEntity(pair.getKey());
+            cur += entity.getSize() * pair.getValue();
+            while (cur * (WAREHOUSE_CNT_X * WAREHOUSE_CNT_Y) > cnt * (Game.getInstance().getWarehouse().getMaximumCapacity())) {
+                cnt++;
+                ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
+                imageView.setFitHeight(70 / WAREHOUSE_CNT_Y);
+                imageView.setFitWidth(100 / WAREHOUSE_CNT_X);
+                Label label = new Label();
+                label.setStyle("-fx-border-color: white;"
+                        + "-fx-border-style:dashed;"
+                        + "-fx-background-color: black;");
+                label.setOpacity(0.5);
+                label.setGraphic(imageView);
+                label.setMaxHeight(70 / WAREHOUSE_CNT_Y);
+
+                stored.getChildren().add(label);
+            }
+        }
+        root.getChildren().add(stored);
+    }
+
     public void update(SpriteAnimation sprite, Upgradable upgradable) {
         root.getChildren().remove(sprite.getImageView());
         sprite.setState(upgradable.getLevel());
         root.getChildren().add(sprite.getImageView());
     }
 
+    public Group getRoot() {
+        return root;
+    }
+
     public SpriteAnimation getWorkshop(Workshop workshop) {
         return workshops.get(workshop);
     }
 
-    public Group getRoot() {
-        return root;
+    public SpriteAnimation getWarehouse() {
+        return warehouse;
     }
 
     public SpriteAnimation getWell() {

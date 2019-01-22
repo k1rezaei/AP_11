@@ -1,48 +1,39 @@
-import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ChoiceDialog;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class Menu {
+    static int OFFSET_X = 320;
     private View view;
     private Group menuGroup = new Group();
-    static int OFFSET_X = 320;
 
-    {
+    Menu(View view) {
+        initializeMenu();
+        this.view = view;
+    }
 
-
+    private void initializeMenu() {
         VBox vBox = new VBox();
-
         vBox.setAlignment(Pos.CENTER);
         vBox.setPrefWidth(800);
         vBox.setPrefHeight(600);
         menuGroup.getChildren().add(vBox);
-
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
         menuGroup.getChildren().add(background);
-
-
         setStart();
-
         setLoad();
-
         setInfo();
-
         setExit();
-
     }
 
     private void setStart() {
@@ -52,7 +43,6 @@ public class Menu {
         menuGroup.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             GameView gameView = GameView.getInstance();
-
             List<String> choices = new ArrayList<>();
             choices.add("level0");
             choices.add("level1");
@@ -80,9 +70,8 @@ public class Menu {
                 GameView gameView = GameView.getInstance();
                 for (Workshop workshop : Game.getInstance().getWorkshops())
                     System.out.println(workshop.getName() + "," + workshop.getLevel());
-                gameView.initGame();
+                gameView.runGame();
                 view.setRoot(gameView.getRoot());
-
             } catch (Exception e) {
                 e.printStackTrace();
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -129,10 +118,6 @@ public class Menu {
                 view.close();
             }
         });
-    }
-
-    Menu(View view) {
-        this.view = view;
     }
 
     Group getRoot() {
