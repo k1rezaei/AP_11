@@ -1,5 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -41,6 +42,25 @@ public class SellMenu {
 
     HashMap<String, Integer> truck = new HashMap<>();
 
+    void setCapAndMoney(){
+
+        Label cap = new Label("Capacity : " + Game.getInstance().getTruck().getCurrentCapacity());
+        Label money = new Label("Money : " + Game.getInstance().getTruck().getResultMoneyWithoutClear());
+
+
+        cap.setMinSize(50,HEIGHT);
+        cap.setFont(Font.font(20));
+        cap.setAlignment(Pos.CENTER);
+        cap.relocate(600,20);
+
+        money.setMinSize(50,HEIGHT);
+        money.setFont(Font.font(20));
+        money.setAlignment(Pos.CENTER);
+        money.relocate(600,0);
+
+        sellGroup.getChildren().add(cap);
+        sellGroup.getChildren().add(money);
+    }
 
     void update() {
         sellGroup.getChildren().clear();
@@ -50,12 +70,7 @@ public class SellMenu {
         bg.setFitHeight(600);
         sellGroup.getChildren().add(bg);
 
-        Label cap = new Label("Capacity : " + Game.getInstance().getTruck().getCurrentCapacity());
-        Label money = new Label("Money : " + Game.getInstance().getTruck().getResultMoneyWithoutClear());
-        sellGroup.getChildren().add(cap);
-        money.relocate(300,10);
-        cap.relocate(300,30);
-        sellGroup.getChildren().add(money);
+        setCapAndMoney();
 
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
 
@@ -93,18 +108,7 @@ public class SellMenu {
             public void handle(MouseEvent event) {
                 try {
                     Game.getInstance().go(Game.getInstance().getTruck());
-                    GameView.getInstance().getTruck().getImageView().setVisible(false);
-                    new AnimationTimer() {
-                        @Override
-                        public void handle(long now) {
-                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
-                                GameView.getInstance().getTruck().getImageView().setVisible(true);
-                                stop();
-                            }
-                        }
-                    }.start();
                 }catch (Exception e){
-
                 }
                 truck.clear();
                 GameView.getInstance().resume();
@@ -141,9 +145,11 @@ public class SellMenu {
 
            // price.setTextFill(Color.LIGHTGREEN);
 
+            ImageView so = new ImageView(one); so.setFitHeight(30); so.setFitWidth(25);
+            Label sellOne = new Label(); sellOne.setGraphic(so);
 
-            ImageView sellOne = new ImageView(one); sellOne.setFitHeight(30); sellOne.setFitWidth(25);
-            ImageView sellAll = new ImageView(all); sellAll.setFitHeight(30); sellAll.setFitWidth(25);
+            ImageView sa = new ImageView(all); sa.setFitHeight(30); sa.setFitWidth(25);
+            Label sellAll = new Label(); sellAll.setGraphic(sa);
 
             int baseX = numberOfItems / NUM_IN_ROW * DIS_X + BASE_X;
             int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;

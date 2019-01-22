@@ -1,15 +1,25 @@
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 
 public class EventHandlers {
 
     static View view;
 
+    static private Media sound = new Media(new File("sounds/alert.mp3").toURI().toString());
+    static private MediaPlayer mediaPlayer = new MediaPlayer(sound);
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
+    static void alert(){
+        mediaPlayer.stop();
+        mediaPlayer.play();
+    }
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
             if(event.getButton()== MouseButton.PRIMARY) {
@@ -27,9 +37,11 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     try {
+                        System.out.println("HELLO");
                         Game.getInstance().startWorkshop(workshop.getName());
                         GameView.getInstance().getWorkshop(workshop).play();
                     } catch (Exception e) {
+                        alert();
                     }
                     break;
                 case SECONDARY:
@@ -39,6 +51,7 @@ public class EventHandlers {
 
                         GameView.getInstance().update(sprite, workshop);
                     } catch (Exception e) {
+                        alert();
                         System.out.println(e.getMessage());
                     }
                     break;
@@ -59,6 +72,7 @@ public class EventHandlers {
                         SpriteAnimation sprite = GameView.getInstance().getHelicopter();
                         GameView.getInstance().update(sprite, helicopter);
                     } catch (Exception e) {
+                        alert();
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -80,6 +94,7 @@ public class EventHandlers {
                         SpriteAnimation sprite = GameView.getInstance().getTruck();
                         GameView.getInstance().update(sprite, truck);
                     } catch (Exception e) {
+                        alert();
                         System.err.println(e.getMessage());
                     }
                     break;
@@ -88,20 +103,27 @@ public class EventHandlers {
     }
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
-        return event -> {
-            switch (event.getButton()) {
-                case PRIMARY:
-                    GameView.getInstance().pause();
-                    view.setRoot(new SellMenu(view).getSellGroup());
-                    break;
-                case SECONDARY:
-                    try {
-                        Game.getInstance().upgrade("warehouse");
-                        //TODO GameView.update(GameView.getWarehouse,warehouse);
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                    }
-                    break;
+        return new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                switch (event.getButton()) {
+                    case PRIMARY:
+                        GameView.getInstance().pause();
+                        view.setRoot(new SellMenu(view).getSellGroup());
+                        break;
+                    case SECONDARY:
+                        try {
+                            Game.getInstance().upgrade("warehouse");
+                            SpriteAnimation sprite = GameView.getInstance().getWarehouse();
+                            GameView.getInstance().update(sprite, warehouse);
+                        } catch (Exception e) {
+                            System.err.println(e.getMessage());
+                            alert();;
+                        }
+
+
+                        break;
+                }
             }
         };
     }

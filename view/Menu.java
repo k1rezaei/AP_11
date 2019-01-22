@@ -80,7 +80,7 @@ public class Menu {
                 GameView gameView = GameView.getInstance();
                 for (Workshop workshop : Game.getInstance().getWorkshops())
                     System.out.println(workshop.getName() + "," + workshop.getLevel());
-                gameView.initGame(Game.getInstance().getLevel());
+                gameView.initGame();
                 view.setRoot(gameView.getRoot());
 
             } catch (Exception e) {
@@ -106,7 +106,8 @@ public class Menu {
             alert.setContentText("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
                     "Mohammad Mahdavi\n" +
-                    "Keivan Rezaei");
+                    "Keivan Rezaei\n" +
+                    "Music : Hope Prevails (By Jesper Kyd)");
             alert.showAndWait();
         });
     }

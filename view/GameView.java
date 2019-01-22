@@ -1,25 +1,25 @@
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 
 public class GameView {
     private static final GameView gameView = new GameView();
-    private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
     private static final int TRUCK_X = 200;
@@ -33,6 +33,34 @@ public class GameView {
     private static final int BUY_ANIMAL_Y = 20;
     private static final int BUY_ANIMAL_BASE_X = 20;
     private static final int BUY_ANIMAL_X_DIFF = 45;
+    private static final int GOALS_WIDTH = 70;
+    private static final int GOALS_HEIGHT = 50;
+    private static final int GOALS_X = 720;
+    private static final int GOALS_Y = 550;
+    private static final int FF_HEIGHT = 50;
+    private static final int FF_WIDTH = 100;
+    private static final int FF_X = 450;
+    private static final int FF_Y = 15;
+    private static final int SAVE_X = 550;
+    private static final int SAVE_Y = 15;
+    private static final int EXIT_X = 10;
+    private static final int EXIT_Y = 550;
+    private static final int MONEY_X = 700;
+    private static final int MONEY_Y = 20;
+
+    private static final int MENU_X = 90;
+    private static final int MENU_Y = 550;
+    private static final int MENU_WODTH = 100;
+    private static final int MENU_HEIGHT = 50;
+
+    private static final int WAREHOUSE_X = 360;
+    private static final int WAREHOUSE_Y = 460;
+    private static final int WAREHOUSE_CNT_X = 8;
+    private static final int WAREHOUSE_CNT_Y = 4;
+    private static final double SOUND_PROP = 0.01;
+
+    private Group root = new Group();
+    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
     private static final int BASE_Y = 130;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
@@ -42,17 +70,18 @@ public class GameView {
     private static boolean paused = false;
     private static AnimationTimer game;
 
+
     static {
         REFRESHER.setVisible(false);
     }
 
-    private Group root = new Group();
     private Group entityRoot = new Group();
-    private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private View view;
     private Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
     private SpriteAnimation well;
+
+    private SpriteAnimation warehouse;
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
     private Label moneyLabel;
@@ -64,6 +93,11 @@ public class GameView {
         return gameView;
     }
 
+    public SpriteAnimation getWarehouse() {
+        return warehouse;
+    }
+
+
     public void pause() {
         paused = true;
         game.stop();
@@ -74,26 +108,43 @@ public class GameView {
         game.start();
     }
 
-    public void initGame(Level level) {
+    public void initGame() {
         runGame();
     }
 
-    public boolean initGame() {
-        List<String> choices = new ArrayList<>();
-        choices.add("level0");
-        choices.add("level1");
-        ChoiceDialog<String> dialog = new ChoiceDialog<>("level0", choices);
-        dialog.setTitle("Choose Level");
-        dialog.setHeaderText(null);
-        dialog.setContentText(null);
-        Optional<String> result = dialog.showAndWait();
-        if (result.isPresent()) {
-            GAME.runMap(GAME.getLevel(result.get()));
-            runGame();
-        } else {
-            return false;
+    FlowPane stored = new FlowPane();
+
+    public void updateWarehouse() {
+        Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
+        root.getChildren().remove(stored);
+        stored.getChildren().clear();
+
+        int offset_y = Game.getInstance().getWarehouse().getLevel() * 5;
+        stored.relocate(WAREHOUSE_X + 30, offset_y + WAREHOUSE_Y + 40);
+        stored.setMaxHeight(80);
+        stored.setMaxWidth(120);
+        int cur = 0;
+        int cnt = 0;
+        for (Map.Entry<String, Integer> pair : storables.entrySet()) {
+            Entity entity = Entity.getNewEntity(pair.getKey());
+            cur += entity.getSize() * pair.getValue();
+            while (cur * (WAREHOUSE_CNT_X * WAREHOUSE_CNT_Y) > cnt * (Game.getInstance().getWarehouse().getMaximumCapacity())) {
+                cnt++;
+                ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
+                imageView.setFitHeight(70 / WAREHOUSE_CNT_Y);
+                imageView.setFitWidth(100 / WAREHOUSE_CNT_X);
+                Label label = new Label();
+                label.setStyle("-fx-border-color: white;"
+                        + "-fx-border-style:dashed;"
+                        + "-fx-background-color: black;");
+                label.setOpacity(0.5);
+                label.setGraphic(imageView);
+                label.setMaxHeight(70 / WAREHOUSE_CNT_Y);
+
+                stored.getChildren().add(label);
+            }
         }
-        return true;
+        root.getChildren().add(stored);
     }
 
     public void runGame() {
@@ -112,17 +163,33 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
+                    updateWarehouse();
+
+                    if (Game.getInstance().getTruck().getRemainingTime() != 0) {
+                        truck.getImageView().setVisible(false);
+                    } else truck.getImageView().setVisible(true);
+
+                    if (Game.getInstance().getHelicopter().getRemainingTime() != 0) {
+                        helicopter.getImageView().setVisible(false);
+                    } else helicopter.getImageView().setVisible(true);
+
+
                     lastTime = now;
-                    GAME.turn();
+                    Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.getCell() != null) {
+                            if (entity instanceof Animal) {
+                                if (Math.random() < SOUND_PROP) {
+                                    Sounds.play(entity.getType() + "_voice");
+                                }
+                            }
                             if (!sprites.containsKey(entity)) {
                                 SpriteAnimation newSprite = Images.getSpriteAnimation(entity);
                                 sprites.put(entity, newSprite);
                                 newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
                                 newSprite.play();
                                 entityRoot.getChildren().add(newSprite.getImageView());
-                                if(entity.getType().equalsIgnoreCase("plant")){
+                                if (entity.getType().equalsIgnoreCase("plant")) {
                                     newSprite.getImageView().toBack();
                                 }
                             }
@@ -135,6 +202,7 @@ public class GameView {
                             sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
                         } else {
                             if (!sprites.containsKey(entity)) continue;
+                            if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
                             SpriteAnimation sprite = sprites.get(entity);
                             sprite.stop();
                             sprite.getImageView().setVisible(false);
@@ -142,15 +210,15 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
-                    for (Workshop workshop : GAME.getWorkshops()) {
+                    for (Workshop workshop : Game.getInstance().getWorkshops()) {
                         if (workshop.getRemainTime() == 0) {
                             getWorkshop(workshop).shutDown();
                         }
                     }
-                    GAME.getMap().relax();
-                    filled.setHeight(50 - 50 * (1.0 * GAME.getWell().getCurrentAmount() / GAME.getWell().getCapacity()));
-                    moneyLabel.setText(Integer.toString(GAME.getMoney()));
-                    if (GAME.checkLevel()) {
+                    Game.getInstance().getMap().relax();
+                    filled.setHeight(50 - 50 * (1.0 * Game.getInstance().getWell().getCurrentAmount() / Game.getInstance().getWell().getCapacity()));
+                    moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
+                    if (Game.getInstance().checkLevel()) {
                         this.stop();
                         //TODO go back to menu
                     }
@@ -166,12 +234,45 @@ public class GameView {
         setUpMoneyLabel();
         setUpWell();
         setUpTruck();
+        setUpWarehouse();
         setUpWorkshops();
         setUpHelicopter();
         setUpSaveButton();
         setUpFastForward();
         setUpExitButton();
+        setUpGoals();
+        setUpMenuButton();
         root.getChildren().add(entityRoot);
+    }
+
+    private void setUpGoals() {
+        Level level = Game.getInstance().getLevel();
+        Label goals = new Label();
+        ImageView goal = new ImageView(new Image("file:textures/goals.png"));
+        goal.setFitWidth(GOALS_WIDTH);
+        goal.setFitHeight(GOALS_HEIGHT);
+        goals.setGraphic(goal);
+        goals.relocate(GOALS_X, GOALS_Y);
+        root.getChildren().add(goals);
+
+        goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Goals");
+                alert.setContentText(level.toString());
+                alert.setHeaderText(null);
+                alert.show();
+            }
+        });
+    }
+
+    private void setUpWarehouse() {
+        warehouse = Images.getSpriteAnimation("warehouse");
+        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        warehouse.setState(Game.getInstance().getWarehouse().getLevel());
+        fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
+        root.getChildren().add(stored);
     }
 
     private void setUpHelicopter() {
@@ -185,16 +286,16 @@ public class GameView {
         Label ff = new Label();
 
         ImageView ff1 = new ImageView(new Image("file:textures/fastForward/fastForward1.png"));
-        ff1.setFitHeight(50);
-        ff1.setFitWidth(100);
+        ff1.setFitHeight(FF_HEIGHT);
+        ff1.setFitWidth(FF_WIDTH);
 
 
         ImageView ff2 = new ImageView(new Image("file:textures/fastForward/fastForward2.png"));
-        ff2.setFitHeight(50);
-        ff2.setFitWidth(100);
+        ff2.setFitHeight(FF_HEIGHT);
+        ff2.setFitWidth(FF_WIDTH);
 
         ff.setGraphic(ff1);
-        ff.relocate(450, 15);
+        ff.relocate(FF_X, FF_Y);
         ff.setOnMouseClicked(event -> {
             if (SPEED < 1 + EPS) {
                 SPEED = 2;
@@ -210,7 +311,7 @@ public class GameView {
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
-        save.relocate(550, 15);
+        save.relocate(SAVE_X, SAVE_Y);
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
@@ -233,7 +334,7 @@ public class GameView {
 
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
-        exit.relocate(10, 550);
+        exit.relocate(EXIT_X, EXIT_Y);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.NONE);
@@ -266,9 +367,47 @@ public class GameView {
         root.getChildren().add(exit);
     }
 
+    private void setUpMenuButton() {
+
+        ImageView mn = new ImageView(new Image("file:textures/menu.png"));
+        mn.setFitWidth(MENU_WODTH);
+        mn.setFitHeight(MENU_HEIGHT);
+        Label menu = new Label();
+        menu.setGraphic(mn);
+        menu.relocate(MENU_X, MENU_Y);
+
+        menu.setOnMouseClicked(event -> {
+
+            Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Back To Menu");
+            pause();
+
+            ButtonType buttonTypeOne = new ButtonType("Save");
+            ButtonType buttonTypeTwo = new ButtonType("Do Not Save");
+            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
+
+            alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+
+            Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == buttonTypeOne) {
+                try {
+                    Game.getInstance().saveGame("SaveGame");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            root.getChildren().clear();
+            Menu backMenu = new Menu(view);
+            view.setRoot(backMenu.getRoot());
+
+        });
+        root.getChildren().add(menu);
+    }
+
     private void setUpWorkshops() {
-        for (int i = 0; i < GAME.getWorkshops().size(); i++) {
-            Workshop workshop = GAME.getWorkshops().get(i);
+        workshops.clear();
+        for (int i = 0; i < Game.getInstance().getWorkshops().size(); i++) {
+            Workshop workshop = Game.getInstance().getWorkshops().get(i);
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
@@ -308,7 +447,7 @@ public class GameView {
                 int y = (int) mouseEvent.getY();
                 try {
                     if (new Cell(x - BASE_X - 20, y - BASE_Y - 20).isInside()) {
-                        GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+                        Game.getInstance().addPlant(x - BASE_X - 20, y - BASE_Y - 20);
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -325,9 +464,9 @@ public class GameView {
             buyAnimal.setOnMouseClicked(mouseEvent -> {
                 try {
                     if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                        GAME.buyAnimal(animalName);
+                        Game.getInstance().buyAnimal(animalName);
                     else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
-                        GAME.upgrade("cat");
+                        Game.getInstance().upgrade("cat");
                     }
                 } catch (Exception e) {
                     if (e.getMessage() != null) {
@@ -346,10 +485,10 @@ public class GameView {
     }
 
     private void setUpMoneyLabel() {
-        moneyLabel = new Label(Integer.toString(GAME.getMoney()));
+        moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
         moneyLabel.setTextFill(Color.GOLD);
         moneyLabel.setFont(Font.font(30));
-        moneyLabel.relocate(700, 20);
+        moneyLabel.relocate(MONEY_X, MONEY_Y);
         root.getChildren().add(moneyLabel);
     }
 

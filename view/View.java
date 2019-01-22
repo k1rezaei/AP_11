@@ -2,8 +2,11 @@
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
@@ -24,6 +27,10 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
+
+
+
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
@@ -32,8 +39,10 @@ public class View extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
+        Sounds.init();
         Game.getInstance().loadCustom("workshops");
         GameView.getInstance().setView(this);
+        scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"),20,20));
         primaryStage.show();
 
       //  mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
