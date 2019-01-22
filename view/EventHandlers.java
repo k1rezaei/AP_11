@@ -24,6 +24,7 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     try {
+                        System.out.println("HELLO");
                         Game.getInstance().startWorkshop(workshop.getName());
                         GameView.getInstance().getWorkshop(workshop).play();
                     } catch (Exception e) {
