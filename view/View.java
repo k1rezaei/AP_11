@@ -33,8 +33,8 @@ public class View extends Application {
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
         Game.getInstance().loadCustom("workshops");
+        GameView.getInstance().setView(this);
         primaryStage.show();
-
 
       //  mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
       //  mediaPlayer.play();

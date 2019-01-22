@@ -96,7 +96,7 @@ public class GameView {
         return true;
     }
 
-    private void runGame() {
+    public void runGame() {
 
         initializeNodes();
 

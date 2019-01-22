@@ -1,4 +1,5 @@
 import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
 public class EventHandlers {
@@ -11,10 +12,12 @@ public class EventHandlers {
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
-            if (entity instanceof WildAnimal) {
-                Game.getInstance().cage(entity.getCell().getX(), entity.getCell().getY());
-            } else if (entity instanceof Item) {
-                Game.getInstance().pickUp(entity.getCell().getX(), entity.getCell().getY());
+            if(event.getButton()== MouseButton.PRIMARY) {
+                if (entity instanceof WildAnimal) {
+                    Game.getInstance().cage(entity.getCell().getX(), entity.getCell().getY());
+                } else if (entity instanceof Item) {
+                    Game.getInstance().pickUp(entity.getCell().getX(), entity.getCell().getY());
+                }
             }
         };
     }
@@ -85,50 +88,43 @@ public class EventHandlers {
     }
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                switch (event.getButton()) {
-                    case PRIMARY:
-                        GameView.getInstance().pause();
-                        view.setRoot(new SellMenu(view).getSellGroup());
-                        break;
-                    case SECONDARY:
-                        try {
-                            Game.getInstance().upgrade("warehouse");
-                            /// TODO      GameView.getInstance().getWareHouse().setState(warehouse.getLevel());
-                        } catch (Exception e) {
-                            System.err.println(e.getMessage());
-                        }
-                        break;
-                }
+        return event -> {
+            switch (event.getButton()) {
+                case PRIMARY:
+                    GameView.getInstance().pause();
+                    view.setRoot(new SellMenu(view).getSellGroup());
+                    break;
+                case SECONDARY:
+                    try {
+                        Game.getInstance().upgrade("warehouse");
+                        //TODO GameView.update(GameView.getWarehouse,warehouse);
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
             }
         };
     }
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Well well) {
-        return new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                switch (event.getButton()) {
-                    case PRIMARY:
-                        try {
-                            Game.getInstance().well();
-                        } catch (Exception e) {
-                            System.err.println(e.getMessage());
-                        }
-
-                        break;
-                    case SECONDARY:
-                        try {
-                            Game.getInstance().upgrade("well");
-                            SpriteAnimation sprite = GameView.getInstance().getWell();
-                            GameView.getInstance().update(sprite, well);
-                        } catch (Exception e) {
-                            System.err.println(e.getMessage());
-                        }
-                        break;
-                }
+        return event -> {
+            switch (event.getButton()) {
+                case PRIMARY:
+                    try {
+                        Game.getInstance().well();
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
+                case SECONDARY:
+                    try {
+                        Game.getInstance().upgrade("well");
+                        SpriteAnimation sprite = GameView.getInstance().getWell();
+                        GameView.getInstance().update(sprite, well);
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                    }
+                    break;
             }
         };
     }
