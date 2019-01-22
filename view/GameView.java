@@ -46,6 +46,10 @@ public class GameView {
     public static final int EXIT_Y = 550;
     public static final int MONEY_X = 700;
     public static final int MONEY_Y = 20;
+    public static final int MENU_X = 90;
+    public static final int MENU_Y = 550;
+    public static final int MENU_WODTH = 100;
+    public static final int MENU_HEIGHT = 50;
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
@@ -324,9 +328,10 @@ public class GameView {
 
     private void setUpMenuButton() {
 
+        ImageView mn = new ImageView(new Image("file:textures/menu.png")); mn.setFitWidth(MENU_WODTH); mn.setFitHeight(MENU_HEIGHT);
         Label menu = new Label();
-        menu.setGraphic(new ImageView(new Image("file:textures/exit.png")));
-        menu.relocate(70, 550);
+        menu.setGraphic(mn);
+        menu.relocate(MENU_X, MENU_Y);
 
         menu.setOnMouseClicked(event -> {
 
