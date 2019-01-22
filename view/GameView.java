@@ -118,7 +118,7 @@ public class GameView {
                     root.getChildren().remove(REFRESHER);
                     updateWarehouse();
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime()==0);
-                    helicopter.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime()==0);
+                    helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime()==0);
                     lastTime = now;
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
