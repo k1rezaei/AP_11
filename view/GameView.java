@@ -187,7 +187,10 @@ public class GameView {
 
     private void setUpGoals() {
         Level level = Game.getInstance().getLevel();
-        Button goals = new Button("Goals");
+        Label goals = new Label();
+        ImageView goal = new ImageView(new Image("file:textures/goals.png"));
+        goal.setFitWidth(70); goal.setFitHeight(50);
+        goals.setGraphic(goal);
         goals.relocate(720, 550);
         root.getChildren().add(goals);
 
