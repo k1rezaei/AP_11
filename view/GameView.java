@@ -155,6 +155,15 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
+                    if(Game.getInstance().getTruck().getRemainingTime() != 0){
+                        truck.getImageView().setVisible(false);
+                    }else truck.getImageView().setVisible(true);
+
+                    if(Game.getInstance().getHelicopter().getRemainingTime() != 0){
+                        helicopter.getImageView().setVisible(false);
+                    }else helicopter.getImageView().setVisible(true);
+
+
                     lastTime = now;
                     GAME.turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
