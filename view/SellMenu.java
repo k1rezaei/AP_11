@@ -61,7 +61,7 @@ public class SellMenu {
 
 
         Label ok = new Label(); ok.relocate(BASE_X, 10);
-        ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
+        ImageView okImage = new ImageView(new Image("file:textures/sell.png"));
         okImage.setFitHeight(60);
         okImage.setFitWidth(100);
 
@@ -187,8 +187,10 @@ public class SellMenu {
                 public void handle(MouseEvent event) {
 
                     int k = cnt;
-                    if(k >= Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize())
+                    if(Entity.getNewEntity(pair.getKey()).getSize() == 0) k = cnt;
+                    else if(k >= Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize())
                         k = Game.getInstance().getTruck().getCurrentCapacity()/Entity.getNewEntity(pair.getKey()).getSize();
+
                     if(k == 0){
                         Alert alert = new Alert(Alert.AlertType.ERROR);
                         alert.setContentText("Not Enough Space");
