@@ -145,9 +145,11 @@ public class SellMenu {
 
            // price.setTextFill(Color.LIGHTGREEN);
 
+            ImageView so = new ImageView(one); so.setFitHeight(30); so.setFitWidth(25);
+            Label sellOne = new Label(); sellOne.setGraphic(so);
 
-            ImageView sellOne = new ImageView(one); sellOne.setFitHeight(30); sellOne.setFitWidth(25);
-            ImageView sellAll = new ImageView(all); sellAll.setFitHeight(30); sellAll.setFitWidth(25);
+            ImageView sa = new ImageView(all); sa.setFitHeight(30); sa.setFitWidth(25);
+            Label sellAll = new Label(); sellAll.setGraphic(sa);
 
             int baseX = numberOfItems / NUM_IN_ROW * DIS_X + BASE_X;
             int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
