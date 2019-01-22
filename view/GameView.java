@@ -25,7 +25,7 @@ import java.util.Optional;
 
 public class GameView {
     private static final GameView gameView = new GameView();
-    private static final Game GAME = Game.getInstance();
+    //private static final Game GAME = Game.getInstance();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
     private static final int TRUCK_X = 200;
@@ -61,7 +61,7 @@ public class GameView {
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private static final int BASE_X = 180;
-    private static final int BASE_Y = 130;
+    private static final int  BASE_Y = 130;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static double SPEED = 1;
     private static final double EPS = 0.0001;
@@ -108,14 +108,14 @@ public class GameView {
     }
 
     public void initGame(Level level) {
-        GAME.loadCustom("workshops");
+        Game.getInstance().loadCustom("workshops");
         Images.init();
         Sounds.init();
         runGame(level);
     }
 
     public boolean initGame() {
-        GAME.loadCustom("workshops");
+        Game.getInstance().loadCustom("workshops");
         Images.init();
         Sounds.init();
 
@@ -128,7 +128,7 @@ public class GameView {
         dialog.setContentText(null);
         Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            runGame(GAME.getLevel(result.get()));
+            runGame(Game.getInstance().getLevel(result.get()));
         } else {
             return false;
         }
@@ -187,7 +187,7 @@ public class GameView {
 
     private void runGame(Level level) {
 
-        GAME.runMap(level);
+        Game.getInstance().runMap(level);
 
         setUpBackground();
         setUpBuyIcons();
@@ -201,7 +201,7 @@ public class GameView {
         setUpFastForward();
         setUpExitButton();
         setUpGoals();
-        //setUpMenuButton();
+        setUpMenuButton();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
@@ -227,7 +227,7 @@ public class GameView {
 
 
                     lastTime = now;
-                    GAME.turn();
+                    Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.getCell() != null) {
                             if(entity instanceof Animal){
@@ -259,15 +259,15 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
-                    for (Workshop workshop : GAME.getWorkshops()) {
+                    for (Workshop workshop : Game.getInstance().getWorkshops()) {
                         if (workshop.getRemainTime() == 0) {
                             getWorkshop(workshop).shutDown();
                         }
                     }
-                    GAME.getMap().relax();
-                    filled.setHeight(50 - 50 * (1.0 * GAME.getWell().getCurrentAmount() / GAME.getWell().getCapacity()));
-                    moneyLabel.setText(Integer.toString(GAME.getMoney()));
-                    if (GAME.checkLevel()) {
+                    Game.getInstance().getMap().relax();
+                    filled.setHeight(50 - 50 * (1.0 * Game.getInstance().getWell().getCurrentAmount() / Game.getInstance().getWell().getCapacity()));
+                    moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
+                    if (Game.getInstance().checkLevel()) {
                         this.stop();
                         //TODO go back to menu
                     }
@@ -425,6 +425,7 @@ public class GameView {
                     System.out.println(e.getMessage());
                 }
             }
+            root.getChildren().clear();
             Menu backMenu = new Menu(view);
             view.setRoot(backMenu.getRoot());
 
@@ -433,12 +434,14 @@ public class GameView {
     }
 
     private void setUpWorkshops() {
-        for (int i = 0; i < GAME.getWorkshops().size(); i++) {
-            Workshop workshop = GAME.getWorkshops().get(i);
+        workshops.clear();
+        for (int i = 0; i < Game.getInstance().getWorkshops().size(); i++) {
+            Workshop workshop = Game.getInstance().getWorkshops().get(i);
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
             sprite.setState(workshop.getLevel());
+            System.out.println("KIRE KHAR");
             if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
             else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
         }
@@ -474,7 +477,7 @@ public class GameView {
                 int y = (int) mouseEvent.getY();
                 try {
                     if (new Cell(x - BASE_X - 20, y - BASE_Y - 20).isInside()) {
-                        GAME.addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+                        Game.getInstance().addPlant(x - BASE_X - 20, y - BASE_Y - 20);
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -491,9 +494,9 @@ public class GameView {
             buyAnimal.setOnMouseClicked(mouseEvent -> {
                 try {
                     if (mouseEvent.getButton() == MouseButton.PRIMARY)
-                        GAME.buyAnimal(animalName);
+                        Game.getInstance().buyAnimal(animalName);
                     else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
-                        GAME.upgrade("cat");
+                        Game.getInstance().upgrade("cat");
                     }
                 } catch (Exception e) {
                     if (e.getMessage() != null) {
@@ -512,7 +515,7 @@ public class GameView {
     }
 
     private Label setUpMoneyLabel() {
-        Label moneyLabel = new Label(Integer.toString(GAME.getMoney()));
+        Label moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
         moneyLabel.setTextFill(Color.GOLD);
         moneyLabel.setFont(Font.font(30));
         moneyLabel.relocate(MONEY_X, MONEY_Y);
