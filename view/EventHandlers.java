@@ -22,13 +22,18 @@ public class EventHandlers {
     }
 
     static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Workshop workshop) {
-        return event -> {
-            GameView.getInstance().getFocus().add(workshop);
-        };
+        return event ->  GameView.getInstance().getFocus().add(workshop);
     }
 
     static EventHandler<MouseEvent> getOnMouseExitedEventHandler(Workshop workshop) {
         return event -> GameView.getInstance().getFocus().remove(workshop);
+    }
+
+    static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Vehicle vehicle) {
+        return event -> GameView.getInstance().getFocus().add(vehicle);
+    }
+    static EventHandler<MouseEvent> getOnMouseExitedEventHandler(Vehicle vehicle) {
+        return event -> GameView.getInstance().getFocus().remove(vehicle);
     }
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {

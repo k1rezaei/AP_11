@@ -66,6 +66,7 @@ public class GameView {
     private static boolean paused = false;
     private static AnimationTimer game;
     private static Image info = new Image("file:textures/info.png");
+    private Label truckInfo, helicopterInfo;
 
     static {
         REFRESHER.setVisible(false);
@@ -121,8 +122,13 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
                     updateWarehouse();
+
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
+                    truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
+
                     helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
+                    helicopterInfo.setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
+
                     lastTime = now;
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
@@ -228,13 +234,6 @@ public class GameView {
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
         root.getChildren().add(stored);
-    }
-
-    private void setUpHelicopter() {
-        helicopter = Images.getSpriteAnimation("helicopter");
-        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
-        helicopter.setState(Game.getInstance().getHelicopter().getLevel());
-        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
     }
 
     private void setUpFastForward() {
@@ -413,7 +412,41 @@ public class GameView {
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
         truck.setState(Game.getInstance().getTruck().getLevel());
         fixSprite(truck, TRUCK_X, TRUCK_Y);
+
+        ImageView img = new ImageView(info);
+        img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+
+        Label truckInfo = new Label();
+        truckInfo.setGraphic(img);
+        truckInfo.relocate(TRUCK_X - 10, TRUCK_Y);
+        truckInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getTruck()));
+        truckInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getTruck()));
+        root.getChildren().add(truckInfo);
+
+        this.truckInfo = truckInfo;
+
     }
+
+    private void setUpHelicopter() {
+        helicopter = Images.getSpriteAnimation("helicopter");
+        helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        helicopter.setState(Game.getInstance().getHelicopter().getLevel());
+        fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
+
+        ImageView img = new ImageView(info);
+        img.setFitWidth(INFO_LENGTH); img.setFitHeight(INFO_LENGTH);
+
+        Label heliopterInfo = new Label();
+        heliopterInfo.setGraphic(img);
+        heliopterInfo.relocate(HELICOPTER_X - 10, HELICOPTER_Y);
+
+        heliopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
+        heliopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));
+
+        root.getChildren().add(heliopterInfo);
+        this.helicopterInfo = heliopterInfo;
+    }
+
 
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
