@@ -132,7 +132,6 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
-                    updateWarehouse();
 
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
                     truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
