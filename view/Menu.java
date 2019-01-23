@@ -53,7 +53,7 @@ public class Menu {
             dialog.setContentText(null);
             Optional<String> result = dialog.showAndWait();
             result.ifPresent(s -> {
-                Game.getInstance().runMap(Game.getInstance().getLevel(s));
+                Game.runMap(Game.getLevel(s));
                 gameView.runGame();
                 view.setRoot(gameView.getRoot());
             });

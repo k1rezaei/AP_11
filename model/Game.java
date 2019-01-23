@@ -8,12 +8,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
-    public static final int PLANT_DISTANCE = 20;
+    private static final int PLANT_DISTANCE = 20;
     private static Game game = new Game();
     private static HashMap<String, Level> levels = new HashMap<>();
     private static ArrayList<Workshop> workshopTemplates = new ArrayList<>();
     private Map map = new Map();
-    private int money;
+    private int money = 0;
     private Level level;
     private ArrayList<Workshop> workshops = new ArrayList<>();
     private Helicopter helicopter = new Helicopter();
@@ -22,17 +22,15 @@ public class Game {
     private Warehouse warehouse = new Warehouse();
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Upgradable> upgradables;
-    private int currentTurn;
-    private int catLevel;
+    private int currentTurn = 0;
+    private int catLevel = 0;
 
     private Game() {
-
         vehicles = new ArrayList<>();
         upgradables = new ArrayList<>();
         vehicles.add(truck);
         vehicles.add(helicopter);
         upgradables.add(warehouse);
-        upgradables.addAll(workshops);
         upgradables.add(well);
         upgradables.addAll(vehicles);
     }
@@ -51,24 +49,12 @@ public class Game {
         Cat.setLevel(catLevel);
         this.currentTurn = save.getCurrentTurn();
         map = new Map();
-        for (FarmAnimal farmAnimal : save.getFarmAnimals()) {
-            map.addEntity(farmAnimal);
-        }
-        for (WildAnimal wildAnimal : save.getWildAnimals()) {
-            map.addEntity(wildAnimal);
-        }
-        for (Dog dog : save.getDogs()) {
-            map.addEntity(dog);
-        }
-        for (Cat cat : save.getCats()) {
-            map.addEntity(cat);
-        }
-        for (Item item : save.getItems()) {
-            map.addEntity(item);
-        }
-        for (Plant plant : save.getPlants()) {
-            map.addEntity(plant);
-        }
+        for (FarmAnimal farmAnimal : save.getFarmAnimals()) map.addEntity(farmAnimal);
+        for (WildAnimal wildAnimal : save.getWildAnimals()) map.addEntity(wildAnimal);
+        for (Dog dog : save.getDogs()) map.addEntity(dog);
+        for (Cat cat : save.getCats()) map.addEntity(cat);
+        for (Item item : save.getItems()) map.addEntity(item);
+        for (Plant plant : save.getPlants()) map.addEntity(plant);
         vehicles = new ArrayList<>();
         upgradables = new ArrayList<>();
         vehicles.add(truck);
@@ -176,15 +162,16 @@ public class Game {
         runMap(levels.get(mapName));
     }
 
-    public void runMap(Level level) {
-        this.level = level;
+    public static void runMap(Level level) {
+        game = new Game();
+        game.level = level;
         Cell.setN(level.getN());
         Cell.setM(level.getM());
-        this.money = level.getStartMoney();
+        game.money = level.getStartMoney();
         for (Workshop workshop : workshopTemplates) {
-            workshops.add(new Workshop(workshop));
+            game.workshops.add(new Workshop(workshop));
         }
-        upgradables.addAll(workshops);
+        game.upgradables.addAll(game.workshops);
     }
 
     public void saveGame(String command) throws IOException {
@@ -507,7 +494,7 @@ public class Game {
         return catLevel;
     }
 
-    public Level getLevel(String name) {
+    public static Level getLevel(String name) {
         return levels.get(name);
     }
 }

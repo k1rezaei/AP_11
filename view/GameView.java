@@ -1,6 +1,5 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -20,6 +19,8 @@ import java.util.Optional;
 
 
 public class GameView {
+    public static final int INFO_LENGTH = 20;
+    public static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
@@ -48,7 +49,7 @@ public class GameView {
     private static final int EXIT_Y = 550;
     private static final int MONEY_X = 700;
     private static final int MONEY_Y = 20;
-    private static final int MENU_X = 90;
+    private static final int MENU_X = 110;
     private static final int MENU_Y = 550;
     private static final int MENU_WODTH = 100;
     private static final int MENU_HEIGHT = 50;
@@ -62,21 +63,17 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
-    public static final int INFO_LENGTH = 20;
-    public static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static double SPEED = 1;
     private static boolean paused = false;
     private static AnimationTimer game;
     private static Image info = new Image("file:textures/info.png");
-    private Label truckInfo, helicopterInfo;
 
     static {
         REFRESHER.setVisible(false);
-
     }
 
-
-
+    private Label truckInfo;
+    private Label helicopterInfo;
     private FlowPane stored = new FlowPane();
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
@@ -91,7 +88,6 @@ public class GameView {
     private Label moneyLabel;
     private Focus focus;
 
-
     private GameView() {
     }
 
@@ -104,8 +100,6 @@ public class GameView {
         game.stop();
     }
 
-
-
     public void resume() {
         paused = false;
         game.start();
@@ -116,22 +110,25 @@ public class GameView {
     }
 
     public void runGame() {
+        root = new Group();
+        entityRoot = new Group();
         workshops.clear();
         sprites.clear();
         initializeNodes();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
-            private long lastTime;
             int cnt = 0;
+            private long lastTime;
+
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * SPEED)) {
+                    lastTime = now;
 
                     updateWarehouse();
 
-                    //TODO ye chiz behtar az 2 khat payin bezanim
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
@@ -143,9 +140,6 @@ public class GameView {
                     helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
                     helicopterInfo.setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
 
-
-
-                    lastTime = now;
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
                         if (entity.getCell() != null) {
@@ -206,11 +200,12 @@ public class GameView {
 
                         AnimationTimer animationTimer = new AnimationTimer() {
                             long last = -1;
+
                             @Override
                             public void handle(long now) {
-                                if(last == -1) last = now;
+                                if (last == -1) last = now;
                                 //System.out.println(last + " : " + now);
-                                if(now - last > (long)(3) * ONE_SECOND) {
+                                if (now - last > (long) (3) * ONE_SECOND) {
                                     Menu menu = new Menu(view);
                                     view.setRoot(menu.getRoot());
                                     //TODO fix Back to MENU.
@@ -225,6 +220,7 @@ public class GameView {
                 }
             }
         };
+        resume();
         game.start();
     }
 
@@ -461,17 +457,15 @@ public class GameView {
         fixSprite(truck, TRUCK_X, TRUCK_Y);
 
         ImageView img = new ImageView(info);
-        img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+        img.setFitHeight(INFO_LENGTH);
+        img.setFitWidth(INFO_LENGTH);
 
-        Label truckInfo = new Label();
+        truckInfo = new Label();
         truckInfo.setGraphic(img);
         truckInfo.relocate(TRUCK_X - 10, TRUCK_Y);
         truckInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getTruck()));
         truckInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getTruck()));
         root.getChildren().add(truckInfo);
-
-        this.truckInfo = truckInfo;
-
     }
 
     private void setUpHelicopter() {
@@ -481,17 +475,17 @@ public class GameView {
         fixSprite(helicopter, HELICOPTER_X, HELICOPTER_Y);
 
         ImageView img = new ImageView(info);
-        img.setFitWidth(INFO_LENGTH); img.setFitHeight(INFO_LENGTH);
+        img.setFitWidth(INFO_LENGTH);
+        img.setFitHeight(INFO_LENGTH);
 
-        Label heliopterInfo = new Label();
-        heliopterInfo.setGraphic(img);
-        heliopterInfo.relocate(HELICOPTER_X - 10, HELICOPTER_Y);
+        helicopterInfo = new Label();
+        helicopterInfo.setGraphic(img);
+        helicopterInfo.relocate(HELICOPTER_X - 10, HELICOPTER_Y);
 
-        heliopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
-        heliopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));
+        helicopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
+        helicopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));
 
-        root.getChildren().add(heliopterInfo);
-        this.helicopterInfo = heliopterInfo;
+        root.getChildren().add(helicopterInfo);
     }
 
 
@@ -509,7 +503,8 @@ public class GameView {
         root.getChildren().add(filled);
 
         ImageView img = new ImageView(info);
-        img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+        img.setFitHeight(INFO_LENGTH);
+        img.setFitWidth(INFO_LENGTH);
 
         Label wellInfo = new Label();
         wellInfo.setGraphic(img);
@@ -584,16 +579,14 @@ public class GameView {
     }
 
 
-
-
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
         stored.getChildren().clear();
 
         int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
         stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
-        stored.setMinSize(120,80);
-        stored.setMaxSize(120,80);
+        stored.setMinSize(120, 80);
+        stored.setMaxSize(120, 80);
         int cur = 0;
         int cnt = 0;
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {

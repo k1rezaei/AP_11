@@ -25,8 +25,6 @@ public class SpriteAnimation extends Transition {
                            ArrayList<Integer> widths, ArrayList<Integer> heights) {
         this.counts = counts;
         this.columns = columns;
-
-
         for (int i = 0; i < widths.size(); i++) {
             this.widths.add(widths.get(i) / (columns.get(i)));
             this.heights.add(heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
