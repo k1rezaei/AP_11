@@ -195,7 +195,7 @@ public class GameView {
 
                         root.getChildren().clear();
                         Label finish = new Label("You Won The Level :D");
-                        finish.relocate(370, 270);
+                        finish.relocate(330, 270);
                         root.getChildren().add(finish);
 
                         AnimationTimer animationTimer = new AnimationTimer() {
