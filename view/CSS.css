@@ -14,5 +14,9 @@
     -fx-scale-y: 1.2;
 }
 #label_button{
-    -fx-effect: innershadow( three-pass-box , rgba(255,255,0,0.7) , 6, 0.0 , 0 , 2 )
+    -fx-effect: innershadow( three-pass-box , rgba(200,200,0,0.7) , 6, 0.0 , 0 , 2 );
+
 }
+
+
+
