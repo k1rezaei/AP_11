@@ -23,7 +23,6 @@ public class SpriteAnimation extends Transition {
         return lastIndex;
     }
 
-
     public SpriteAnimation(Duration duration,
                            ArrayList<Integer> counts, ArrayList<Integer> columns,
                            ArrayList<Integer> widths, ArrayList<Integer> heights) {
@@ -97,10 +96,27 @@ public class SpriteAnimation extends Transition {
         this.state = state;
     }
 
-    public int getX() { return x; }
+    public int getX() {
+        return x;
+    }
 
-    public int getY() { return y; }
+    public int getY() {
+        return y;
+    }
 
-    public void setX(int x) {this.x = x;}
-    public void setY(int y) {this.y = y;}
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public double getWidth() {
+        return widths.get(state);
+    }
+
+    public double getHeight() {
+        return heights.get(state);
+    }
 }

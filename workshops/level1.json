@@ -4,9 +4,9 @@
   "goalEntity": {
     "Sheep": 3
   },
-  "n": 400,
-  "m": 300,
-  "itemList":[
+  "n": 300,
+  "m": 200,
+  "itemList": [
     "Flour",
     "BrightHorn",
     "Horn",
