@@ -243,6 +243,7 @@ public class GameView {
         setUpGoals();
         setUpMenuButton();
         root.getChildren().add(entityRoot);
+        root.getChildren().add(focus.getRoot());
     }
 
     private void setUpGoals() {
@@ -441,6 +442,8 @@ public class GameView {
 
 
             workshopInfo.relocate(x + 10, y + 10);
+
+
             root.getChildren().add(workshopInfo);
 
             workshopInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(workshop));
@@ -479,7 +482,7 @@ public class GameView {
 
         helicopterInfo = new Label();
         helicopterInfo.setGraphic(img);
-        helicopterInfo.relocate(HELICOPTER_X - 10, HELICOPTER_Y);
+        helicopterInfo.relocate(HELICOPTER_X + 120, HELICOPTER_Y + 100);
 
         helicopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
         helicopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));
