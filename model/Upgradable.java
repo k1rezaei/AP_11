@@ -16,4 +16,8 @@ public interface Upgradable {
         return getLevel() < getMaxLevel();
     }
 
+    default boolean equals(Upgradable u) {
+        return this.getName().equals(u.getName());
+    }
+
 }

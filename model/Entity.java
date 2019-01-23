@@ -5,6 +5,7 @@ public abstract class Entity {
     final public static String PLANT = "Plant";
     final public static String ITEM = "Item";
     protected Cell cell;
+    protected Cell deadCell;
     protected int sellPrice, buyPrice, size;
     protected String type;
 
@@ -52,6 +53,8 @@ public abstract class Entity {
         return buyPrice;
     }
 
+    public Cell getDeadCell() { return deadCell; }
+
     public String getType() {
         return type;
     }
@@ -59,6 +62,10 @@ public abstract class Entity {
     abstract void turn();
 
     void destroy() {
+        deadCell = cell;
+
+
+
         cell = null;
     }
 

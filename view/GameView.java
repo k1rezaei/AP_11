@@ -1,4 +1,5 @@
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -13,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -64,6 +66,7 @@ public class GameView {
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
     private static Image info = new Image("file:textures/info.png");
+    private static ArrayList<SpriteAnimation> deadSprites = new ArrayList<>();
 
     static {
         REFRESHER.setVisible(false);
@@ -103,6 +106,32 @@ public class GameView {
     public void resume() {
         paused = false;
         game.start();
+    }
+
+    public void setUpDead(Entity entity){
+        if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
+        if( (entity instanceof Animal) && !(entity instanceof WildAnimal)){
+            SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
+            spriteAnimation.setState(4);
+
+            if(entity instanceof Dog) {
+                fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - 50, entity.getDeadCell().getY() + BASE_Y - 50);
+            }else{
+                fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X, entity.getDeadCell().getY() + BASE_Y);
+            }
+            spriteAnimation.setCycleCount(1);
+            spriteAnimation.play();
+            deadSprites.add(spriteAnimation);
+        }
+    }
+
+    public void removeFinishedDead(){
+        for(int i = deadSprites.size()-1; i >= 0; i--){
+            if(deadSprites.get(i).getLastIndex() == 23){
+                root.getChildren().remove(deadSprites.get(i).getImageView());
+                deadSprites.remove(i);
+            }
+        }
     }
 
     public FlowPane getStored() {
@@ -165,7 +194,7 @@ public class GameView {
                             sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
                         } else {
                             if (!sprites.containsKey(entity)) continue;
-                            if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
+                            setUpDead(entity);
                             SpriteAnimation sprite = sprites.get(entity);
                             sprite.stop();
                             sprite.getImageView().setVisible(false);
@@ -173,6 +202,7 @@ public class GameView {
                             sprites.remove(entity);
                         }
                     }
+                    removeFinishedDead();
                     for (Workshop workshop : Game.getInstance().getWorkshops()) {
                         if (workshop.getRemainTime() == 0) {
                             getWorkshop(workshop).shutDown();
