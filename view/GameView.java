@@ -58,8 +58,8 @@ public class GameView {
     private static final int WAREHOUSE_CNT_X = 8;
     private static final int WAREHOUSE_CNT_Y = 4;
     private static final double SOUND_PROP = 0.01;
-    private static final int BASE_X = 180;
-    private static final int BASE_Y = 130;
+    private static final int BASE_X = 200;
+    private static final int BASE_Y = 150;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
@@ -115,7 +115,6 @@ public class GameView {
         workshops.clear();
         sprites.clear();
         initializeNodes();
-
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             int cnt = 0;
@@ -215,7 +214,6 @@ public class GameView {
                         };
                         animationTimer.start();
                     }
-
                 }
             }
         };
@@ -488,7 +486,6 @@ public class GameView {
 
         root.getChildren().add(helicopterInfo);
     }
-
 
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
