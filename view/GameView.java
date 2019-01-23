@@ -460,6 +460,18 @@ public class GameView {
         filled.setFill(Color.WHITE);
         filled.relocate(WELL_X, WELL_Y + 65);
         root.getChildren().add(filled);
+
+        ImageView img = new ImageView(info);
+        img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+
+        Label wellInfo = new Label();
+        wellInfo.setGraphic(img);
+        wellInfo.relocate(WELL_X - 10, WELL_Y + 10);
+        root.getChildren().add(wellInfo);
+
+        wellInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getWell()));
+        wellInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getWell()));
+
     }
 
     private void setUpBackground() {

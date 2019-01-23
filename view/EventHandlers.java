@@ -36,6 +36,15 @@ public class EventHandlers {
         return event -> GameView.getInstance().getFocus().remove(vehicle);
     }
 
+    static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Well well) {
+        return event -> GameView.getInstance().getFocus().add(well);
+    }
+    static EventHandler<MouseEvent> getOnMouseExitedEventHandler(Well well) {
+        return event -> GameView.getInstance().getFocus().remove(well);
+    }
+
+
+
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
             if(event.getButton()== MouseButton.PRIMARY) {

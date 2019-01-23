@@ -70,9 +70,11 @@ public class Focus {
         String cap = getCap(vehicle);
 
         VBox vBox = new VBox();
+        Label name = new Label(vehicle.getName());
         Label upgrade = new Label(cost);
         Label capacity = new Label(cap);
 
+        vBox.getChildren().add(name);
         vBox.getChildren().add(upgrade);
         vBox.getChildren().add(capacity);
         vBox.relocate(x + DIS_X, y);
@@ -80,6 +82,25 @@ public class Focus {
 
         active.put(vehicle, true);
         UpgradableInfo.put(vehicle, vBox);
+
+    }
+
+    void add(Well well) {
+        if(active.get(well) != null && active.get(well)) return ;
+        int x = GameView.getInstance().getWell().getX(), y = GameView.getInstance().getWell().getY();
+
+        String cost = getCost(well);
+        VBox vBox = new VBox();
+        Label name = new Label(well.getName());
+        Label upgrade = new Label(cost);
+
+        vBox.getChildren().add(name);
+        vBox.getChildren().add(upgrade);
+        vBox.relocate(x + DIS_X, y);
+        GameView.getInstance().getRoot().getChildren().add(vBox);
+
+        active.put(well, true);
+        UpgradableInfo.put(well, vBox);
 
     }
 
