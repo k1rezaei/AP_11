@@ -27,11 +27,7 @@ public class BuyMenu {
     public static final int DIS_X_BOUGHT = 30;
     View view;
 
-    int currentMoney;
-
-    {
-        currentMoney = Game.getInstance().getMoney();
-    }
+    int currentMoney = Game.getInstance().getMoney();
 
     int numBought = 0;
 
@@ -55,7 +51,6 @@ public class BuyMenu {
 
     {
         cap.setMinSize(50, HEIGHT);
-        //cap.setFont(Font.font(20));
         cap.setAlignment(Pos.CENTER);
         cap.relocate(600, 20);
     }
@@ -65,7 +60,6 @@ public class BuyMenu {
     {
 
         money.setMinSize(50, HEIGHT);
-        //money.setFont(Font.font(20));
         money.setAlignment(Pos.CENTER);
         money.relocate(600, 0);
     }
@@ -79,7 +73,6 @@ public class BuyMenu {
 
 
     static private Image BG = new Image("file:textures/bglemon.gif");
-    static private Image SHELF = new Image("file:textures/3x5shelf.png");
 
     void init() {
 
@@ -100,13 +93,6 @@ public class BuyMenu {
 
         buyGroup.getChildren().add(stack);
         buyGroup.getChildren().add(rectangle);
-   /*     {
-            ImageView imageView = new ImageView(SHELF);
-            imageView.setFitWidth(470);
-            imageView.setFitHeight(500);
-            imageView.relocate(BASE_X-10, BASE_Y-35);
-            buyGroup.getChildren().add(imageView);
-        }*/
 
 
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
