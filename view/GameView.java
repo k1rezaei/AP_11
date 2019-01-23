@@ -61,9 +61,11 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+    public static final int INFO_LENGTH = 20;
     private static double SPEED = 1;
     private static boolean paused = false;
     private static AnimationTimer game;
+    private static Image info = new Image("file:textures/info.png");
 
     static {
         REFRESHER.setVisible(false);
@@ -82,6 +84,8 @@ public class GameView {
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
     private Label moneyLabel;
+    private Focus focus;
+
 
     private GameView() {
     }
@@ -117,8 +121,8 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
                     updateWarehouse();
-                    truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime()==0);
-                    helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime()==0);
+                    truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
+                    helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
                     lastTime = now;
                     Game.getInstance().turn();
                     for (Entity entity : Game.getInstance().getMap().getEntities()) {
@@ -173,7 +177,12 @@ public class GameView {
         game.start();
     }
 
+    public Focus getFocus() {
+        return focus;
+    }
+
     private void initializeNodes() {
+        focus = new Focus();
         setUpBackground();
         setUpBuyIcons();
         setUpMoneyLabel();
@@ -354,7 +363,7 @@ public class GameView {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
                 view.setRoot(backMenu.getRoot());
-            }else resume();
+            } else resume();
 
         });
         root.getChildren().add(menu);
@@ -365,11 +374,37 @@ public class GameView {
         for (int i = 0; i < Game.getInstance().getWorkshops().size(); i++) {
             Workshop workshop = Game.getInstance().getWorkshops().get(i);
             workshops.put(workshop, Images.getSpriteAnimation(workshop.getName()));
+
             SpriteAnimation sprite = getWorkshop(workshop);
             sprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(workshop));
+
             sprite.setState(workshop.getLevel());
-            if (i <= 2) fixSprite(sprite, LEFT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * i);
-            else fixSprite(sprite, RIGHT_WORKSHOP_X, BASE_WORKSHOP + WORKSHOP_DIS * (i - 3));
+
+            int x, y;
+
+            if (i <= 2) {
+                x = LEFT_WORKSHOP_X;
+                y = BASE_WORKSHOP + WORKSHOP_DIS * i;
+            } else {
+                x = RIGHT_WORKSHOP_X;
+                y = BASE_WORKSHOP + WORKSHOP_DIS * (i - 3);
+            }
+
+            fixSprite(sprite, x, y);
+
+            Label workshopInfo = new Label();
+            ImageView img = new ImageView(info);
+            img.setFitHeight(INFO_LENGTH);
+            img.setFitWidth(INFO_LENGTH);
+            workshopInfo.setGraphic(img);
+
+
+            workshopInfo.relocate(x + 10, y + 10);
+            root.getChildren().add(workshopInfo);
+
+            workshopInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(workshop));
+            workshopInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(workshop));
+
         }
     }
 
@@ -452,6 +487,8 @@ public class GameView {
         for (ImageView img : sprite.getImageViews())
             img.relocate(x, y);
         root.getChildren().add(sprite.getImageView());
+        sprite.setX(x);
+        sprite.setY(y);
     }
 
     public void updateWarehouse() {
@@ -479,8 +516,8 @@ public class GameView {
                         + "-fx-background-color: black;");
                 label.setOpacity(0.5);
                 label.setGraphic(imageView);
-                label.setMinHeight(80/WAREHOUSE_CNT_Y);
-                label.setMaxHeight(80/WAREHOUSE_CNT_Y);
+                label.setMinHeight(80 / WAREHOUSE_CNT_Y);
+                label.setMaxHeight(80 / WAREHOUSE_CNT_Y);
 
                 stored.getChildren().add(label);
             }

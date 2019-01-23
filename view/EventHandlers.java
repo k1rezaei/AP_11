@@ -20,6 +20,17 @@ public class EventHandlers {
     //    mediaPlayer.stop();
     //    mediaPlayer.play();
     }
+
+    static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Workshop workshop) {
+        return event -> {
+            GameView.getInstance().getFocus().add(workshop);
+        };
+    }
+
+    static EventHandler<MouseEvent> getOnMouseExitedEventHandler(Workshop workshop) {
+        return event -> GameView.getInstance().getFocus().remove(workshop);
+    }
+
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Entity entity) {
         return event -> {
             if(event.getButton()== MouseButton.PRIMARY) {
@@ -37,7 +48,6 @@ public class EventHandlers {
             switch (event.getButton()) {
                 case PRIMARY:
                     try {
-                        System.out.println("HELLO");
                         Game.getInstance().startWorkshop(workshop.getName());
                         GameView.getInstance().getWorkshop(workshop).play();
                     } catch (Exception e) {
