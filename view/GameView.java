@@ -213,7 +213,7 @@ public class GameView {
                                 if(now - last > (long)(3) * ONE_SECOND) {
                                     Menu menu = new Menu(view);
                                     view.setRoot(menu.getRoot());
-                                    //TODO FIX THE BACK TO MENU.
+                                    //TODO fix Back to MENU.
                                     game.stop();
                                     this.stop();
                                 }
