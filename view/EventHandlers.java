@@ -163,6 +163,8 @@ public class EventHandlers {
                 case PRIMARY:
                     try {
                         Game.getInstance().well();
+                        GameView.getInstance().getWell().setCycleCount(1);
+                        GameView.getInstance().getWell().play();
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
                     }
