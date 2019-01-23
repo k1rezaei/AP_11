@@ -106,6 +106,8 @@ public class EventHandlers {
         return new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
+                System.err.println("HEYY");
                 switch (event.getButton()) {
                     case PRIMARY:
                         GameView.getInstance().pause();
@@ -116,6 +118,9 @@ public class EventHandlers {
                             Game.getInstance().upgrade("warehouse");
                             SpriteAnimation sprite = GameView.getInstance().getWarehouse();
                             GameView.getInstance().update(sprite, warehouse);
+
+                            GameView.getInstance().getRoot().getChildren().remove(GameView.getInstance().getStored());
+                            GameView.getInstance().getRoot().getChildren().add(GameView.getInstance().getStored());
                         } catch (Exception e) {
                             System.err.println(e.getMessage());
                             alert();;
