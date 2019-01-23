@@ -9,6 +9,8 @@
     -fx-stroke-width: 1px;
 }
 
+
+
 HBox {
     -fx-alignment: center;
     -fx-padding: 1;
@@ -35,6 +37,25 @@ VBox {
 #label_button {
     -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
 }
+
+#finish {
+    -fx-text-alignment: center;
+    -fx-font-size: 50px;
+}
+#finish .text{
+    -fx-stroke: green;
+    -fx-stroke-width: 2px;
+}
+
+#finish2 {
+    -fx-text-alignment: center;
+    -fx-font-size: 50px;
+}
+#finish2 .text{
+    -fx-stroke: red;
+    -fx-stroke-width: 2px;
+}
+
 
 
 
