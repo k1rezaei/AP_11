@@ -1,5 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -10,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -60,8 +60,8 @@ public class GameView {
     private static final int WAREHOUSE_CNT_X = 8;
     private static final int WAREHOUSE_CNT_Y = 4;
     private static final double SOUND_PROP = 0.01;
-    private static final int BASE_X = 200;
-    private static final int BASE_Y = 150;
+    private static final int BASE_X = 260;
+    private static final int BASE_Y = 210;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
@@ -108,15 +108,15 @@ public class GameView {
         game.start();
     }
 
-    public void setUpDead(Entity entity){
+    public void setUpDead(Entity entity) {
         if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
-        if( (entity instanceof Animal) && !(entity instanceof WildAnimal)){
+        if ((entity instanceof Animal) && !(entity instanceof WildAnimal)) {
             SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
             spriteAnimation.setState(4);
 
-            if(entity instanceof Dog) {
+            if (entity instanceof Dog) {
                 fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - 50, entity.getDeadCell().getY() + BASE_Y - 50);
-            }else{
+            } else {
                 fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X, entity.getDeadCell().getY() + BASE_Y);
             }
             spriteAnimation.setCycleCount(1);
@@ -125,9 +125,9 @@ public class GameView {
         }
     }
 
-    public void removeFinishedDead(){
-        for(int i = deadSprites.size()-1; i >= 0; i--){
-            if(deadSprites.get(i).getLastIndex() == 23){
+    public void removeFinishedDead() {
+        for (int i = deadSprites.size() - 1; i >= 0; i--) {
+            if (deadSprites.get(i).getLastIndex() == 23) {
                 root.getChildren().remove(deadSprites.get(i).getImageView());
                 deadSprites.remove(i);
             }
@@ -144,6 +144,7 @@ public class GameView {
         workshops.clear();
         sprites.clear();
         initializeNodes();
+
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             int cnt = 0;
@@ -159,7 +160,6 @@ public class GameView {
 
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
-
 
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
                     truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
@@ -191,6 +191,8 @@ public class GameView {
                                 sprite.setState(entity.getState());
                                 entityRoot.getChildren().add(sprite.getImageView());
                             }
+                            sprite.getImageView().setTranslateX(-sprite.getWidth() / 2);
+                            sprite.getImageView().setTranslateY(-sprite.getHeight() / 2);
                             sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
                         } else {
                             if (!sprites.containsKey(entity)) continue;
@@ -244,10 +246,12 @@ public class GameView {
                         };
                         animationTimer.start();
                     }
+
                 }
             }
         };
         resume();
+        game.start();
     }
 
     public Focus getFocus() {
@@ -552,8 +556,8 @@ public class GameView {
                 int x = (int) mouseEvent.getX();
                 int y = (int) mouseEvent.getY();
                 try {
-                    if (new Cell(x - BASE_X - 20, y - BASE_Y - 20).isInside()) {
-                        Game.getInstance().addPlant(x - BASE_X - 20, y - BASE_Y - 20);
+                    if (new Cell(x - BASE_X, y - BASE_Y).isInside()) {
+                        Game.getInstance().addPlant(x - BASE_X, y - BASE_Y);
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -567,11 +571,17 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
+            VBox info = new VBox();
+            info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 50);
+            Label name = new Label(animalName);
+            Label price = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
+            info.getChildren().add(name);
+            info.getChildren().add(price);
             buyAnimal.setOnMouseClicked(mouseEvent -> {
                 try {
-                    if (mouseEvent.getButton() == MouseButton.PRIMARY)
+                    if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                         Game.getInstance().buyAnimal(animalName);
-                    else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
+                    } else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
                         Game.getInstance().upgrade("cat");
                     }
                 } catch (Exception e) {
@@ -582,8 +592,11 @@ public class GameView {
                     }
                 }
             });
-
             buyAnimal.setOnMouseEntered(mouseEvent -> {
+                focus.getRoot().getChildren().add(info);
+            });
+            buyAnimal.setOnMouseExited(mouseEvent -> {
+                focus.getRoot().getChildren().remove(info);
             });
             buyAnimal.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i, BUY_ANIMAL_Y);
             root.getChildren().add(buyAnimal);
@@ -605,7 +618,6 @@ public class GameView {
         sprite.setX(x);
         sprite.setY(y);
     }
-
 
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
