@@ -1,5 +1,6 @@
 public class FarmAnimal extends Animal {
     static private int RATE_OF_HUNGER = 250;
+    static private int MIN_HUNGER = 200;
 
 
     private String produceType;
@@ -71,6 +72,7 @@ public class FarmAnimal extends Animal {
     void collide(Entity entity) {
         if (entity instanceof Plant) {
             ((Plant) (entity)).startTimer();
+            if(rateOfHunger > MIN_HUNGER) return;
             rateOfHunger += RATE_OF_HUNGER / hungrySpeed;
             if (rateOfHunger > RATE_OF_HUNGER) rateOfHunger = RATE_OF_HUNGER;
         }

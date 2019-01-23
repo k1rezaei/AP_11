@@ -16,13 +16,13 @@ public class Images {
 
         loadImage("cat", 4, 24, new int[]{6, 4, 6, 4});
 
-        loadImage("chicken", 5, 24, new int[]{5, 5, 5, 5, 5});
+        loadImage("chicken", 6, 24, new int[]{5, 5, 5, 5, 5, 5});
 
-        loadImage("sheep", 5, 24, new int[]{5, 4, 5, 4, 4});
+        loadImage("sheep", 6, 24, new int[]{5, 4, 5, 4, 4, 4});
 
-        loadImage("cow", 5, 24, new int[]{4, 3, 3, 3, 4});
+        loadImage("cow", 6, 24, new int[]{4, 3, 3, 3, 3, 4});
 
-        loadImage("dog", 4, 24, new int[]{6, 6, 6, 6});
+        loadImage("dog", 5, 24, new int[]{6, 6, 6, 6, 5});
 
         loadImage("lion", 4, 24, new int[]{6, 3, 5, 3});
 
