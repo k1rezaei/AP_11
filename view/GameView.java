@@ -63,6 +63,7 @@ public class GameView {
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
     public static final int INFO_LENGTH = 20;
+    public static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static double SPEED = 1;
     private static boolean paused = false;
     private static AnimationTimer game;
@@ -189,8 +190,36 @@ public class GameView {
                     filled.setHeight(50 - 50 * (1.0 * Game.getInstance().getWell().getCurrentAmount() / Game.getInstance().getWell().getCapacity()));
                     moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
                     if (Game.getInstance().checkLevel()) {
-                        this.stop();
-                        //TODO go back to menu
+                        pause();
+                        AnimationTimer game = this;
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        root.getChildren().clear();
+                        Label finish = new Label("You Won The Level :D");
+                        finish.relocate(370, 270);
+                        root.getChildren().add(finish);
+
+                        AnimationTimer animationTimer = new AnimationTimer() {
+                            long last = -1;
+                            @Override
+                            public void handle(long now) {
+                                if(last == -1) last = now;
+                                //System.out.println(last + " : " + now);
+                                if(now - last > (long)(3) * ONE_SECOND) {
+                                    Menu menu = new Menu(view);
+                                    view.setRoot(menu.getRoot());
+                                    //TODO fix Back to MENU.
+                                    game.stop();
+                                    this.stop();
+                                }
+                            }
+                        };
+                        animationTimer.start();
                     }
 
                 }
@@ -378,6 +407,8 @@ public class GameView {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
                 view.setRoot(backMenu.getRoot());
+                game.stop();
+                //TODO fix Back to MENU.
             } else resume();
 
         });
