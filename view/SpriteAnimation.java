@@ -17,8 +17,12 @@ public class SpriteAnimation extends Transition {
     private final ArrayList<Integer> heights = new ArrayList<>();
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int state = 0, x, y;
-
     private int lastIndex;
+
+    public int getLastIndex() {
+        return lastIndex;
+    }
+
 
     public SpriteAnimation(Duration duration,
                            ArrayList<Integer> counts, ArrayList<Integer> columns,
@@ -33,6 +37,7 @@ public class SpriteAnimation extends Transition {
         setCycleDuration(duration);
         setCycleCount(Animation.INDEFINITE);
         setInterpolator(Interpolator.LINEAR);
+
     }
 
     public SpriteAnimation(LoadedImage loadedImage) {
