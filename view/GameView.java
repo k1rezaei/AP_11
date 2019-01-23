@@ -132,7 +132,6 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
-                    updateWarehouse();
 
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
                     truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
@@ -195,7 +194,7 @@ public class GameView {
 
                         root.getChildren().clear();
                         Label finish = new Label("You Won The Level :D");
-                        finish.relocate(370, 270);
+                        finish.relocate(330, 270);
                         root.getChildren().add(finish);
 
                         AnimationTimer animationTimer = new AnimationTimer() {
@@ -243,6 +242,7 @@ public class GameView {
         setUpGoals();
         setUpMenuButton();
         root.getChildren().add(entityRoot);
+        root.getChildren().add(focus.getRoot());
     }
 
     private void setUpGoals() {
@@ -441,6 +441,8 @@ public class GameView {
 
 
             workshopInfo.relocate(x + 10, y + 10);
+
+
             root.getChildren().add(workshopInfo);
 
             workshopInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(workshop));
@@ -479,7 +481,7 @@ public class GameView {
 
         helicopterInfo = new Label();
         helicopterInfo.setGraphic(img);
-        helicopterInfo.relocate(HELICOPTER_X - 10, HELICOPTER_Y);
+        helicopterInfo.relocate(HELICOPTER_X + 120, HELICOPTER_Y + 100);
 
         helicopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
         helicopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));

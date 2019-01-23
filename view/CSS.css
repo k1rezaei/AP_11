@@ -4,18 +4,36 @@
     -fx-font-family: "Comic Sans MS";
 }
 
-.label .text{
+.label .text {
     -fx-stroke: green;
     -fx-stroke-width: 1px;
 }
 
-#label_button:hover{
+HBox {
+    -fx-alignment: center;
+    -fx-padding: 1;
+}
+
+VBox {
+    -fx-background-color: black;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 30;
+    -fx-alignment: center;
+    -fx-padding: 1;
+    -fx-min-height: 80px;
+    -fx-max-height: 80px;
+    -fx-max-width: 110px;
+    -fx-min-width: 110px;
+}
+
+
+#label_button:hover {
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
 }
-#label_button{
-    -fx-effect: innershadow( three-pass-box , rgba(200,200,0,0.7) , 6, 0.0 , 0 , 2 );
 
+#label_button {
+    -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
 }
 
 

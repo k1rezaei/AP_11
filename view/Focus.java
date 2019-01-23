@@ -1,9 +1,11 @@
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.HashMap;
@@ -12,13 +14,18 @@ import java.util.Map;
 public class Focus {
     private static final int DIS_X = 50;
     private static final int ITEM_LENGTH = 25;
-    private static final int DIS_Y = 10;
-    private Map<Upgradable, Boolean> active = new HashMap<>();
-    private Map<Upgradable, Node> UpgradableInfo = new HashMap<>();
+    public static final int DIS_Y = 10;
+    Map<Upgradable, Boolean> active = new HashMap<>();
+    Map<Upgradable, Node> UpgradableInfo = new HashMap<>();
     private static Image arrowImage = new Image("file:textures/arrow.png");
+    Group focus = new Group();
+
+    public Group getRoot() {
+        return focus;
+    }
 
     void add(Workshop workshop) {
-        if (active.get(workshop) != null && active.get(workshop)) return;
+        if(active.get(workshop) != null && active.get(workshop)) return ;
 
         int x = GameView.getInstance().getWorkshop(workshop).getX();
         int y = GameView.getInstance().getWorkshop(workshop).getY();
@@ -27,8 +34,7 @@ public class Focus {
 
         VBox vBox = new VBox();
 
-        Label upgrade = new Label(cost);
-        upgrade.setFont(Font.font(2));
+        Label upgrade = new Label(cost); upgrade.setFont(Font.font(2));
         HBox hBox1 = new HBox();
         hBox1.getChildren().add(upgrade);
         vBox.getChildren().add(hBox1);
@@ -41,8 +47,7 @@ public class Focus {
             hBox2.getChildren().add(sprite.getImageView());
         }
         ImageView arrow = new ImageView(arrowImage);
-        arrow.setFitWidth(ITEM_LENGTH);
-        arrow.setFitHeight(ITEM_LENGTH);
+        arrow.setFitWidth(ITEM_LENGTH); arrow.setFitHeight(ITEM_LENGTH);
         hBox2.getChildren().add(arrow);
         SpriteAnimation sprite = Images.getSpriteAnimation(workshop.getOutput());
         sprite.getImageView().setFitWidth(ITEM_LENGTH);
@@ -50,20 +55,20 @@ public class Focus {
         hBox2.getChildren().add(sprite.getImageView());
         vBox.getChildren().add(hBox2);
         vBox.relocate(x + DIS_X, y - DIS_Y);
-        GameView.getInstance().getRoot().getChildren().add(vBox);
+        focus.getChildren().add(vBox);
 
         UpgradableInfo.put(workshop, vBox);
         active.put(workshop, true);
     }
 
     void add(Vehicle vehicle) {
-        if (active.get(vehicle) != null && active.get(vehicle)) return;
+        if(active.get(vehicle) != null && active.get(vehicle)) return ;
 
         int x, y;
-        if (vehicle.getName().equals("helicopter")) {
-            x = GameView.getInstance().getHelicopter().getX();
-            y = GameView.getInstance().getHelicopter().getY();
-        } else {
+        if(vehicle.getName().equals("helicopter")) {
+            x = GameView.getInstance().getHelicopter().getX() + 100;
+            y = GameView.getInstance().getHelicopter().getY() + 50;
+        }else {
             x = GameView.getInstance().getTruck().getX();
             y = GameView.getInstance().getTruck().getY();
         }
@@ -80,7 +85,7 @@ public class Focus {
         vBox.getChildren().add(upgrade);
         vBox.getChildren().add(capacity);
         vBox.relocate(x + DIS_X, y);
-        GameView.getInstance().getRoot().getChildren().add(vBox);
+        focus.getChildren().add(vBox);
 
         active.put(vehicle, true);
         UpgradableInfo.put(vehicle, vBox);
@@ -88,7 +93,7 @@ public class Focus {
     }
 
     void add(Well well) {
-        if (active.get(well) != null && active.get(well)) return;
+        if(active.get(well) != null && active.get(well)) return ;
         int x = GameView.getInstance().getWell().getX(), y = GameView.getInstance().getWell().getY();
 
         String cost = getCost(well);
@@ -99,7 +104,7 @@ public class Focus {
         vBox.getChildren().add(name);
         vBox.getChildren().add(upgrade);
         vBox.relocate(x + DIS_X, y);
-        GameView.getInstance().getRoot().getChildren().add(vBox);
+        focus.getChildren().add(vBox);
 
         active.put(well, true);
         UpgradableInfo.put(well, vBox);
@@ -107,17 +112,17 @@ public class Focus {
     }
 
     void remove(Upgradable u) {
-        if (active.get(u) == null || !active.get(u)) return;
+        if(active.get(u) == null || !active.get(u)) return;
         VBox data = (VBox) UpgradableInfo.remove(u);
-        GameView.getInstance().getRoot().getChildren().remove(data);
+        focus.getChildren().remove(data);
         active.put(u, false);
     }
 
     String getCost(Upgradable u) {
         String cost;
-        if (u.canUpgrade()) cost = Integer.toString(u.getUpgradeCost());
+        if(u.canUpgrade()) cost = Integer.toString(u.getUpgradeCost());
         else cost = "oo";
-        return cost;
+        return  cost;
     }
 
     String getCap(Vehicle vehicle) {
