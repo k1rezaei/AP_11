@@ -67,7 +67,7 @@ public class Workshop implements Upgradable {
 
         if (remainTime == 0) {
             for (int i = 0; i < numberOfOutputs; i++) {
-                Entity entity = new Item(output, new Cell(z * 10 + x + 20 * i * z, y));
+                Entity entity = new Item(output, new Cell(z * 20 + x + 20 * i * z, y));
                 Game.getInstance().addEntity(entity);
             }
             remainTime = -1;
