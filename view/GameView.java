@@ -1,5 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
@@ -73,6 +74,8 @@ public class GameView {
 
     }
 
+
+
     private FlowPane stored = new FlowPane();
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
@@ -100,9 +103,15 @@ public class GameView {
         game.stop();
     }
 
+
+
     public void resume() {
         paused = false;
         game.start();
+    }
+
+    public FlowPane getStored() {
+        return stored;
     }
 
     public void runGame() {
@@ -113,14 +122,18 @@ public class GameView {
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
-
+            int cnt = 0;
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * SPEED)) {
+
+                    updateWarehouse();
+
                     //TODO ye chiz behtar az 2 khat payin bezanim
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
+
                     updateWarehouse();
 
                     truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
@@ -128,6 +141,8 @@ public class GameView {
 
                     helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
                     helicopterInfo.setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
+
+
 
                     lastTime = now;
                     Game.getInstance().turn();
@@ -177,6 +192,7 @@ public class GameView {
                         this.stop();
                         //TODO go back to menu
                     }
+
                 }
             }
         };
@@ -230,9 +246,9 @@ public class GameView {
 
     private void setUpWarehouse() {
         warehouse = Images.getSpriteAnimation("warehouse");
-        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
+        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
         root.getChildren().add(stored);
     }
 
@@ -536,15 +552,17 @@ public class GameView {
         sprite.setY(y);
     }
 
+
+
+
     public void updateWarehouse() {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
-        root.getChildren().remove(stored);
         stored.getChildren().clear();
 
         int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
         stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
-        stored.setMaxHeight(80);
-        stored.setMaxWidth(120);
+        stored.setMinSize(120,80);
+        stored.setMaxSize(120,80);
         int cur = 0;
         int cnt = 0;
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {
@@ -561,13 +579,15 @@ public class GameView {
                         + "-fx-background-color: black;");
                 label.setOpacity(0.5);
                 label.setGraphic(imageView);
+
                 label.setMinHeight(80 / WAREHOUSE_CNT_Y);
                 label.setMaxHeight(80 / WAREHOUSE_CNT_Y);
 
                 stored.getChildren().add(label);
             }
         }
-        root.getChildren().add(stored);
+        stored.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+
     }
 
     public void update(SpriteAnimation sprite, Upgradable upgradable) {

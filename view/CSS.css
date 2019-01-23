@@ -2,8 +2,11 @@
     -fx-text-fill: white;
     -fx-font-size: 18;
     -fx-font-family: "Comic Sans MS";
-    -fx-stroke: firebrick;
-    -fx-stroke-width: 5px;
+}
+
+.label .text{
+    -fx-stroke: green;
+    -fx-stroke-width: 1px;
 }
 
 #label_button:hover{
@@ -11,7 +14,9 @@
     -fx-scale-y: 1.2;
 }
 #label_button{
-    -fx-effect: innershadow( three-pass-box , rgba(255,255,0,0.7) , 6, 0.0 , 0 , 2 )
-
+    -fx-effect: innershadow( three-pass-box , rgba(200,200,0,0.7) , 6, 0.0 , 0 , 2 );
 
 }
+
+
+

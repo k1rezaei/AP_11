@@ -147,10 +147,10 @@ public class SellMenu {
 
            // price.setTextFill(Color.LIGHTGREEN);
 
-            ImageView so = new ImageView(one); so.setFitHeight(30); so.setFitWidth(25);
+            ImageView so = new ImageView(one); so.setFitHeight(30*7/5); so.setFitWidth(25*7/5);
             Label sellOne = new Label(); sellOne.setGraphic(so);
 
-            ImageView sa = new ImageView(all); sa.setFitHeight(30); sa.setFitWidth(25);
+            ImageView sa = new ImageView(all); sa.setFitHeight(30*7/5); sa.setFitWidth(25*7/5);
             Label sellAll = new Label(); sellAll.setGraphic(sa);
             sellAll.setId("label_button");
             sellOne.setId("label_button");
@@ -162,7 +162,7 @@ public class SellMenu {
             label.relocate(baseX + 30, baseY);
             price.relocate(baseX + 75, baseY + 5);
             sellOne.relocate(baseX + 130, baseY);
-            sellAll.relocate(baseX + 160, baseY);
+            sellAll.relocate(baseX + 165, baseY);
 
             //Rectangle rectangle = new Rectangle(baseX, baseY, DIS_X, DIS_Y);
             //rectangle.setStroke(Color.GOLD); rectangle.setFill(Color.TRANSPARENT);
