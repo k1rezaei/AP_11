@@ -1,9 +1,10 @@
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import java.util.HashMap;
@@ -59,8 +60,8 @@ public class Focus {
 
         int x, y;
         if(vehicle.getName().equals("helicopter")) {
-            x = GameView.getInstance().getHelicopter().getX();
-            y = GameView.getInstance().getHelicopter().getY();
+            x = GameView.getInstance().getHelicopter().getX() + 10;
+            y = GameView.getInstance().getHelicopter().getY() + 5;
         }else {
             x = GameView.getInstance().getTruck().getX();
             y = GameView.getInstance().getTruck().getY();
