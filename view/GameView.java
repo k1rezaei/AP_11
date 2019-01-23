@@ -19,8 +19,8 @@ import java.util.Optional;
 
 
 public class GameView {
-    public static final int INFO_LENGTH = 20;
-    public static final int ONE_SECOND = 1000 * 1000 * 1000;
+    private static final int INFO_LENGTH = 20;
+    private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
     private static final int WELL_X = 360;
     private static final int WELL_Y = 20;
@@ -63,15 +63,15 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
-    private static double SPEED = 1;
-    private static boolean paused = false;
-    private static AnimationTimer game;
     private static Image info = new Image("file:textures/info.png");
 
     static {
         REFRESHER.setVisible(false);
     }
 
+    private double speed = 1;
+    private boolean paused = false;
+    private AnimationTimer game;
     private Label truckInfo;
     private Label helicopterInfo;
     private FlowPane stored = new FlowPane();
@@ -124,7 +124,7 @@ public class GameView {
             @Override
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
-                if (now > lastTime + SECOND / (48 * SPEED)) {
+                if (now > lastTime + SECOND / (48 * speed)) {
                     lastTime = now;
 
                     updateWarehouse();
@@ -221,7 +221,6 @@ public class GameView {
             }
         };
         resume();
-        game.start();
     }
 
     public Focus getFocus() {
@@ -293,11 +292,11 @@ public class GameView {
         ff.setGraphic(ff1);
         ff.relocate(FF_X, FF_Y);
         ff.setOnMouseClicked(event -> {
-            if (SPEED < 1 + EPS) {
-                SPEED = 2;
+            if (speed < 1 + EPS) {
+                speed = 2;
                 ff.setGraphic(ff2);
             } else {
-                SPEED = 1;
+                speed = 1;
                 ff.setGraphic(ff1);
             }
         });
