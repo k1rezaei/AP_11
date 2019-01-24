@@ -39,7 +39,7 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(workshop);
 
-        vBox.getChildren().add(hBox1);
+        if(hBox1 != null) vBox.getChildren().add(hBox1);
 
         HBox hBox2 = new HBox();
         for (Map.Entry<String, Integer> pair : workshop.getInputs().entrySet()) {
@@ -57,6 +57,9 @@ public class Focus {
         sprite.getImageView().setFitHeight(ITEM_LENGTH);
         hBox2.getChildren().add(sprite.getImageView());
         vBox.getChildren().add(hBox2);
+        Label label = new Label(workshop.getStartCost() + "");
+        label.setId("gold");
+        vBox.getChildren().add(label);
         vBox.relocate(x + DIS_X, y - DIS_Y);
         focus.getChildren().add(vBox);
 
@@ -83,7 +86,8 @@ public class Focus {
         HBox hBox1 = getUpgradeBox(vehicle);
         HBox hBox2 = getCapacityBox(vehicle);
 
-        vBox.getChildren().addAll(name, hBox1, hBox2);
+        vBox.getChildren().addAll(name, hBox2);
+        if(hBox1 != null) vBox.getChildren().add(hBox1);
 
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
@@ -104,7 +108,8 @@ public class Focus {
         HBox hBox1 = getUpgradeBox(well);
         HBox hBox2 = getFillBox(well);
 
-        vBox.getChildren().addAll(name, hBox1, hBox2);
+        vBox.getChildren().addAll(name, hBox2);
+        if(hBox1 != null) vBox.getChildren().add(hBox1);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -133,6 +138,7 @@ public class Focus {
 
     private HBox getUpgradeBox(Upgradable u) {
         String cost = getCost(u);
+        if(cost.equals("oo")) return null;
         return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
     }
 

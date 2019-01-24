@@ -5,9 +5,19 @@
 }
 
 .label .text {
-    -fx-stroke: green;
+    -fx-stroke: lightblue;
     -fx-stroke-width: 1px;
 }
+#name{
+
+}
+#capacity {
+}
+
+#capacity .text {
+    -fx-stroke: orange;
+}
+
 
 #intro {
     -fx-text-alignment: center;
@@ -38,7 +48,7 @@
 }
 
 #gold .text{
-    -fx-text-stroke : yellow;
+    -fx-stroke : yellow;
     -fx-stroke-width: 1px;
 }
 

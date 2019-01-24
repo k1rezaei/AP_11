@@ -681,13 +681,17 @@ public class GameView {
             VBox info = new VBox();
             info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 60);
             Label name = new Label(animalName);
+            name.setId("name");
             Label price = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
+            price.setId("gold");
+
             info.getChildren().add(name);
             info.getChildren().add(price);
             buyAnimal.setOnMouseClicked(mouseEvent -> {
                 try {
                     if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                         Game.getInstance().buyAnimal(animalName);
+
                     } else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
                         Game.getInstance().upgrade("cat");
                     }
