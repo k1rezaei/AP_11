@@ -45,17 +45,17 @@ public class GameView {
     private static final int GOALS_Y = 550;
     private static final int FF_HEIGHT = 50;
     private static final int FF_WIDTH = 100;
-    private static final int FF_X = 450;
+    private static final int FF_X = 360;
     private static final int FF_Y = 15;
-    private static final int SAVE_X = 550;
+    private static final int SAVE_X = 450;
     private static final int SAVE_Y = 15;
     private static final int EXIT_X = 10;
     private static final int EXIT_Y = 550;
-    private static final int MONEY_X = 700;
-    private static final int MONEY_Y = 20;
+    private static final int MONEY_X = 600;
+    private static final int MONEY_Y = 35;
     private static final int MENU_X = 110;
     private static final int MENU_Y = 550;
-    private static final int MENU_WODTH = 100;
+    private static final int MENU_WIDTH = 100;
     private static final int MENU_HEIGHT = 50;
     private static final int WAREHOUSE_X = 360;
     private static final int WAREHOUSE_Y = 460;
@@ -65,10 +65,13 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
-    private static final int VEHICLE_MINI_X = 630;
-    private static final int HELICOPTER_MINI_Y = 50;
-    private static final int TRUCK_MINI_Y = 85;
-    public static final int VEHICLE_MINI_TRAVEL = 110;
+    private static final int VEHICLE_MINI_X = 600;
+    private static final int ROAD_X = 520;
+    private static final int HELICOPTER_MINI_Y = 10;
+    private static final int ROAD_Y = 10;
+    private static final int TRUCK_MINI_Y = 35;
+    private static final int VEHICLE_MINI_TRAVEL = 130;
+    private static final String LABEL_BUTTON = "label_button";
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -355,6 +358,7 @@ public class GameView {
     private void initializeNodes() {
         focus = new Focus();
         setUpBackground();
+        setUpRoadImage();
         setUpBuyIcons();
         setUpMoneyLabel();
         setUpWell();
@@ -374,6 +378,14 @@ public class GameView {
         root.getChildren().add(focus.getRoot());
     }
 
+    private void setUpRoadImage() {
+        ImageView imageView = new ImageView(new Image("file:textures/road.png"));
+        imageView.relocate(ROAD_X, ROAD_Y);
+        imageView.setScaleX(0.8);
+        imageView.setScaleY(0.8);
+        root.getChildren().add(imageView);
+    }
+
     private void setUpTruckMini() {
         truckMini = Images.getSpriteAnimation("truckMini");
         for (ImageView imageView : truckMini.getImageViews()) {
@@ -391,7 +403,7 @@ public class GameView {
     private void setUpGoals() {
         Level level = Game.getInstance().getLevel();
         Label goals = new Label();
-        goals.setId("label_button");
+        goals.setId(LABEL_BUTTON);
         ImageView goal = new ImageView(new Image("file:textures/goals.png"));
         goal.setFitWidth(GOALS_WIDTH);
         goal.setFitHeight(GOALS_HEIGHT);
@@ -510,7 +522,7 @@ public class GameView {
     private void setUpMenuButton() {
 
         ImageView mn = new ImageView(new Image("file:textures/menu.png"));
-        mn.setFitWidth(MENU_WODTH);
+        mn.setFitWidth(MENU_WIDTH);
         mn.setFitHeight(MENU_HEIGHT);
         Label menu = new Label();
         menu.setId("label_button");
@@ -730,6 +742,9 @@ public class GameView {
         coin.setFitHeight(20);
         coin.setFitWidth(20);
         hBox.getChildren().add(coin);
+        hBox.setScaleX(0.8);
+        hBox.setScaleY(0.8);
+        hBox.translateXProperty().bind(hBox.widthProperty().divide(2).negate());
         hBox.relocate(MONEY_X, MONEY_Y);
         root.getChildren().add(hBox);
     }
