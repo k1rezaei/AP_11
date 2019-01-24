@@ -407,11 +407,7 @@ public class GameView {
         goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Goals");
-                alert.setContentText(level.toString());
-                alert.setHeaderText(null);
-                alert.show();
+                pop(level.toString());
             }
         });
     }
@@ -451,6 +447,19 @@ public class GameView {
         root.getChildren().add(ff);
     }
 
+    void pop(String text){
+        pause();
+        Pop pop = new Pop(text);
+        root.getChildren().add(pop.getStackPane());
+        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+                resume();
+            }
+        });
+    }
+
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
@@ -459,13 +468,14 @@ public class GameView {
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
-                pause();
+                pop("Saved Successful\nClick To Continue");
+                /* OLD VERSION
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("^_^");
                 alert.setContentText(null);
                 alert.setHeaderText("Saved Successful");
                 alert.showAndWait();
-                resume();
+                resume();*/
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -482,13 +492,52 @@ public class GameView {
         exit.setId("label_button");
         exit.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setTitle("Exit");
+          /*  Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Exit");*/
             pause();
 
-            ButtonType buttonTypeOne = new ButtonType("Save & Exit");
+            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?");
+            root.getChildren().add(menu.getStackPane());
+
+            menu.getNo().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    view.close();
+                }
+            });
+
+            menu.getYes().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        Game.getInstance().saveGame("SaveGame");
+                    } catch (Exception e) {
+
+                    }
+                    root.getChildren().remove(menu.getStackPane());
+                    view.close();
+                }
+            });
+            menu.getCancel().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
+
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
+
+
+        /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
-            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
             ButtonType buttonTypeCancel = new ButtonType("Cancel");
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
@@ -506,7 +555,7 @@ public class GameView {
             } else {
                 resume();
             }
-
+*/
 
         });
         root.getChildren().add(exit);
@@ -517,14 +566,61 @@ public class GameView {
         ImageView mn = new ImageView(new Image("file:textures/menu.png"));
         mn.setFitWidth(MENU_WODTH);
         mn.setFitHeight(MENU_HEIGHT);
-        Label menu = new Label();
-        menu.setId("label_button");
-        menu.setGraphic(mn);
-        menu.relocate(MENU_X, MENU_Y);
+        Label menuButton = new Label();
+        menuButton.setId("label_button");
+        menuButton.setGraphic(mn);
+        menuButton.relocate(MENU_X, MENU_Y);
 
-        menu.setOnMouseClicked(event -> {
+        menuButton.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.NONE);
+            pause();
+
+            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?");
+            root.getChildren().add(menu.getStackPane());
+
+            menu.getNo().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().clear();
+                    Menu backMenu = new Menu(view);
+                    view.setRoot(backMenu.getRoot());
+                    game.stop();
+                }
+            });
+
+            menu.getYes().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        Game.getInstance().saveGame("SaveGame");
+                    } catch (Exception e) {
+
+                    }
+                    root.getChildren().clear();
+                    Menu backMenu = new Menu(view);
+                    view.setRoot(backMenu.getRoot());
+                    game.stop();
+                }
+            });
+
+            menu.getCancel().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    resume();
+                }
+            });
+
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    resume();
+                }
+            });
+
+
+          /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Back To Menu");
             pause();
 
@@ -552,10 +648,10 @@ public class GameView {
                 view.setRoot(backMenu.getRoot());
                 game.stop();
                 //TODO fix Back to MENU.
-            } else resume();
+            } else resume();*/
 
         });
-        root.getChildren().add(menu);
+        root.getChildren().add(menuButton);
     }
 
     private void setUpWorkshops() {

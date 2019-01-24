@@ -44,20 +44,7 @@ public class Menu {
         start.setId("label_button");
         menuGroup.getChildren().add(start);
         start.setOnMouseClicked(event -> {
-            GameView gameView = GameView.getInstance();
-            List<String> choices = new ArrayList<>();
-            choices.addAll(Game.getLevels().keySet());
-            Collections.sort(choices);
-            ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
-            dialog.setTitle("Choose Level");
-            dialog.setHeaderText(null);
-            dialog.setContentText(null);
-            Optional<String> result = dialog.showAndWait();
-            result.ifPresent(s -> {
-                Game.runMap(Game.getLevel(s));
-                gameView.runGame();
-                view.setRoot(gameView.getRoot());
-            });
+            view.setRoot(new LevelSelect(view).getRoot());
         });
     }
 
@@ -93,15 +80,18 @@ public class Menu {
         info.setId("label_button");
         menuGroup.getChildren().add(info);
         info.setOnMouseClicked(event -> {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Info");
-            alert.setHeaderText(null);
-            alert.setContentText("Designed By\n" +
+            Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
                     "Mohammad Mahdavi\n" +
                     "Keivan Rezaei\n" +
                     "Music : Hope Prevails (By Jesper Kyd)");
-            alert.showAndWait();
+            menuGroup.getChildren().add(pop.getStackPane());
+            pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    menuGroup.getChildren().remove(pop.getStackPane());
+                }
+            });
         });
     }
 
