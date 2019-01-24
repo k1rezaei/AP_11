@@ -135,8 +135,6 @@ public class EventHandlers {
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
-
-            System.err.println("HEYY");
             switch (event.getButton()) {
                 case PRIMARY:
                     GameView.getInstance().pause();
