@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
 public class Truck extends Vehicle implements Upgradable {
-    private static final int INITIAL_CAPACITY = 30;
-    private static final int CAPACITY_INCREASE = 50;
+    private static final int INITIAL_CAPACITY = 20;
+    private static final int CAPACITY_INCREASE = 8;
     private static final int UPGRADE_COST = 300;
     private static final int GO_TIME = 200;
 
