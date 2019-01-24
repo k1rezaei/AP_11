@@ -136,17 +136,6 @@ public class SellMenu {
 
             Label price = new Label(Integer.toString(Entity.getNewEntity(pair.getKey()).getSellPrice()));
 
-            //TODO add Stroke to Texts
-           // price.setFont(Font.font(20));
-            //label.setTextFill(Color.LIGHTGREEN);
-            //label.setTextFill(Color.LIGHTGREEN);
-
-          //  price.setStyle("-fx-stroke: white; -fx-stroke-width: 100;");
-
-
-
-           // price.setTextFill(Color.LIGHTGREEN);
-
             ImageView so = new ImageView(one); so.setFitHeight(30*7/5); so.setFitWidth(25*7/5);
             Label sellOne = new Label(); sellOne.setGraphic(so);
 

@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -38,7 +39,7 @@ public class GameView {
     private static final int WORKSHOP_DIS = 150;
     private static final int BUY_ANIMAL_Y = 20;
     private static final int BUY_ANIMAL_BASE_X = 20;
-    private static final int BUY_ANIMAL_X_DIFF = 45;
+    private static final int BUY_ANIMAL_X_DIFF = 60;
     private static final int GOALS_WIDTH = 70;
     private static final int GOALS_HEIGHT = 50;
     private static final int GOALS_X = 720;
@@ -135,6 +136,42 @@ public class GameView {
         return stored;
     }
 
+    public double canv(double t){
+        return 4*(t-0.5)*(t-0.5);
+    }
+
+    public void updateGoTruck(){
+
+        /* alt
+        truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
+        */
+
+        int rem = Game.getInstance().getTruck().getRemainingTime();
+        int tim = Game.getInstance().getTruck().getGoTime();
+        if(rem == 0)
+            truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        else
+            truck.setOnMouseClicked(null);
+
+        truck.getImageView().setOpacity(canv(1-(double)rem/tim));
+
+    }
+
+    public void updateGoHelicopter(){
+        /*
+            alt
+            helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
+         */
+        int rem = Game.getInstance().getHelicopter().getRemainingTime();
+        int tim = Game.getInstance().getHelicopter().getGoTime();
+        if(rem == 0)
+            helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        else
+            helicopter.setOnMouseClicked(null);
+
+        helicopter.getImageView().setOpacity(canv(1-(double)rem/tim));
+    }
+
     public void runGame() {
         root = new Group();
         entityRoot = new Group();
@@ -162,10 +199,10 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
-                    truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
+                    updateGoTruck();
                     truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
 
-                    helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
+                    updateGoHelicopter();
                     helicopterInfo.setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
 
                     Game.getInstance().turn();
@@ -587,8 +624,11 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
+           // buyAnimal.setFitWidth(48);
+           // buyAnimal.setFitHeight(48);
+
             VBox info = new VBox();
-            info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 50);
+            info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 60);
             Label name = new Label(animalName);
             Label price = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
             info.getChildren().add(name);
@@ -608,23 +648,44 @@ public class GameView {
                     }
                 }
             });
+
+            Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
+            if(priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());
+            priceLabel.setId("buyAnimal");
+            buyAnimal.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i, BUY_ANIMAL_Y);
+            priceLabel.relocate( BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i + 10, BUY_ANIMAL_Y + 34);
+
+            priceLabel.setOnMouseEntered(mouseEvent -> {
+                focus.getRoot().getChildren().add(info);
+            });
+
+            priceLabel.setOnMouseExited(mouseEvent -> {
+                focus.getRoot().getChildren().remove(info);
+            });
+
             buyAnimal.setOnMouseEntered(mouseEvent -> {
                 focus.getRoot().getChildren().add(info);
             });
             buyAnimal.setOnMouseExited(mouseEvent -> {
                 focus.getRoot().getChildren().remove(info);
             });
-            buyAnimal.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i, BUY_ANIMAL_Y);
+
             root.getChildren().add(buyAnimal);
+            root.getChildren().add(priceLabel);
         }
     }
 
     private void setUpMoneyLabel() {
+        HBox hBox = new HBox();
         moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
-        moneyLabel.setTextFill(Color.GOLD);
-        moneyLabel.setFont(Font.font(30));
-        moneyLabel.relocate(MONEY_X, MONEY_Y);
-        root.getChildren().add(moneyLabel);
+        moneyLabel.setId("gold");
+        hBox.getChildren().add(moneyLabel);
+        ImageView coin = new ImageView(new Image("file:textures/coin3.gif"));
+        coin.setFitHeight(20);
+        coin.setFitWidth(20);
+        hBox.getChildren().add(coin);
+        hBox.relocate(MONEY_X, MONEY_Y);
+        root.getChildren().add(hBox);
     }
 
     private void fixSprite(SpriteAnimation sprite, int x, int y) {
