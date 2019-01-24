@@ -120,7 +120,7 @@ abstract public class Vehicle implements Upgradable {
     }
 
     public int getUpgradeCost() {
-        return upgradeCost * level;
+        return upgradeCost * (level + 1);
     }
 
     public void setUpgradeCost(int upgradeCost) {
