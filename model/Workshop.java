@@ -176,4 +176,9 @@ public class Workshop implements Upgradable {
     public void setNumberOfOutputs(int numberOfOutputs) {
         this.numberOfOutputs = numberOfOutputs;
     }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }
