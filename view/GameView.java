@@ -148,10 +148,14 @@ public class GameView {
 
         int rem = Game.getInstance().getTruck().getRemainingTime();
         int tim = Game.getInstance().getTruck().getGoTime();
-        if(rem == 0)
+        if(rem == 0) {
             truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
-        else
+            warehouse.setOnMouseClicked(EventHandlers.getAltOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        }
+        else {
             truck.setOnMouseClicked(null);
+            warehouse.setOnMouseClicked(EventHandlers.getAltOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        }
 
         truck.getImageView().setOpacity(canv(1-(double)rem/tim));
 
