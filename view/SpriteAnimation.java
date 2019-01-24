@@ -112,11 +112,11 @@ public class SpriteAnimation extends Transition {
         this.y = y;
     }
 
-    public double getWidth() {
+    public int getWidth() {
         return widths.get(state);
     }
 
-    public double getHeight() {
+    public int getHeight() {
         return heights.get(state);
     }
 }

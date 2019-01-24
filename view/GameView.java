@@ -1,6 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.application.Platform;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -62,8 +60,8 @@ public class GameView {
     private static final int WAREHOUSE_CNT_X = 8;
     private static final int WAREHOUSE_CNT_Y = 4;
     private static final double SOUND_PROP = 0.01;
-    private static final int BASE_X = 260;
-    private static final int BASE_Y = 210;
+    public static final int BASE_X = 260;
+    public static final int BASE_Y = 210;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
@@ -144,6 +142,7 @@ public class GameView {
     public void runGame() {
         root = new Group();
         entityRoot = new Group();
+        infoRoot = new Group();
         workshops.clear();
         sprites.clear();
         initializeNodes();
@@ -208,16 +207,15 @@ public class GameView {
                         }
 
                         root.getChildren().clear();
-                        ImageView imageView = new ImageView( new Image("file:textures/end3.gif"));
+                        ImageView imageView = new ImageView(new Image("file:textures/end3.gif"));
                         imageView.setFitHeight(600);
                         imageView.setFitWidth(800);
                         root.getChildren().add(imageView);
                         Label finish = new Label("You Won The Level :D");
                         finish.translateXProperty().bind(finish.widthProperty().divide(2).negate());
                         finish.translateYProperty().bind(finish.heightProperty().divide(2).negate());
-                        finish.relocate(400, 300);
                         finish.setId("finish");
-                        finish.relocate(150, 270);
+                        finish.relocate(400, 300);
                         root.getChildren().add(finish);
                         AnimationTimer animationTimer = new AnimationTimer() {
                             long last = -1;
@@ -226,12 +224,12 @@ public class GameView {
                             @Override
                             public void handle(long now) {
                                 if (last == -1) last = now;
-                                if(now - last > ONE_SECOND){
+                                if (now - last > ONE_SECOND) {
                                     cnt++;
                                     last = now;
-                                    if(finish.getId().equals("finish")) finish.setId("finish2");
+                                    if (finish.getId().equals("finish")) finish.setId("finish2");
                                     else finish.setId("finish");
-                                    if(cnt == 5){
+                                    if (cnt == 5) {
                                         Menu menu = new Menu(view);
                                         view.setRoot(menu.getRoot());
                                         //TODO fix Back to MENU.
@@ -279,7 +277,11 @@ public class GameView {
         newSprite.play();
         entityRoot.getChildren().add(newSprite.getImageView());
         if (entity.getType().equalsIgnoreCase("plant")) {
-            newSprite.getImageView().toBack();
+            ImageView plant = newSprite.getImageView();
+            plant.toBack();
+            plant.setOnMouseClicked(EventHandlers.getOnMouseClickedPlant(
+                    entity.getCell().getX() + BASE_X - newSprite.getWidth() / 2,
+                    entity.getCell().getY() + BASE_Y - newSprite.getHeight() / 2));
         }
     }
 
@@ -581,19 +583,7 @@ public class GameView {
     private void setUpBackground() {
         Image backgroundImage = new Image("file:textures/back.png");
         ImageView imageView = new ImageView(backgroundImage);
-        imageView.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                int x = (int) mouseEvent.getX();
-                int y = (int) mouseEvent.getY();
-                try {
-                    if (new Cell(x - BASE_X, y - BASE_Y).isInside()) {
-                        Game.getInstance().addPlant(x - BASE_X, y - BASE_Y);
-                    }
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                }
-            }
-        });
+        imageView.setOnMouseClicked(EventHandlers.getOnMouseClickedPlant(0, 0));
         root.getChildren().add(imageView);
     }
 

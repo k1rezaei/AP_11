@@ -183,4 +183,19 @@ public class EventHandlers {
         };
     }
 
+    static EventHandler<MouseEvent> getOnMouseClickedPlant(int nodeX, int nodeY) {
+        return mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                int x = (int) mouseEvent.getX();
+                int y = (int) mouseEvent.getY();
+                try {
+                    if (new Cell(x + nodeX - GameView.BASE_X, y + nodeY - GameView.BASE_Y).isInside()) {
+                        Game.getInstance().addPlant(x + nodeX - GameView.BASE_X, y + nodeY - GameView.BASE_Y);
+                    }
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                }
+            }
+        };
+    }
 }

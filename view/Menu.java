@@ -8,9 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Menu {
     static int OFFSET_X = 320;
@@ -45,8 +43,8 @@ public class Menu {
         start.setOnMouseClicked(event -> {
             GameView gameView = GameView.getInstance();
             List<String> choices = new ArrayList<>();
-            choices.add("level0");
-            choices.add("level1");
+            choices.addAll(Game.getLevels().keySet());
+            Collections.sort(choices);
             ChoiceDialog<String> dialog = new ChoiceDialog<>(choices.get(0), choices);
             dialog.setTitle("Choose Level");
             dialog.setHeaderText(null);
