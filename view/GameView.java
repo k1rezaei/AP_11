@@ -1,4 +1,6 @@
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -206,24 +208,36 @@ public class GameView {
                         }
 
                         root.getChildren().clear();
+                        ImageView imageView = new ImageView( new Image("file:textures/end3.gif"));
+                        imageView.setFitHeight(600);
+                        imageView.setFitWidth(800);
+                        root.getChildren().add(imageView);
                         Label finish = new Label("You Won The Level :D");
                         finish.translateXProperty().bind(finish.widthProperty().divide(2).negate());
                         finish.translateYProperty().bind(finish.heightProperty().divide(2).negate());
                         finish.relocate(400, 300);
+                        finish.setId("finish");
+                        finish.relocate(150, 270);
                         root.getChildren().add(finish);
                         AnimationTimer animationTimer = new AnimationTimer() {
                             long last = -1;
+                            int cnt = 0;
 
                             @Override
                             public void handle(long now) {
                                 if (last == -1) last = now;
-                                //System.out.println(last + " : " + now);
-                                if (now - last > (long) (3) * ONE_SECOND) {
-                                    Menu menu = new Menu(view);
-                                    view.setRoot(menu.getRoot());
-                                    //TODO fix Back to MENU.
-                                    game.stop();
-                                    this.stop();
+                                if(now - last > ONE_SECOND){
+                                    cnt++;
+                                    last = now;
+                                    if(finish.getId().equals("finish")) finish.setId("finish2");
+                                    else finish.setId("finish");
+                                    if(cnt == 5){
+                                        Menu menu = new Menu(view);
+                                        view.setRoot(menu.getRoot());
+                                        //TODO fix Back to MENU.
+                                        game.stop();
+                                        this.stop();
+                                    }
                                 }
                             }
                         };
