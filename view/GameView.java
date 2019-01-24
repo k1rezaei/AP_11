@@ -81,6 +81,7 @@ public class GameView {
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
     private Group entityRoot = new Group();
+    private Group infoRoot = new Group();
     private View view;
     private Rectangle filled = new Rectangle(12, 0);
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
@@ -154,6 +155,8 @@ public class GameView {
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * speed)) {
+                    infoRoot.toFront();
+                    focus.getRoot().toFront();
                     lastTime = now;
 
                     updateWarehouse();
@@ -176,32 +179,12 @@ public class GameView {
                                 }
                             }
                             if (!sprites.containsKey(entity)) {
-                                SpriteAnimation newSprite = Images.getSpriteAnimation(entity);
-                                sprites.put(entity, newSprite);
-                                newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
-                                newSprite.play();
-                                entityRoot.getChildren().add(newSprite.getImageView());
-                                if (entity.getType().equalsIgnoreCase("plant")) {
-                                    newSprite.getImageView().toBack();
-                                }
+                                addSprite(entity);
                             }
-                            SpriteAnimation sprite = sprites.get(entity);
-                            if (sprite.getState() != entity.getState()) {
-                                entityRoot.getChildren().remove(sprite.getImageView());
-                                sprite.setState(entity.getState());
-                                entityRoot.getChildren().add(sprite.getImageView());
-                            }
-                            sprite.getImageView().setTranslateX(-sprite.getWidth() / 2);
-                            sprite.getImageView().setTranslateY(-sprite.getHeight() / 2);
-                            sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
+                            renderSprite(entity);
                         } else {
                             if (!sprites.containsKey(entity)) continue;
-                            setUpDead(entity);
-                            SpriteAnimation sprite = sprites.get(entity);
-                            sprite.stop();
-                            sprite.getImageView().setVisible(false);
-                            entityRoot.getChildren().remove(sprite.getImageView());
-                            sprites.remove(entity);
+                            killSprite(entity);
                         }
                     }
                     removeFinishedDead();
@@ -216,7 +199,6 @@ public class GameView {
                     if (Game.getInstance().checkLevel()) {
                         pause();
                         AnimationTimer game = this;
-
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
@@ -225,9 +207,10 @@ public class GameView {
 
                         root.getChildren().clear();
                         Label finish = new Label("You Won The Level :D");
-                        finish.relocate(330, 270);
+                        finish.translateXProperty().bind(finish.widthProperty().divide(2).negate());
+                        finish.translateYProperty().bind(finish.heightProperty().divide(2).negate());
+                        finish.relocate(400, 300);
                         root.getChildren().add(finish);
-
                         AnimationTimer animationTimer = new AnimationTimer() {
                             long last = -1;
 
@@ -254,6 +237,38 @@ public class GameView {
         game.start();
     }
 
+    private void killSprite(Entity entity) {
+        setUpDead(entity);
+        SpriteAnimation sprite = sprites.get(entity);
+        sprite.stop();
+        sprite.getImageView().setVisible(false);
+        entityRoot.getChildren().remove(sprite.getImageView());
+        sprites.remove(entity);
+    }
+
+    private void renderSprite(Entity entity) {
+        SpriteAnimation sprite = sprites.get(entity);
+        if (sprite.getState() != entity.getState()) {
+            entityRoot.getChildren().remove(sprite.getImageView());
+            sprite.setState(entity.getState());
+            entityRoot.getChildren().add(sprite.getImageView());
+        }
+        sprite.getImageView().setTranslateX(-sprite.getWidth() / 2);
+        sprite.getImageView().setTranslateY(-sprite.getHeight() / 2);
+        sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
+    }
+
+    private void addSprite(Entity entity) {
+        SpriteAnimation newSprite = Images.getSpriteAnimation(entity);
+        sprites.put(entity, newSprite);
+        newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
+        newSprite.play();
+        entityRoot.getChildren().add(newSprite.getImageView());
+        if (entity.getType().equalsIgnoreCase("plant")) {
+            newSprite.getImageView().toBack();
+        }
+    }
+
     public Focus getFocus() {
         return focus;
     }
@@ -274,6 +289,7 @@ public class GameView {
         setUpGoals();
         setUpMenuButton();
         root.getChildren().add(entityRoot);
+        root.getChildren().add(infoRoot);
         root.getChildren().add(focus.getRoot());
     }
 
@@ -475,7 +491,7 @@ public class GameView {
             workshopInfo.relocate(x + 10, y + 10);
 
 
-            root.getChildren().add(workshopInfo);
+            infoRoot.getChildren().add(workshopInfo);
 
             workshopInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(workshop));
             workshopInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(workshop));
@@ -498,7 +514,7 @@ public class GameView {
         truckInfo.relocate(TRUCK_X - 10, TRUCK_Y);
         truckInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getTruck()));
         truckInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getTruck()));
-        root.getChildren().add(truckInfo);
+        infoRoot.getChildren().add(truckInfo);
     }
 
     private void setUpHelicopter() {
@@ -518,7 +534,7 @@ public class GameView {
         helicopterInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getHelicopter()));
         helicopterInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getHelicopter()));
 
-        root.getChildren().add(helicopterInfo);
+        infoRoot.getChildren().add(helicopterInfo);
     }
 
     private void setUpWell() {
@@ -541,7 +557,7 @@ public class GameView {
         Label wellInfo = new Label();
         wellInfo.setGraphic(img);
         wellInfo.relocate(WELL_X - 10, WELL_Y + 10);
-        root.getChildren().add(wellInfo);
+        infoRoot.getChildren().add(wellInfo);
 
         wellInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getWell()));
         wellInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getWell()));
