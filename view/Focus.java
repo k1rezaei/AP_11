@@ -101,7 +101,6 @@ public class Focus {
         if (active.get(well) != null && active.get(well)) return;
         int x = GameView.getInstance().getWell().getX(), y = GameView.getInstance().getWell().getY();
 
-        String cost = getCost(well);
         VBox vBox = new VBox();
         Label name = new Label("Well");
 
@@ -115,6 +114,24 @@ public class Focus {
 
         active.put(well, true);
         upgradableInfo.put(well, vBox);
+
+    }
+
+    void add (Warehouse warehouse) {
+        if(active.get(warehouse) != null && active.get(warehouse)) return ;
+        int x = GameView.getInstance().getWarehouse().getX(), y = GameView.getInstance().getWarehouse().getY();
+
+        VBox vBox = new VBox();
+        Label name = new Label("Warehouse");
+
+        HBox hBox1 = getUpgradeBox(warehouse);
+        HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
+        vBox.getChildren().addAll(name, hBox1, hBox2);
+        vBox.relocate(x + DIS_X, y);
+        focus.getChildren().add(vBox);
+
+        active.put(warehouse, true);
+        upgradableInfo.put(warehouse, vBox);
 
     }
 
@@ -149,6 +166,11 @@ public class Focus {
 
     private HBox getCapacityBox(Vehicle vehicle) {
         String cap = getCap(vehicle);
+        return combiner(cap, "capacity", capacityImage, CAPACITY_LENGTH);
+    }
+
+    private HBox getCapacityBoxForWarehouse(Warehouse warehouse) {
+        String cap = Integer.toString(warehouse.getCapacity());
         return combiner(cap, "capacity", capacityImage, CAPACITY_LENGTH);
     }
 
