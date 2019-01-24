@@ -21,6 +21,8 @@ import java.util.Optional;
 
 
 public class GameView {
+    public static final int BASE_X = 260;
+    public static final int BASE_Y = 210;
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
@@ -60,18 +62,16 @@ public class GameView {
     private static final int WAREHOUSE_CNT_X = 8;
     private static final int WAREHOUSE_CNT_Y = 4;
     private static final double SOUND_PROP = 0.01;
-    public static final int BASE_X = 260;
-    public static final int BASE_Y = 210;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
     private static Image info = new Image("file:textures/info.png");
-    private static ArrayList<SpriteAnimation> deadSprites = new ArrayList<>();
 
     static {
         REFRESHER.setVisible(false);
     }
 
+    private ArrayList<SpriteAnimation> deadSprites = new ArrayList<>();
     private double speed = 1;
     private boolean paused = false;
     private AnimationTimer game;
@@ -114,12 +114,8 @@ public class GameView {
         if ((entity instanceof Animal) && !(entity instanceof WildAnimal)) {
             SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
             spriteAnimation.setState(4);
-
-            if (entity instanceof Dog) {
-                fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - 50, entity.getDeadCell().getY() + BASE_Y - 50);
-            } else {
-                fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X, entity.getDeadCell().getY() + BASE_Y);
-            }
+            fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - spriteAnimation.getWidth() / 2,
+                    entity.getDeadCell().getY() + BASE_Y - spriteAnimation.getHeight() / 2);
             spriteAnimation.setCycleCount(1);
             spriteAnimation.play();
             deadSprites.add(spriteAnimation);
@@ -145,6 +141,7 @@ public class GameView {
         infoRoot = new Group();
         workshops.clear();
         sprites.clear();
+        deadSprites.clear();
         initializeNodes();
 
         game = new AnimationTimer() {
@@ -183,8 +180,7 @@ public class GameView {
                                 addSprite(entity);
                             }
                             renderSprite(entity);
-                        } else {
-                            if (!sprites.containsKey(entity)) continue;
+                        } else if (sprites.containsKey(entity)) {
                             killSprite(entity);
                         }
                     }
