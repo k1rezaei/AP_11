@@ -14,7 +14,13 @@ public class Focus {
     private static final int DIS_X = 50;
     private static final int ITEM_LENGTH = 25;
     private static final int DIS_Y = 10;
+    public static final int UPGRADE_LENGTH = 20;
+    public static final int CAPACITY_LENGTH = 20;
+    public static final int FILL_LENGTH = 20;
     private static Image arrowImage = new Image("file:textures/arrow.png");
+    private static Image upgradeImage = new Image("file:textures/upgradeIcon1.png");
+    private static Image capacityImage = new Image("file:textures/cap.png");
+    private static Image fillImage = new Image("file:textures/water1.png");
     private Map<Upgradable, Boolean> active = new HashMap<>();
     private Map<Upgradable, Node> upgradableInfo = new HashMap<>();
     private Group focus = new Group();
@@ -29,14 +35,10 @@ public class Focus {
         int x = GameView.getInstance().getWorkshop(workshop).getX();
         int y = GameView.getInstance().getWorkshop(workshop).getY();
 
-        String cost = getCost(workshop);
-
         VBox vBox = new VBox();
 
-        Label upgrade = new Label(cost);
-        upgrade.setFont(Font.font(2));
-        HBox hBox1 = new HBox();
-        hBox1.getChildren().add(upgrade);
+        HBox hBox1 = getUpgradeBox(workshop);
+
         vBox.getChildren().add(hBox1);
 
         HBox hBox2 = new HBox();
@@ -74,17 +76,15 @@ public class Focus {
             y = GameView.getInstance().getTruck().getY();
         }
 
-        String cost = getCost(vehicle);
-        String cap = getCap(vehicle);
-
         VBox vBox = new VBox();
-        Label name = new Label(vehicle.getName());
-        Label upgrade = new Label(cost);
-        Label capacity = new Label(cap);
+        Label name = new Label(vehicle.getName().substring(0, 1).toUpperCase() + vehicle.getName().substring(1));
+        name.setId("name");
 
-        vBox.getChildren().add(name);
-        vBox.getChildren().add(upgrade);
-        vBox.getChildren().add(capacity);
+        HBox hBox1 = getUpgradeBox(vehicle);
+        HBox hBox2 = getCapacityBox(vehicle);
+
+        vBox.getChildren().addAll(name, hBox1, hBox2);
+
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -99,11 +99,12 @@ public class Focus {
 
         String cost = getCost(well);
         VBox vBox = new VBox();
-        Label name = new Label(well.getName());
-        Label upgrade = new Label(cost);
+        Label name = new Label("Well");
 
-        vBox.getChildren().add(name);
-        vBox.getChildren().add(upgrade);
+        HBox hBox1 = getUpgradeBox(well);
+        HBox hBox2 = getFillBox(well);
+
+        vBox.getChildren().addAll(name, hBox1, hBox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -128,6 +129,31 @@ public class Focus {
 
     String getCap(Vehicle vehicle) {
         return Integer.toString(vehicle.getCapacity());
+    }
+
+    private HBox getUpgradeBox(Upgradable u) {
+        String cost = getCost(u);
+        return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
+    }
+
+    private HBox getCapacityBox(Vehicle vehicle) {
+        String cap = getCap(vehicle);
+        return combiner(cap, "capacity", capacityImage, CAPACITY_LENGTH);
+    }
+
+    HBox combiner(String str, String id, Image image, int len) {
+        HBox hBox = new HBox();
+        Label label = new Label(str);
+        label.setId(id);
+        ImageView img = new ImageView(image);
+        img.setFitHeight(len); img.setFitWidth(len);
+        hBox.getChildren().addAll(label, img);
+        return hBox;
+    }
+
+    private HBox getFillBox(Well well) {
+        String fill = Integer.toString(well.getFillCost());
+        return combiner(fill, "well",fillImage, FILL_LENGTH);
     }
 
 }
