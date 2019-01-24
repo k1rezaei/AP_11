@@ -63,11 +63,12 @@ public class Images {
 
         for (int i = 0; i < 6; i++)
             loadImage("workshop" + i, 5, 16, new int[]{4, 4, 4, 4, 4});
-
+        loadImage("helicopterMini", 4, 6, new int[]{3, 3, 3, 3});
+        loadImage("truckMini", 4, 2, new int[]{2, 2, 2, 2});
     }
 
     static void addImages(ArrayList<Image> images, String type, int n) {
-        String address = BASE;
+        String address;
         if (type.startsWith("workshop"))
             address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
         else address = BASE + type + "/";
@@ -89,11 +90,16 @@ public class Images {
     static SpriteAnimation getSpriteAnimation(Entity entity) {
         return new SpriteAnimation(map.get(entity.getType()));
     }
-    static SpriteAnimation getSpriteAnimation (String type) {return new SpriteAnimation(map.get(type));}
+
+    static SpriteAnimation getSpriteAnimation(String type) {
+        return new SpriteAnimation(map.get(type));
+    }
+
     static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
-    static ImageView getIcon(String type){
+
+    static ImageView getIcon(String type) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }
