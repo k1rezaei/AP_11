@@ -13,7 +13,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +65,10 @@ public class GameView {
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
+    private static final int VEHICLE_MINI_X = 630;
+    private static final int HELICOPTER_MINI_Y = 50;
+    private static final int TRUCK_MINI_Y = 85;
+    public static final int VEHICLE_MINI_TRAVEL = 110;
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -90,6 +93,8 @@ public class GameView {
     private SpriteAnimation warehouse;
     private SpriteAnimation truck;
     private SpriteAnimation helicopter;
+    private SpriteAnimation truckMini;
+    private SpriteAnimation helicopterMini;
     private Label moneyLabel;
     private Focus focus;
 
@@ -108,68 +113,6 @@ public class GameView {
     public void resume() {
         paused = false;
         game.start();
-    }
-
-    public void setUpDead(Entity entity) {
-        if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
-        if ((entity instanceof Animal) && !(entity instanceof WildAnimal)) {
-            SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
-            spriteAnimation.setState(4);
-            fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - spriteAnimation.getWidth() / 2,
-                    entity.getDeadCell().getY() + BASE_Y - spriteAnimation.getHeight() / 2);
-            spriteAnimation.setCycleCount(1);
-            spriteAnimation.play();
-            deadSprites.add(spriteAnimation);
-        }
-    }
-
-    public void removeFinishedDead() {
-        for (int i = deadSprites.size() - 1; i >= 0; i--) {
-            if (deadSprites.get(i).getLastIndex() == 23) {
-                root.getChildren().remove(deadSprites.get(i).getImageView());
-                deadSprites.remove(i);
-            }
-        }
-    }
-
-    public FlowPane getStored() {
-        return stored;
-    }
-
-    public double canv(double t){
-        return 4*(t-0.5)*(t-0.5);
-    }
-
-    public void updateGoTruck(){
-
-        /* alt
-        truck.getImageView().setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
-        */
-
-        int rem = Game.getInstance().getTruck().getRemainingTime();
-        int tim = Game.getInstance().getTruck().getGoTime();
-        if(rem == 0)
-            truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
-        else
-            truck.setOnMouseClicked(null);
-
-        truck.getImageView().setOpacity(canv(1-(double)rem/tim));
-
-    }
-
-    public void updateGoHelicopter(){
-        /*
-            alt
-            helicopter.getImageView().setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
-         */
-        int rem = Game.getInstance().getHelicopter().getRemainingTime();
-        int tim = Game.getInstance().getHelicopter().getGoTime();
-        if(rem == 0)
-            helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
-        else
-            helicopter.setOnMouseClicked(null);
-
-        helicopter.getImageView().setOpacity(canv(1-(double)rem/tim));
     }
 
     public void runGame() {
@@ -199,10 +142,10 @@ public class GameView {
                     root.getChildren().add(REFRESHER);
                     root.getChildren().remove(REFRESHER);
 
-                    updateGoTruck();
+                    updateTruck();
                     truckInfo.setVisible(Game.getInstance().getTruck().getRemainingTime() == 0);
 
-                    updateGoHelicopter();
+                    updateHelicopter();
                     helicopterInfo.setVisible(Game.getInstance().getHelicopter().getRemainingTime() == 0);
 
                     Game.getInstance().turn();
@@ -282,6 +225,93 @@ public class GameView {
         game.start();
     }
 
+    public FlowPane getStored() {
+        return stored;
+    }
+
+    public double canv(double t) {
+        return 4 * (t - 0.5) * (t - 0.5);
+    }
+
+    public void updateTruck() {
+        int remainingTime = Game.getInstance().getTruck().getRemainingTime();
+        int goTime = Game.getInstance().getTruck().getGoTime();
+        setUpVehicleMini(remainingTime, goTime, truckMini, truck);
+        truck.getImageView().setVisible(remainingTime == 0);
+        /*int rem = Game.getInstance().getTruck().getRemainingTime();
+        int tim = Game.getInstance().getTruck().getGoTime();
+        if (rem == 0)
+            truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
+        else
+            truck.setOnMouseClicked(null);
+
+        truck.getImageView().setOpacity(canv(1 - (double) rem / tim));*/
+
+    }
+
+    public void updateHelicopter() {
+        int remainingTime = Game.getInstance().getHelicopter().getRemainingTime();
+        int goTime = Game.getInstance().getHelicopter().getGoTime();
+        setUpVehicleMini(remainingTime, goTime, helicopterMini, helicopter);
+        helicopter.getImageView().setVisible(remainingTime == 0);
+        /*int rem = Game.getInstance().getHelicopter().getRemainingTime();
+        int tim = Game.getInstance().getHelicopter().getGoTime();
+        if (rem == 0)
+            helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
+        else
+            helicopter.setOnMouseClicked(null);
+
+        helicopter.getImageView().setOpacity(canv(1 - (double) rem / tim));*/
+    }
+
+    private void setUpVehicleMini(int remainingTime, int goTime, SpriteAnimation vehicleMini, SpriteAnimation vehicle) {
+        if (vehicleMini.getState() != vehicle.getState()) {
+            root.getChildren().remove(vehicleMini.getImageView());
+            vehicleMini.setState(vehicle.getState());
+            if (remainingTime != 0) {
+                root.getChildren().add(vehicleMini.getImageView());
+            }
+        }
+        if (remainingTime != 0) {
+            if (!root.getChildren().contains(vehicleMini.getImageView())) {
+                root.getChildren().add(vehicleMini.getImageView());
+                vehicleMini.play();
+            }
+            if (2 * remainingTime > goTime) {
+                vehicleMini.getImageView().setScaleX(-1);
+            } else {
+                vehicleMini.getImageView().setScaleX(1);
+            }
+            vehicleMini.getImageView().setX(VEHICLE_MINI_X + VEHICLE_MINI_TRAVEL -
+                    VEHICLE_MINI_TRAVEL * Math.abs(2 * remainingTime - goTime) / (2.0 * goTime));
+        } else {
+            root.getChildren().remove(vehicleMini.getImageView());
+            vehicleMini.stop();
+        }
+    }
+
+    public void setUpDead(Entity entity) {
+        if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
+        if ((entity instanceof Animal) && !(entity instanceof WildAnimal)) {
+            SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
+            spriteAnimation.setState(4);
+            fixSprite(spriteAnimation, entity.getDeadCell().getX() + BASE_X - spriteAnimation.getWidth() / 2,
+                    entity.getDeadCell().getY() + BASE_Y - spriteAnimation.getHeight() / 2);
+            spriteAnimation.setCycleCount(1);
+            spriteAnimation.play();
+            deadSprites.add(spriteAnimation);
+        }
+    }
+
+    public void removeFinishedDead() {
+        for (int i = deadSprites.size() - 1; i >= 0; i--) {
+            if (deadSprites.get(i).getLastIndex() == 23) {
+                root.getChildren().remove(deadSprites.get(i).getImageView());
+                deadSprites.remove(i);
+            }
+        }
+    }
+
     private void killSprite(Entity entity) {
         setUpDead(entity);
         SpriteAnimation sprite = sprites.get(entity);
@@ -336,10 +366,26 @@ public class GameView {
         setUpFastForward();
         setUpExitButton();
         setUpGoals();
+        setUpHelicoperMini();
+        setUpTruckMini();
         setUpMenuButton();
         root.getChildren().add(entityRoot);
         root.getChildren().add(infoRoot);
         root.getChildren().add(focus.getRoot());
+    }
+
+    private void setUpTruckMini() {
+        truckMini = Images.getSpriteAnimation("truckMini");
+        for (ImageView imageView : truckMini.getImageViews()) {
+            imageView.setY(TRUCK_MINI_Y);
+        }
+    }
+
+    private void setUpHelicoperMini() {
+        helicopterMini = Images.getSpriteAnimation("helicopterMini");
+        for (ImageView imageView : helicopterMini.getImageViews()) {
+            imageView.setY(HELICOPTER_MINI_Y);
+        }
     }
 
     private void setUpGoals() {
@@ -624,8 +670,8 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
-           // buyAnimal.setFitWidth(48);
-           // buyAnimal.setFitHeight(48);
+            // buyAnimal.setFitWidth(48);
+            // buyAnimal.setFitHeight(48);
 
             VBox info = new VBox();
             info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 60);
@@ -650,10 +696,10 @@ public class GameView {
             });
 
             Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
-            if(priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());
+            if (priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());
             priceLabel.setId("buyAnimal");
             buyAnimal.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i, BUY_ANIMAL_Y);
-            priceLabel.relocate( BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i + 10, BUY_ANIMAL_Y + 34);
+            priceLabel.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i + 10, BUY_ANIMAL_Y + 34);
 
             priceLabel.setOnMouseEntered(mouseEvent -> {
                 focus.getRoot().getChildren().add(info);
