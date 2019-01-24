@@ -127,4 +127,9 @@ public class Warehouse implements Upgradable {
     public Map<String, Integer> getStorables() {
         return storables;
     }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

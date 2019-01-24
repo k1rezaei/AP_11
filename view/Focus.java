@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +29,7 @@ public class Focus {
     }
 
     void add(Workshop workshop) {
+        System.err.println("To Add : " + workshop.getName());
         if (active.get(workshop) != null && active.get(workshop)) return;
 
         int x = GameView.getInstance().getWorkshop(workshop).getX();
@@ -119,9 +119,14 @@ public class Focus {
     }
 
     void remove(Upgradable u) {
+        System.err.println("To Remove : " + u.getName());
         if (active.get(u) == null || !active.get(u)) return;
+        System.out.println("is Going to Remove");
         VBox data = (VBox) upgradableInfo.remove(u);
-        focus.getChildren().remove(data);
+        if(data == null) System.out.println("BUG");
+        System.err.print(focus.getChildren().size() + " : ");
+        focus.getChildren().clear();
+        System.err.println(focus.getChildren().size());
         active.put(u, false);
     }
 

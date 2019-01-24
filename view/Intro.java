@@ -1,4 +1,5 @@
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -42,7 +43,7 @@ public class Intro {
                 goToMenu();
             }
         });
-        Label label = new Label("Felan SmsS Taghdim Mikonad");
+        Label label = new Label("Dr. Keivan and friends Present!");
         label.setId("intro");
         label.translateXProperty().bind(label.widthProperty().divide(2).negate());
         label.translateYProperty().bind(label.heightProperty().divide(2).negate());
