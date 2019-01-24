@@ -80,7 +80,7 @@ public class GameView {
     private boolean paused = false;
     private AnimationTimer game;
     private Label truckInfo;
-    private Label helicopterInfo;
+    private Label helicopterInfo, warehouseInfo;
     private FlowPane stored = new FlowPane();
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
@@ -412,14 +412,6 @@ public class GameView {
         });
     }
 
-    private void setUpWarehouse() {
-        warehouse = Images.getSpriteAnimation("warehouse");
-        warehouse.setState(Game.getInstance().getWarehouse().getLevel());
-        fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
-        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
-        root.getChildren().add(stored);
-    }
-
     private void setUpFastForward() {
         Label ff = new Label();
         ff.setId("label_button");
@@ -711,6 +703,26 @@ public class GameView {
         truckInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getTruck()));
         truckInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getTruck()));
         infoRoot.getChildren().add(truckInfo);
+    }
+
+    private void setUpWarehouse() {
+        warehouse = Images.getSpriteAnimation("warehouse");
+        warehouse.setState(Game.getInstance().getWarehouse().getLevel());
+        fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
+
+        ImageView img = new ImageView(info);
+        img.setFitHeight(INFO_LENGTH);
+        img.setFitWidth(INFO_LENGTH);
+
+        warehouseInfo = new Label();
+        warehouseInfo.setGraphic(img);
+        warehouseInfo.relocate(WAREHOUSE_X - 10, WAREHOUSE_Y);
+        warehouseInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getWarehouse()));
+        warehouseInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getWarehouse()));
+        warehouseInfo.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        infoRoot.getChildren().add(warehouseInfo);
+
+        root.getChildren().add(stored);
     }
 
     private void setUpHelicopter() {

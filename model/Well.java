@@ -64,6 +64,11 @@ public class Well implements Upgradable {
     }
 
     @Override
+    public int hashCode() {
+        return 0;
+    }
+
+    @Override
     public String toString() {
         return "ٌٍLevel : " + level + " | currentAmount : " + currentAmount + "\n";
     }
