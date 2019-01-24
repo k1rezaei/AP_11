@@ -153,7 +153,7 @@ public class Focus {
 
     private HBox getFillBox(Well well) {
         String fill = Integer.toString(well.getFillCost());
-        return combiner(fill, "well",fillImage, FILL_LENGTH);
+        return combiner(fill, "gold",fillImage, FILL_LENGTH);
     }
 
 }
