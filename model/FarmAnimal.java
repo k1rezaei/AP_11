@@ -1,6 +1,6 @@
 public class FarmAnimal extends Animal {
-    static private int RATE_OF_HUNGER = 250;
-    static private int MIN_HUNGER = 200;
+    static private int RATE_OF_HUNGER = 600;
+    static private int MIN_HUNGER = 400;
 
 
     private String produceType;
@@ -17,22 +17,22 @@ public class FarmAnimal extends Animal {
         super(type);
         rateOfHunger = RATE_OF_HUNGER;
         if (type.equalsIgnoreCase("cow")) {
-            speed = 4;
+            speed = 3;
             buyPrice = 1000;
-            hungrySpeed = 6;
-            remainTime = baseRemainTime = 60;
+            hungrySpeed = 36;
+            remainTime = baseRemainTime = 450;
             produceType = "Milk";
         } else if (type.equalsIgnoreCase("chicken")) {
             speed = 5;
             buyPrice = 100;
-            hungrySpeed = 1;
-            remainTime = baseRemainTime = 40;
+            hungrySpeed = 6;
+            remainTime = baseRemainTime = 300;
             produceType = "Egg";
         } else {
-            speed = 5;
+            speed = 4;
             buyPrice = 1000;
-            hungrySpeed = 3;
-            remainTime = baseRemainTime = 50;
+            hungrySpeed = 18;
+            remainTime = baseRemainTime = 350;
             produceType = "Wool";
         }
     }
@@ -43,7 +43,7 @@ public class FarmAnimal extends Animal {
     }
 
     void move() {
-        if (rateOfHunger < RATE_OF_HUNGER / 2) {
+        if (rateOfHunger < RATE_OF_HUNGER / 3) {
             setTargetCell(Game.getInstance().getMap().getClosest(Entity.PLANT, cell));
             super.move();
             super.move();
@@ -56,7 +56,7 @@ public class FarmAnimal extends Animal {
 
 
     void turn() {
-        rateOfHunger -=2;
+        rateOfHunger -= 3;
         if (rateOfHunger <= 0) {
             destroy();
             return;
@@ -71,8 +71,8 @@ public class FarmAnimal extends Animal {
 
     void collide(Entity entity) {
         if (entity instanceof Plant) {
-            ((Plant) (entity)).startTimer();
             if(rateOfHunger > MIN_HUNGER) return;
+            ((Plant) (entity)).startTimer();
             rateOfHunger += RATE_OF_HUNGER / hungrySpeed;
             if (rateOfHunger > RATE_OF_HUNGER) rateOfHunger = RATE_OF_HUNGER;
         }

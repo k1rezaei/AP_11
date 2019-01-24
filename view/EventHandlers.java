@@ -173,8 +173,10 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    GameView.getInstance().pause();
-                    view.setRoot(new SellMenu(view).getSellGroup());
+                    if(Game.getInstance().getTruck().getRemainingTime() == 0) {
+                        GameView.getInstance().pause();
+                        view.setRoot(new SellMenu(view).getSellGroup());
+                    }
                     break;
                 case SECONDARY:
                     upgradeWarehouse(warehouse);
