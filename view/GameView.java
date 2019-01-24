@@ -366,7 +366,7 @@ public class GameView {
         setUpFastForward();
         setUpExitButton();
         setUpGoals();
-        setUpHelicoperMini();
+        setUpHelicopterMini();
         setUpTruckMini();
         setUpMenuButton();
         root.getChildren().add(entityRoot);
@@ -381,7 +381,7 @@ public class GameView {
         }
     }
 
-    private void setUpHelicoperMini() {
+    private void setUpHelicopterMini() {
         helicopterMini = Images.getSpriteAnimation("helicopterMini");
         for (ImageView imageView : helicopterMini.getImageViews()) {
             imageView.setY(HELICOPTER_MINI_Y);
