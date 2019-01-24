@@ -1,13 +1,47 @@
- .label {
+.label {
     -fx-text-fill: white;
     -fx-font-size: 18;
     -fx-font-family: "Comic Sans MS";
 }
 
 .label .text {
-    -fx-stroke: green;
+    -fx-stroke: lightblue;
     -fx-stroke-width: 1px;
 }
+#pop {
+    -fx-padding: 10;
+    -fx-opacity: 0.7;
+    -fx-background-color: rgb(203, 141, 79);
+    -fx-background-radius: 30;
+    -fx-text-fill: white;
+    -fx-font-size: 30;
+}
+
+#pop .text{
+    -fx-stroke: firebrick;
+    -fx-stroke-width: 2px;
+}
+#tutorial{
+    -fx-text-fill: blue;
+    -fx-background-color: black;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 30;
+    -fx-padding: 10;
+}
+#tutorial .text {
+    -fx-stroke: #F0E68C;
+    -fx-stroke-width: 1px;
+}
+#name{
+
+}
+#capacity {
+}
+
+#capacity .text {
+    -fx-stroke: orange;
+}
+
 
 #intro {
     -fx-text-alignment: center;
@@ -38,7 +72,7 @@
 }
 
 #gold .text{
-    -fx-text-stroke : yellow;
+    -fx-stroke : yellow;
     -fx-stroke-width: 1px;
 }
 
@@ -72,6 +106,20 @@ VBox {
     -fx-min-width: 110px;
 }
 
+#vBox_menu {
+    -fx-background-color: black;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 50;
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-min-height: 400px;
+    -fx-max-height: 400px;
+    -fx-max-width: 400px;
+    -fx-min-width: 400px;
+}
+#vBox_menu .label .text{
+    -fx-stroke: blue;
+}
 
 #label_button:hover {
     -fx-scale-x: 1.2;
@@ -99,7 +147,3 @@ VBox {
     -fx-stroke: red;
     -fx-stroke-width: 2px;
 }
-
-
-
-
