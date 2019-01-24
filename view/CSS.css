@@ -9,6 +9,17 @@
     -fx-stroke-width: 1px;
 }
 
+#intro {
+    -fx-text-alignment: center;
+    -fx-padding: 50;
+    -fx-font-size: 50;
+}
+
+#intro .text{
+    -fx-stroke: green;
+    -fx-stroke-width: 2px;
+}
+
 #buyAnimal {
     -fx-padding: 5;
     -fx-text-alignment: center;
@@ -27,8 +38,20 @@
 }
 
 #gold .text{
-    -fx-stroke: yellow;
+    -fx-text-stroke : yellow;
     -fx-stroke-width: 1px;
+}
+
+#introFrom {
+    -fx-fill: white;
+}
+
+#introTo {
+    -fx-fill: yellow;
+}
+#introFrom .text{
+    -fx-stroke: white;
+
 }
 
 
