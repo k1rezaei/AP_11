@@ -83,7 +83,7 @@ public class GameView {
     private boolean paused = false;
     private AnimationTimer game;
     private Label truckInfo;
-    private Label helicopterInfo;
+    private Label helicopterInfo, warehouseInfo;
     private FlowPane stored = new FlowPane();
     private Group root = new Group();
     private HashMap<Entity, SpriteAnimation> sprites = new HashMap<>();
@@ -419,21 +419,9 @@ public class GameView {
         goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Goals");
-                alert.setContentText(level.toString());
-                alert.setHeaderText(null);
-                alert.show();
+                pop(level.toString());
             }
         });
-    }
-
-    private void setUpWarehouse() {
-        warehouse = Images.getSpriteAnimation("warehouse");
-        warehouse.setState(Game.getInstance().getWarehouse().getLevel());
-        fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
-        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
-        root.getChildren().add(stored);
     }
 
     private void setUpFastForward() {
@@ -463,6 +451,19 @@ public class GameView {
         root.getChildren().add(ff);
     }
 
+    void pop(String text){
+        pause();
+        Pop pop = new Pop(text);
+        root.getChildren().add(pop.getStackPane());
+        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+                resume();
+            }
+        });
+    }
+
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
@@ -471,13 +472,14 @@ public class GameView {
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
-                pause();
+                pop("Saved Successful\nClick To Continue");
+                /* OLD VERSION
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setTitle("^_^");
                 alert.setContentText(null);
                 alert.setHeaderText("Saved Successful");
                 alert.showAndWait();
-                resume();
+                resume();*/
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -494,13 +496,52 @@ public class GameView {
         exit.setId("label_button");
         exit.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.NONE);
-            alert.setTitle("Exit");
+          /*  Alert alert = new Alert(Alert.AlertType.NONE);
+            alert.setTitle("Exit");*/
             pause();
 
-            ButtonType buttonTypeOne = new ButtonType("Save & Exit");
+            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?");
+            root.getChildren().add(menu.getStackPane());
+
+            menu.getNo().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    view.close();
+                }
+            });
+
+            menu.getYes().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        Game.getInstance().saveGame("SaveGame");
+                    } catch (Exception e) {
+
+                    }
+                    root.getChildren().remove(menu.getStackPane());
+                    view.close();
+                }
+            });
+            menu.getCancel().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
+
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
+
+
+        /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
-            // TODO  ButtonType buttonTypeThree = new ButtonType("Go to menu");
             ButtonType buttonTypeCancel = new ButtonType("Cancel");
 
             alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
@@ -518,7 +559,7 @@ public class GameView {
             } else {
                 resume();
             }
-
+*/
 
         });
         root.getChildren().add(exit);
@@ -529,14 +570,61 @@ public class GameView {
         ImageView mn = new ImageView(new Image("file:textures/menu.png"));
         mn.setFitWidth(MENU_WIDTH);
         mn.setFitHeight(MENU_HEIGHT);
-        Label menu = new Label();
-        menu.setId("label_button");
-        menu.setGraphic(mn);
-        menu.relocate(MENU_X, MENU_Y);
+        Label menuButton = new Label();
+        menuButton.setId("label_button");
+        menuButton.setGraphic(mn);
+        menuButton.relocate(MENU_X, MENU_Y);
 
-        menu.setOnMouseClicked(event -> {
+        menuButton.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.NONE);
+            pause();
+
+            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?");
+            root.getChildren().add(menu.getStackPane());
+
+            menu.getNo().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().clear();
+                    Menu backMenu = new Menu(view);
+                    view.setRoot(backMenu.getRoot());
+                    game.stop();
+                }
+            });
+
+            menu.getYes().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    try {
+                        Game.getInstance().saveGame("SaveGame");
+                    } catch (Exception e) {
+
+                    }
+                    root.getChildren().clear();
+                    Menu backMenu = new Menu(view);
+                    view.setRoot(backMenu.getRoot());
+                    game.stop();
+                }
+            });
+
+            menu.getCancel().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    resume();
+                }
+            });
+
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(menu.getStackPane());
+                    resume();
+                }
+            });
+
+
+          /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Back To Menu");
             pause();
 
@@ -564,10 +652,10 @@ public class GameView {
                 view.setRoot(backMenu.getRoot());
                 game.stop();
                 //TODO fix Back to MENU.
-            } else resume();
+            } else resume();*/
 
         });
-        root.getChildren().add(menu);
+        root.getChildren().add(menuButton);
     }
 
     private void setUpWorkshops() {
@@ -627,6 +715,26 @@ public class GameView {
         truckInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getTruck()));
         truckInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getTruck()));
         infoRoot.getChildren().add(truckInfo);
+    }
+
+    private void setUpWarehouse() {
+        warehouse = Images.getSpriteAnimation("warehouse");
+        warehouse.setState(Game.getInstance().getWarehouse().getLevel());
+        fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
+
+        ImageView img = new ImageView(info);
+        img.setFitHeight(INFO_LENGTH);
+        img.setFitWidth(INFO_LENGTH);
+
+        warehouseInfo = new Label();
+        warehouseInfo.setGraphic(img);
+        warehouseInfo.relocate(WAREHOUSE_X - 10, WAREHOUSE_Y);
+        warehouseInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getWarehouse()));
+        warehouseInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getWarehouse()));
+        warehouseInfo.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        infoRoot.getChildren().add(warehouseInfo);
+
+        root.getChildren().add(stored);
     }
 
     private void setUpHelicopter() {
@@ -693,13 +801,17 @@ public class GameView {
             VBox info = new VBox();
             info.relocate(BUY_ANIMAL_BASE_X + 210, BUY_ANIMAL_Y + 60);
             Label name = new Label(animalName);
+            name.setId("name");
             Label price = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
+            price.setId("gold");
+
             info.getChildren().add(name);
             info.getChildren().add(price);
             buyAnimal.setOnMouseClicked(mouseEvent -> {
                 try {
                     if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                         Game.getInstance().buyAnimal(animalName);
+
                     } else if (mouseEvent.getButton() == MouseButton.SECONDARY && animalName.equalsIgnoreCase("cat")) {
                         Game.getInstance().upgrade("cat");
                     }

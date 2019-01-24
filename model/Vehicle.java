@@ -146,4 +146,9 @@ abstract public class Vehicle implements Upgradable {
     abstract public int getResultMoney();
 
     abstract public ArrayList<Entity> getResultItems();
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

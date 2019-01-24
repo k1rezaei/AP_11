@@ -17,6 +17,15 @@ public class EventHandlers {
         //    mediaPlayer.play();
     }
 
+    static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Warehouse warehouse) {
+        return event -> GameView.getInstance().getFocus().add(warehouse);
+    }
+
+    static EventHandler<MouseEvent> getOnMouseExitedEventHandler(Warehouse warehouse) {
+        return event -> GameView.getInstance().getFocus().remove(warehouse);
+    }
+
+
     static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Workshop workshop) {
         return event -> GameView.getInstance().getFocus().add(workshop);
     }

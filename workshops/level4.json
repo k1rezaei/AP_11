@@ -1,0 +1,18 @@
+{
+  "startMoney": 10000,
+  "goalMoney": 50000,
+  "goalEntity": {
+    "Sheep": 3,
+    "Cow" : 5
+  },
+  "n": 300,
+  "m": 200,
+  "itemList": [
+    "Flour",
+    "BrightHorn",
+    "Horn",
+    "Plume",
+    "Adornment",
+    "Souvenir"
+  ]
+}
