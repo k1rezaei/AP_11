@@ -497,4 +497,16 @@ public class Game {
     public static Level getLevel(String name) {
         return levels.get(name);
     }
+
+    public static HashMap<String, Level> getLevels() {
+        return levels;
+    }
+
+    public static void setLevels(HashMap<String, Level> levels) {
+        Game.levels = levels;
+    }
+
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
 }
