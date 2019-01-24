@@ -8,6 +8,17 @@
     -fx-stroke: lightblue;
     -fx-stroke-width: 1px;
 }
+#tutorial{
+    -fx-text-fill: blue;
+    -fx-background-color: black;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 30;
+    -fx-padding: 10;
+}
+#tutorial .text {
+    -fx-stroke: #F0E68C;
+    -fx-stroke-width: 1px;
+}
 #name{
 
 }
