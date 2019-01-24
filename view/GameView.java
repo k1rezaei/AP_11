@@ -114,7 +114,7 @@ public class GameView {
         paused = false;
         game.start();
     }
-
+  
     public void runGame() {
         root = new Group();
         entityRoot = new Group();
@@ -187,11 +187,16 @@ public class GameView {
                         imageView.setFitHeight(600);
                         imageView.setFitWidth(800);
                         root.getChildren().add(imageView);
-                        Label finish = new Label("You Won The Level :D");
+                        Label finish = new Label("You Win :D");
                         finish.translateXProperty().bind(finish.widthProperty().divide(2).negate());
                         finish.translateYProperty().bind(finish.heightProperty().divide(2).negate());
                         finish.setId("finish");
                         finish.relocate(400, 300);
+                        TextAnimation textAnimation = new TextAnimation(finish);
+                        textAnimation.setFrom(0,255,0);
+                        textAnimation.setTo(255,0,255);
+                        textAnimation.setBlinkTime(100);
+                        textAnimation.play();
                         root.getChildren().add(finish);
                         AnimationTimer animationTimer = new AnimationTimer() {
                             long last = -1;
@@ -200,7 +205,7 @@ public class GameView {
                             @Override
                             public void handle(long now) {
                                 if (last == -1) last = now;
-                                if (now - last > ONE_SECOND) {
+                                if (now - last > ONE_SECOND || last == -1) {
                                     cnt++;
                                     last = now;
                                     if (finish.getId().equals("finish")) finish.setId("finish2");
