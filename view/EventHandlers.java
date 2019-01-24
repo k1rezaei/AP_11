@@ -133,6 +133,33 @@ public class EventHandlers {
         };
     }
 
+    static void upgradeWarehouse(Warehouse warehouse){
+        try {
+            Game.getInstance().upgrade("warehouse");
+            SpriteAnimation sprite = GameView.getInstance().getWarehouse();
+            GameView.getInstance().update(sprite, warehouse);
+
+            GameView.getInstance().getRoot().getChildren().remove(GameView.getInstance().getStored());
+            GameView.getInstance().getRoot().getChildren().add(GameView.getInstance().getStored());
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            alert();
+        }
+    }
+
+
+
+    static EventHandler<MouseEvent> getAltOnMouseClickedEventHandler(Warehouse warehouse) {
+        return event -> {
+            switch (event.getButton()) {
+                case PRIMARY:
+                    break;
+                case SECONDARY:
+                    upgradeWarehouse(warehouse);
+                    break;
+            }
+        };
+    }
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
             switch (event.getButton()) {
@@ -141,17 +168,7 @@ public class EventHandlers {
                     view.setRoot(new SellMenu(view).getSellGroup());
                     break;
                 case SECONDARY:
-                    try {
-                        Game.getInstance().upgrade("warehouse");
-                        SpriteAnimation sprite = GameView.getInstance().getWarehouse();
-                        GameView.getInstance().update(sprite, warehouse);
-
-                        GameView.getInstance().getRoot().getChildren().remove(GameView.getInstance().getStored());
-                        GameView.getInstance().getRoot().getChildren().add(GameView.getInstance().getStored());
-                    } catch (Exception e) {
-                        System.err.println(e.getMessage());
-                        alert();
-                    }
+                    upgradeWarehouse(warehouse);
                     break;
             }
         };

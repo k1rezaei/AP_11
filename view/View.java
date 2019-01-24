@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 public class View extends Application {
     private Stage primaryStage;
     private Scene scene;
+    static final boolean INTRO = true;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,8 +24,12 @@ public class View extends Application {
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
-        Menu menu = new Menu(this);
-        scene = new Scene(menu.getRoot(), 800, 600);
+        if(INTRO){
+            scene = new Scene(new Intro(this).getRoot(), 800, 600);
+        }else {
+            Menu menu = new Menu(this);
+            scene = new Scene(menu.getRoot(), 800, 600);
+        }
         scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
