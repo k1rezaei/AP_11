@@ -31,7 +31,7 @@ public class LevelSelect {
     private static final String BASE = "file:textures/level/";
     private static Image back = new Image(BASE + "back.png");
     private static Image lock = new Image(BASE + "lock.png");
-    private static Image BG = new Image(BASE + "back.jpg");
+    private static Image BG = new Image(BASE + "back2.jpg");
     static ArrayList<Image> images = new ArrayList<>();
     static {
         for(int i = 0; i < NUM_LEVELS; i++){
