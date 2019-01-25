@@ -15,37 +15,32 @@ public class Menu {
     static int OFFSET_X = 320;
     private View view;
     private Group menuGroup = new Group();
-
+    VBox vBox = new VBox();
     Menu(View view) {
         initializeMenu();
         this.view = view;
     }
 
-    VBox vBox;
-
     private void initializeMenu() {
-        vBox = new VBox();
-        vBox.setId("null");
-
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
-        background.setFitWidth(800); background.setFitHeight(600);
+        background.setFitHeight(600);
+        background.setFitWidth(800);
         menuGroup.getChildren().add(background);
         setStart();
         setLoad();
         setGuide();
         setInfo();
         setExit();
-
         vBox.relocate(400,300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        vBox.setId("null");
         menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
         Label start = new Label();
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
-        start.relocate(OFFSET_X, 100);
         start.setId("label_button");
         vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
@@ -56,7 +51,6 @@ public class Menu {
     private void setLoad() {
         Label load = new Label();
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
-        load.relocate(OFFSET_X, 200);
         load.setId("label_button");
         vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
@@ -81,7 +75,6 @@ public class Menu {
     private void setInfo() {
         Label info = new Label();
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
-        info.relocate(OFFSET_X, 300);
         info.setId("label_button");
         vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
@@ -89,7 +82,7 @@ public class Menu {
                     "Seyed Mahdi Sadegh Shobeiri\n" +
                     "Mohammad Mahdavi\n" +
                     "Keivan Rezaei\n" +
-                    "Music : Hope Prevails (By Jesper Kyd)");
+                    "Music : Hope Prevails (By Jesper Kyd)", view.getSnap());
             menuGroup.getChildren().add(pop.getStackPane());
             pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -108,9 +101,9 @@ public class Menu {
         return event -> {
             menuGroup.getChildren().remove(slides.get(i));
             menuGroup.getChildren().removeAll(labels.get(i));
-            if(i+1 != NUM_SLIDES){
-                menuGroup.getChildren().add(slides.get(i+1));
-                menuGroup.getChildren().addAll(labels.get(i+1));
+            if (i + 1 != NUM_SLIDES) {
+                menuGroup.getChildren().add(slides.get(i + 1));
+                menuGroup.getChildren().addAll(labels.get(i + 1));
             }
         };
     }
@@ -122,31 +115,31 @@ public class Menu {
         switch (i) {
             case 0: {
                 Label label0 = new Label(
-                        "you can buy animals from here\n" +
-                                "dog attacks lion and bear\n" +
-                                "cat collect items\n" +
-                                "lion and bear attack chicken, sheep and cow\n" +
-                                "chicken lay eggs\n" +
-                                "sheep produce wool\n" +
-                                "cow produce milk\n");
-                label0.relocate(20, 100);
+                        "You can buy animals here.\n" +
+                                "Dogs attack lions and bears.\n" +
+                                "Cats collect items.\n" +
+                                "Lions and bears attack chickens, sheep, and cows.\n" +
+                                "Chickens lay eggs.\n" +
+                                "Sheep produce wool.\n" +
+                                "Cows produce milk.\n");
+                label0.relocate(20, 120);
 
                 Label label1 = new Label(
-                        "this shows how much money you have"
+                        "This shows how much money you have."
                 );
-                label1.relocate(420, 70);
+                label1.relocate(400, 70);
 
                 Label label2 = new Label(
-                        "you can sell items with truck"
+                        "You can sell your items using the truck."
                 );
                 label2.relocate(20, 400);
 
                 Label label3 = new Label("" +
-                        "you can buy items with helicopter");
-                label3.relocate(450, 380);
+                        "You can buy items using the helicopter.");
+                label3.relocate(370, 400);
 
-                Label label4 = new Label("click on screen to go to next slide");
-                label4.relocate(400,300);
+                Label label4 = new Label("Click on the screen to move to next slide.");
+                label4.relocate(400, 320);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -156,15 +149,15 @@ public class Menu {
                 break;
             }
             case 1: {
-                Label label0 = new Label("you need water for planting\n" +
-                        "you can refill well by pressing left click on it");
+                Label label0 = new Label("You need water to plant plants.\n" +
+                        "You can refill  the well by left-clicking on it.");
                 label0.relocate(300, 170);
 
-                Label label1 = new Label("workshop can convers item(s) to item");
+                Label label1 = new Label("Workshops can convert items to other items");
                 label1.relocate(200, 300);
 
-                Label label2 = new Label("items go to warehouse when you click on them");
-                label2.relocate(300, 400);
+                Label label2 = new Label("Items are put in the warehouse when you click on them.");
+                label2.relocate(250, 400);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -173,29 +166,28 @@ public class Menu {
                 break;
             }
             case 2: {
-                Label label0 = new Label("you can cage lion and bear by clicking on them");
-                label0.relocate(2,200);
+                Label label0 = new Label("You can cage lions and bears by clicking on them.");
+                label0.relocate(2, 200);
 
-                Label label1 = new Label("you can plant by clicking on ground");
-                label1.relocate(400,450);
+                Label label1 = new Label("You can plant by clicking on the ground.");
+                label1.relocate(400, 450);
 
-                Label label2 = new Label("you can upgrade cat, workshop, truck, well,\n" +
-                        "helicopter and warehouse just press right click on them!\n" +
-                        "and don't forget to collect items from ground");
-                label2.relocate(10,10);
+                Label label2 = new Label("You can upgrade the cat, workshops, the truck, the well,\n" +
+                        "the helicopter and the warehouse. Just press right click on them!\n" +
+                        "And don't forget to collect items from the ground.");
+                label2.relocate(10, 10);
                 labels.add(label0);
                 labels.add(label1);
                 labels.add(label2);
                 break;
             }
         }
-        for(Label label: labels){
+        for (Label label : labels) {
             label.setId("tutorial");
             label.setOnMouseClicked(getOnMouseClickedEventHandler(i));
         }
         this.labels.add(labels);
     }
-
 
 
     private void setGuide() {
@@ -212,7 +204,6 @@ public class Menu {
 
         Label guide = new Label();
         guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
-        guide.relocate(OFFSET_X, 400);
         guide.setId("label_button");
         vBox.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
@@ -224,7 +215,6 @@ public class Menu {
     private void setExit() {
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
-        exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
         vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {

@@ -55,7 +55,7 @@ public class LevelSelect {
     private static final String BASE = "file:textures/level/";
     private static Image back = new Image(BASE + "back.png");
     private static Image lock = new Image(BASE + "lock.png");
-    private static Image BG = new Image(BASE + "back2.jpg");
+    private static Image BG = new Image(BASE + "back.jpg");
     static ArrayList<Image> images = new ArrayList<>();
 
     static {
@@ -85,9 +85,9 @@ public class LevelSelect {
             }
         });
 
-        flowPane.setPrefWrapLength(SIZE * 3 + 25);
-        flowPane.setPadding(new Insets(10));
+        flowPane.setPrefWrapLength(350);
 
+        flowPane.setPadding(new Insets(10));
         flowPane.setHgap(10);
         flowPane.setVgap(10);
 
@@ -132,8 +132,6 @@ public class LevelSelect {
             });
             flowPane.getChildren().add(stackPane);
         }
-
-        flowPane.setId("levelFlowPane");
 
         root.getChildren().addAll(flowPane);
     }

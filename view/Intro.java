@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -14,13 +16,13 @@ import javafx.util.Duration;
 
 public class Intro {
 
-    static final int DURATION = 4000;
-    static final int fadeCanv = 6;
-    Group introGroup = new Group();
-    View view;
-    static final ImageView BG = new ImageView(new Image("file:textures/intro.png"));
+    private static final int DURATION = 4000;
+    private static final int fadeCanv = 6;
+    private Group introGroup = new Group();
+    private View view;
+    private static final ImageView BG = new ImageView(new Image("file:textures/intro.png"));
 
-    static Interpolator interpolator = new Interpolator() {
+    private static Interpolator interpolator = new Interpolator() {
         @Override
         protected double curve(double t) {
             double res = 1;
@@ -37,17 +39,17 @@ public class Intro {
 
         BG.setFitWidth(800);
         BG.setFitHeight(600);
-        introGroup.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                goToMenu();
-            }
-        });
+        introGroup.setOnMouseClicked(event -> goToMenu());
         Label label = new Label("Dr. Keivan - SmsS - Banana");
         label.setId("intro");
         label.relocate(400,300);
         label.translateXProperty().bind(label.widthProperty().divide(2).negate());
         label.translateYProperty().bind(label.heightProperty().divide(2).negate());
+
+        Reflection r = new Reflection();
+        r.setFraction(1);
+        label.setEffect(r);
+
         introGroup.getChildren().addAll(BG, label);
 
         FadeTransition ft = new FadeTransition(Duration.millis(DURATION), BG);
@@ -63,12 +65,7 @@ public class Intro {
 
         ft.play();
         ft2.play();
-        ft.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                goToMenu();
-            }
-        });
+        ft.setOnFinished(event -> goToMenu());
 
         TextAnimation blinkAnimation = new TextAnimation(label);
         blinkAnimation.setFrom(255, 0, 0);

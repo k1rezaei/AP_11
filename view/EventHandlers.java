@@ -143,7 +143,7 @@ public class EventHandlers {
         };
     }
 
-    static void upgradeWarehouse(Warehouse warehouse){
+    static void upgradeWarehouse(Warehouse warehouse) {
         try {
             Game.getInstance().upgrade("warehouse");
             SpriteAnimation sprite = GameView.getInstance().getWarehouse();
@@ -158,7 +158,6 @@ public class EventHandlers {
     }
 
 
-
     static EventHandler<MouseEvent> getAltOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
             switch (event.getButton()) {
@@ -170,6 +169,7 @@ public class EventHandlers {
             }
         };
     }
+
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
             switch (event.getButton()) {
@@ -223,6 +223,26 @@ public class EventHandlers {
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
+                }
+            }
+        };
+    }
+
+    public static EventHandler<MouseEvent> getOnMouseClicked(String animalName) {
+        return mouseEvent -> {
+            try {
+                if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                    Game.getInstance().buyAnimal(animalName);
+
+                } else if (mouseEvent.getButton() == MouseButton.SECONDARY &&
+                        animalName.equalsIgnoreCase("cat")) {
+                    Game.getInstance().upgrade("cat");
+                }
+            } catch (Exception e) {
+                if (e.getMessage() != null) {
+                    System.err.println(e.getMessage());
+                } else {
+                    e.printStackTrace();
                 }
             }
         };
