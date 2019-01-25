@@ -60,8 +60,9 @@ public class LevelSelect {
             }
         });
 
-        flowPane.setPrefWrapLength(350);
+        flowPane.setPrefWrapLength(SIZE*3+25);
         flowPane.setPadding(new Insets(10));
+
         flowPane.setHgap(10);
         flowPane.setVgap(10);
 
@@ -107,6 +108,8 @@ public class LevelSelect {
             });
             flowPane.getChildren().add(stackPane);
         }
+
+        flowPane.setId("levelFlowPane");
 
         root.getChildren().addAll(flowPane);
     }
