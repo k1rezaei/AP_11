@@ -15,7 +15,7 @@ public class Menu {
     static int OFFSET_X = 320;
     private View view;
     private Group menuGroup = new Group();
-    VBox vBox;
+    VBox vBox = new VBox();
     Menu(View view) {
         initializeMenu();
         this.view = view;
@@ -23,6 +23,8 @@ public class Menu {
 
     private void initializeMenu() {
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
+        background.setFitHeight(600);
+        background.setFitWidth(800);
         menuGroup.getChildren().add(background);
         setStart();
         setLoad();
@@ -32,13 +34,13 @@ public class Menu {
         vBox.relocate(400,300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        vBox.setId("null");
         menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
         Label start = new Label();
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
-        start.relocate(OFFSET_X, 100);
         start.setId("label_button");
         vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
@@ -49,7 +51,6 @@ public class Menu {
     private void setLoad() {
         Label load = new Label();
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
-        load.relocate(OFFSET_X, 200);
         load.setId("label_button");
         vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
@@ -74,7 +75,6 @@ public class Menu {
     private void setInfo() {
         Label info = new Label();
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
-        info.relocate(OFFSET_X, 300);
         info.setId("label_button");
         vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
@@ -122,12 +122,12 @@ public class Menu {
                                 "Chickens lay eggs.\n" +
                                 "Sheep produce wool.\n" +
                                 "Cows produce milk.\n");
-                label0.relocate(20, 100);
+                label0.relocate(20, 120);
 
                 Label label1 = new Label(
                         "This shows how much money you have."
                 );
-                label1.relocate(450, 70);
+                label1.relocate(400, 70);
 
                 Label label2 = new Label(
                         "You can sell your items using the truck."
@@ -136,10 +136,10 @@ public class Menu {
 
                 Label label3 = new Label("" +
                         "You can buy items using the helicopter.");
-                label3.relocate(450, 380);
+                label3.relocate(370, 400);
 
                 Label label4 = new Label("Click on the screen to move to next slide.");
-                label4.relocate(400, 300);
+                label4.relocate(400, 320);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -151,13 +151,13 @@ public class Menu {
             case 1: {
                 Label label0 = new Label("You need water to plant plants.\n" +
                         "You can refill  the well by left-clicking on it.");
-                label0.relocate(400, 170);
+                label0.relocate(300, 170);
 
                 Label label1 = new Label("Workshops can convert items to other items");
                 label1.relocate(200, 300);
 
                 Label label2 = new Label("Items are put in the warehouse when you click on them.");
-                label2.relocate(390, 400);
+                label2.relocate(250, 400);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -204,9 +204,8 @@ public class Menu {
 
         Label guide = new Label();
         guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
-        //guide.relocate(OFFSET_X, 400);
         guide.setId("label_button");
-        menuGroup.getChildren().add(guide);
+        vBox.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
             menuGroup.getChildren().add(slides.get(0));
             menuGroup.getChildren().addAll(labels.get(0));
@@ -216,7 +215,6 @@ public class Menu {
     private void setExit() {
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
-        exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
         vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {

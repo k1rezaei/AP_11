@@ -126,7 +126,8 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(warehouse);
         HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
-        vBox.getChildren().addAll(name, hBox1, hBox2);
+        if(hBox1 == null) vBox.getChildren().addAll(name, hBox2);
+        else              vBox.getChildren().addAll(name, hBox1, hBox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 

@@ -69,6 +69,7 @@ public class GameView {
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
     public static final String FINISH = "finish";
+    //public static final Image BOX = new Image("file:/textures/box.png");
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -449,17 +450,9 @@ public class GameView {
         root.getChildren().add(fastForward);
     }
 
-    private void pop(String text) {
-        pause();
-        Pop pop = new Pop(text);
-        root.getChildren().add(pop.getStackPane());
-        pop.getStackPane().setOnMouseClicked(event -> {
-            root.getChildren().remove(pop.getStackPane());
-            resume();
-        });
-    }
 
-    void pop(String text){
+
+    private void pop(String text){
         pause();
         Pop pop = new Pop(text, view.getSnap());
         root.getChildren().add(pop.getStackPane());
@@ -691,6 +684,7 @@ public class GameView {
     private void setUpWarehouse() {
         warehouse = Images.getSpriteAnimation("warehouse");
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
+        warehouse.setOnMouseClicked(EventHandlers.getAltOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
         setUpWarehouseInfo();
         root.getChildren().add(stored);
