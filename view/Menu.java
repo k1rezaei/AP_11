@@ -1,7 +1,6 @@
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,13 +8,15 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class Menu {
-    static int OFFSET_X = 320;
+    private static final int NUM_SLIDES = 3;
+    private VBox vBox = new VBox();
+    private ArrayList<ImageView> slides = new ArrayList<>();
+    private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
     private View view;
     private Group menuGroup = new Group();
-    VBox vBox = new VBox();
+
     Menu(View view) {
         initializeMenu();
         this.view = view;
@@ -31,10 +32,10 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
-        vBox.relocate(400,300);
+        vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
-        vBox.setId("null");
+        vBox.setId("menu");
         menuGroup.getChildren().add(vBox);
     }
 
@@ -43,9 +44,7 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.setId("label_button");
         vBox.getChildren().add(start);
-        start.setOnMouseClicked(event -> {
-            view.setRoot(new LevelSelect(view).getRoot());
-        });
+        start.setOnMouseClicked(event -> view.setRoot(new LevelSelect(view).getRoot()));
     }
 
     private void setLoad() {
@@ -84,20 +83,11 @@ public class Menu {
                     "Keivan Rezaei\n" +
                     "Music : Hope Prevails (By Jesper Kyd)", view.getSnap());
             menuGroup.getChildren().add(pop.getStackPane());
-            pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    menuGroup.getChildren().remove(pop.getStackPane());
-                }
-            });
+            pop.getStackPane().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(pop.getStackPane()));
         });
     }
 
-    private static final int NUM_SLIDES = 3;
-    ArrayList<ImageView> slides = new ArrayList<>();
-    ArrayList<ArrayList<Label>> labels = new ArrayList<>();
-
-    EventHandler<MouseEvent> getOnMouseClickedEventHandler(int i) {
+    private EventHandler<MouseEvent> getOnMouseClickedEventHandler(int i) {
         return event -> {
             menuGroup.getChildren().remove(slides.get(i));
             menuGroup.getChildren().removeAll(labels.get(i));
@@ -109,7 +99,7 @@ public class Menu {
     }
 
 
-    void setUpLabels(int i) {
+    private void setUpLabels(int i) {
         ArrayList<Label> labels = new ArrayList<>();
 
         switch (i) {
@@ -219,15 +209,20 @@ public class Menu {
         vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exit");
-            alert.setContentText("Are You Sure?");
-            alert.setHeaderText(null);
+            YesNoCancel yesNoCancel = new YesNoCancel("Are you sure you want to exit?", view.getSnap());
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            yesNoCancel.getVBox().getChildren().remove(yesNoCancel.getCancel());
+
+            menuGroup.getChildren().add(yesNoCancel.getStackPane());
+
+            yesNoCancel.getYes().setOnMouseClicked(event13 -> {
+                menuGroup.getChildren().clear();
                 view.close();
-            }
+            });
+
+            yesNoCancel.getNo().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
+
+            yesNoCancel.getDisabler().setOnMouseClicked(event12 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
         });
     }
 

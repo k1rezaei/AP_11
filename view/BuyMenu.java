@@ -12,42 +12,27 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class BuyMenu {
-    public static final int BASE_Y_BOUGHT = 80;
-    public static final int DIS_Y_BOUGHT = 30;
-    public static final int BASE_X_BOUGHT = 600;
-    public static final int NUM_OF_BOUGHT = 5;
-    public static final int DIS_X_BOUGHT = 30;
-    View view;
-
-    int currentMoney = Game.getInstance().getMoney();
-
-    int numBought = 0;
-
-    BuyMenu(View view) {
-        this.view = view;
-    }
-
-    private Group buyGroup = new Group();
+    private static final int BASE_Y_BOUGHT = 80;
+    private static final int DIS_Y_BOUGHT = 30;
+    private static final int BASE_X_BOUGHT = 600;
+    private static final int NUM_OF_BOUGHT = 5;
+    private static final int DIS_X_BOUGHT = 30;
+    private static Image one = new Image("file:textures/one.png");
+    private static Image BG = new Image("file:textures/bglemon.gif");
     private final int WIDTH = 50, DIS_X = 270, DIS_Y = 95, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 80;
     private final int HEIGHT = 50;
-
-    Group getBuyGroup() {
-        numBought = 0;
-        init();
-        return buyGroup;
-    }
-
-    static Image one = new Image("file:textures/one.png");
-
-    Label cap = new Label();
+    private View view;
+    private int currentMoney = Game.getInstance().getMoney();
+    private int numBought = 0;
+    private Label cap = new Label();
+    private Label money = new Label();
+    private Group buyGroup = new Group();
 
     {
         cap.setMinSize(50, HEIGHT);
         cap.setAlignment(Pos.CENTER);
         cap.relocate(600, 20);
     }
-
-    Label money = new Label();
 
     {
 
@@ -56,13 +41,20 @@ public class BuyMenu {
         money.relocate(600, 0);
     }
 
+    BuyMenu(View view) {
+        this.view = view;
+    }
+
+    Group getBuyGroup() {
+        numBought = 0;
+        init();
+        return buyGroup;
+    }
+
     void update() {
         cap.setText("Capacity : " + Game.getInstance().getHelicopter().getCurrentCapacity());
         money.setText("Money : " + currentMoney);
     }
-
-
-    static private Image BG = new Image("file:textures/bglemon.gif");
 
     void init() {
 
