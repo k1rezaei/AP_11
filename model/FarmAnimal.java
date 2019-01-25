@@ -18,7 +18,7 @@ public class FarmAnimal extends Animal {
         rateOfHunger = RATE_OF_HUNGER;
         if (type.equalsIgnoreCase("cow")) {
             speed = 3;
-            buyPrice = 1000;
+            buyPrice = 5000;
             hungrySpeed = 36;
             remainTime = baseRemainTime = 450;
             produceType = "Milk";
