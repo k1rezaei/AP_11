@@ -15,6 +15,13 @@
     -fx-background-radius: 30 30 30 30;
     -fx-text-fill: white;
     -fx-font-size: 30;
+
+
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 30 30 30 30;
+
+
 }
 
 #pop .text{
@@ -124,8 +131,11 @@ VBox {
     -fx-padding: 10;
     -fx-min-height: 400px;
     -fx-max-height: 400px;
-    -fx-max-width: 400px;
-    -fx-min-width: 400px;
+    -fx-max-width: 500px;
+    -fx-min-width: 500px;
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50;
 }
 #vBox_menu .label .text{
     -fx-stroke: blue;
