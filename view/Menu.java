@@ -1,16 +1,14 @@
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class Menu {
     static int OFFSET_X = 320;
@@ -21,7 +19,7 @@ public class Menu {
         initializeMenu();
         this.view = view;
     }
-  
+
     private void initializeMenu() {
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
         menuGroup.getChildren().add(background);
@@ -30,7 +28,6 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
-        setGuide();
     }
 
     private void setStart() {
@@ -99,9 +96,9 @@ public class Menu {
         return event -> {
             menuGroup.getChildren().remove(slides.get(i));
             menuGroup.getChildren().removeAll(labels.get(i));
-            if(i+1 != NUM_SLIDES){
-                menuGroup.getChildren().add(slides.get(i+1));
-                menuGroup.getChildren().addAll(labels.get(i+1));
+            if (i + 1 != NUM_SLIDES) {
+                menuGroup.getChildren().add(slides.get(i + 1));
+                menuGroup.getChildren().addAll(labels.get(i + 1));
             }
         };
     }
@@ -137,7 +134,7 @@ public class Menu {
                 label3.relocate(450, 380);
 
                 Label label4 = new Label("Click on the screen to move to next slide.");
-                label4.relocate(400,300);
+                label4.relocate(400, 300);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -165,28 +162,27 @@ public class Menu {
             }
             case 2: {
                 Label label0 = new Label("You can cage lions and bears by clicking on them.");
-                label0.relocate(2,200);
+                label0.relocate(2, 200);
 
                 Label label1 = new Label("You can plant by clicking on the ground.");
-                label1.relocate(400,450);
+                label1.relocate(400, 450);
 
                 Label label2 = new Label("You can upgrade the cat, workshops, the truck, the well,\n" +
                         "the helicopter and the warehouse. Just press right click on them!\n" +
                         "And don't forget to collect items from the ground.");
-                label2.relocate(10,10);
+                label2.relocate(10, 10);
                 labels.add(label0);
                 labels.add(label1);
                 labels.add(label2);
                 break;
             }
         }
-        for(Label label: labels){
+        for (Label label : labels) {
             label.setId("tutorial");
             label.setOnMouseClicked(getOnMouseClickedEventHandler(i));
         }
         this.labels.add(labels);
     }
-
 
 
     private void setGuide() {
