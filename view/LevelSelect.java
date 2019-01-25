@@ -1,14 +1,11 @@
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -18,13 +15,22 @@ public class LevelSelect {
 
     private static final int NUM_LEVELS = 9;
     private static final int SIZE = 100;
-
-    public Group getRoot() {
-        return root;
-    }
-
+    private static final String BASE = "file:textures/level/";
+    private static ArrayList<Image> images = new ArrayList<>();
+    private static Image back = new Image(BASE + "back.png");
+    private static Image lock = new Image(BASE + "lock.png");
+    private static Image BG = new Image(BASE + "back.jpg");
     private ArrayList<Boolean> isLock = new ArrayList<>();
     private boolean[] levels = new boolean[NUM_LEVELS];
+    private Group root = new Group();
+    private View view;
+    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
+
+    static {
+        for (int i = 0; i < NUM_LEVELS; i++) {
+            images.add(new Image(BASE + (i + 1) + ".png"));
+        }
+    }
 
     {
         try {
@@ -36,7 +42,9 @@ public class LevelSelect {
             }
             scanner.close();
             inputStream.close();
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+            System.err.println("Level Select");
+        }
 
 
         for (int i = 0; i < 1; i++) isLock.add(false);
@@ -49,24 +57,11 @@ public class LevelSelect {
         }
     }
 
-    private Group root = new Group();
-    private View view;
-    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
-    private static final String BASE = "file:textures/level/";
-    private static Image back = new Image(BASE + "back.png");
-    private static Image lock = new Image(BASE + "lock.png");
-    private static Image BG = new Image(BASE + "back.jpg");
-    static ArrayList<Image> images = new ArrayList<>();
-
-    static {
-        for (int i = 0; i < NUM_LEVELS; i++) {
-            images.add(new Image(BASE + (i + 1) + ".png"));
-        }
-    }
-
-
     LevelSelect(View view) {
         this.view = view;
+
+        flowPane.setId("level_select");
+
         ImageView bg = new ImageView(BG);
         bg.setFitWidth(800);
         bg.setFitHeight(600);
@@ -78,12 +73,7 @@ public class LevelSelect {
         backLabel.setGraphic(backImageView);
         backLabel.relocate(30, 30);
         root.getChildren().add(backLabel);
-        backLabel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setRoot(new Menu(view).getRoot());
-            }
-        });
+        backLabel.setOnMouseClicked(event -> view.setRoot(new Menu(view).getRoot()));
 
         flowPane.setPrefWrapLength(350);
 
@@ -122,18 +112,19 @@ public class LevelSelect {
             stackPane.setId("label_button");
 
             final int finalI = i;
-            if (!isLock.get(i)) stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    Game.runMap(Game.getLevel("level" + finalI));
-                    GameView.getInstance().runGame();
-                    view.setRoot(GameView.getInstance().getRoot());
-                }
+            if (!isLock.get(i)) stackPane.setOnMouseClicked(event -> {
+                Game.runMap(Game.getLevel("level" + finalI));
+                GameView.getInstance().runGame();
+                view.setRoot(GameView.getInstance().getRoot());
             });
             flowPane.getChildren().add(stackPane);
         }
 
         root.getChildren().addAll(flowPane);
+    }
+
+    public Group getRoot() {
+        return root;
     }
 
 }

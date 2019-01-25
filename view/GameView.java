@@ -21,6 +21,8 @@ import java.util.Map;
 public class GameView {
     public static final int BASE_X = 260;
     public static final int BASE_Y = 210;
+    public static final String FINISH = "finish";
+    public static final Image BOX = new Image("file:textures/box.png");
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
@@ -70,8 +72,6 @@ public class GameView {
     private static final int TRUCK_MINI_Y = 35;
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
-    public static final String FINISH = "finish";
-    public static final Image BOX = new Image("file:textures/box.png");
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -204,13 +204,14 @@ public class GameView {
     private void saveLevel() {
         Game.getInstance().getLevel();
         for (String name : Game.getLevels().keySet()) {
-            if(Game.getLevels().get(name) == Game.getInstance().getLevel()) {
+            if (Game.getLevels().get(name) == Game.getInstance().getLevel()) {
                 try {
                     FileWriter fw = new FileWriter("Levels", true);
                     fw.write(name.substring("level".length()) + "\n");
                     fw.close();
-                }catch (Exception ignored) {}
-                return ;
+                } catch (Exception ignored) {
+                }
+                return;
             }
         }
     }
@@ -471,8 +472,7 @@ public class GameView {
     }
 
 
-
-    private void pop(String text){
+    private void pop(String text) {
         pause();
         Pop pop = new Pop(text, view.getSnap());
         root.getChildren().add(pop.getStackPane());
@@ -813,6 +813,7 @@ public class GameView {
 
     private VBox getBuyAnimalFocus(String animalName) {//TODO move to focus
         VBox infoBox = new VBox();
+        infoBox.setId("focus");
         Label name = new Label(animalName);
         name.setId("name");
         HBox price = new HBox();
@@ -887,7 +888,7 @@ public class GameView {
                 box.setFitWidth(120 / WAREHOUSE_CNT_X);
                 box.setOpacity(0.5);
                 stackPane.getChildren().addAll(box, imageView);
-                stackPane.setMaxSize(120/ WAREHOUSE_CNT_X, 80/WAREHOUSE_CNT_Y);
+                stackPane.setMaxSize(120 / WAREHOUSE_CNT_X, 80 / WAREHOUSE_CNT_Y);
                 stored.getChildren().add(stackPane);
             }
         }

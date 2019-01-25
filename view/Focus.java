@@ -39,7 +39,7 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(workshop);
 
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
+        if (hBox1 != null) vBox.getChildren().add(hBox1);
 
         HBox hBox2 = new HBox();
         for (Map.Entry<String, Integer> pair : workshop.getInputs().entrySet()) {
@@ -61,6 +61,7 @@ public class Focus {
         label.setId("gold");
         vBox.getChildren().add(label);
         vBox.relocate(x + DIS_X, y - DIS_Y);
+        vBox.setId("focus");
         focus.getChildren().add(vBox);
 
         upgradableInfo.put(workshop, vBox);
@@ -87,9 +88,10 @@ public class Focus {
         HBox hBox2 = getCapacityBox(vehicle);
 
         vBox.getChildren().addAll(name, hBox2);
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
+        if (hBox1 != null) vBox.getChildren().add(hBox1);
 
         vBox.relocate(x + DIS_X, y);
+        vBox.setId("focus");
         focus.getChildren().add(vBox);
 
         active.put(vehicle, true);
@@ -102,13 +104,14 @@ public class Focus {
         int x = GameView.getInstance().getWell().getX(), y = GameView.getInstance().getWell().getY();
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
         Label name = new Label("Well");
 
         HBox hBox1 = getUpgradeBox(well);
         HBox hBox2 = getFillBox(well);
 
         vBox.getChildren().addAll(name, hBox2);
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
+        if (hBox1 != null) vBox.getChildren().add(hBox1);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -117,17 +120,18 @@ public class Focus {
 
     }
 
-    void add (Warehouse warehouse) {
-        if(active.get(warehouse) != null && active.get(warehouse)) return ;
+    void add(Warehouse warehouse) {
+        if (active.get(warehouse) != null && active.get(warehouse)) return;
         int x = GameView.getInstance().getWarehouse().getX(), y = GameView.getInstance().getWarehouse().getY();
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
         Label name = new Label("Warehouse");
 
         HBox hBox1 = getUpgradeBox(warehouse);
         HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
-        if(hBox1 == null) vBox.getChildren().addAll(name, hBox2);
-        else              vBox.getChildren().addAll(name, hBox1, hBox2);
+        if (hBox1 == null) vBox.getChildren().addAll(name, hBox2);
+        else vBox.getChildren().addAll(name, hBox1, hBox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -141,27 +145,28 @@ public class Focus {
         if (active.get(u) == null || !active.get(u)) return;
         System.out.println("is Going to Remove");
         VBox data = (VBox) upgradableInfo.remove(u);
-        if(data == null) System.out.println("BUG");
+        data.setId("focus");
+        if (data == null) System.out.println("BUG");
         System.err.print(focus.getChildren().size() + " : ");
         focus.getChildren().clear();
         System.err.println(focus.getChildren().size());
         active.put(u, false);
     }
 
-    String getCost(Upgradable u) {
+    private String getCost(Upgradable u) {
         String cost;
         if (u.canUpgrade()) cost = Integer.toString(u.getUpgradeCost());
         else cost = "oo";
         return cost;
     }
 
-    String getCap(Vehicle vehicle) {
+    private String getCap(Vehicle vehicle) {
         return Integer.toString(vehicle.getCapacity());
     }
 
     private HBox getUpgradeBox(Upgradable u) {
         String cost = getCost(u);
-        if(cost.equals("oo")) return null;
+        if (cost.equals("oo")) return null;
         return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
     }
 
@@ -175,19 +180,20 @@ public class Focus {
         return combiner(cap, "capacity", capacityImage, CAPACITY_LENGTH);
     }
 
-    HBox combiner(String str, String id, Image image, int len) {
+    private HBox combiner(String str, String id, Image image, int len) {
         HBox hBox = new HBox();
         Label label = new Label(str);
         label.setId(id);
         ImageView img = new ImageView(image);
-        img.setFitHeight(len); img.setFitWidth(len);
+        img.setFitHeight(len);
+        img.setFitWidth(len);
         hBox.getChildren().addAll(label, img);
         return hBox;
     }
 
     private HBox getFillBox(Well well) {
         String fill = Integer.toString(well.getFillCost());
-        return combiner(fill, "gold",fillImage, FILL_LENGTH);
+        return combiner(fill, "gold", fillImage, FILL_LENGTH);
     }
 
 }

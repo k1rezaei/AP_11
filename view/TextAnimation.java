@@ -10,9 +10,10 @@ import java.util.ArrayList;
 
 public class TextAnimation extends Transition {
 
-    int blinkTime = 500;
-    Label label;
-    ;
+    private int blinkTime = 500;
+    private Label label;
+    private ArrayList<Integer> from = new ArrayList<>();
+    private ArrayList<Integer> to = new ArrayList<>();
 
     TextAnimation(Label label) {
         this.label = label;
@@ -21,9 +22,6 @@ public class TextAnimation extends Transition {
         setCycleCount(Animation.INDEFINITE);
         setAutoReverse(true);
     }
-
-    ArrayList<Integer> from = new ArrayList<>();
-    ArrayList<Integer> to = new ArrayList<>();
 
     int diff(int idx) {
         return to.get(idx) - from.get(idx);
@@ -41,7 +39,7 @@ public class TextAnimation extends Transition {
         to.add(b);
     }
 
-    void setBlinkTime(int blinkTime){
+    void setBlinkTime(int blinkTime) {
         this.blinkTime = blinkTime;
     }
 
@@ -53,7 +51,6 @@ public class TextAnimation extends Transition {
         int b = (int) (from.get(2) + diff(2) * k);
 
         label.setTextFill(Color.rgb(r, g, b));
-        //label.getText().
     }
 
 }
