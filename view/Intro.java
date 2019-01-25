@@ -14,13 +14,13 @@ import javafx.util.Duration;
 
 public class Intro {
 
-    private static final int DURATION = 4000;
-    private static final int fadeCanv = 6;
-    private Group introGroup = new Group();
-    private View view;
-    private static final ImageView BG = new ImageView(new Image("file:textures/intro.png"));
+    static final int DURATION = 4000;
+    static final int fadeCanv = 6;
+    Group introGroup = new Group();
+    View view;
+    static final ImageView BG = new ImageView(new Image("file:textures/intro.png"));
 
-    private static Interpolator interpolator = new Interpolator() {
+    static Interpolator interpolator = new Interpolator() {
         @Override
         protected double curve(double t) {
             double res = 1;
@@ -37,7 +37,12 @@ public class Intro {
 
         BG.setFitWidth(800);
         BG.setFitHeight(600);
-        introGroup.setOnMouseClicked(event -> goToMenu());
+        introGroup.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                goToMenu();
+            }
+        });
         Label label = new Label("Dr. Keivan - SmsS - Banana");
         label.setId("intro");
         label.relocate(400,300);
@@ -58,7 +63,12 @@ public class Intro {
 
         ft.play();
         ft2.play();
-        ft.setOnFinished(event -> goToMenu());
+        ft.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                goToMenu();
+            }
+        });
 
         TextAnimation blinkAnimation = new TextAnimation(label);
         blinkAnimation.setFrom(255, 0, 0);
