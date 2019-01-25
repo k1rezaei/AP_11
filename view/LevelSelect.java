@@ -109,7 +109,7 @@ public class LevelSelect {
             back.setFitWidth(SIZE);
             back.setOpacity(0.5);
             stackPane.getChildren().addAll(back, label);
-            stackPane.setId("label_button");
+            label.setId("label_button");
 
             final int finalI = i;
             if (!isLock.get(i)) stackPane.setOnMouseClicked(event -> {

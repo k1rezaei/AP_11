@@ -161,18 +161,24 @@ public class BuyMenu {
                         buyGroup.getChildren().add(bought);
                         update();
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Oooops");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Not Enough Money");
-                        alert.showAndWait();
+                        Pop pop = new Pop("Not Enough Money", view.getSnap());
+                        buyGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                buyGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
                     }
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Oooops");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Not Enough Space");
-                    alert.showAndWait();
+                    Pop pop = new Pop("Not Enough Space", view.getSnap());
+                    buyGroup.getChildren().add(pop.getStackPane());
+                    pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buyGroup.getChildren().remove(pop.getStackPane());
+                        }
+                    });
                 }
             });
 

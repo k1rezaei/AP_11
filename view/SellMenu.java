@@ -164,11 +164,16 @@ public class SellMenu {
                 public void handle(MouseEvent event) {
 
                     if (Game.getInstance().getTruck().getCurrentCapacity() < Entity.getNewEntity(pair.getKey()).getSize()) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setContentText("Not Enough Space");
-                        alert.setHeaderText(null);
-                        alert.setTitle("Oops");
-                        alert.showAndWait();
+                        Pop pop = new Pop("Not Enough Space", view.getSnap());
+                        sellGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
+
                         return;
                     }
 
@@ -189,11 +194,15 @@ public class SellMenu {
                         k = Game.getInstance().getTruck().getCurrentCapacity() / Entity.getNewEntity(pair.getKey()).getSize();
 
                     if (k == 0) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setContentText("Not Enough Space");
-                        alert.setHeaderText(null);
-                        alert.setTitle("Oops");
-                        alert.showAndWait();
+                        Pop pop = new Pop("Not Enough Space", view.getSnap());
+                        sellGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
                     }
                     Game.getInstance().getTruck().add(pair.getKey(), k);
                     if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);

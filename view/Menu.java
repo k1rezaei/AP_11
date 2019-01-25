@@ -17,9 +17,40 @@ public class Menu {
     private View view;
     private Group menuGroup = new Group();
 
+
     Menu(View view) {
         initializeMenu();
         this.view = view;
+    }
+
+    void setMute() {
+        ImageView imageView = new ImageView(new Image("file:textures/mute0.png"));
+
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        Label mute = new Label();
+        mute.setId("label_button");
+        mute.setGraphic(imageView);
+
+        mute.relocate(20, 20);
+        mute.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.setMute(!view.getMute());
+                String path = "file:textures/mute";
+                if (view.getMute() == false) {
+                    path += "0";
+                } else path += "1";
+                path += ".png";
+                Image image = new Image(path);
+                imageView.setImage(image);
+                if(view.getMute()){
+                    Sounds.mute();
+                }else Sounds.play("main_theme");
+            }
+        });
+        menuGroup.getChildren().add(mute);
+
     }
 
     private void initializeMenu() {
@@ -27,6 +58,8 @@ public class Menu {
         background.setFitHeight(600);
         background.setFitWidth(800);
         menuGroup.getChildren().add(background);
+
+        setMute();
         setStart();
         setLoad();
         setGuide();
@@ -35,7 +68,16 @@ public class Menu {
         vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        VBox fake = new VBox();
+
+        fake.relocate(400, 300);
+        fake.translateXProperty().bind(fake.widthProperty().divide(2).negate());
+        fake.translateYProperty().bind(fake.heightProperty().divide(2).negate());
+
+        fake.setId("menuFake");
         vBox.setId("menu");
+
+        menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
     }
 

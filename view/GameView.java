@@ -245,7 +245,7 @@ public class GameView {
         for (Entity entity : Game.getInstance().getMap().getEntities())
             if (entity.getCell() != null) {
                 if (entity instanceof Animal && (Math.random() < SOUND_PROP))
-                    Sounds.play(entity.getType() + "_voice");
+                    if(view.getMute() == false) Sounds.play(entity.getType() + "_voice");
                 if (!sprites.containsKey(entity)) addSprite(entity);
                 renderSprite(entity);
             } else if (sprites.containsKey(entity)) killSprite(entity);
@@ -324,7 +324,7 @@ public class GameView {
     }
 
     public void setUpDead(Entity entity) {
-        if (entity instanceof Animal) Sounds.play(entity.getType() + "_die");
+        if (entity instanceof Animal && view.getMute() == false) Sounds.play(entity.getType() + "_die");
         if ((entity instanceof Animal) && !(entity instanceof WildAnimal)) {
             SpriteAnimation spriteAnimation = Images.getSpriteAnimation(entity.getType());
             spriteAnimation.setState(4);
