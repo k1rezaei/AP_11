@@ -1,21 +1,13 @@
-import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
@@ -70,8 +62,6 @@ public class BuyMenu {
     }
 
 
-
-
     static private Image BG = new Image("file:textures/bglemon.gif");
 
     void init() {
@@ -83,11 +73,11 @@ public class BuyMenu {
         buyGroup.getChildren().add(money);
         buyGroup.getChildren().add(cap);
         update();
-        Rectangle rectangle = new Rectangle(BASE_X-10,BASE_Y-10,DIS_X*2-10,DIS_Y*5);
+        Rectangle rectangle = new Rectangle(BASE_X - 10, BASE_Y - 10, DIS_X * 2 - 10, DIS_Y * 5);
         rectangle.setFill(Color.BLACK);
         rectangle.setOpacity(0.5);
 
-        Rectangle stack = new Rectangle(DIS_X*2-20+BASE_X+10,BASE_Y-10,200,300);
+        Rectangle stack = new Rectangle(DIS_X * 2 - 20 + BASE_X + 10, BASE_Y - 10, 200, 300);
         stack.setFill(Color.BLACK);
         stack.setOpacity(0.5);
 
@@ -162,7 +152,6 @@ public class BuyMenu {
             buyOne.setGraphic(buyOneImage);
 
             buyGroup.getChildren().addAll(imageView, price, buyOne);
-
 
 
             buyOne.setOnMouseClicked(event -> {

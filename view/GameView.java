@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -171,6 +172,9 @@ public class GameView {
         textAnimation.setBlinkTime(100);
         textAnimation.play();
         root.getChildren().add(finish);
+
+        saveLevel();
+
         AnimationTimer animationTimer = new AnimationTimer() {
             long last = -1;
             int cnt = 0;
@@ -195,6 +199,21 @@ public class GameView {
         };
         animationTimer.start();
     }
+
+    private void saveLevel() {
+        Game.getInstance().getLevel();
+        for (String name : Game.getLevels().keySet()) {
+            if(Game.getLevels().get(name) == Game.getInstance().getLevel()) {
+                try {
+                    FileWriter fw = new FileWriter("Levels", true);
+                    fw.write(name.substring("level".length()) + "\n");
+                    fw.close();
+                }catch (Exception ignored) {}
+                return ;
+            }
+        }
+    }
+
 
     private void initializeGame() {
         root = new Group();

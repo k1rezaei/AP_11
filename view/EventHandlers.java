@@ -2,6 +2,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 
+
 public class EventHandlers {
 
     static View view;

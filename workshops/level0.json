@@ -1,6 +1,6 @@
 {
   "startMoney": 5000,
-  "goalMoney": 20000,
+  "goalMoney": 1000,
   "goalEntity": {
     "Sheep": 3
   },
