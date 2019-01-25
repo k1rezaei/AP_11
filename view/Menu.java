@@ -21,8 +21,13 @@ public class Menu {
         initializeMenu();
         this.view = view;
     }
-  
+
+    VBox vBox;
+
     private void initializeMenu() {
+        vBox = new VBox();
+        vBox.setId("null");
+
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
         menuGroup.getChildren().add(background);
         setStart();
@@ -30,7 +35,11 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
-        setGuide();
+
+        vBox.relocate(400,300);
+        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
+        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
@@ -113,30 +122,30 @@ public class Menu {
         switch (i) {
             case 0: {
                 Label label0 = new Label(
-                        "You can buy animals here.\n" +
-                                "Dogs attack lions and bears.\n" +
-                                "Cats collect items.\n" +
-                                "Lions and bears attack chickens, sheep, and cows.\n" +
-                                "Chickens lay eggs.\n" +
-                                "Sheep produce wool.\n" +
-                                "Cows produce milk.\n");
+                        "you can buy animals from here\n" +
+                                "dog attacks lion and bear\n" +
+                                "cat collect items\n" +
+                                "lion and bear attack chicken, sheep and cow\n" +
+                                "chicken lay eggs\n" +
+                                "sheep produce wool\n" +
+                                "cow produce milk\n");
                 label0.relocate(20, 100);
 
                 Label label1 = new Label(
-                        "This shows how much money you have."
+                        "this shows how much money you have"
                 );
                 label1.relocate(450, 70);
 
                 Label label2 = new Label(
-                        "You can sell your items using the truck."
+                        "you can sell items with truck"
                 );
                 label2.relocate(20, 400);
 
                 Label label3 = new Label("" +
-                        "You can buy items using the helicopter.");
+                        "you can buy items with helicopter");
                 label3.relocate(450, 380);
 
-                Label label4 = new Label("Click on the screen to move to next slide.");
+                Label label4 = new Label("click on screen to go to next slide");
                 label4.relocate(400,300);
 
                 labels.add(label0);
@@ -147,14 +156,14 @@ public class Menu {
                 break;
             }
             case 1: {
-                Label label0 = new Label("You need water to plant plants.\n" +
-                        "You can refill  the well by left-clicking on it.");
+                Label label0 = new Label("you need water for planting\n" +
+                        "you can refill well by pressing left click on it");
                 label0.relocate(400, 170);
 
-                Label label1 = new Label("Workshops can convert items to other items");
+                Label label1 = new Label("workshop can convers item(s) to item");
                 label1.relocate(200, 300);
 
-                Label label2 = new Label("Items are put in the warehouse when you click on them.");
+                Label label2 = new Label("items go to warehouse when you click on them");
                 label2.relocate(390, 400);
 
                 labels.add(label0);
@@ -164,15 +173,15 @@ public class Menu {
                 break;
             }
             case 2: {
-                Label label0 = new Label("You can cage lions and bears by clicking on them.");
+                Label label0 = new Label("you can cage lion and bear by clicking on them");
                 label0.relocate(2,200);
 
-                Label label1 = new Label("You can plant by clicking on the ground.");
+                Label label1 = new Label("you can plant by clicking on ground");
                 label1.relocate(400,450);
 
-                Label label2 = new Label("You can upgrade the cat, workshops, the truck, the well,\n" +
-                        "the helicopter and the warehouse. Just press right click on them!\n" +
-                        "And don't forget to collect items from the ground.");
+                Label label2 = new Label("you can upgrade cat, workshop, truck, well,\n" +
+                        "helicopter and warehouse just press right click on them!\n" +
+                        "and don't forget to collect items from ground");
                 label2.relocate(10,10);
                 labels.add(label0);
                 labels.add(label1);
@@ -205,7 +214,7 @@ public class Menu {
         guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
         guide.relocate(OFFSET_X, 400);
         guide.setId("label_button");
-        menuGroup.getChildren().add(guide);
+        vBox.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
             menuGroup.getChildren().add(slides.get(0));
             menuGroup.getChildren().addAll(labels.get(0));

@@ -13,9 +13,9 @@ public class Focus {
     private static final int DIS_X = 50;
     private static final int ITEM_LENGTH = 25;
     private static final int DIS_Y = 10;
-    private static final int UPGRADE_LENGTH = 20;
-    private static final int CAPACITY_LENGTH = 20;
-    private static final int FILL_LENGTH = 20;
+    public static final int UPGRADE_LENGTH = 20;
+    public static final int CAPACITY_LENGTH = 20;
+    public static final int FILL_LENGTH = 20;
     private static Image arrowImage = new Image("file:textures/arrow.png");
     private static Image upgradeImage = new Image("file:textures/upgradeIcon1.png");
     private static Image capacityImage = new Image("file:textures/cap.png");
