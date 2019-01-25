@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -14,7 +15,7 @@ import java.net.URL;
 public class View extends Application {
     private Stage primaryStage;
     private Scene scene;
-    static final boolean INTRO = true;
+    private static final boolean INTRO = true;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,10 +23,17 @@ public class View extends Application {
 
 
 
+    /// age ejra nashod true konid
+    public static boolean MUTE = false;
 
-    private AudioClip mainTheme = null;
-    //private static Media sound = new Media(new File("file:/sounds/main_theme.mp3").toString())   ;
-    //private MediaPlayer mainTheme = new MediaPlayer(sound);
+    private Media music;
+    private MediaPlayer mainTheme;
+    {
+        if(!MUTE){
+            music =  new Media(new File("sounds/main_theme.mp3").toURI().toString());
+            mainTheme = new MediaPlayer(music);
+        }
+    }
 
 
     @Override
@@ -43,20 +51,18 @@ public class View extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
-        //Sounds.init();
+        if(!MUTE) Sounds.init();
         Game.loadCustom("workshops");
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
         primaryStage.show();
 
 
-        try {
-            mainTheme = new AudioClip(new File("sounds/main_theme.mp3").toURI().toURL().toString());
-        }catch (Exception e){
-        }
 
-        mainTheme.setCycleCount(AudioClip.INDEFINITE);
-        mainTheme.play();
+        if(!MUTE) {
+            mainTheme.setCycleCount(AudioClip.INDEFINITE);
+            mainTheme.play();
+        }
 
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -56,8 +57,8 @@ public class GameView {
     private static final int MENU_HEIGHT = 50;
     private static final int WAREHOUSE_X = 360;
     private static final int WAREHOUSE_Y = 460;
-    private static final int WAREHOUSE_CNT_X = 8;
-    private static final int WAREHOUSE_CNT_Y = 4;
+    private static final int WAREHOUSE_CNT_X = 7;
+    private static final int WAREHOUSE_CNT_Y = 5;
     private static final double SOUND_PROP = 0.01;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
@@ -70,7 +71,7 @@ public class GameView {
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
     public static final String FINISH = "finish";
-    //public static final Image BOX = new Image("file:/textures/box.png");
+    public static final Image BOX = new Image("file:textures/box.png");
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -868,8 +869,8 @@ public class GameView {
 
         int offsetY = Game.getInstance().getWarehouse().getLevel() * 5;
         stored.relocate(WAREHOUSE_X + 30, offsetY + WAREHOUSE_Y + 40);
-        stored.setMinSize(120, 80);
-        stored.setMaxSize(120, 80);
+        stored.setMinSize(130, 80);
+        stored.setMaxSize(130, 80);
         int cur = 0;
         int cnt = 0;
         for (Map.Entry<String, Integer> pair : storables.entrySet()) {
@@ -879,16 +880,15 @@ public class GameView {
                 cnt++;
                 ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
                 imageView.setFitHeight(80 / WAREHOUSE_CNT_Y);
-                imageView.setFitWidth(100 / WAREHOUSE_CNT_X);
-                Label label = new Label();
-                label.setStyle("-fx-border-color: white;"
-                        + "-fx-border-style:dashed;"
-                        + "-fx-background-color: black;");
-                label.setOpacity(0.5);
-                label.setGraphic(imageView);
-                label.setMinHeight(80 / WAREHOUSE_CNT_Y);
-                label.setMaxHeight(80 / WAREHOUSE_CNT_Y);
-                stored.getChildren().add(label);
+                imageView.setFitWidth(120 / WAREHOUSE_CNT_X);
+                StackPane stackPane = new StackPane();
+                ImageView box = new ImageView(BOX);
+                box.setFitHeight(80 / WAREHOUSE_CNT_Y);
+                box.setFitWidth(120 / WAREHOUSE_CNT_X);
+                box.setOpacity(0.5);
+                stackPane.getChildren().addAll(box, imageView);
+                stackPane.setMaxSize(120/ WAREHOUSE_CNT_X, 80/WAREHOUSE_CNT_Y);
+                stored.getChildren().add(stackPane);
             }
         }
         stored.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));

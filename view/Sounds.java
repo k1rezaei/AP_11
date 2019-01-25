@@ -30,7 +30,9 @@ public class Sounds {
     }
 
     public static void play(String type){
-        //mediaPlayerHashMap.get(type).stop();
-        //mediaPlayerHashMap.get(type).play();
+        if(!View.MUTE) {
+            mediaPlayerHashMap.get(type).stop();
+            mediaPlayerHashMap.get(type).play();
+        }
     }
 }
