@@ -439,19 +439,6 @@ public class GameView {
         root.getChildren().add(ff);
     }
 
-    void pop(String text){
-        pause();
-        Pop pop = new Pop(text);
-        root.getChildren().add(pop.getStackPane());
-        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().remove(pop.getStackPane());
-                resume();
-            }
-        });
-    }
-
     private void setUpSaveButton() {
         Label save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
