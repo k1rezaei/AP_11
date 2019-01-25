@@ -13,9 +13,9 @@ public class Focus {
     private static final int DIS_X = 50;
     private static final int ITEM_LENGTH = 25;
     private static final int DIS_Y = 10;
-    public static final int UPGRADE_LENGTH = 20;
-    public static final int CAPACITY_LENGTH = 20;
-    public static final int FILL_LENGTH = 20;
+    private static final int UPGRADE_LENGTH = 20;
+    private static final int CAPACITY_LENGTH = 20;
+    private static final int FILL_LENGTH = 20;
     private static Image arrowImage = new Image("file:textures/arrow.png");
     private static Image upgradeImage = new Image("file:textures/upgradeIcon1.png");
     private static Image capacityImage = new Image("file:textures/cap.png");
@@ -126,10 +126,7 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(warehouse);
         HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
-        vBox.getChildren().add(name);
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
-        vBox.getChildren().add(hBox2);
-
+        vBox.getChildren().addAll(name, hBox1, hBox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -163,7 +160,6 @@ public class Focus {
 
     private HBox getUpgradeBox(Upgradable u) {
         String cost = getCost(u);
-        System.err.println(cost);
         if(cost.equals("oo")) return null;
         return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
     }
