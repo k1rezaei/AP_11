@@ -37,12 +37,15 @@ public class YesNoCancel {
             vBox.getChildren().add(labels[i]);
         }
 
+        VBox fake = new VBox();
+        fake.setId("vBox_menu_fake");
+
         stackPane.relocate(400, 300);
         stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
 
         frost = Frost.freeze(bg);
-        stackPane.getChildren().addAll(frost, vBox);
+        stackPane.getChildren().addAll(frost,fake, vBox);
     }
 
 

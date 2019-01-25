@@ -14,19 +14,20 @@ public class EventHandlers {
     static private Media sound;
     static private MediaPlayer mediaPlayer;
 
-    static {
-        if (!View.MUTE) {
+    {
+        if (!view.getMute()) {
             sound = new Media(new File("sounds/alert.mp3").toURI().toString());
             mediaPlayer = new MediaPlayer(sound);
         }
     }
+
 
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
     static void alert() {
-        if (!View.MUTE) {
+        if (!view.getMute()) {
             mediaPlayer.stop();
             mediaPlayer.play();
         }
@@ -246,8 +247,6 @@ public class EventHandlers {
             }
         };
     }
-
-
 
 
     public static EventHandler<MouseEvent> getOnMouseClicked(String animalName) {

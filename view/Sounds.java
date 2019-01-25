@@ -3,6 +3,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Sounds {
 
@@ -26,12 +27,20 @@ public class Sounds {
         add("lion");
         add("dog");
         add("cat");
+        Media sound = new Media(new File("sounds/main_theme.mp3").toURI().toString());
+        mediaPlayerHashMap.put("main_theme", new MediaPlayer(sound));
+    }
+
+    public static void mute(){
+        for(Map.Entry<String, MediaPlayer> entry : mediaPlayerHashMap.entrySet()) {
+            entry.getValue().stop();
+        }
     }
 
     public static void play(String type) {
-        if (!View.MUTE) {
-            mediaPlayerHashMap.get(type).stop();
-            mediaPlayerHashMap.get(type).play();
-        }
+        mediaPlayerHashMap.get(type).stop();
+        mediaPlayerHashMap.get(type).play();
     }
+
+
 }
