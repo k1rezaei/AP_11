@@ -16,10 +16,12 @@ public class Focus {
     private static final int UPGRADE_LENGTH = 20;
     private static final int CAPACITY_LENGTH = 20;
     private static final int FILL_LENGTH = 20;
+    private static final int DO_LENGTH = 20;
     private static Image arrowImage = new Image("file:textures/arrow.png");
     private static Image upgradeImage = new Image("file:textures/upgradeIcon1.png");
     private static Image capacityImage = new Image("file:textures/cap.png");
     private static Image fillImage = new Image("file:textures/water1.png");
+    private static Image doImage = new Image("file:textures/do.png");
     private Map<Upgradable, Boolean> active = new HashMap<>();
     private Map<Upgradable, Node> upgradableInfo = new HashMap<>();
     private Group focus = new Group();
@@ -57,9 +59,8 @@ public class Focus {
         sprite.getImageView().setFitHeight(ITEM_LENGTH);
         hBox2.getChildren().add(sprite.getImageView());
         vBox.getChildren().add(hBox2);
-        Label label = new Label(workshop.getStartCost() + "");
-        label.setId("gold");
-        vBox.getChildren().add(label);
+        HBox hBox3 = combiner(workshop.getStartCost() + "", "gold", doImage, DO_LENGTH);
+        vBox.getChildren().add(hBox3);
         vBox.relocate(x + DIS_X, y - DIS_Y);
         vBox.setId("focus");
         focus.getChildren().add(vBox);
@@ -81,22 +82,26 @@ public class Focus {
         }
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
+
         Label name = new Label(vehicle.getName().substring(0, 1).toUpperCase() + vehicle.getName().substring(1));
         name.setId("name");
 
         HBox hBox1 = getUpgradeBox(vehicle);
         HBox hBox2 = getCapacityBox(vehicle);
 
-        vBox.getChildren().addAll(name, hBox2);
-        if (hBox1 != null) vBox.getChildren().add(hBox1);
-
-        vBox.relocate(x + DIS_X, y);
-        vBox.setId("focus");
-        focus.getChildren().add(vBox);
+        fix(vBox, name, hBox2, hBox1, x, y);
 
         active.put(vehicle, true);
         upgradableInfo.put(vehicle, vBox);
 
+    }
+
+    private void fix(VBox vBox, Label label, HBox hBox1, HBox hbox2, int x, int y) {
+        vBox.getChildren().addAll(label, hBox1);
+        if(hbox2 != null) vBox.getChildren().add(hbox2);
+        vBox.relocate(x + DIS_X, y);
+        focus.getChildren().add(vBox);
     }
 
     void add(Well well) {
@@ -106,14 +111,12 @@ public class Focus {
         VBox vBox = new VBox();
         vBox.setId("focus");
         Label name = new Label("Well");
+        name.setId("name");
 
         HBox hBox1 = getUpgradeBox(well);
         HBox hBox2 = getFillBox(well);
 
-        vBox.getChildren().addAll(name, hBox2);
-        if (hBox1 != null) vBox.getChildren().add(hBox1);
-        vBox.relocate(x + DIS_X, y);
-        focus.getChildren().add(vBox);
+        fix(vBox, name, hBox2, hBox1, x, y);
 
         active.put(well, true);
         upgradableInfo.put(well, vBox);
@@ -146,7 +149,6 @@ public class Focus {
         System.out.println("is Going to Remove");
         VBox data = (VBox) upgradableInfo.remove(u);
         data.setId("focus");
-        if (data == null) System.out.println("BUG");
         System.err.print(focus.getChildren().size() + " : ");
         focus.getChildren().clear();
         System.err.println(focus.getChildren().size());
