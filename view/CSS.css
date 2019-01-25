@@ -44,8 +44,6 @@
 
 
 #intro {
-    -fx-text-alignment: center;
-    -fx-padding: 50;
     -fx-font-size: 50;
 }
 
@@ -60,6 +58,12 @@
     -fx-text-fill: white;
     -fx-font-size: 11;
     -fx-font-family: "Comic Sans MS";
+}
+
+#null {
+    -fx-background-color: transparent;
+    -fx-opacity: 1;
+    -fx-padding: 0;
 }
 
 #buyAnimal .text {

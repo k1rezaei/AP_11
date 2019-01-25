@@ -21,17 +21,13 @@ public class Menu {
         initializeMenu();
         this.view = view;
     }
-
+  
     private void initializeMenu() {
-        VBox vBox = new VBox();
-        vBox.setAlignment(Pos.CENTER);
-        vBox.setPrefWidth(800);
-        vBox.setPrefHeight(600);
-        menuGroup.getChildren().add(vBox);
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
         menuGroup.getChildren().add(background);
         setStart();
         setLoad();
+        setGuide();
         setInfo();
         setExit();
         setGuide();
@@ -42,7 +38,7 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         start.setId("label_button");
-        menuGroup.getChildren().add(start);
+        vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             view.setRoot(new LevelSelect(view).getRoot());
         });
@@ -53,7 +49,7 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         load.setId("label_button");
-        menuGroup.getChildren().add(load);
+        vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");
@@ -78,7 +74,7 @@ public class Menu {
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.relocate(OFFSET_X, 300);
         info.setId("label_button");
-        menuGroup.getChildren().add(info);
+        vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
@@ -221,7 +217,7 @@ public class Menu {
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
-        menuGroup.getChildren().add(exit);
+        vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

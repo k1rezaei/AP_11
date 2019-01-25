@@ -459,6 +459,19 @@ public class GameView {
         });
     }
 
+    void pop(String text){
+        pause();
+        Pop pop = new Pop(text);
+        root.getChildren().add(pop.getStackPane());
+        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+                resume();
+            }
+        });
+    }
+
     private void setUpSaveButton() {
         save = new Label();
         save.setGraphic(new ImageView(new Image("file:textures/save.png")));
@@ -550,7 +563,6 @@ public class GameView {
         menuButton.setId("label_button");
         menuButton.setGraphic(mn);
         menuButton.relocate(MENU_X, MENU_Y);
-
         menuButton.setOnMouseClicked(event -> {
             pause();
             YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?");
@@ -584,7 +596,6 @@ public class GameView {
                 root.getChildren().remove(menu.getStackPane());
                 resume();
             });
-
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Back To Menu");
@@ -679,9 +690,7 @@ public class GameView {
         warehouse = Images.getSpriteAnimation("warehouse");
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
-
         setUpWarehouseInfo();
-
         root.getChildren().add(stored);
     }
 

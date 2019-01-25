@@ -1,4 +1,5 @@
-import javafx.animation.*;
+import javafx.animation.FadeTransition;
+import javafx.animation.Interpolator;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
@@ -37,13 +38,11 @@ public class Intro {
         BG.setFitWidth(800);
         BG.setFitHeight(600);
         introGroup.setOnMouseClicked(event -> goToMenu());
-        Label label = new Label("Felan SmsS Taghdim Mikonad");
+        Label label = new Label("Dr. Keivan - SmsS - Banana");
         label.setId("intro");
+        label.relocate(400,300);
         label.translateXProperty().bind(label.widthProperty().divide(2).negate());
         label.translateYProperty().bind(label.heightProperty().divide(2).negate());
-        label.relocate(400,300);
-        label.setMinSize(800,600);
-        label.setMaxSize(800,600);
         introGroup.getChildren().addAll(BG, label);
 
         FadeTransition ft = new FadeTransition(Duration.millis(DURATION), BG);
