@@ -12,7 +12,7 @@
     -fx-padding: 10;
     -fx-opacity: 0.7;
     -fx-background-color: rgb(203, 141, 79);
-    -fx-background-radius: 30 30 30 30;
+    -fx-background-radius: 30;
     -fx-text-fill: white;
     -fx-font-size: 30;
 
@@ -38,12 +38,6 @@
 #tutorial .text {
     -fx-stroke: #F0E68C;
     -fx-stroke-width: 1px;
-}
-#levelFlowPane {
-    -fx-background-color: black;
-    -fx-background-radius: 30;
-    -fx-opacity: 0.7;
-    -fx-padding: 10 10 10 10;
 }
 #name{
 
@@ -167,7 +161,3 @@ VBox {
     -fx-stroke: red;
     -fx-stroke-width: 2px;
 }
-
-
-
-
