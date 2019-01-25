@@ -7,7 +7,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Frost extends StackPane{
+public class Frost extends StackPane {
 
     private static final double BLUR_AMOUNT = 7;
 
@@ -25,7 +25,6 @@ public class Frost extends StackPane{
                 filler,
                 frostPane
         );
-
 
 
         Rectangle clipShape = new Rectangle(0, 0, 800, 600);

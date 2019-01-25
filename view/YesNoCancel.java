@@ -7,17 +7,15 @@ import javafx.scene.layout.VBox;
 
 
 public class YesNoCancel {
-    private VBox vBox = new VBox();
-   // private Label disabler = new Label();
-    private StackPane stackPane  = new StackPane();
-    private Label[] labels = new Label[3];
     private static Image YES = new Image("file:textures/yes.png");
     private static Image NO = new Image("file:textures/no.png");
     private static Image CANCEL = new Image("file:textures/cancel.png");
     private static int WIDTH = 200;
     private static int HEIGHT = 100;
-    private static final double BLUR_AMOUNT = 7;
-    Node frost;
+    private Node frost;
+    private VBox vBox = new VBox();
+    private StackPane stackPane = new StackPane();
+    private Label[] labels = new Label[3];
 
     YesNoCancel(String text, Image bg) {
         ImageView[] imageViews = new ImageView[3];
@@ -31,24 +29,15 @@ public class YesNoCancel {
         for (int i = 0; i < 3; i++) {
             labels[i] = new Label();
             labels[i].setGraphic(imageViews[i]);
-
             imageViews[i].setFitWidth(WIDTH);
             imageViews[i].setFitHeight(HEIGHT);
-
             labels[i].setMinSize(WIDTH, HEIGHT);
             labels[i].setMaxSize(WIDTH, HEIGHT);
-
             labels[i].setId("label_button");
-
             vBox.getChildren().add(labels[i]);
         }
 
-     /*   disabler.setMinSize(800, 600);
-        disabler.setMaxSize(800, 600);*/
-
-
-
-        stackPane.relocate(400,300);
+        stackPane.relocate(400, 300);
         stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
 
@@ -61,10 +50,9 @@ public class YesNoCancel {
         return stackPane;
     }
 
-    public VBox getvBox() {
+    public VBox getVBox() {
         return vBox;
     }
-
 
     public Label getYes() {
         return labels[0];

@@ -8,14 +8,13 @@ public class Sounds {
 
     private static HashMap<String, MediaPlayer> mediaPlayerHashMap = new HashMap<>();
 
-    static void add(String type){
+    private static void add(String type) {
 
+        Media sound = new Media(new File("sounds/" + type + "_voice.mp3").toURI().toString());
+        mediaPlayerHashMap.put(type + "_voice", new MediaPlayer(sound));
 
-        Media sound = new Media(new File("sounds/"+type+"_voice.mp3").toURI().toString());
-        mediaPlayerHashMap.put(type + "_voice",new MediaPlayer(sound));
-
-        Media sound2 = new Media(new File("sounds/"+type+"_die.mp3").toURI().toString());
-        mediaPlayerHashMap.put(type + "_die",new MediaPlayer(sound2));
+        Media sound2 = new Media(new File("sounds/" + type + "_die.mp3").toURI().toString());
+        mediaPlayerHashMap.put(type + "_die", new MediaPlayer(sound2));
 
     }
 
@@ -29,8 +28,8 @@ public class Sounds {
         add("cat");
     }
 
-    public static void play(String type){
-        if(!View.MUTE) {
+    public static void play(String type) {
+        if (!View.MUTE) {
             mediaPlayerHashMap.get(type).stop();
             mediaPlayerHashMap.get(type).play();
         }
