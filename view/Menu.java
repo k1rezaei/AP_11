@@ -134,7 +134,7 @@ public class Menu {
                 Label label1 = new Label(
                         "this shows how much money you have"
                 );
-                label1.relocate(450, 70);
+                label1.relocate(420, 70);
 
                 Label label2 = new Label(
                         "you can sell items with truck"
@@ -158,13 +158,13 @@ public class Menu {
             case 1: {
                 Label label0 = new Label("you need water for planting\n" +
                         "you can refill well by pressing left click on it");
-                label0.relocate(400, 170);
+                label0.relocate(300, 170);
 
                 Label label1 = new Label("workshop can convers item(s) to item");
                 label1.relocate(200, 300);
 
                 Label label2 = new Label("items go to warehouse when you click on them");
-                label2.relocate(390, 400);
+                label2.relocate(300, 400);
 
                 labels.add(label0);
                 labels.add(label1);
