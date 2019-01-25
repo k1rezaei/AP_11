@@ -12,7 +12,7 @@
     -fx-padding: 10;
     -fx-opacity: 0.7;
     -fx-background-color: rgb(203, 141, 79);
-    -fx-background-radius: 30;
+    -fx-background-radius: 30 30 30 30;
     -fx-text-fill: white;
     -fx-font-size: 30;
 }
