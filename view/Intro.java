@@ -4,6 +4,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Bloom;
+import javafx.scene.effect.Reflection;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -43,6 +45,11 @@ public class Intro {
         label.relocate(400,300);
         label.translateXProperty().bind(label.widthProperty().divide(2).negate());
         label.translateYProperty().bind(label.heightProperty().divide(2).negate());
+
+        Reflection r = new Reflection();
+        r.setFraction(1);
+        label.setEffect(r);
+
         introGroup.getChildren().addAll(BG, label);
 
         FadeTransition ft = new FadeTransition(Duration.millis(DURATION), BG);
