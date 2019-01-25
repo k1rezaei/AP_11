@@ -1,16 +1,15 @@
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class Menu {
     static int OFFSET_X = 320;
@@ -29,6 +28,7 @@ public class Menu {
         vBox.setId("null");
 
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
+        background.setFitWidth(800); background.setFitHeight(600);
         menuGroup.getChildren().add(background);
         setStart();
         setLoad();
