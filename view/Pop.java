@@ -41,7 +41,7 @@ public class Pop {
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
 
         if(bg != null) {
-            Node frost = freeze(bg);
+            Node frost = Frost.freeze(bg);
             stackPane.getChildren().addAll(frost, content);
 
         }else{
@@ -54,29 +54,7 @@ public class Pop {
     }
 
 
-    private StackPane freeze(Image background) {
-        ImageView frost = new ImageView(background);
 
-        Rectangle filler = new Rectangle(0, 0, 800, 600);
-        filler.setFill(Color.AZURE);
-
-        Pane frostPane = new Pane(frost);
-        Effect frostEffect = new BoxBlur(BLUR_AMOUNT, BLUR_AMOUNT, 3);
-        frostPane.setEffect(frostEffect);
-
-        StackPane frostView = new StackPane(
-                filler,
-                frostPane
-        );
-
-
-
-        Rectangle clipShape = new Rectangle(0, 0, 800, 600);
-        frostView.setClip(clipShape);
-
-
-        return frostView;
-    }
 
 
 }

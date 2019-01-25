@@ -6,6 +6,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -14,7 +15,7 @@ public class Menu {
     static int OFFSET_X = 320;
     private View view;
     private Group menuGroup = new Group();
-
+    VBox vBox;
     Menu(View view) {
         initializeMenu();
         this.view = view;
@@ -28,6 +29,10 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
+        vBox.relocate(400,300);
+        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
+        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
@@ -35,7 +40,7 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         start.setId("label_button");
-        menuGroup.getChildren().add(start);
+        vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             view.setRoot(new LevelSelect(view).getRoot());
         });
@@ -46,7 +51,7 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         load.setId("label_button");
-        menuGroup.getChildren().add(load);
+        vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");
@@ -71,7 +76,7 @@ public class Menu {
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.relocate(OFFSET_X, 300);
         info.setId("label_button");
-        menuGroup.getChildren().add(info);
+        vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
@@ -199,7 +204,7 @@ public class Menu {
 
         Label guide = new Label();
         guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
-        guide.relocate(OFFSET_X, 400);
+        //guide.relocate(OFFSET_X, 400);
         guide.setId("label_button");
         menuGroup.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
@@ -213,7 +218,7 @@ public class Menu {
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
-        menuGroup.getChildren().add(exit);
+        vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

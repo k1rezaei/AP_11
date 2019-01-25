@@ -504,7 +504,8 @@ public class GameView {
         exit.setId("label_button");
         exit.setOnMouseClicked(event -> {
             pause();
-            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?");
+
+            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?", view.getSnap());
             root.getChildren().add(menu.getStackPane());
             menu.getNo().setOnMouseClicked(event1 -> {
                 root.getChildren().remove(menu.getStackPane());
@@ -565,7 +566,8 @@ public class GameView {
         menuButton.relocate(MENU_X, MENU_Y);
         menuButton.setOnMouseClicked(event -> {
             pause();
-            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?");
+
+            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?", view.getSnap());
             root.getChildren().add(menu.getStackPane());
 
             menu.getNo().setOnMouseClicked(event1 -> {
