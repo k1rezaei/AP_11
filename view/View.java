@@ -3,6 +3,7 @@ import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.stage.Stage;
@@ -57,6 +58,10 @@ public class View extends Application {
         mainTheme.setCycleCount(AudioClip.INDEFINITE);
         mainTheme.play();
 
+    }
+
+    public Image getSnap(){
+        return  scene.snapshot(null);
     }
 
     public void setRoot(Group root) {

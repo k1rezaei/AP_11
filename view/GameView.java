@@ -441,7 +441,7 @@ public class GameView {
 
     void pop(String text){
         pause();
-        Pop pop = new Pop(text);
+        Pop pop = new Pop(text, view.getSnap());
         root.getChildren().add(pop.getStackPane());
         pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

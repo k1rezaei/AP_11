@@ -89,7 +89,7 @@ public class Menu {
                     "Seyed Mahdi Sadegh Shobeiri\n" +
                     "Mohammad Mahdavi\n" +
                     "Keivan Rezaei\n" +
-                    "Music : Hope Prevails (By Jesper Kyd)");
+                    "Music : Hope Prevails (By Jesper Kyd)", view.getSnap());
             menuGroup.getChildren().add(pop.getStackPane());
             pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
