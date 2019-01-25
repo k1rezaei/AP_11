@@ -126,7 +126,10 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(warehouse);
         HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
-        vBox.getChildren().addAll(name, hBox1, hBox2);
+        vBox.getChildren().add(name);
+        if(hBox1 != null) vBox.getChildren().add(hBox1);
+        vBox.getChildren().add(hBox2);
+
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -160,6 +163,7 @@ public class Focus {
 
     private HBox getUpgradeBox(Upgradable u) {
         String cost = getCost(u);
+        System.err.println(cost);
         if(cost.equals("oo")) return null;
         return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
     }
