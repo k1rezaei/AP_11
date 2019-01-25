@@ -38,7 +38,7 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         start.setId("label_button");
-        vBox.getChildren().add(start);
+        menuGroup.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             view.setRoot(new LevelSelect(view).getRoot());
         });
@@ -49,7 +49,7 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         load.setId("label_button");
-        vBox.getChildren().add(load);
+        menuGroup.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");
@@ -74,7 +74,7 @@ public class Menu {
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.relocate(OFFSET_X, 300);
         info.setId("label_button");
-        vBox.getChildren().add(info);
+        menuGroup.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
@@ -217,7 +217,7 @@ public class Menu {
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
-        vBox.getChildren().add(exit);
+        menuGroup.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
