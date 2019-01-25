@@ -187,7 +187,13 @@ HBox {
     -fx-min-width: 300;
     -fx-min-height: 500;
 }
-
+#recBG {
+    -fx-border-radius: 30;
+    -fx-border-color: gray;
+    -fx-background-color: black;
+    -fx-background-radius: 30;
+    -fx-opacity: 0.5;
+}
 #label_button:hover {
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
