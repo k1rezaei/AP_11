@@ -328,7 +328,8 @@ public class Game {
         if (item != null && warehouse.getCapacity() >= item.getSize()) {
             item.destroy();
             warehouse.add(item);
-        }else throw new RuntimeException("Warehouse is full");
+        }else {};
+        //throw new RuntimeException("Warehouse is full");
     }
 
     public void well() {
