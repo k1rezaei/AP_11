@@ -36,7 +36,7 @@ public class Intro {
         BG.setFitWidth(800);
         BG.setFitHeight(600);
         introGroup.setOnMouseClicked(event -> goToMenu());
-        Label label = new Label("Dr. Keivan - SmsS - Banana");
+        Label label = new Label("Keivan - SmsS - Banana");
         label.setId("intro");
         label.relocate(400, 300);
         label.translateXProperty().bind(label.widthProperty().divide(2).negate());
