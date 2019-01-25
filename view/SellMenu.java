@@ -203,11 +203,12 @@ public class SellMenu {
                                 sellGroup.getChildren().remove(pop.getStackPane());
                             }
                         });
+                    }else {
+                        Game.getInstance().getTruck().add(pair.getKey(), k);
+                        if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
+                        truck.put(pair.getKey(), truck.get(pair.getKey()) + k);
+                        update();
                     }
-                    Game.getInstance().getTruck().add(pair.getKey(), k);
-                    if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
-                    truck.put(pair.getKey(), truck.get(pair.getKey()) + k);
-                    update();
                 }
             });
 
