@@ -710,6 +710,8 @@ public class GameView {
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
 
+        warehouse.getImageView().setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+
         ImageView img = new ImageView(info);
         img.setFitHeight(INFO_LENGTH);
         img.setFitWidth(INFO_LENGTH);
