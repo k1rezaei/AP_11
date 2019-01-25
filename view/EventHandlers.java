@@ -14,20 +14,14 @@ public class EventHandlers {
     static private Media sound;
     static private MediaPlayer mediaPlayer;
 
-    {
-        if (!view.getMute()) {
-            sound = new Media(new File("sounds/alert.mp3").toURI().toString());
-            mediaPlayer = new MediaPlayer(sound);
-        }
-    }
-
-
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
     static void alert() {
         if (!view.getMute()) {
+            sound = new Media(new File("sounds/alert.mp3").toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.stop();
             mediaPlayer.play();
         }

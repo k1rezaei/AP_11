@@ -19,12 +19,14 @@ public class Menu {
 
 
     Menu(View view) {
-        initializeMenu();
         this.view = view;
+        initializeMenu();
     }
 
     void setMute() {
-        ImageView imageView = new ImageView(new Image("file:textures/mute0.png"));
+        int x = 0;
+        if(view.getMute()) x = 1;
+        ImageView imageView = new ImageView(new Image("file:textures/mute"+(x)+".png"));
 
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
