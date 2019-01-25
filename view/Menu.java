@@ -6,7 +6,6 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Optional;
@@ -21,8 +20,6 @@ public class Menu {
         this.view = view;
     }
 
-    VBox vBox;
-
     private void initializeMenu() {
         vBox = new VBox();
         vBox.setId("null");
@@ -35,11 +32,6 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
-
-        vBox.relocate(400,300);
-        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
-        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
-        menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
@@ -47,7 +39,7 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.relocate(OFFSET_X, 100);
         start.setId("label_button");
-        vBox.getChildren().add(start);
+        menuGroup.getChildren().add(start);
         start.setOnMouseClicked(event -> {
             view.setRoot(new LevelSelect(view).getRoot());
         });
@@ -58,7 +50,7 @@ public class Menu {
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.relocate(OFFSET_X, 200);
         load.setId("label_button");
-        vBox.getChildren().add(load);
+        menuGroup.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");
@@ -83,7 +75,7 @@ public class Menu {
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.relocate(OFFSET_X, 300);
         info.setId("label_button");
-        vBox.getChildren().add(info);
+        menuGroup.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
@@ -108,9 +100,9 @@ public class Menu {
         return event -> {
             menuGroup.getChildren().remove(slides.get(i));
             menuGroup.getChildren().removeAll(labels.get(i));
-            if(i+1 != NUM_SLIDES){
-                menuGroup.getChildren().add(slides.get(i+1));
-                menuGroup.getChildren().addAll(labels.get(i+1));
+            if (i + 1 != NUM_SLIDES) {
+                menuGroup.getChildren().add(slides.get(i + 1));
+                menuGroup.getChildren().addAll(labels.get(i + 1));
             }
         };
     }
@@ -145,8 +137,8 @@ public class Menu {
                         "you can buy items with helicopter");
                 label3.relocate(450, 380);
 
-                Label label4 = new Label("click on screen to go to next slide");
-                label4.relocate(400,300);
+                Label label4 = new Label("Click on the screen to move to next slide.");
+                label4.relocate(400, 300);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -173,29 +165,28 @@ public class Menu {
                 break;
             }
             case 2: {
-                Label label0 = new Label("you can cage lion and bear by clicking on them");
-                label0.relocate(2,200);
+                Label label0 = new Label("You can cage lions and bears by clicking on them.");
+                label0.relocate(2, 200);
 
-                Label label1 = new Label("you can plant by clicking on ground");
-                label1.relocate(400,450);
+                Label label1 = new Label("You can plant by clicking on the ground.");
+                label1.relocate(400, 450);
 
-                Label label2 = new Label("you can upgrade cat, workshop, truck, well,\n" +
-                        "helicopter and warehouse just press right click on them!\n" +
-                        "and don't forget to collect items from ground");
-                label2.relocate(10,10);
+                Label label2 = new Label("You can upgrade the cat, workshops, the truck, the well,\n" +
+                        "the helicopter and the warehouse. Just press right click on them!\n" +
+                        "And don't forget to collect items from the ground.");
+                label2.relocate(10, 10);
                 labels.add(label0);
                 labels.add(label1);
                 labels.add(label2);
                 break;
             }
         }
-        for(Label label: labels){
+        for (Label label : labels) {
             label.setId("tutorial");
             label.setOnMouseClicked(getOnMouseClickedEventHandler(i));
         }
         this.labels.add(labels);
     }
-
 
 
     private void setGuide() {
@@ -226,7 +217,7 @@ public class Menu {
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
-        vBox.getChildren().add(exit);
+        menuGroup.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
