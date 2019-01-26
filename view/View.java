@@ -1,28 +1,17 @@
 import javafx.application.Application;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.control.IndexedCell;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-import java.io.File;
 
 public class View extends Application {
     private static final boolean INTRO = true;
     /// age ejra nashod true konid
-    private boolean mute = false;
+    private boolean mute = true;
     private Stage primaryStage;
     private Scene scene;
 
-
-    boolean getMute(){ return mute;}
-    void setMute(boolean mute){ this.mute = mute;}
 
     public static void main(String[] args) {
         launch(args);
@@ -56,7 +45,17 @@ public class View extends Application {
 
     }
 
-    public Image getSnap() { return scene.snapshot(null); }
+    boolean getMute() {
+        return mute;
+    }
+
+    void setMute(boolean mute) {
+        this.mute = mute;
+    }
+
+    public Image getSnap() {
+        return scene.snapshot(null);
+    }
 
     public void setRoot(Group root) {
         scene.setRoot(root);

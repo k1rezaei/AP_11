@@ -72,6 +72,7 @@ public class GameView {
     private static final int TRUCK_MINI_Y = 35;
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
+    private static final float ITEM_FADE_TIME = 100;
     private static Image info = new Image("file:textures/info.png");
 
     static {
@@ -243,7 +244,7 @@ public class GameView {
         for (Entity entity : Game.getInstance().getMap().getEntities())
             if (entity.getCell() != null) {
                 if (entity instanceof Animal && (Math.random() < SOUND_PROP))
-                    if(view.getMute() == false) Sounds.play(entity.getType() + "_voice");
+                    if (view.getMute() == false) Sounds.play(entity.getType() + "_voice");
                 if (!sprites.containsKey(entity)) addSprite(entity);
                 renderSprite(entity);
             } else if (sprites.containsKey(entity)) killSprite(entity);
@@ -362,6 +363,10 @@ public class GameView {
         sprite.getImageView().setTranslateX(-sprite.getWidth() / 2);
         sprite.getImageView().setTranslateY(-sprite.getHeight() / 2);
         sprite.getImageView().relocate(BASE_X + entity.getCell().getX(), BASE_Y + entity.getCell().getY());
+        if (entity instanceof Item) {
+            int remainTime = ((Item) entity).getRemainTime();
+            sprite.getImageView().setOpacity(Math.min(1.0, remainTime / ITEM_FADE_TIME));
+        }
     }
 
     private void addSprite(Entity entity) {
