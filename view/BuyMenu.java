@@ -78,7 +78,7 @@ public class BuyMenu {
 
         Label stack = new Label();
         stack.relocate(DIS_X * 2 - 20 + BASE_X + 10, BASE_Y - 10);
-        stack.setMinSize( 200, 300);
+        stack.setMinSize( 200, 350);
         stack.setId("recBG");
 
 
