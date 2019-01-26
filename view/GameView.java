@@ -449,26 +449,13 @@ public class GameView {
         root.getChildren().add(fastForward);
     }
 
-    private void pop(String text) {
+    void pop(String text) {
         pause();
-        Pop pop = new Pop(text);
+        Pop pop = new Pop(text, view.getSnap());
         root.getChildren().add(pop.getStackPane());
         pop.getStackPane().setOnMouseClicked(event -> {
             root.getChildren().remove(pop.getStackPane());
             resume();
-        });
-    }
-
-    void pop(String text){
-        pause();
-        Pop pop = new Pop(text, view.getSnap());
-        root.getChildren().add(pop.getStackPane());
-        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().remove(pop.getStackPane());
-                resume();
-            }
         });
     }
 

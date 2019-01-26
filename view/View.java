@@ -3,13 +3,8 @@ import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.media.AudioClip;
-import javafx.scene.media.Media;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.net.URL;
 
 public class View extends Application {
     private Stage primaryStage;
@@ -19,8 +14,6 @@ public class View extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-
 
 
     private AudioClip mainTheme = null;
@@ -33,9 +26,9 @@ public class View extends Application {
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
-        if(INTRO){
+        if (INTRO) {
             scene = new Scene(new Intro(this).getRoot(), 800, 600);
-        }else {
+        } else {
             Menu menu = new Menu(this);
             scene = new Scene(menu.getRoot(), 800, 600);
         }
@@ -47,21 +40,19 @@ public class View extends Application {
         Game.loadCustom("workshops");
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
-        primaryStage.show();
 
 
         try {
-            mainTheme = new AudioClip(new File("sounds/main_theme.mp3").toURI().toURL().toString());
-        }catch (Exception e){
+            //mainTheme = new AudioClip("file:sounds/alt_main_theme.mp3");
+            //mainTheme.setCycleCount(AudioClip.INDEFINITE);
+            //mainTheme.play();
+        } catch (Exception e) {
         }
-
-        mainTheme.setCycleCount(AudioClip.INDEFINITE);
-        mainTheme.play();
-
+        primaryStage.show();
     }
 
-    public Image getSnap(){
-        return  scene.snapshot(null);
+    public Image getSnap() {
+        return scene.snapshot(null);
     }
 
     public void setRoot(Group root) {
