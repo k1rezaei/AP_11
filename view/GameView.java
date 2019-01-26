@@ -748,7 +748,6 @@ public class GameView {
         warehouseInfo.relocate(WAREHOUSE_X - 10, WAREHOUSE_Y);
         warehouseInfo.setOnMouseEntered(EventHandlers.getOnMouseEnteredEventHandler(Game.getInstance().getWarehouse()));
         warehouseInfo.setOnMouseExited(EventHandlers.getOnMouseExitedEventHandler(Game.getInstance().getWarehouse()));
-        warehouseInfo.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
         infoRoot.getChildren().add(warehouseInfo);
     }
 

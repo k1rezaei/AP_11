@@ -91,6 +91,8 @@ public class BuyMenu {
 
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
 
+
+
         Label ok = new Label();
         ok.relocate(BASE_X, 10);
         ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
@@ -107,6 +109,14 @@ public class BuyMenu {
         cancel.relocate(BASE_X + 110, 10);
         cancel.setGraphic(cancelImage);
         cancel.setId("label_button");
+
+      /*  Label clear = new Label();
+        clear.relocate(BASE_X + 220, 10 );
+        ImageView clearImage = new ImageView(new Image("file:textures/clear.png"));
+        clearImage.setFitHeight(60);
+        clearImage.setFitWidth(100);
+        clear.setGraphic(cancelImage);
+        clear.setId("label_button");*/
 
         buyGroup.getChildren().addAll(ok, cancel);
 
@@ -131,6 +141,13 @@ public class BuyMenu {
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
+
+      /*  clear.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        });*/
 
         int numberOfItems = 0;
 
