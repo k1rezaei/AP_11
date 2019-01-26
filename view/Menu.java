@@ -48,7 +48,10 @@ public class Menu {
                 imageView.setImage(image);
                 if(view.getMute()){
                     Sounds.mute();
-                }else Sounds.play("main_theme");
+                }else{
+                    Sounds.init();
+                    Sounds.play("main_theme");
+                }
             }
         });
         menuGroup.getChildren().add(mute);

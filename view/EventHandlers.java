@@ -167,17 +167,6 @@ public class EventHandlers {
     }
 
 
-    static EventHandler<MouseEvent> getAltOnMouseClickedEventHandler(Warehouse warehouse) {
-        return event -> {
-            switch (event.getButton()) {
-                case PRIMARY:
-                    break;
-                case SECONDARY:
-                    upgradeWarehouse(warehouse);
-                    break;
-            }
-        };
-    }
 
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
