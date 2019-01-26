@@ -16,13 +16,14 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 
 public class GameView {
-    public static final int BASE_X = 260;
-    public static final int BASE_Y = 210;
-    public static final String FINISH = "finish";
-    public static final Image BOX = new Image("file:textures/box.png");
+    private static final int BASE_X = 260;
+    private static final int BASE_Y = 210;
+    private static final String FINISH = "finish";
+    private static final Image BOX = new Image("file:textures/box.png");
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
@@ -442,9 +443,38 @@ public class GameView {
         goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                VBox vBox = getGoals(level.toString());
                 pop(level.toString());
             }
         });
+    }
+
+    private VBox getGoals(String data) {
+        Scanner scanner = new Scanner(data);
+        VBox vBox = new VBox();
+        while(scanner.hasNext()) {
+            String line = scanner.nextLine();
+
+            HBox hBox = new HBox();
+
+            String[] s = line.split(" ");
+            String type = s[0].split(":")[0];
+
+            System.out.println(type + " , " + s[1]);
+
+            if(type.startsWith("Req")) {
+                Label label = new Label(line);
+                label.setId("money");
+                hBox.getChildren().add(label);
+            }else {
+                ImageView img = Images.getImageForGoal(type);
+                img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+                Label number = new Label(s[1]);
+                hBox.getChildren().addAll(img, number);
+            }
+            vBox.getChildren().add(hBox);
+        }
+        return vBox;
     }
 
     private void setUpFastForward() {
