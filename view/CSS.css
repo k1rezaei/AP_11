@@ -23,13 +23,39 @@
     -fx-border-radius: 30 30 30 30;
 }
 
-#pop_stackPane {
-}
 
 #pop .text {
     -fx-stroke: firebrick;
     -fx-stroke-width: 2px;
 }
+
+#popVBox {
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 30;
+
+    -fx-background-color: rgb(203, 141, 79);
+    -fx-background-radius: 30 30 30 30;
+    -fx-opacity: 0.7;
+
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 30 30 30 30;
+}
+#popVBox .label {
+    -fx-padding: 10;
+    -fx-text-fill: white;
+    -fx-font-size: 40;
+}
+
+#popVBox .text {
+    -fx-stroke: firebrick;
+    -fx-stroke-width: 2px;
+}
+#pop_stackPane {
+}
+
+
 
 #tutorial {
     -fx-text-fill: blue;
