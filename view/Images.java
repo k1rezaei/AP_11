@@ -64,7 +64,7 @@ public class Images {
         loadImage("truckMini", 4, 2, new int[]{2, 2, 2, 2});
     }
 
-    static void addImages(ArrayList<Image> images, String type, int n) {
+    private static void addImages(ArrayList<Image> images, String type, int n) {
         String address;
         if (type.startsWith("workshop"))
             address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
@@ -74,13 +74,13 @@ public class Images {
             images.add(new Image(address + i + ".png"));
     }
 
-    static void loadImage(String type, int n, int count, int[] column) {
+    private static void loadImage(String type, int n, int count, int[] column) {
         ArrayList<Image> images = new ArrayList<>();
         addImages(images, type, n);
         map.put(type, new LoadedImage(images, count, column));
     }
 
-    static void loadImage(String type, ArrayList<Image> images, int count, int[] column) {
+    private static void loadImage(String type, ArrayList<Image> images, int count, int[] column) {
         map.put(type, new LoadedImage(images, count, column));
     }
 
@@ -98,5 +98,9 @@ public class Images {
 
     static ImageView getIcon(String type) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
+    }
+
+    static ImageView getImageForGoal(String type) {
+        return new ImageView(new Image("file:textures/goal/" + type + ".png"));
     }
 }
