@@ -177,6 +177,7 @@ public class BuyMenu {
                         ImageView bought = Images.getSpriteAnimation(type).getImageView();
                         bought.setFitWidth(30);
                         bought.setFitHeight(30);
+                        // TODO flowPane
                         int x = numBought % NUM_OF_BOUGHT * DIS_X_BOUGHT + BASE_X_BOUGHT;
                         int y = numBought / NUM_OF_BOUGHT * DIS_Y_BOUGHT + BASE_Y_BOUGHT;
                         bought.relocate(x, y);

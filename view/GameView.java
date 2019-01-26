@@ -407,9 +407,25 @@ public class GameView {
         setUpHelicopterMini();
         setUpTruckMini();
         setUpMenuButton();
+        setUpStructrues();
         root.getChildren().add(entityRoot);
         root.getChildren().add(infoRoot);
         root.getChildren().add(focus.getRoot());
+    }
+
+    private void setStyle(SpriteAnimation spriteAnimation){
+        for(ImageView imageView : spriteAnimation.getImageViews()) {
+            imageView.setId("glow");
+        }
+    }
+
+    private void setUpStructrues(){
+        setStyle(warehouse);
+        setStyle(well);
+        setStyle(truck);
+        setStyle(helicopter);
+        for (Map.Entry<Workshop, SpriteAnimation> entry : workshops.entrySet()) setStyle(entry.getValue());
+
     }
 
     private void setUpRoadImage() {
@@ -834,6 +850,7 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setId("glow");
             buyAnimal.setOnMouseClicked(EventHandlers.getOnMouseClicked(animalName));
             Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
             if (priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());
@@ -861,6 +878,7 @@ public class GameView {
         }
     }
 
+
     private VBox getBuyAnimalFocus(String animalName) {//TODO move to focus
         VBox infoBox = new VBox();
         infoBox.setId("focus");
@@ -876,7 +894,7 @@ public class GameView {
         price.getChildren().add(coin);
         infoBox.getChildren().add(name);
         infoBox.getChildren().add(price);
-        if (animalName.equalsIgnoreCase("cat")) {
+        if (animalName.equalsIgnoreCase("cat") ) {
             HBox upgrade = new HBox();
             Label upgradeLabel = new Label(Integer.toString(Cat.getUpgradeCost()));
             upgradeLabel.setId("gold");
