@@ -2,7 +2,6 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -835,7 +834,6 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
-            buyAnimal.setCursor(new Effect());
             buyAnimal.setOnMouseClicked(EventHandlers.getOnMouseClicked(animalName));
             Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
             if (priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());
