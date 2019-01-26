@@ -146,9 +146,9 @@ public class Focus {
         if (active.get(u) == null || !active.get(u)) return;
         VBox data = (VBox) upgradableInfo.remove(u);
         data.setId("focus");
-        System.err.print(focus.getChildren().size() + " : ");
+        //System.err.print(focus.getChildren().size() + " : ");
         focus.getChildren().clear();
-        System.err.println(focus.getChildren().size());
+        //System.err.println(focus.getChildren().size());
         active.put(u, false);
     }
 
