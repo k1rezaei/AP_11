@@ -202,15 +202,14 @@ public class GameView {
     }
 
     private void saveLevel() {
-        Game.getInstance().getLevel();
+        System.out.println(Game.getInstance().getLevel().getGoalMoney());
         for (String name : Game.getLevels().keySet()) {
-            if (Game.getLevels().get(name) == Game.getInstance().getLevel()) {
+            if (Game.getLevels().get(name).equals(Game.getInstance().getLevel())) {
                 try {
                     FileWriter fw = new FileWriter("Levels", true);
                     fw.write(name.substring("level".length()) + "\n");
                     fw.close();
-                } catch (Exception ignored) {
-                }
+                } catch (Exception ignored) { }
                 return;
             }
         }
