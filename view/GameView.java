@@ -20,10 +20,10 @@ import java.util.Scanner;
 
 
 public class GameView {
-    private static final int BASE_X = 260;
-    private static final int BASE_Y = 210;
-    private static final String FINISH = "finish";
-    private static final Image BOX = new Image("file:textures/box.png");
+    public static final int BASE_X = 260;
+    public static final int BASE_Y = 210;
+    public static final String FINISH = "finish";
+    public static final Image BOX = new Image("file:textures/box.png");
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
