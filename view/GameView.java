@@ -460,7 +460,7 @@ public class GameView {
             String[] s = line.split(" ");
             String type = s[0].split(":")[0];
 
-            System.out.println(type + " , " + s[1]);
+            //System.out.println(type + " , " + s[1]);
 
             if(type.startsWith("Req")) {
                 Label label = new Label(line);
