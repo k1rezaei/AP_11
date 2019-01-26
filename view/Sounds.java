@@ -20,6 +20,7 @@ public class Sounds {
     }
 
     public static void init() {
+        mediaPlayerHashMap.clear();
         add("chicken");
         add("sheep");
         add("cow");

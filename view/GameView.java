@@ -702,7 +702,7 @@ public class GameView {
     private void setUpWarehouse() {
         warehouse = Images.getSpriteAnimation("warehouse");
         warehouse.setState(Game.getInstance().getWarehouse().getLevel());
-        warehouse.setOnMouseClicked(EventHandlers.getAltOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
+        warehouse.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWarehouse()));
         fixSprite(warehouse, WAREHOUSE_X, WAREHOUSE_Y);
         setUpWarehouseInfo();
         root.getChildren().add(stored);
