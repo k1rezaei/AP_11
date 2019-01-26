@@ -1,5 +1,3 @@
-import java.util.Objects;
-
 public abstract class Entity {
     final public static String WILD_ANIMAL = "WildAnimal";
     final public static String PLANT = "Plant";
@@ -53,7 +51,9 @@ public abstract class Entity {
         return buyPrice;
     }
 
-    public Cell getDeadCell() { return deadCell; }
+    public Cell getDeadCell() {
+        return deadCell;
+    }
 
     public String getType() {
         return type;
@@ -63,7 +63,6 @@ public abstract class Entity {
 
     void destroy() {
         deadCell = cell;
-
 
 
         cell = null;

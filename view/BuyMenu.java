@@ -1,15 +1,10 @@
-import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 
@@ -72,25 +67,24 @@ public class BuyMenu {
         rectangle.relocate(BASE_X - 10, BASE_Y - 10);
         rectangle.setMinSize(DIS_X * 2 - 10, DIS_Y * 5);
         //rectangle.setFill(Color.BLACK);
-       // rectangle.setOpacity(0.5);
+        // rectangle.setOpacity(0.5);
         //rectangle.setFill(Color.TRANSPARENT);
         rectangle.setId("recBG");
 
         Label stack = new Label();
         stack.relocate(DIS_X * 2 - 20 + BASE_X + 10, BASE_Y - 10);
-        stack.setMinSize( 200, 350);
+        stack.setMinSize(200, 350);
         stack.setId("recBG");
 
 
         //stack.setFill(Color.BLACK);
-       // stack.setOpacity(0.5);
+        // stack.setOpacity(0.5);
 
         buyGroup.getChildren().add(stack);
         buyGroup.getChildren().add(rectangle);
 
 
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
-
 
 
         Label ok = new Label();

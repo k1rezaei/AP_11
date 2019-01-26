@@ -71,7 +71,7 @@ public class FarmAnimal extends Animal {
 
     void collide(Entity entity) {
         if (entity instanceof Plant) {
-            if(rateOfHunger > MIN_HUNGER) return;
+            if (rateOfHunger > MIN_HUNGER) return;
             ((Plant) (entity)).startTimer();
             rateOfHunger += RATE_OF_HUNGER / hungrySpeed;
             if (rateOfHunger > RATE_OF_HUNGER) rateOfHunger = RATE_OF_HUNGER;

@@ -74,32 +74,32 @@ public class Level {
         }
     }
 
-    public void setItemList(ArrayList<String> itemList) {
-        this.itemList = itemList;
-    }
-
     public ArrayList<String> getItemList() {
         return itemList;
     }
 
+    public void setItemList(ArrayList<String> itemList) {
+        this.itemList = itemList;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof Level)) return false;
-        Level oth = (Level)obj;
-        if(this.m != oth.getM()) return false;
-        if(this.n != oth.getN()) return false;
-        if(this.goalMoney != oth.getGoalMoney()) return false;
-        if(this.startMoney != oth.getStartMoney()) return false;
-        if(!checkGoals(this.goalEntity, oth.getGoalEntity())) return false;
+        if (!(obj instanceof Level)) return false;
+        Level oth = (Level) obj;
+        if (this.m != oth.getM()) return false;
+        if (this.n != oth.getN()) return false;
+        if (this.goalMoney != oth.getGoalMoney()) return false;
+        if (this.startMoney != oth.getStartMoney()) return false;
+        if (!checkGoals(this.goalEntity, oth.getGoalEntity())) return false;
         return true;
     }
 
     private boolean checkGoals(HashMap<String, Integer> map1, HashMap<String, Integer> map2) {
         for (String str : map1.keySet()) {
-            if(map2.get(str) == null || map2.get(str) != map1.get(str)) return false;
+            if (map2.get(str) == null || map2.get(str) != map1.get(str)) return false;
         }
         for (String str : map2.keySet()) {
-            if(map1.get(str) == null || map1.get(str) != map2.get(str)) return false;
+            if (map1.get(str) == null || map1.get(str) != map2.get(str)) return false;
         }
         return true;
     }

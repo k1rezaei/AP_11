@@ -167,7 +167,6 @@ public class EventHandlers {
     }
 
 
-
     static EventHandler<MouseEvent> getOnMouseClickedEventHandler(Warehouse warehouse) {
         return event -> {
             switch (event.getButton()) {

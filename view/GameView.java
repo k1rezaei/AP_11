@@ -2,6 +2,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -209,7 +210,8 @@ public class GameView {
                     FileWriter fw = new FileWriter("Levels", true);
                     fw.write(name.substring("level".length()) + "\n");
                     fw.close();
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
                 return;
             }
         }
@@ -455,7 +457,7 @@ public class GameView {
     private VBox getGoals(String data) {
         Scanner scanner = new Scanner(data);
         VBox vBox = new VBox();
-        while(scanner.hasNext()) {
+        while (scanner.hasNext()) {
             String line = scanner.nextLine();
 
             HBox hBox = new HBox();
@@ -465,13 +467,14 @@ public class GameView {
 
             //System.out.println(type + " , " + s[1]);
 
-            if(type.startsWith("Req")) {
+            if (type.startsWith("Req")) {
                 Label label = new Label(line);
                 label.setId("money");
                 hBox.getChildren().add(label);
-            }else {
+            } else {
                 ImageView img = Images.getImageForGoal(type);
-                img.setFitHeight(INFO_LENGTH); img.setFitWidth(INFO_LENGTH);
+                img.setFitHeight(INFO_LENGTH);
+                img.setFitWidth(INFO_LENGTH);
                 Label number = new Label(s[1]);
                 hBox.getChildren().addAll(img, number);
             }
@@ -811,6 +814,7 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setCursor(new Effect());
             buyAnimal.setOnMouseClicked(EventHandlers.getOnMouseClicked(animalName));
             Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
             if (priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());

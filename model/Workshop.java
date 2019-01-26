@@ -20,7 +20,7 @@ public class Workshop implements Upgradable {
         this.name = name;
     }
 
-    Workshop(Workshop workshop){
+    Workshop(Workshop workshop) {
         output = workshop.output;
         inputs = workshop.inputs;
         x = workshop.x;
@@ -62,7 +62,7 @@ public class Workshop implements Upgradable {
     void turn() {
         if (remainTime == -1) return;
         int z = 0;
-        if(x > 200) z = -1;
+        if (x > 200) z = -1;
         else z = 1;
 
         if (remainTime == 0) {

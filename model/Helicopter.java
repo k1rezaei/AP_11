@@ -5,6 +5,7 @@ public class Helicopter extends Vehicle implements Upgradable {
     private static final int CAPACITY_INCREASE = 10;
     private static final int GO_TIME = 200;
     private static final int UPGRADE_COST = 200;
+    private static final int GO_TIME_DECREASE = 20;
 
     public Helicopter() {
         setCapacity(INITIAL_CAPACITY);
@@ -12,6 +13,7 @@ public class Helicopter extends Vehicle implements Upgradable {
         setCapacityIncrease(CAPACITY_INCREASE);
         setGoTime(GO_TIME);
         setUpgradeCost(UPGRADE_COST);
+        setGoTimeDecrease(GO_TIME_DECREASE);
     }
 
     public ArrayList<Entity> getResultItems() {
