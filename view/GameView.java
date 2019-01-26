@@ -63,6 +63,7 @@ public class GameView {
     private static final int WAREHOUSE_CNT_X = 7;
     private static final int WAREHOUSE_CNT_Y = 5;
     private static final double SOUND_PROP = 0.01;
+    private static final int GOAL_ICONS_LENGTH = 70;
     private static final String[] NON_WILD = {"chicken", "sheep", "cow", "dog", "cat"};
     private static final double EPS = 0.0001;
     private static final Rectangle REFRESHER = new Rectangle(0, 0, 1000, 1000);
@@ -448,7 +449,7 @@ public class GameView {
             @Override
             public void handle(MouseEvent event) {
                 VBox vBox = getGoals(level.toString());
-                pop(level.toString());
+                pop(vBox);
             }
         });
     }
@@ -456,7 +457,10 @@ public class GameView {
     private VBox getGoals(String data) {
         Scanner scanner = new Scanner(data);
         VBox vBox = new VBox();
-        while (scanner.hasNext()) {
+
+        int cnt = 0;
+        while(scanner.hasNext()) {
+            cnt++;
             String line = scanner.nextLine();
 
             HBox hBox = new HBox();
@@ -465,20 +469,24 @@ public class GameView {
             String type = s[0].split(":")[0];
 
             //System.out.println(type + " , " + s[1]);
-
-            if (type.startsWith("Req")) {
-                Label label = new Label(line);
+            if(type.startsWith("Req")) {
+                Label label = new Label(s[2]);
                 label.setId("money");
-                hBox.getChildren().add(label);
-            } else {
+
+                ImageView img = Images.getImageForGoal("money");
+                img.setFitHeight(GOAL_ICONS_LENGTH); img.setFitWidth(GOAL_ICONS_LENGTH);
+
+                hBox.getChildren().addAll(img, label);
+            }else {
                 ImageView img = Images.getImageForGoal(type);
-                img.setFitHeight(INFO_LENGTH);
-                img.setFitWidth(INFO_LENGTH);
+                img.setFitHeight(GOAL_ICONS_LENGTH); img.setFitWidth(GOAL_ICONS_LENGTH);
                 Label number = new Label(s[1]);
                 hBox.getChildren().addAll(img, number);
             }
             vBox.getChildren().add(hBox);
         }
+        vBox.setMaxHeight(cnt*GOAL_ICONS_LENGTH);
+        vBox.setMaxWidth(300);
         return vBox;
     }
 
@@ -512,6 +520,19 @@ public class GameView {
         pop.getStackPane().setOnMouseClicked(event -> {
             root.getChildren().remove(pop.getStackPane());
             resume();
+        });
+    }
+
+    void pop(VBox vBox){
+        pause();
+        Pop pop = new Pop(vBox, view.getSnap());
+        root.getChildren().add(pop.getStackPane());
+        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+                resume();
+            }
         });
     }
 

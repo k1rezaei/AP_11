@@ -109,11 +109,14 @@ public class Menu {
                 view.setRoot(gameView.getRoot());
             } catch (Exception e) {
                 e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Can't LoadGame");
-                alert.setHeaderText(null);
-                alert.setContentText("Can't Find SaveGame");
-                alert.showAndWait();
+                Pop pop = new Pop("Can't Find SaveGame", view.getSnap());
+                menuGroup.getChildren().add(pop.getStackPane());
+                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        menuGroup.getChildren().remove(pop.getStackPane());
+                    }
+                });
             }
         });
     }
