@@ -2,6 +2,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -210,7 +211,8 @@ public class GameView {
                     FileWriter fw = new FileWriter("Levels", true);
                     fw.write(name.substring("level".length()) + "\n");
                     fw.close();
-                } catch (Exception ignored) { }
+                } catch (Exception ignored) {
+                }
                 return;
             }
         }
@@ -456,6 +458,7 @@ public class GameView {
     private VBox getGoals(String data) {
         Scanner scanner = new Scanner(data);
         VBox vBox = new VBox();
+
         int cnt = 0;
         while(scanner.hasNext()) {
             cnt++;
@@ -467,7 +470,6 @@ public class GameView {
             String type = s[0].split(":")[0];
 
             //System.out.println(type + " , " + s[1]);
-
             if(type.startsWith("Req")) {
                 Label label = new Label(s[2]);
                 label.setId("money");
@@ -833,6 +835,7 @@ public class GameView {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
             ImageView buyAnimal = Images.getIcon(animalName);
+            buyAnimal.setCursor(new Effect());
             buyAnimal.setOnMouseClicked(EventHandlers.getOnMouseClicked(animalName));
             Label priceLabel = new Label("" + Entity.getNewEntity(animalName).getBuyPrice());
             if (priceLabel.getText().length() < 4) priceLabel.setText(" " + priceLabel.getText());

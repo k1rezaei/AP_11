@@ -19,7 +19,7 @@ public class Cat extends Animal {
         level = 1;
     }
 
-        static public int getUpgradeCost() {
+    static public int getUpgradeCost() {
         if (level == 1) throw Upgradable.MAX_LEVEL_EXCEPTION;
         return 500;
     }

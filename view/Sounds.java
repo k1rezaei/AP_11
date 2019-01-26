@@ -32,8 +32,8 @@ public class Sounds {
         mediaPlayerHashMap.put("main_theme", new MediaPlayer(sound));
     }
 
-    public static void mute(){
-        for(Map.Entry<String, MediaPlayer> entry : mediaPlayerHashMap.entrySet()) {
+    public static void mute() {
+        for (Map.Entry<String, MediaPlayer> entry : mediaPlayerHashMap.entrySet()) {
             entry.getValue().stop();
         }
     }

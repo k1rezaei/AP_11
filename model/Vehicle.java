@@ -9,6 +9,7 @@ abstract public class Vehicle implements Upgradable {
     private int level = 0;
     private int maxLevel = 3;
     private int capacityIncrease;
+    private int goTimeDecrease;
     private ArrayList<String> items = new ArrayList<>();
 
     public void add(String type, int count) {
@@ -45,7 +46,7 @@ abstract public class Vehicle implements Upgradable {
         if (level < maxLevel) {
             capacity += capacityIncrease;
             currentCapacity += capacityIncrease;
-            goTime--;
+            goTime -= goTimeDecrease;
             level++;
         } else {
             throw new RuntimeException("Already at max level");
@@ -133,6 +134,14 @@ abstract public class Vehicle implements Upgradable {
 
     public void setRemainingTime(int remainingTime) {
         this.remainingTime = remainingTime;
+    }
+
+    public int getGoTimeDecrease() {
+        return goTimeDecrease;
+    }
+
+    public void setGoTimeDecrease(int goTimeDecrease) {
+        this.goTimeDecrease = goTimeDecrease;
     }
 
     public ArrayList<String> getItems() {

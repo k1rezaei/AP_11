@@ -80,6 +80,59 @@ public class Game {
         }
     }
 
+    public static void runMap(Level level) {
+        game = new Game();
+        game.level = level;
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        game.money = level.getStartMoney();
+        for (Workshop workshop : workshopTemplates) {
+            game.workshops.add(new Workshop(workshop));
+        }
+        game.upgradables.addAll(game.workshops);
+    }
+
+    public static void loadCustom(String address) {
+        Gson gson = new Gson();
+        //TODO BUG.
+        if (workshopTemplates.isEmpty()) {
+            workshopTemplates.clear();
+            for (int i = 0; i < 6; i++) {
+                try {
+                    JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
+                    workshopTemplates.add(gson.fromJson(reader, Workshop.class));
+                    workshopTemplates.get(i).setName("workshop" + i);
+                } catch (Exception e) {
+                    workshopTemplates.clear();
+                    throw new RuntimeException("File not found");
+                }
+            }
+        }
+        levels.clear();
+        int i = 0;
+        while (true) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
+                levels.put("level" + i, gson.fromJson(reader, Level.class));
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+    }
+
+    public static Level getLevel(String name) {
+        return levels.get(name);
+    }
+
+    public static HashMap<String, Level> getLevels() {
+        return levels;
+    }
+
+    public static void setLevels(HashMap<String, Level> levels) {
+        Game.levels = levels;
+    }
+
     public void run(String command) {
         String[] commands = command.split("(\\s)+");
         Vehicle vehicle = null;
@@ -162,18 +215,6 @@ public class Game {
         runMap(levels.get(mapName));
     }
 
-    public static void runMap(Level level) {
-        game = new Game();
-        game.level = level;
-        Cell.setN(level.getN());
-        Cell.setM(level.getM());
-        game.money = level.getStartMoney();
-        for (Workshop workshop : workshopTemplates) {
-            game.workshops.add(new Workshop(workshop));
-        }
-        game.upgradables.addAll(game.workshops);
-    }
-
     public void saveGame(String command) throws IOException {
         Gson gson = new Gson();
         OutputStream outputStream = new FileOutputStream(command);
@@ -188,35 +229,6 @@ public class Game {
         JsonReader reader = new JsonReader(new FileReader(address));
         Saver save = gson.fromJson(reader, Saver.class);
         game = new Game(save);
-    }
-
-    public static void loadCustom(String address) {
-        Gson gson = new Gson();
-        //TODO BUG.
-        if (workshopTemplates.isEmpty()) {
-            workshopTemplates.clear();
-            for (int i = 0; i < 6; i++) {
-                try {
-                    JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
-                    workshopTemplates.add(gson.fromJson(reader, Workshop.class));
-                    workshopTemplates.get(i).setName("workshop" + i);
-                } catch (Exception e) {
-                    workshopTemplates.clear();
-                    throw new RuntimeException("File not found");
-                }
-            }
-        }
-        levels.clear();
-        int i = 0;
-        while (true) {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
-                levels.put("level" + i, gson.fromJson(reader, Level.class));
-                i++;
-            } catch (Exception e) {
-                break;
-            }
-        }
     }
 
     public void print(String name) {
@@ -490,23 +502,11 @@ public class Game {
         return currentTurn;
     }
 
-    public int getCatLevel() {
-        return catLevel;
-    }
-
-    public static Level getLevel(String name) {
-        return levels.get(name);
-    }
-
-    public static HashMap<String, Level> getLevels() {
-        return levels;
-    }
-
-    public static void setLevels(HashMap<String, Level> levels) {
-        Game.levels = levels;
-    }
-
     public void setCurrentTurn(int currentTurn) {
         this.currentTurn = currentTurn;
+    }
+
+    public int getCatLevel() {
+        return catLevel;
     }
 }

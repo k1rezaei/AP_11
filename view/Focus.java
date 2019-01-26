@@ -98,7 +98,7 @@ public class Focus {
 
     private void fix(VBox vBox, Label label, HBox hBox1, HBox hbox2, int x, int y) {
         vBox.getChildren().addAll(label, hBox1);
-        if(hbox2 != null) vBox.getChildren().add(hbox2);
+        if (hbox2 != null) vBox.getChildren().add(hbox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
     }

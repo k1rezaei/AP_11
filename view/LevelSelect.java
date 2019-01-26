@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
+
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -20,17 +21,18 @@ public class LevelSelect {
     private static Image back = new Image(BASE + "back.png");
     private static Image lock = new Image(BASE + "lock.png");
     private static Image BG = new Image(BASE + "back.jpg");
-    private ArrayList<Boolean> isLock = new ArrayList<>();
-    private boolean[] levels = new boolean[NUM_LEVELS];
-    private Group root = new Group();
-    private View view;
-    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
 
     static {
         for (int i = 0; i < NUM_LEVELS; i++) {
             images.add(new Image(BASE + (i + 1) + ".png"));
         }
     }
+
+    private ArrayList<Boolean> isLock = new ArrayList<>();
+    private boolean[] levels = new boolean[NUM_LEVELS];
+    private Group root = new Group();
+    private View view;
+    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
 
     {
         try {

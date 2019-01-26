@@ -1,13 +1,12 @@
-
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -203,7 +202,7 @@ public class SellMenu {
                                 sellGroup.getChildren().remove(pop.getStackPane());
                             }
                         });
-                    }else {
+                    } else {
                         Game.getInstance().getTruck().add(pair.getKey(), k);
                         if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
                         truck.put(pair.getKey(), truck.get(pair.getKey()) + k);

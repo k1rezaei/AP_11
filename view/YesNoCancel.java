@@ -45,7 +45,7 @@ public class YesNoCancel {
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
 
         frost = Frost.freeze(bg);
-        stackPane.getChildren().addAll(frost,fake, vBox);
+        stackPane.getChildren().addAll(frost, fake, vBox);
     }
 
 

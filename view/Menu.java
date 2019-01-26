@@ -25,8 +25,8 @@ public class Menu {
 
     void setMute() {
         int x = 0;
-        if(view.getMute()) x = 1;
-        ImageView imageView = new ImageView(new Image("file:textures/mute"+(x)+".png"));
+        if (view.getMute()) x = 1;
+        ImageView imageView = new ImageView(new Image("file:textures/mute" + (x) + ".png"));
 
         imageView.setFitHeight(100);
         imageView.setFitWidth(100);
@@ -46,9 +46,9 @@ public class Menu {
                 path += ".png";
                 Image image = new Image(path);
                 imageView.setImage(image);
-                if(view.getMute()){
+                if (view.getMute()) {
                     Sounds.mute();
-                }else{
+                } else {
                     Sounds.init();
                     Sounds.play("main_theme");
                 }
