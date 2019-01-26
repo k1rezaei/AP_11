@@ -93,7 +93,7 @@ public class GameView {
     private Group entityRoot = new Group();
     private Group infoRoot = new Group();
     private View view;
-    private Rectangle filled = new Rectangle(12, 0);
+    private Label filled = new Label();
     private HashMap<Workshop, SpriteAnimation> workshops = new HashMap<>();
     private SpriteAnimation well;
     private SpriteAnimation warehouse;
@@ -230,8 +230,10 @@ public class GameView {
     }
 
     private void updateWellFilledBar() {
-        filled.setHeight(50 - 50 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
+        int h = (int)(70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
                 / Game.getInstance().getWell().getCapacity()));
+        filled.setMaxHeight(h);
+        filled.setMinHeight(h);
     }
 
     private void stopWorkshops() {
@@ -817,12 +819,18 @@ public class GameView {
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
         well.setState(Game.getInstance().getWell().getLevel());
         fixSprite(well, WELL_X, WELL_Y);
-        Rectangle waterBar = new Rectangle(12, 50);
-        waterBar.setFill(Color.BLUE);
-        waterBar.relocate(WELL_X, WELL_Y + 65);
+        Label waterBar = new Label();
+        waterBar.setId("baseBar");
+        waterBar.relocate(WELL_X, WELL_Y + 50);
+        waterBar.setMinSize(15, 70);
+        waterBar.setMaxSize(15,70);
         root.getChildren().add(waterBar);
-        filled.setFill(Color.WHITE);
-        filled.relocate(WELL_X, WELL_Y + 65);
+
+
+        filled.relocate(WELL_X, WELL_Y + 50);
+        filled.setMinWidth(15);
+        filled.setMaxWidth(15);
+        filled.setId("bar");
         root.getChildren().add(filled);
         setUpWellInfo();
     }
