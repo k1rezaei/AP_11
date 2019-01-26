@@ -31,7 +31,6 @@ public class Focus {
     }
 
     void add(Workshop workshop) {
-        System.err.println("To Add : " + workshop.getName());
         if (active.get(workshop) != null && active.get(workshop)) return;
 
         int x = GameView.getInstance().getWorkshop(workshop).getX();
@@ -144,9 +143,7 @@ public class Focus {
     }
 
     void remove(Upgradable u) {
-        System.err.println("To Remove : " + u.getName());
         if (active.get(u) == null || !active.get(u)) return;
-        System.out.println("is Going to Remove");
         VBox data = (VBox) upgradableInfo.remove(u);
         data.setId("focus");
         System.err.print(focus.getChildren().size() + " : ");
