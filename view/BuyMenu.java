@@ -1,61 +1,40 @@
-import javafx.animation.AnimationTimer;
+import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 public class BuyMenu {
-    public static final int BASE_Y_BOUGHT = 80;
-    public static final int DIS_Y_BOUGHT = 30;
-    public static final int BASE_X_BOUGHT = 600;
-    public static final int NUM_OF_BOUGHT = 5;
-    public static final int DIS_X_BOUGHT = 30;
-    View view;
-
-    int currentMoney = Game.getInstance().getMoney();
-
-    int numBought = 0;
-
-    BuyMenu(View view) {
-        this.view = view;
-    }
-
-    private Group buyGroup = new Group();
+    private static final int BASE_Y_BOUGHT = 80;
+    private static final int DIS_Y_BOUGHT = 30;
+    private static final int BASE_X_BOUGHT = 600;
+    private static final int NUM_OF_BOUGHT = 5;
+    private static final int DIS_X_BOUGHT = 30;
+    private static Image one = new Image("file:textures/one.png");
+    private static Image BG = new Image("file:textures/bglemon.gif");
     private final int WIDTH = 50, DIS_X = 270, DIS_Y = 95, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 80;
     private final int HEIGHT = 50;
-
-    Group getBuyGroup() {
-        numBought = 0;
-        init();
-        return buyGroup;
-    }
-
-    static Image one = new Image("file:textures/one.png");
-
-    Label cap = new Label();
+    private View view;
+    private int currentMoney = Game.getInstance().getMoney();
+    private int numBought = 0;
+    private Label cap = new Label();
+    private Label money = new Label();
+    private Group buyGroup = new Group();
 
     {
         cap.setMinSize(50, HEIGHT);
         cap.setAlignment(Pos.CENTER);
         cap.relocate(600, 20);
     }
-
-    Label money = new Label();
 
     {
 
@@ -64,15 +43,20 @@ public class BuyMenu {
         money.relocate(600, 0);
     }
 
+    BuyMenu(View view) {
+        this.view = view;
+    }
+
+    Group getBuyGroup() {
+        numBought = 0;
+        init();
+        return buyGroup;
+    }
+
     void update() {
         cap.setText("Capacity : " + Game.getInstance().getHelicopter().getCurrentCapacity());
         money.setText("Money : " + currentMoney);
     }
-
-
-
-
-    static private Image BG = new Image("file:textures/bglemon.gif");
 
     void init() {
 
@@ -83,13 +67,23 @@ public class BuyMenu {
         buyGroup.getChildren().add(money);
         buyGroup.getChildren().add(cap);
         update();
-        Rectangle rectangle = new Rectangle(BASE_X-10,BASE_Y-10,DIS_X*2-10,DIS_Y*5);
-        rectangle.setFill(Color.BLACK);
-        rectangle.setOpacity(0.5);
+        Label rectangle = new Label();
 
-        Rectangle stack = new Rectangle(DIS_X*2-20+BASE_X+10,BASE_Y-10,200,300);
-        stack.setFill(Color.BLACK);
-        stack.setOpacity(0.5);
+        rectangle.relocate(BASE_X - 10, BASE_Y - 10);
+        rectangle.setMinSize(DIS_X * 2 - 10, DIS_Y * 5);
+        //rectangle.setFill(Color.BLACK);
+       // rectangle.setOpacity(0.5);
+        //rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setId("recBG");
+
+        Label stack = new Label();
+        stack.relocate(DIS_X * 2 - 20 + BASE_X + 10, BASE_Y - 10);
+        stack.setMinSize( 200, 300);
+        stack.setId("recBG");
+
+
+        //stack.setFill(Color.BLACK);
+       // stack.setOpacity(0.5);
 
         buyGroup.getChildren().add(stack);
         buyGroup.getChildren().add(rectangle);
@@ -164,7 +158,6 @@ public class BuyMenu {
             buyGroup.getChildren().addAll(imageView, price, buyOne);
 
 
-
             buyOne.setOnMouseClicked(event -> {
                 if (Game.getInstance().getHelicopter().getCurrentCapacity() >= Entity.getNewEntity(type).getSize()) {
                     if (Game.getInstance().getHelicopter().getNeededMoney() + Entity.getNewEntity(type).getBuyPrice() <= Game.getInstance().getMoney()) {
@@ -180,18 +173,24 @@ public class BuyMenu {
                         buyGroup.getChildren().add(bought);
                         update();
                     } else {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Oooops");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Not Enough Money");
-                        alert.showAndWait();
+                        Pop pop = new Pop("Not Enough Money", view.getSnap());
+                        buyGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                buyGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
                     }
                 } else {
-                    Alert alert = new Alert(Alert.AlertType.WARNING);
-                    alert.setTitle("Oooops");
-                    alert.setHeaderText(null);
-                    alert.setContentText("Not Enough Space");
-                    alert.showAndWait();
+                    Pop pop = new Pop("Not Enough Space", view.getSnap());
+                    buyGroup.getChildren().add(pop.getStackPane());
+                    pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buyGroup.getChildren().remove(pop.getStackPane());
+                        }
+                    });
                 }
             });
 

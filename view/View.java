@@ -1,59 +1,62 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
+import javafx.scene.control.IndexedCell;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import java.io.File;
 
 public class View extends Application {
+    private static final boolean INTRO = true;
+    /// age ejra nashod true konid
+    private boolean mute = false;
     private Stage primaryStage;
     private Scene scene;
-    static final boolean INTRO = true;
+
+
+    boolean getMute(){ return mute;}
+    void setMute(boolean mute){ this.mute = mute;}
 
     public static void main(String[] args) {
         launch(args);
     }
-
-
-    private AudioClip mainTheme = null;
-    //private static Media sound = new Media(new File("file:/sounds/main_theme.mp3").toString())   ;
-    //private MediaPlayer mainTheme = new MediaPlayer(sound);
-
 
     @Override
     public void start(Stage primaryStage) {
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
+        scene = new Scene(new Group(), 800, 600);
         if (INTRO) {
-            scene = new Scene(new Intro(this).getRoot(), 800, 600);
+            setRoot(new Intro(this).getRoot());
         } else {
-            Menu menu = new Menu(this);
-            scene = new Scene(menu.getRoot(), 800, 600);
+            setRoot(new Menu(this).getRoot());
         }
         scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
         Images.init();
-        //Sounds.init();
+        if (!mute) Sounds.init();
         Game.loadCustom("workshops");
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
-
-
-        try {
-            //mainTheme = new AudioClip("file:sounds/alt_main_theme.mp3");
-            //mainTheme.setCycleCount(AudioClip.INDEFINITE);
-            //mainTheme.play();
-        } catch (Exception e) {
-        }
         primaryStage.show();
+
+
+        if (!mute) {
+            Sounds.play("main_theme");
+        }
+
     }
 
-    public Image getSnap() {
-        return scene.snapshot(null);
-    }
+    public Image getSnap() { return scene.snapshot(null); }
 
     public void setRoot(Group root) {
         scene.setRoot(root);

@@ -50,9 +50,6 @@ public class Images {
         images.add(new Image(BASE + "plant/plant.png"));
         loadImage("plant", images, 1, new int[]{1});
 
-
-        //loadImage("plant", images, 1, new int[]{1});
-
         loadImage("helicopter", 4, 1, new int[]{1, 1, 1, 1});
 
         loadImage("truck", 4, 1, new int[]{1, 1, 1, 1});
@@ -103,8 +100,3 @@ public class Images {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
 }
-
-
-/*Image image = new Image(new File(path).toURI().toString(), 150, 100, false, false);
-    ImageView imageView = new ImageView(image);
-    */

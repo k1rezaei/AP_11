@@ -8,40 +8,53 @@
     -fx-stroke: lightblue;
     -fx-stroke-width: 1px;
 }
+
 #pop {
     -fx-padding: 10;
-    -fx-opacity: 0.7;
-    -fx-background-color: rgb(203, 141, 79);
-    -fx-background-radius: 30;
     -fx-text-fill: white;
     -fx-font-size: 30;
 
+    -fx-background-color: rgb(203, 141, 79);
+    -fx-background-radius: 30 30 30 30;
+    -fx-opacity: 0.7;
 
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 30 30 30 30;
-
-
 }
 
-#pop .text{
+#pop_stackPane {
+}
+
+#pop .text {
     -fx-stroke: firebrick;
     -fx-stroke-width: 2px;
 }
-#tutorial{
+
+#tutorial {
     -fx-text-fill: blue;
     -fx-background-color: black;
     -fx-opacity: 0.7;
     -fx-background-radius: 30;
     -fx-padding: 10;
 }
+
 #tutorial .text {
     -fx-stroke: #F0E68C;
     -fx-stroke-width: 1px;
 }
-#name{
+
+#levelFlowPane {
+    -fx-background-color: black;
+    -fx-background-radius: 30;
+    -fx-opacity: 0.7;
+    -fx-padding: 10 10 10 10;
+}
+
+#name {
 
 }
+
 #capacity {
 }
 
@@ -49,12 +62,11 @@
     -fx-stroke: orange;
 }
 
-
 #intro {
     -fx-font-size: 50;
 }
 
-#intro .text{
+#intro .text {
     -fx-stroke: green;
     -fx-stroke-width: 2px;
 }
@@ -82,8 +94,8 @@
 #gold {
 }
 
-#gold .text{
-    -fx-stroke : yellow;
+#gold .text {
+    -fx-stroke: yellow;
     -fx-stroke-width: 1px;
 }
 
@@ -94,18 +106,18 @@
 #introTo {
     -fx-fill: yellow;
 }
-#introFrom .text{
+
+#introFrom .text {
     -fx-stroke: white;
 
 }
-
 
 HBox {
     -fx-alignment: center;
     -fx-padding: 1;
 }
 
-VBox {
+#focus {
     -fx-background-color: black;
     -fx-opacity: 0.7;
     -fx-background-radius: 30;
@@ -117,7 +129,27 @@ VBox {
     -fx-min-width: 110px;
 }
 
+
+#level_select {
+    -fx-background-color: black;
+    -fx-padding: 10 -20 10 10;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 50;
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50;
+}
+
 #vBox_menu {
+
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-min-height: 400px;
+    -fx-max-height: 400px;
+    -fx-max-width: 500px;
+    -fx-min-width: 500px;
+}
+#vBox_menu_fake {
     -fx-background-color: black;
     -fx-opacity: 0.7;
     -fx-background-radius: 50;
@@ -131,16 +163,44 @@ VBox {
     -fx-border-width: 2px;
     -fx-border-radius: 50;
 }
-#vBox_menu .label .text{
+
+#vBox_menu .label .text {
     -fx-stroke: blue;
 }
 
+#menu {
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-min-width: 300;
+    -fx-min-height: 500;
+}
+
+#menuFake{
+    -fx-background-color: black;
+    -fx-opacity: 0.7;
+    -fx-background-radius: 50;
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50;
+    -fx-min-width: 300;
+    -fx-min-height: 500;
+}
+#recBG {
+    -fx-border-radius: 30;
+    -fx-border-color: gray;
+    -fx-background-color: black;
+    -fx-background-radius: 30;
+    -fx-opacity: 0.5;
+}
 #label_button:hover {
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
 }
 
 #label_button {
+    -fx-opacity: 1;
     -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
 }
 
@@ -148,7 +208,8 @@ VBox {
     -fx-text-alignment: center;
     -fx-font-size: 50px;
 }
-#finish .text{
+
+#finish .text {
     -fx-stroke: green;
     -fx-stroke-width: 2px;
 }
@@ -157,7 +218,12 @@ VBox {
     -fx-text-alignment: center;
     -fx-font-size: 50px;
 }
-#finish2 .text{
+
+#finish2 .text {
     -fx-stroke: red;
     -fx-stroke-width: 2px;
 }
+
+
+
+

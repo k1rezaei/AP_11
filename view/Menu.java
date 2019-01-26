@@ -1,52 +1,101 @@
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 public class Menu {
-    static int OFFSET_X = 320;
+    private static final int NUM_SLIDES = 3;
+    private VBox vBox = new VBox();
+    private ArrayList<ImageView> slides = new ArrayList<>();
+    private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
     private View view;
     private Group menuGroup = new Group();
 
+
     Menu(View view) {
-        initializeMenu();
         this.view = view;
+        initializeMenu();
+    }
+
+    void setMute() {
+        int x = 0;
+        if(view.getMute()) x = 1;
+        ImageView imageView = new ImageView(new Image("file:textures/mute"+(x)+".png"));
+
+        imageView.setFitHeight(100);
+        imageView.setFitWidth(100);
+        Label mute = new Label();
+        mute.setId("label_button");
+        mute.setGraphic(imageView);
+
+        mute.relocate(20, 20);
+        mute.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.setMute(!view.getMute());
+                String path = "file:textures/mute";
+                if (view.getMute() == false) {
+                    path += "0";
+                } else path += "1";
+                path += ".png";
+                Image image = new Image(path);
+                imageView.setImage(image);
+                if(view.getMute()){
+                    Sounds.mute();
+                }else Sounds.play("main_theme");
+            }
+        });
+        menuGroup.getChildren().add(mute);
+
     }
 
     private void initializeMenu() {
         ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
+        background.setFitHeight(600);
+        background.setFitWidth(800);
         menuGroup.getChildren().add(background);
+
+        setMute();
         setStart();
         setLoad();
         setGuide();
         setInfo();
         setExit();
+        vBox.relocate(400, 300);
+        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
+        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        VBox fake = new VBox();
+
+        fake.relocate(400, 300);
+        fake.translateXProperty().bind(fake.widthProperty().divide(2).negate());
+        fake.translateYProperty().bind(fake.heightProperty().divide(2).negate());
+
+        fake.setId("menuFake");
+        vBox.setId("menu");
+
+        menuGroup.getChildren().add(fake);
+        menuGroup.getChildren().add(vBox);
     }
 
     private void setStart() {
         Label start = new Label();
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
-        start.relocate(OFFSET_X, 100);
         start.setId("label_button");
-        menuGroup.getChildren().add(start);
-        start.setOnMouseClicked(event -> {
-            view.setRoot(new LevelSelect(view).getRoot());
-        });
+        vBox.getChildren().add(start);
+        start.setOnMouseClicked(event -> view.setRoot(new LevelSelect(view).getRoot()));
     }
 
     private void setLoad() {
         Label load = new Label();
         load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
-        load.relocate(OFFSET_X, 200);
         load.setId("label_button");
-        menuGroup.getChildren().add(load);
+        vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");
@@ -69,9 +118,8 @@ public class Menu {
     private void setInfo() {
         Label info = new Label();
         info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
-        info.relocate(OFFSET_X, 300);
         info.setId("label_button");
-        menuGroup.getChildren().add(info);
+        vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
             Pop pop = new Pop("Designed By\n" +
                     "Seyed Mahdi Sadegh Shobeiri\n" +
@@ -79,20 +127,11 @@ public class Menu {
                     "Keivan Rezaei\n" +
                     "Music : Hope Prevails (By Jesper Kyd)", view.getSnap());
             menuGroup.getChildren().add(pop.getStackPane());
-            pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    menuGroup.getChildren().remove(pop.getStackPane());
-                }
-            });
+            pop.getStackPane().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(pop.getStackPane()));
         });
     }
 
-    private static final int NUM_SLIDES = 3;
-    ArrayList<ImageView> slides = new ArrayList<>();
-    ArrayList<ArrayList<Label>> labels = new ArrayList<>();
-
-    EventHandler<MouseEvent> getOnMouseClickedEventHandler(int i) {
+    private EventHandler<MouseEvent> getOnMouseClickedEventHandler(int i) {
         return event -> {
             menuGroup.getChildren().remove(slides.get(i));
             menuGroup.getChildren().removeAll(labels.get(i));
@@ -104,7 +143,7 @@ public class Menu {
     }
 
 
-    void setUpLabels(int i) {
+    private void setUpLabels(int i) {
         ArrayList<Label> labels = new ArrayList<>();
 
         switch (i) {
@@ -117,12 +156,12 @@ public class Menu {
                                 "Chickens lay eggs.\n" +
                                 "Sheep produce wool.\n" +
                                 "Cows produce milk.\n");
-                label0.relocate(20, 100);
+                label0.relocate(20, 120);
 
                 Label label1 = new Label(
                         "This shows how much money you have."
                 );
-                label1.relocate(450, 70);
+                label1.relocate(400, 70);
 
                 Label label2 = new Label(
                         "You can sell your items using the truck."
@@ -131,10 +170,10 @@ public class Menu {
 
                 Label label3 = new Label("" +
                         "You can buy items using the helicopter.");
-                label3.relocate(450, 380);
+                label3.relocate(370, 400);
 
                 Label label4 = new Label("Click on the screen to move to next slide.");
-                label4.relocate(400, 300);
+                label4.relocate(400, 320);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -146,13 +185,13 @@ public class Menu {
             case 1: {
                 Label label0 = new Label("You need water to plant plants.\n" +
                         "You can refill  the well by left-clicking on it.");
-                label0.relocate(400, 170);
+                label0.relocate(300, 170);
 
                 Label label1 = new Label("Workshops can convert items to other items");
                 label1.relocate(200, 300);
 
                 Label label2 = new Label("Items are put in the warehouse when you click on them.");
-                label2.relocate(390, 400);
+                label2.relocate(250, 400);
 
                 labels.add(label0);
                 labels.add(label1);
@@ -199,9 +238,8 @@ public class Menu {
 
         Label guide = new Label();
         guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
-        guide.relocate(OFFSET_X, 400);
         guide.setId("label_button");
-        menuGroup.getChildren().add(guide);
+        vBox.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
             menuGroup.getChildren().add(slides.get(0));
             menuGroup.getChildren().addAll(labels.get(0));
@@ -211,20 +249,24 @@ public class Menu {
     private void setExit() {
         Label exit = new Label();
         exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
-        exit.relocate(OFFSET_X, 500);
         exit.setId("label_button");
-        menuGroup.getChildren().add(exit);
+        vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Exit");
-            alert.setContentText("Are You Sure?");
-            alert.setHeaderText(null);
+            YesNoCancel yesNoCancel = new YesNoCancel("Are you sure you want to exit?", view.getSnap());
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
+            yesNoCancel.getVBox().getChildren().remove(yesNoCancel.getCancel());
+
+            menuGroup.getChildren().add(yesNoCancel.getStackPane());
+
+            yesNoCancel.getYes().setOnMouseClicked(event13 -> {
+                menuGroup.getChildren().clear();
                 view.close();
-            }
+            });
+
+            yesNoCancel.getNo().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
+
+            yesNoCancel.getDisabler().setOnMouseClicked(event12 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
         });
     }
 

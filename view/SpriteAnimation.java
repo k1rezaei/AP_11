@@ -19,10 +19,6 @@ public class SpriteAnimation extends Transition {
     private int state = 0, x, y;
     private int lastIndex;
 
-    public int getLastIndex() {
-        return lastIndex;
-    }
-
     public SpriteAnimation(Duration duration,
                            ArrayList<Integer> counts, ArrayList<Integer> columns,
                            ArrayList<Integer> widths, ArrayList<Integer> heights) {
@@ -47,6 +43,10 @@ public class SpriteAnimation extends Transition {
             imageViews.add(imageView);
             imageView.setViewport(new Rectangle2D(0, 0, widths.get(i), heights.get(i)));
         }
+    }
+
+    public int getLastIndex() {
+        return lastIndex;
     }
 
     @Override
@@ -100,12 +100,12 @@ public class SpriteAnimation extends Transition {
         return x;
     }
 
-    public int getY() {
-        return y;
-    }
-
     public void setX(int x) {
         this.x = x;
+    }
+
+    public int getY() {
+        return y;
     }
 
     public void setY(int y) {

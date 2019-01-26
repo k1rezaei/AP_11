@@ -16,10 +16,12 @@ public class Focus {
     private static final int UPGRADE_LENGTH = 20;
     private static final int CAPACITY_LENGTH = 20;
     private static final int FILL_LENGTH = 20;
+    private static final int DO_LENGTH = 20;
     private static Image arrowImage = new Image("file:textures/arrow.png");
     private static Image upgradeImage = new Image("file:textures/upgradeIcon1.png");
     private static Image capacityImage = new Image("file:textures/cap.png");
     private static Image fillImage = new Image("file:textures/water1.png");
+    private static Image doImage = new Image("file:textures/do.png");
     private Map<Upgradable, Boolean> active = new HashMap<>();
     private Map<Upgradable, Node> upgradableInfo = new HashMap<>();
     private Group focus = new Group();
@@ -39,7 +41,7 @@ public class Focus {
 
         HBox hBox1 = getUpgradeBox(workshop);
 
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
+        if (hBox1 != null) vBox.getChildren().add(hBox1);
 
         HBox hBox2 = new HBox();
         for (Map.Entry<String, Integer> pair : workshop.getInputs().entrySet()) {
@@ -57,10 +59,10 @@ public class Focus {
         sprite.getImageView().setFitHeight(ITEM_LENGTH);
         hBox2.getChildren().add(sprite.getImageView());
         vBox.getChildren().add(hBox2);
-        Label label = new Label(workshop.getStartCost() + "");
-        label.setId("gold");
-        vBox.getChildren().add(label);
+        HBox hBox3 = combiner(workshop.getStartCost() + "", "gold", doImage, DO_LENGTH);
+        vBox.getChildren().add(hBox3);
         vBox.relocate(x + DIS_X, y - DIS_Y);
+        vBox.setId("focus");
         focus.getChildren().add(vBox);
 
         upgradableInfo.put(workshop, vBox);
@@ -80,21 +82,26 @@ public class Focus {
         }
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
+
         Label name = new Label(vehicle.getName().substring(0, 1).toUpperCase() + vehicle.getName().substring(1));
         name.setId("name");
 
         HBox hBox1 = getUpgradeBox(vehicle);
         HBox hBox2 = getCapacityBox(vehicle);
 
-        vBox.getChildren().addAll(name, hBox2);
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
-
-        vBox.relocate(x + DIS_X, y);
-        focus.getChildren().add(vBox);
+        fix(vBox, name, hBox2, hBox1, x, y);
 
         active.put(vehicle, true);
         upgradableInfo.put(vehicle, vBox);
 
+    }
+
+    private void fix(VBox vBox, Label label, HBox hBox1, HBox hbox2, int x, int y) {
+        vBox.getChildren().addAll(label, hBox1);
+        if(hbox2 != null) vBox.getChildren().add(hbox2);
+        vBox.relocate(x + DIS_X, y);
+        focus.getChildren().add(vBox);
     }
 
     void add(Well well) {
@@ -102,31 +109,32 @@ public class Focus {
         int x = GameView.getInstance().getWell().getX(), y = GameView.getInstance().getWell().getY();
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
         Label name = new Label("Well");
+        name.setId("name");
 
         HBox hBox1 = getUpgradeBox(well);
         HBox hBox2 = getFillBox(well);
 
-        vBox.getChildren().addAll(name, hBox2);
-        if(hBox1 != null) vBox.getChildren().add(hBox1);
-        vBox.relocate(x + DIS_X, y);
-        focus.getChildren().add(vBox);
+        fix(vBox, name, hBox2, hBox1, x, y);
 
         active.put(well, true);
         upgradableInfo.put(well, vBox);
 
     }
 
-    void add (Warehouse warehouse) {
-        if(active.get(warehouse) != null && active.get(warehouse)) return ;
+    void add(Warehouse warehouse) {
+        if (active.get(warehouse) != null && active.get(warehouse)) return;
         int x = GameView.getInstance().getWarehouse().getX(), y = GameView.getInstance().getWarehouse().getY();
 
         VBox vBox = new VBox();
+        vBox.setId("focus");
         Label name = new Label("Warehouse");
 
         HBox hBox1 = getUpgradeBox(warehouse);
         HBox hBox2 = getCapacityBoxForWarehouse(warehouse);
-        vBox.getChildren().addAll(name, hBox1, hBox2);
+        if (hBox1 == null) vBox.getChildren().addAll(name, hBox2);
+        else vBox.getChildren().addAll(name, hBox1, hBox2);
         vBox.relocate(x + DIS_X, y);
         focus.getChildren().add(vBox);
 
@@ -140,27 +148,27 @@ public class Focus {
         if (active.get(u) == null || !active.get(u)) return;
         System.out.println("is Going to Remove");
         VBox data = (VBox) upgradableInfo.remove(u);
-        if(data == null) System.out.println("BUG");
+        data.setId("focus");
         System.err.print(focus.getChildren().size() + " : ");
         focus.getChildren().clear();
         System.err.println(focus.getChildren().size());
         active.put(u, false);
     }
 
-    String getCost(Upgradable u) {
+    private String getCost(Upgradable u) {
         String cost;
         if (u.canUpgrade()) cost = Integer.toString(u.getUpgradeCost());
         else cost = "oo";
         return cost;
     }
 
-    String getCap(Vehicle vehicle) {
+    private String getCap(Vehicle vehicle) {
         return Integer.toString(vehicle.getCapacity());
     }
 
     private HBox getUpgradeBox(Upgradable u) {
         String cost = getCost(u);
-        if(cost.equals("oo")) return null;
+        if (cost.equals("oo")) return null;
         return combiner(cost, "gold", upgradeImage, UPGRADE_LENGTH);
     }
 
@@ -174,19 +182,20 @@ public class Focus {
         return combiner(cap, "capacity", capacityImage, CAPACITY_LENGTH);
     }
 
-    HBox combiner(String str, String id, Image image, int len) {
+    private HBox combiner(String str, String id, Image image, int len) {
         HBox hBox = new HBox();
         Label label = new Label(str);
         label.setId(id);
         ImageView img = new ImageView(image);
-        img.setFitHeight(len); img.setFitWidth(len);
+        img.setFitHeight(len);
+        img.setFitWidth(len);
         hBox.getChildren().addAll(label, img);
         return hBox;
     }
 
     private HBox getFillBox(Well well) {
         String fill = Integer.toString(well.getFillCost());
-        return combiner(fill, "gold",fillImage, FILL_LENGTH);
+        return combiner(fill, "gold", fillImage, FILL_LENGTH);
     }
 
 }

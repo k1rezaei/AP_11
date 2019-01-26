@@ -1,20 +1,30 @@
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
+
 
 public class EventHandlers {
 
     static View view;
 
-    //static private Media sound = new Media(new File("sounds/alert.mp3").toURI().toString());
-    //static private MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    static private Media sound;
+    static private MediaPlayer mediaPlayer;
+
     static void setView(View view) {
         EventHandlers.view = view;
     }
 
     static void alert() {
-        //    mediaPlayer.stop();
-        //    mediaPlayer.play();
+        if (!view.getMute()) {
+            sound = new Media(new File("sounds/alert.mp3").toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.stop();
+            mediaPlayer.play();
+        }
     }
 
     static EventHandler<MouseEvent> getOnMouseEnteredEventHandler(Warehouse warehouse) {
@@ -142,7 +152,7 @@ public class EventHandlers {
         };
     }
 
-    static void upgradeWarehouse(Warehouse warehouse) {
+    private static void upgradeWarehouse(Warehouse warehouse) {
         try {
             Game.getInstance().upgrade("warehouse");
             SpriteAnimation sprite = GameView.getInstance().getWarehouse();
@@ -173,7 +183,7 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    if(Game.getInstance().getTruck().getRemainingTime() == 0) {
+                    if (Game.getInstance().getTruck().getRemainingTime() == 0) {
                         GameView.getInstance().pause();
                         view.setRoot(new SellMenu(view).getSellGroup());
                     }
@@ -205,6 +215,7 @@ public class EventHandlers {
                         GameView.getInstance().update(sprite, well);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
+                        alert();
                     }
                     break;
             }
@@ -214,18 +225,23 @@ public class EventHandlers {
     static EventHandler<MouseEvent> getOnMouseClickedPlant(int nodeX, int nodeY) {
         return mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                boolean inSide = false;
                 int x = (int) mouseEvent.getX();
                 int y = (int) mouseEvent.getY();
                 try {
                     if (new Cell(x + nodeX - GameView.BASE_X, y + nodeY - GameView.BASE_Y).isInside()) {
+                        inSide = true;
                         Game.getInstance().addPlant(x + nodeX - GameView.BASE_X, y + nodeY - GameView.BASE_Y);
                     }
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
+                    if (inSide) alert();
+
                 }
             }
         };
     }
+
 
     public static EventHandler<MouseEvent> getOnMouseClicked(String animalName) {
         return mouseEvent -> {
@@ -243,6 +259,7 @@ public class EventHandlers {
                 } else {
                     e.printStackTrace();
                 }
+                alert();
             }
         };
     }
