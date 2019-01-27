@@ -16,7 +16,7 @@ public class Server {
     ArrayList<Profile> profiles = new ArrayList<>();
     Map<String, String> scoreboard = new HashMap<>();
     Server me;
-    String text;
+    String text = "";
 
     String getText() {
         return text;
