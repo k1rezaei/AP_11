@@ -29,7 +29,7 @@ public class Server {
                         formatter.format("userName Valid\n");
                         formatter.flush();
                     } else {
-                        System.err.println("!valid");
+                        System.err.println("not valid");
                         formatter.format("userName inValid\n");
                         formatter.flush();
                         socket.close();
@@ -40,7 +40,9 @@ public class Server {
                     System.err.println("port is " + cnt);
                     formatter.flush();
 
+                    System.err.println("waiting for finishing");
                     String connected = scanner.nextLine();
+                    System.err.println("connected");
 
                     formatter.close();
                     scanner.close();
@@ -49,13 +51,15 @@ public class Server {
                     serverSocket = new ServerSocket(cnt);
                     cnt++;
                     socket = serverSocket.accept();
-
+                    System.err.println("User adding");
                     Profile profile = new Profile(id, id, socket, new Formatter(socket.getOutputStream()),
                             new Scanner(socket.getInputStream()));
                     profiles.add(profile);
-
+                    System.err.println("User added");
 
                 } catch (Exception e) {
+                    System.err.println("Server's problem");
+                    e.printStackTrace();
                 }
             }
         }

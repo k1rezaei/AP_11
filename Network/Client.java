@@ -24,24 +24,19 @@ public class Client {
     };
 
 
+
     void initialize() {
-        Task task = new Task<Void>() {
-            @Override
-            public Void call() {
-                try {
-                    socket = new Socket("localhost", 8050);
-                    scanner = new Scanner(socket.getInputStream());
-                    formatter = new Formatter(socket.getOutputStream());
-                } catch (Exception e) {
-                    System.err.println("Can not connect to Server :/");
-                }
-                return null;
-            }
-        };
-        new Thread(task).start();
+        try {
+            socket = new Socket("localhost", 8050);
+            scanner = new Scanner(socket.getInputStream());
+            formatter = new Formatter(socket.getOutputStream());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     boolean checkId(String id) throws IOException {
+        System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
         formatter.flush();

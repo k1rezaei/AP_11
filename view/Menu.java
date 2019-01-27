@@ -123,9 +123,11 @@ public class Menu {
                         public void handle(MouseEvent event) {
                             Client client = new Client();
                             client.initialize();
+                            System.err.println(client.formatter == null);
                             try {
+                                System.err.println(client.formatter == null);
                                 if (client.checkId(userName.getText())) {
-                                    System.err.println("Hey");
+
                                 } else {
                                     userName.setText("");
                                 }
