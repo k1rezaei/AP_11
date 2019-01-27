@@ -1,7 +1,7 @@
 import javafx.concurrent.Task;
 
-import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -68,7 +68,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id) throws IOException {
+    boolean checkId(String id){
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -90,7 +90,7 @@ public class Client {
                 try {
                     socket = new Socket("localhost", port);
                     break ;
-                } catch(Exception e) {};
+                } catch(Exception e) {}
             }
             scanner = new Scanner(socket.getInputStream());
             formatter = new Formatter(socket.getOutputStream());

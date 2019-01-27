@@ -6,9 +6,9 @@ import java.util.Scanner;
 
 public class Profile {
 
-    static String end = "#";
+    private static String end = "#";
 
-    String id;
+    Person person;
     Socket socket;
     Formatter formatter;
     Scanner scanner;
@@ -18,14 +18,9 @@ public class Profile {
         this.server = server;
     }
 
-    public String getId() {
-        return id;
+    public Person getPerson() {
+        return person;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
 
     public Socket getSocket() {
         return socket;
@@ -51,11 +46,11 @@ public class Profile {
         this.scanner = scanner;
     }
 
-    public Profile(String id, Socket socket, Formatter formatter, Scanner scanner) {
-        this.id = id;
+    public Profile(Person person, Socket socket) {
+        this.person = person;
         this.socket = socket;
-        this.formatter = formatter;
-        this.scanner = scanner;
+        this.formatter = new Formatter(socket.getOutputStream());
+        this.scanner = new Scanner(socket.getInputStream());
     }
 
     Task<Void> read = new Task<Void>() {
@@ -78,24 +73,27 @@ public class Profile {
         }
     };
 
+
+    //talk with client;
     public void command(String command) {
         formatter.format(command);
         formatter.flush();
     }
 
+    //decoding what's client saying;.
     private void process(String command, String data) {
         if(command.equals("add_text")) {
-            server.appendText(id + " : " + data);
+            server.addMessageToChatRoom(id + " : " + data);
         }else if(command.equals("upd_scoreboard")) {
             server.updateScoreboard(id, data);
         }
     }
 
+    //start listening client's commands;
     public void run() {
         new Thread(read).start();
     }
 
     Task<Void> getRead() {return read;};
-
 
 }

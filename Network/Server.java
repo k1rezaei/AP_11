@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+
 public class Server {
 
     private static String end = "#";
@@ -16,7 +17,7 @@ public class Server {
     ArrayList<Profile> profiles = new ArrayList<>();
     Map<String, String> scoreboard = new HashMap<>();
     Server me;
-    String text;
+    String text = "";
 
     String getText() {
         return text;
@@ -72,10 +73,11 @@ public class Server {
                     cnt++;
                     socket = serverSocket.accept();
                     System.err.println("User adding");
-                    Profile profile = new Profile(id, socket, new Formatter(socket.getOutputStream()),
-                            new Scanner(socket.getInputStream()));
+
+                    Profile profile = new Profile(new Person(id, id), socket);
                     profiles.add(profile);
                     profile.setServer(me);
+
                     new Thread(profile.getRead()).start();
                     System.err.println("User added");
 
@@ -93,11 +95,11 @@ public class Server {
 
     private boolean validId(String id) {
         for (Profile profile : profiles)
-            if (id.equals(profile.getId())) return false;
+            if (id.equals(profile.getPerson().getId())) return false;
         return true;
     }
 
-    synchronized public void appendText(String text) {
+    synchronized public void addMessageToChatRoom(String text) {
         this.text += text;
         for (Profile profile : profiles) {
             String command = "set_text\n" + this.text + end + '\n';

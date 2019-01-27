@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import java.io.FileNotFoundException;
 
 import java.util.ArrayList;
 
@@ -133,7 +134,6 @@ public class Menu {
                                     Game.getInstance().setClient(client);
                                     view.setRoot(client.getMultiPlayerMenu().getRoot());
                                     client.run();
-
                                 } else {
                                     userName.setText("");
                                 }
