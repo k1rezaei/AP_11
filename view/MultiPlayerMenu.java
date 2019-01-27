@@ -28,14 +28,14 @@ public class MultiPlayerMenu {
         chat.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                view.setRoot(Game.getInstance().getClient().getChatroom());
+                //view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
             }
         });
 
         rank.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                view.setRoot(Game.getInstance().getClient().getScoreboard());
+                //view.setRoot(Game.getInstance().getClient().getScoreboard());
             }
         });
     }
