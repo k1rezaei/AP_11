@@ -101,6 +101,8 @@ public class Client {
 
     public void run() {
         new Thread(read).start();
+        addText("");
+        updScoreboard("1");
     }
 
     synchronized void command(String command) {
@@ -111,11 +113,18 @@ public class Client {
     private void process(String command, String text) {
         if(command.equals("set_text")) {
             chatroom.setContent(text);
+        } else {
+            scoreboard.setContent(text);
         }
     }
 
     public void addText(String text) {
         String command = "add_text\n" + text + '\n' + end + "\n";
+        command(command);
+    }
+
+    public void updScoreboard(String level) {
+        String command = "upd_scoreboard\n" + level + '\n' + end + "\n";
         command(command);
     }
 }
