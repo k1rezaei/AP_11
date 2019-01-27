@@ -6,7 +6,13 @@ import java.util.Scanner;
 
 public class Profile {
 
-    private static String end = "#";
+    private static final String end = "#";
+    private static final String UPDATE_SCOREBOARD = "update_scoreboard";
+    private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
+    private static final String INIT_SCOREBOARD = "init_scoreboard";
+    private static final String INIT_CHAT_ROOM = "init_chat_room";
+
+
 
     Person person;
     Socket socket;
@@ -53,21 +59,22 @@ public class Profile {
         this.scanner = new Scanner(socket.getInputStream());
     }
 
+    private String getData(Scanner scanner) {
+        StringBuilder s = new StringBuilder();
+        while(true) {
+            String line = scanner.nextLine();
+            if(line.equals(end)) break;
+            s.append(line + "\n");
+        }
+        return s.toString();
+    }
+
     Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
             while(socket.isConnected()) {
                 String command = scanner.nextLine();
-                StringBuilder s = new StringBuilder();
-                while(true) {
-                    String line = scanner.nextLine();
-                    if(line.equals(end)) {
-                        //process(command, s.toString());
-                        break ;
-                    }
-                    s.append(line + "\n");
-                }
-                process(command, s.toString());
+                process(command, getData(scanner));
             }
             return null;
         }
@@ -75,17 +82,27 @@ public class Profile {
 
 
     //talk with client;
-    public void command(String command) {
+    synchronized public void command(String command) {
         formatter.format(command);
         formatter.flush();
     }
 
     //decoding what's client saying;.
     private void process(String command, String data) {
-        if(command.equals("add_text")) {
-            server.addMessageToChatRoom(id + " : " + data);
-        }else if(command.equals("upd_scoreboard")) {
-            server.updateScoreboard(id, data);
+        switch (command) {
+            case ADD_MESSAGE_TO_CHAT_ROOM:
+                server.addMessageToChatRoom(person.getId() + " : " + data);
+                break;
+            case UPDATE_SCOREBOARD:
+                person.setLevel(data);
+                server.updateScoreboard();
+                break;
+            case INIT_SCOREBOARD:
+                command(server.getScoreboard());
+                break;
+            case INIT_CHAT_ROOM:
+                command(server.getChatRoom());
+                break;
         }
     }
 
