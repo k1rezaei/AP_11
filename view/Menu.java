@@ -122,11 +122,15 @@ public class Menu {
                         @Override
                         public void handle(MouseEvent event) {
                             Client client = new Client();
-                            client.initailize();
-                            if(client.checkId(userName.getText())){
+                            client.initialize();
+                            try {
+                                if (client.checkId(userName.getText())) {
+                                    System.err.println("Hey");
+                                } else {
+                                    userName.setText("");
+                                }
+                            }catch (Exception e){
 
-                            }else{
-                                userName.setText("");
                             }
                         }
                     });
@@ -135,7 +139,9 @@ public class Menu {
             host.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-
+                    Server server = new Server();
+                    server.run();
+                    System.err.println("Hey");
                 }
             });
         });
