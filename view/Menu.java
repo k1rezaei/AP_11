@@ -99,10 +99,13 @@ public class Menu {
             Label[] labels = buttons.getLabels();
             Label solo = labels[0];
             solo.setText("solo");
+            solo.setGraphic(new ImageView(new Image("file:textures/solo.png")));
             Label join = labels[1];
             join.setText("join");
+            join.setGraphic(new ImageView(new Image("file:textures/join.png")));
             Label host = labels[2];
             host.setText("host");
+            host.setGraphic(new ImageView(new Image("file:textures/host.png")));
             menuGroup.getChildren().add(buttons.getStackPane());
             solo.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -127,7 +130,10 @@ public class Menu {
                             try {
                                 System.err.println(client.formatter == null);
                                 if (client.checkId(userName.getText())) {
+                                    Game.getInstance().setClient(client);
+                                    view.setRoot(client.getMultiPlayerMenu().getRoot());
                                     client.run();
+
                                 } else {
                                     userName.setText("");
                                 }
