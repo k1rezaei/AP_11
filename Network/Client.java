@@ -14,9 +14,9 @@ public class Client {
     Scanner scanner;
     Formatter formatter;
 
-    Chatroom chatroom = new Chatroom(view);
-    Scoreboard scoreboard = new Scoreboard(view);
-    MultiPlayerMenu multiPlayerMenu = new MultiPlayerMenu(view);
+    Chatroom chatroom ;
+    Scoreboard scoreboard ;
+    MultiPlayerMenu multiPlayerMenu ;
 
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -32,6 +32,9 @@ public class Client {
 
     Client(View view){
         this.view = view;
+        chatroom = new Chatroom(view);
+        multiPlayerMenu = new MultiPlayerMenu(view);
+        scoreboard = new Scoreboard(view);
     }
 
 
@@ -101,7 +104,7 @@ public class Client {
     }
 
     synchronized void command(String command) {
-        formatter.format(command + "\n");
+        formatter.format(command);
         formatter.flush();
     }
 
@@ -112,7 +115,7 @@ public class Client {
     }
 
     public void addText(String text) {
-        String command = "add_text\n" + text + end + "\n";
+        String command = "add_text\n" + text + '\n' + end + "\n";
         command(command);
     }
 }

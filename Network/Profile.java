@@ -68,7 +68,7 @@ public class Profile {
                 while(true) {
                     String line = scanner.nextLine();
                     if(line.equals(end)) {
-                        process(command, s.toString());
+                        //process(command, s.toString());
                         break ;
                     }
                     s.append(line + "\n");

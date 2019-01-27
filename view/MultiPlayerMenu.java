@@ -16,11 +16,12 @@ public class MultiPlayerMenu {
     MultiPlayerMenu (View view){
         this.view = view;
         ImageView imageView = new ImageView(new Image(BASE + "back.jpg"));
+
         root.getChildren().add(imageView);
-        Label chat = new Label();
+        Label chat = new Label("chat");
         chat.setId("label_button");
 
-        Label rank = new Label();
+        Label rank = new Label("rank");
         rank.setId("label_button");
         VBox vBox = new VBox(rank,chat);
         root.getChildren().addAll(vBox);
@@ -28,6 +29,10 @@ public class MultiPlayerMenu {
         chat.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                System.err.println(view == null);
+                System.err.println(Game.getInstance().getClient() == null);
+                System.err.println(Game.getInstance().getClient().getChatroom() == null);
+                System.err.println(Game.getInstance().getClient().getChatroom().getRoot() == null);
                 view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
             }
         });
