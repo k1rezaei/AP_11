@@ -24,7 +24,7 @@ public class Chatroom {
         send.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().getClient().addText(textField.getText());
+                Game.getInstance().getClient().addMessageToChatRoom(textField.getText());
                 textField.setText("");
             }
         });

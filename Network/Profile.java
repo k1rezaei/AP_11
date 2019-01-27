@@ -1,14 +1,21 @@
 import javafx.concurrent.Task;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Formatter;
 import java.util.Scanner;
 
 public class Profile {
 
-    static String end = "#";
+    private static final String end = "#";
+    private static final String UPDATE_SCOREBOARD = "update_scoreboard";
+    private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
+    private static final String INIT_SCOREBOARD = "init_scoreboard";
+    private static final String INIT_CHAT_ROOM = "init_chat_room";
 
-    String id;
+
+
+    Person person;
     Socket socket;
     Formatter formatter;
     Scanner scanner;
@@ -18,14 +25,9 @@ public class Profile {
         this.server = server;
     }
 
-    public String getId() {
-        return id;
+    public Person getPerson() {
+        return person;
     }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
 
     public Socket getSocket() {
         return socket;
@@ -51,11 +53,21 @@ public class Profile {
         this.scanner = scanner;
     }
 
-    public Profile(String id, Socket socket, Formatter formatter, Scanner scanner) {
-        this.id = id;
+    public Profile(Person person, Socket socket) throws IOException {
+        this.person = person;
         this.socket = socket;
-        this.formatter = formatter;
-        this.scanner = scanner;
+        this.formatter = new Formatter(socket.getOutputStream());
+        this.scanner = new Scanner(socket.getInputStream());
+    }
+
+    private String getData(Scanner scanner) {
+        StringBuilder s = new StringBuilder();
+        while(true) {
+            String line = scanner.nextLine();
+            if(line.equals(end)) break;
+            s.append(line + "\n");
+        }
+        return s.toString();
     }
 
     Task<Void> read = new Task<Void>() {
@@ -63,39 +75,43 @@ public class Profile {
         protected Void call() throws Exception {
             while(socket.isConnected()) {
                 String command = scanner.nextLine();
-                StringBuilder s = new StringBuilder();
-                while(true) {
-                    String line = scanner.nextLine();
-                    if(line.equals(end)) {
-                        //process(command, s.toString());
-                        break ;
-                    }
-                    s.append(line + "\n");
-                }
-                process(command, s.toString());
+                process(command, getData(scanner));
             }
             return null;
         }
     };
 
-    public void command(String command) {
+
+    //talk with client;
+    synchronized public void command(String command) {
         formatter.format(command);
         formatter.flush();
     }
 
+    //decoding what's client saying;.
     private void process(String command, String data) {
-        if(command.equals("add_text")) {
-            server.appendText(id + " : " + data);
-        }else if(command.equals("upd_scoreboard")) {
-            server.updateScoreboard(id, data);
+        switch (command) {
+            case ADD_MESSAGE_TO_CHAT_ROOM:
+                server.addMessageToChatRoom(person.getId() + " : " + data);
+                break;
+            case UPDATE_SCOREBOARD:
+                person.setLevel(data);
+                server.updateScoreboard();
+                break;
+            case INIT_SCOREBOARD:
+                command(server.getScoreboard());
+                break;
+            case INIT_CHAT_ROOM:
+                command(server.getChatRoom());
+                break;
         }
     }
 
+    //start listening client's commands;
     public void run() {
         new Thread(read).start();
     }
 
     Task<Void> getRead() {return read;};
-
 
 }

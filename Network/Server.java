@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -9,12 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+
 public class Server {
 
-    private static String end = "#";
+    private static final String end = "#";
+    private static final String DATA_CHAT_ROOM = "data_chat_room";
+    private static final String DATA_SCOREBOARD = "data_scoreboard";
 
     ArrayList<Profile> profiles = new ArrayList<>();
-    Map<String, String> scoreboard = new HashMap<>();
     Server me;
     String text = "";
 
@@ -72,11 +75,13 @@ public class Server {
                     cnt++;
                     socket = serverSocket.accept();
                     System.err.println("User adding");
-                    Profile profile = new Profile(id, socket, new Formatter(socket.getOutputStream()),
-                            new Scanner(socket.getInputStream()));
+
+                    Profile profile = new Profile(new Person(id, id), socket);
                     profiles.add(profile);
                     profile.setServer(me);
-                    new Thread(profile.getRead()).start();
+
+                    profile.run();
+
                     System.err.println("User added");
 
                 } catch (Exception e) {
@@ -93,31 +98,35 @@ public class Server {
 
     private boolean validId(String id) {
         for (Profile profile : profiles)
-            if (id.equals(profile.getId())) return false;
+            if (id.equals(profile.getPerson().getId())) return false;
         return true;
     }
 
-    synchronized public void appendText(String text) {
+    synchronized public void addMessageToChatRoom(String text) {
         this.text += text;
+        String command = this.text;
         for (Profile profile : profiles) {
-            String command = "set_text\n" + this.text + end + '\n';
             profile.command(command);
         }
     }
 
 
-    synchronized public void updateScoreboard(String id, String data) {
-        scoreboard.put(id, data);
+    synchronized public void updateScoreboard() {
+        String scoreboard = getScoreboard();
+        for (Profile profile : profiles)
+            profile.command(scoreboard);
+    }
 
-        StringBuilder command = new StringBuilder();
 
-        for (Profile profile : profiles) {
-            command.append(profile.getId() + "," + scoreboard.get(profile.getId()));
-        }
+    public String getScoreboard() {
+        ArrayList<Person> people = new ArrayList<>();
+        for (Profile profile : profiles)
+            people.add(profile.getPerson());
+        Gson gson = new Gson();
+        return DATA_SCOREBOARD + '\n' + gson.toJson(people.toArray()) + '\n' + end + '\n';
+    }
 
-        for (Profile profile : profiles) {
-            String result = "set_scoreboard\n" + command.toString() + end + "\n";
-            profile.command(result);
-        }
+    public String getChatRoom() {
+        return DATA_CHAT_ROOM + '\n' + text + end + '\n';
     }
 }

@@ -1,13 +1,23 @@
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonReader;
 import javafx.concurrent.Task;
 
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
 
 public class Client {
 
-    public static String end = "#";
+    private static final String DATA_CHAT_ROOM = "data_chat_room";
+    private static final String DATA_SCOREBOARD = "data_scoreboard";
+    private static final String UPDATE_SCOREBOARD = "update_scoreboard";
+    private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
+    private static final String INIT_SCOREBOARD = "init_scoreboard";
+    private static final String INIT_CHAT_ROOM = "init_chat_room";
+    private static final String end = "#";
 
     View view;
     Socket socket;
@@ -37,6 +47,15 @@ public class Client {
         scoreboard = new Scoreboard(view);
     }
 
+    private String getData(Scanner scanner) {
+        StringBuilder s = new StringBuilder();
+        while(true) {
+            String line = scanner.nextLine();
+            if(line.equals(end)) break;
+            s.append(line + "\n");
+        }
+        return s.toString();
+    }
 
     Task<Void> read = new Task<Void>() {
         @Override
@@ -44,13 +63,7 @@ public class Client {
 
             while (socket.isConnected()) {
                 String command = scanner.nextLine();
-                StringBuilder s = new StringBuilder();
-                while(true) {
-                    String line = scanner.nextLine();
-                    if(line.equals(end)) break;
-                    s.append(line + "\n");
-                }
-                process(command, s.toString());
+                process(command, getData(scanner));
             }
             return null;
         }
@@ -90,7 +103,7 @@ public class Client {
                 try {
                     socket = new Socket("localhost", port);
                     break ;
-                } catch(Exception e) {};
+                } catch(Exception e) {}
             }
             scanner = new Scanner(socket.getInputStream());
             formatter = new Formatter(socket.getOutputStream());
@@ -101,30 +114,46 @@ public class Client {
 
     public void run() {
         new Thread(read).start();
-        addText("");
-        updScoreboard("1");
+        initChatRoom();
+        initScoreboard();
     }
 
+    //talk to server.
     synchronized void command(String command) {
         formatter.format(command);
         formatter.flush();
     }
 
+    //decoding what's server saying.
     private void process(String command, String text) {
-        if(command.equals("set_text")) {
+        if(command.equals(DATA_CHAT_ROOM)) {
             chatroom.setContent(text);
         } else {
+            Gson gson = new Gson();
+            Person[] people = gson.fromJson(text, Person[].class);
+            //scoreboard.setContent(people);
             scoreboard.setContent(text);
         }
     }
 
-    public void addText(String text) {
-        String command = "add_text\n" + text + '\n' + end + "\n";
+    public void addMessageToChatRoom(String text) {
+        String command = ADD_MESSAGE_TO_CHAT_ROOM + "\n" + text + '\n' + end + "\n";
         command(command);
     }
 
-    public void updScoreboard(String level) {
-        String command = "upd_scoreboard\n" + level + '\n' + end + "\n";
+    public void updateScoreboard(String level) {
+        String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
         command(command);
     }
+
+    public void initScoreboard() {
+        String command = INIT_SCOREBOARD + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void initChatRoom() {
+        String command = INIT_CHAT_ROOM + "\n" + end + "\n";
+        command(command);
+    }
+
 }
