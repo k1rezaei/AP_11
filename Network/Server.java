@@ -92,6 +92,8 @@ public class Server {
     }
 
     private boolean validId(String id) {
+        for (Profile profile : profiles)
+            if (id.equals(profile.getId())) return false;
         return true;
     }
 
