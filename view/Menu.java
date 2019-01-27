@@ -130,7 +130,8 @@ public class Menu {
                                     userName.setText("");
                                 }
                             }catch (Exception e){
-
+                                System.err.println("something is wrong");
+                                e.printStackTrace();
                             }
                         }
                     });

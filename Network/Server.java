@@ -19,18 +19,25 @@ public class Server {
                 try {
                     serverSocket = new ServerSocket(8050);
                     Socket socket = serverSocket.accept();
+                    System.err.println("connected new user");
                     Formatter formatter = new Formatter(socket.getOutputStream());
                     Scanner scanner = new Scanner(socket.getInputStream());
                     String id = scanner.nextLine();
+                    System.err.println("userid is : " + id);
                     if (validId(id)) {
+                        System.err.println("valid");
                         formatter.format("userName Valid\n");
                         formatter.flush();
                     } else {
+                        System.err.println("!valid");
                         formatter.format("userName inValid\n");
                         formatter.flush();
+                        socket.close();
+                        continue;
                     }
 
                     formatter.format(Integer.toString(cnt) + '\n');
+                    System.err.println("port is " + cnt);
                     formatter.flush();
 
                     String connected = scanner.nextLine();
