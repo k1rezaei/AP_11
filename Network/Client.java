@@ -9,13 +9,30 @@ public class Client {
 
     public static String end = "#";
 
+    View view;
     Socket socket;
     Scanner scanner;
     Formatter formatter;
 
-    //Chatroom chatroom = new Chatroom();
-    //Scoreboard scoreboard = new Scoreboard();
-    //MultiPlayerMenu multiPlayerMenu = new MultiPlayerMenu();
+    Chatroom chatroom = new Chatroom(view);
+    Scoreboard scoreboard = new Scoreboard(view);
+    MultiPlayerMenu multiPlayerMenu = new MultiPlayerMenu(view);
+
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public MultiPlayerMenu getMultiPlayerMenu() {
+        return multiPlayerMenu;
+    }
+
+    public Chatroom getChatroom() {
+        return chatroom;
+    }
+
+    Client(View view){
+        this.view = view;
+    }
 
 
     Task<Void> read = new Task<Void>() {

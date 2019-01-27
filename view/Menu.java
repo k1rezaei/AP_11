@@ -124,7 +124,7 @@ public class Menu {
                     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            Client client = new Client();
+                            Client client = new Client(view);
                             client.initialize();
                             System.err.println(client.formatter == null);
                             try {
