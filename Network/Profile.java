@@ -13,7 +13,6 @@ public class Profile {
     Formatter formatter;
     Scanner scanner;
     Server server;
-    int level = 1;
 
     public void setServer(Server server) {
         this.server = server;
@@ -87,7 +86,9 @@ public class Profile {
     private void process(String command, String data) {
         if(command.equals("add_text")) {
             server.appendText(id + " : " + data);
-        }//else if(command.equals("upd_"))
+        }else if(command.equals("upd_scoreboard")) {
+            server.updateScoreboard(id, data);
+        }
     }
 
     public void run() {

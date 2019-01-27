@@ -5,6 +5,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Server {
@@ -12,6 +14,7 @@ public class Server {
     private static String end = "#";
 
     ArrayList<Profile> profiles = new ArrayList<>();
+    Map<String, String> scoreboard = new HashMap<>();
     Server me;
     String text = "";
 
@@ -101,4 +104,18 @@ public class Server {
     }
 
 
+    synchronized public void updateScoreboard(String id, String data) {
+        scoreboard.put(id, data);
+
+        StringBuilder command = new StringBuilder();
+
+        for (Profile profile : profiles) {
+            command.append(profile.getId() + "," + scoreboard.get(profile.getId()));
+        }
+
+        for (Profile profile : profiles) {
+            String result = "set_scoreboard\n" + command.toString() + end + "\n";
+            profile.command(result);
+        }
+    }
 }
