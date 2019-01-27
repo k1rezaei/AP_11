@@ -8,6 +8,9 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 public class Server {
+
+    private static String end = "#";
+
     ArrayList<Profile> profiles = new ArrayList<>();
     Server me;
     String text;
@@ -92,7 +95,7 @@ public class Server {
     synchronized public void appendText(String text) {
         this.text += text;
         for (Profile profile : profiles) {
-            String command = "set_text\n" + this.text + "#\n";
+            String command = "set_text\n" + this.text + end + '\n';
             profile.command(command);
         }
     }

@@ -100,14 +100,19 @@ public class Client {
         new Thread(read).start();
     }
 
-    void command(String commond) {
-        formatter.format(commond + "\n");
+    synchronized void command(String command) {
+        formatter.format(command + "\n");
         formatter.flush();
     }
 
     private void process(String command, String text) {
         if(command.equals("set_text")) {
-            //chatroom.setText(text);
+            chatroom.setContent(text);
         }
+    }
+
+    public void addText(String text) {
+        String command = "add_text\n" + text + end + "\n";
+        command(command);
     }
 }
