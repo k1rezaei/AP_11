@@ -52,9 +52,10 @@ public class Server {
                     cnt++;
                     socket = serverSocket.accept();
                     System.err.println("User adding");
-                    Profile profile = new Profile(id, id, socket, new Formatter(socket.getOutputStream()),
+                    Profile profile = new Profile(id, socket, new Formatter(socket.getOutputStream()),
                             new Scanner(socket.getInputStream()));
                     profiles.add(profile);
+                    new Thread(profile.getRead()).start();
                     System.err.println("User added");
 
                 } catch (Exception e) {

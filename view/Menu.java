@@ -127,7 +127,7 @@ public class Menu {
                             try {
                                 System.err.println(client.formatter == null);
                                 if (client.checkId(userName.getText())) {
-
+                                    client.run();
                                 } else {
                                     userName.setText("");
                                 }
