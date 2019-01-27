@@ -3,6 +3,7 @@ import com.google.gson.stream.JsonReader;
 import javafx.concurrent.Task;
 
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -80,7 +81,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id){
+    boolean checkId(String id) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -129,7 +130,7 @@ public class Client {
             chatroom.setContent(text);
         } else {
             Gson gson = new Gson();
-            Person[] people = gson.fromJson(text, Person[].class)
+            Person[] people = gson.fromJson(text, Person[].class);
             //scoreboard.setContent(people);
             scoreboard.setContent(text);
         }

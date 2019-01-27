@@ -1,5 +1,6 @@
 import javafx.concurrent.Task;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -52,7 +53,7 @@ public class Profile {
         this.scanner = scanner;
     }
 
-    public Profile(Person person, Socket socket) {
+    public Profile(Person person, Socket socket) throws IOException {
         this.person = person;
         this.socket = socket;
         this.formatter = new Formatter(socket.getOutputStream());
