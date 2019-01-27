@@ -7,9 +7,16 @@ import java.util.Scanner;
 
 public class Client {
 
+    public static String end = "#";
+
     Socket socket;
     Scanner scanner;
     Formatter formatter;
+
+    //Chatroom chatroom = new Chatroom();
+    //Scoreboard scoreboard = new Scoreboard();
+    //MultiPlayerMenu multiPlayerMenu = new MultiPlayerMenu();
+
 
     Task<Void> read = new Task<Void>() {
         @Override
@@ -17,7 +24,13 @@ public class Client {
 
             while (socket.isConnected()) {
                 String command = scanner.nextLine();
-                process(command);
+                StringBuilder s = new StringBuilder();
+                while(true) {
+                    String line = scanner.nextLine();
+                    if(line.equals(end)) break;
+                    s.append(line + "\n");
+                }
+                process(command, s.toString());
             }
             return null;
         }
@@ -75,6 +88,9 @@ public class Client {
         formatter.flush();
     }
 
-    private void process(String command) {
+    private void process(String command, String text) {
+        if(command.equals("set_text")) {
+            //chatroom.setText(text);
+        }
     }
 }
