@@ -86,8 +86,8 @@ public class Profile {
 
     private void process(String command, String data) {
         if(command.equals("add_text")) {
-            server.appendText(data);
-        }
+            server.appendText(id + " : " + data);
+        }//else if(command.equals("upd_"))
     }
 
     public void run() {
