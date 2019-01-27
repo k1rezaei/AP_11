@@ -28,7 +28,7 @@ public class MultiPlayerMenu {
         chat.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
+                view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
             }
         });
 

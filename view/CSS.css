@@ -1,3 +1,7 @@
+#chatBox {
+    -fx-background-color: gray;
+}
+
 .label {
     -fx-text-fill: white;
     -fx-font-size: 18;
