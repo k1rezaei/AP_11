@@ -1,3 +1,5 @@
+import javafx.concurrent.Task;
+
 import java.net.Socket;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -55,4 +57,29 @@ public class Profile {
         this.formatter = formatter;
         this.scanner = scanner;
     }
+
+    Task<Void> read = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            while(socket.isConnected()) {
+                String command = scanner.nextLine();
+                process(command);
+            }
+            return null;
+        }
+    };
+
+    public void command(String command) {
+        formatter.format(command);
+        formatter.flush();
+    }
+
+    private void process(String command) {
+    }
+
+    public void run() {
+        new Thread(read).start();
+    }
+
+
 }

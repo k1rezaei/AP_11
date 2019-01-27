@@ -10,7 +10,7 @@ import java.util.Scanner;
 public class Server {
     ArrayList<Profile> profiles = new ArrayList<>();
 
-    Task task = new Task<Void>() {
+    Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
             int cnt = 8051;
@@ -46,6 +46,7 @@ public class Server {
                     Profile profile = new Profile(id, id, socket, new Formatter(socket.getOutputStream()),
                             new Scanner(socket.getInputStream()));
                     profiles.add(profile);
+
 
                 } catch (Exception e) {
                 }

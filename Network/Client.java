@@ -70,6 +70,11 @@ public class Client {
         new Thread(read).start();
     }
 
+    void command(String commond) {
+        formatter.format(commond + "\n");
+        formatter.flush();
+    }
+
     private void process(String command) {
     }
 }
