@@ -1,13 +1,11 @@
 public class Item extends Entity {
+    private int remainTime = 400;
 
     Item() {
     }
 
     Item(String type) {
         super(type);
-
-        //TODO for Costume, Decoration, Cloth.
-
         switch (type) {
             case "Egg":
                 fix(1, 20, 10);
@@ -29,6 +27,7 @@ public class Item extends Entity {
                 break;
             case "EggPowder":
                 fix(4, 100, 50);
+                break;
             case "Cookie":
                 fix(5, 200, 100);
                 break;
@@ -49,8 +48,10 @@ public class Item extends Entity {
                 break;
             case "Curd":
                 fix(6, 4000, 2000);
+                break;
             case "Cheese":
                 fix(5, 5000, 2500);
+                break;
             case "ColoredPlume":
                 fix(2, 300, 150);
                 break;
@@ -126,6 +127,11 @@ public class Item extends Entity {
 
     @Override
     void turn() {
-        return;
+        remainTime--;
+        if (remainTime <= 0) destroy();
+    }
+
+    public int getRemainTime() {
+        return remainTime;
     }
 }

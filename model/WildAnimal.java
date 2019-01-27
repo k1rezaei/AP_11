@@ -7,10 +7,12 @@ public class WildAnimal extends Animal {
         super(type);
         if (type.equalsIgnoreCase("bear")) {
             sellPrice = 2000;
-            speed = 4;
+            speed = 3;
+            size = 10;
         } else if (type.equalsIgnoreCase("lion")) {
             sellPrice = 3000;
-            speed = 5;
+            speed = 4;
+            size = 7;
         }
     }
 
@@ -23,8 +25,8 @@ public class WildAnimal extends Animal {
         if (entity instanceof FarmAnimal) {
             entity.destroy();
         }
-        if (entity instanceof Cat)
-            entity.destroy();
+      /*  if (entity instanceof Cat)
+            entity.destroy();*/
         return;
     }
 

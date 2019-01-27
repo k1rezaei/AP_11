@@ -1,10 +1,11 @@
 import java.util.ArrayList;
 
 public class Truck extends Vehicle implements Upgradable {
-    private static final int INITIAL_CAPACITY = 1000;
-    private static final int CAPACITY_INCREASE = 200;
+    private static final int INITIAL_CAPACITY = 20;
+    private static final int CAPACITY_INCREASE = 8;
     private static final int UPGRADE_COST = 300;
     private static final int GO_TIME = 200;
+    private static final int GO_TIME_DECREASE = 20;
 
     public Truck() {
         setCapacity(INITIAL_CAPACITY);
@@ -12,13 +13,20 @@ public class Truck extends Vehicle implements Upgradable {
         setCapacityIncrease(CAPACITY_INCREASE);
         setGoTime(GO_TIME);
         setUpgradeCost(UPGRADE_COST);
+        setGoTimeDecrease(GO_TIME_DECREASE);
+    }
+
+    public int getResultMoneyWithoutClear() {
+        int priceSum = 0;
+        for (String type : getItems()) {
+            Entity entity = Entity.getNewEntity(type);
+            priceSum += entity.getSellPrice();
+        }
+        return priceSum;
     }
 
     public int getResultMoney() {
-        int priceSum = 0;
-        for (Entity entity : getItems()) {
-            priceSum += entity.getSellPrice();
-        }
+        int priceSum = getResultMoneyWithoutClear();
         clear();
         return priceSum;
     }
@@ -30,7 +38,11 @@ public class Truck extends Vehicle implements Upgradable {
 
     @Override
     public ArrayList<Entity> getNeededItems() {
-        return getItems();
+        ArrayList<Entity> neededItems = new ArrayList<>();
+        for (String type : getItems()) {
+            neededItems.add(Entity.getNewEntity(type));
+        }
+        return neededItems;
     }
 
     @Override

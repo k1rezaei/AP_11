@@ -2,9 +2,10 @@ import java.util.ArrayList;
 
 public class Helicopter extends Vehicle implements Upgradable {
     private static final int INITIAL_CAPACITY = 20;
-    private static final int CAPACITY_INCREASE = 20;
-    private static final int GO_TIME = 7;
+    private static final int CAPACITY_INCREASE = 10;
+    private static final int GO_TIME = 200;
     private static final int UPGRADE_COST = 200;
+    private static final int GO_TIME_DECREASE = 20;
 
     public Helicopter() {
         setCapacity(INITIAL_CAPACITY);
@@ -12,10 +13,14 @@ public class Helicopter extends Vehicle implements Upgradable {
         setCapacityIncrease(CAPACITY_INCREASE);
         setGoTime(GO_TIME);
         setUpgradeCost(UPGRADE_COST);
+        setGoTimeDecrease(GO_TIME_DECREASE);
     }
 
     public ArrayList<Entity> getResultItems() {
-        ArrayList<Entity> result = (ArrayList<Entity>) getItems().clone();
+        ArrayList<Entity> result = new ArrayList<>();
+        for (String type : getItems()) {
+            result.add(Entity.getNewEntity(type));
+        }
         clear();
         return result;
     }
@@ -32,7 +37,8 @@ public class Helicopter extends Vehicle implements Upgradable {
     @Override
     public int getNeededMoney() {
         int priceSum = 0;
-        for (Entity entity : getItems()) {
+        for (String type : getItems()) {
+            Entity entity = Entity.getNewEntity(type);
             priceSum += entity.buyPrice;
         }
         return priceSum;

@@ -1,0 +1,13 @@
+{
+  "startMoney": 5000,
+  "goalMoney": 30000,
+  "goalEntity": {
+	"Cake": 10,
+        "EggPowder": 10
+  },
+  "n": 300,
+  "m": 200,
+  "itemList": [
+    "Flour"
+  ]
+}

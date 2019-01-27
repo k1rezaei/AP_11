@@ -1,93 +1,124 @@
-import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 
 public class BuyMenu {
-    View view;
+    private static final int BASE_Y_BOUGHT = 80;
+    private static final int DIS_Y_BOUGHT = 30;
+    private static final int BASE_X_BOUGHT = 600;
+    private static final int NUM_OF_BOUGHT = 5;
+    private static final int DIS_X_BOUGHT = 30;
+    private static Image one = new Image("file:textures/one.png");
+    private static Image BG = new Image("file:textures/bglemon.gif");
+    private final int WIDTH = 50, DIS_X = 270, DIS_Y = 95, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 80;
+    private final int HEIGHT = 50;
+    private View view;
+    private int currentMoney = Game.getInstance().getMoney();
+    private int numBought = 0;
+    private Label cap = new Label();
+    private Label money = new Label();
+    private Group buyGroup = new Group();
 
-    int currentMoney;
     {
-        currentMoney = Game.getInstance().getMoney();
+        cap.setMinSize(50, HEIGHT);
+        cap.setAlignment(Pos.CENTER);
+        cap.relocate(600, 20);
+    }
+
+    {
+
+        money.setMinSize(50, HEIGHT);
+        money.setAlignment(Pos.CENTER);
+        money.relocate(600, 0);
     }
 
     BuyMenu(View view) {
         this.view = view;
     }
 
-    private Group buyGroup = new Group();
-    final int WIDTH = 100;
-    final int HEIGHT = 70;
-
     Group getBuyGroup() {
+        numBought = 0;
         init();
         return buyGroup;
     }
 
-    static Image one = new Image("file:textures/sell/one.png");
-
-    Label cap = new Label();
-    {
-        cap.setMinSize(50,HEIGHT);
-        cap.setFont(Font.font(20));
-        cap.setAlignment(Pos.CENTER);
-        cap.relocate(400,20);
-    }
-
-    Label money = new Label();
-    {
-
-        money.setMinSize(50,HEIGHT);
-        money.setFont(Font.font(20));
-        money.setAlignment(Pos.CENTER);
-        money.relocate(400,0);
-    }
-    void update(){
+    void update() {
         cap.setText("Capacity : " + Game.getInstance().getHelicopter().getCurrentCapacity());
         money.setText("Money : " + currentMoney);
     }
 
-    FlowPane buyList = new FlowPane();
-    {
-        buyGroup.getChildren().add(buyList);
+    void init() {
+
+        ImageView bg = new ImageView(BG);
+        bg.setFitHeight(600);
+        bg.setFitWidth(800);
+        buyGroup.getChildren().add(bg);
         buyGroup.getChildren().add(money);
         buyGroup.getChildren().add(cap);
-        buyList.relocate(400,70);
         update();
-    }
+        Label rectangle = new Label();
 
-    void init() {
+        rectangle.relocate(BASE_X - 10, BASE_Y - 10);
+        rectangle.setMinSize(DIS_X * 2 - 10, DIS_Y * 5);
+        //rectangle.setFill(Color.BLACK);
+        // rectangle.setOpacity(0.5);
+        //rectangle.setFill(Color.TRANSPARENT);
+        rectangle.setId("recBG");
+
+        Label stack = new Label();
+        stack.relocate(DIS_X * 2 - 20 + BASE_X + 10, BASE_Y - 10);
+        stack.setMinSize(200, 350);
+        stack.setId("recBG");
+
+
+        //stack.setFill(Color.BLACK);
+        // stack.setOpacity(0.5);
+
+        buyGroup.getChildren().add(stack);
+        buyGroup.getChildren().add(rectangle);
+
+
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
 
 
-        VBox vBox = new VBox();
-        vBox.setMinWidth(WIDTH*3);
+        Label ok = new Label();
+        ok.relocate(BASE_X, 10);
+        ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
+        okImage.setFitHeight(60);
+        okImage.setFitWidth(100);
+        ok.setId("label_button");
 
-        Button ok = new Button("OK");
-        Button cancel = new Button("Cancel");
-        ok.setMinSize(50, HEIGHT);
-        cancel.setMinSize(50, HEIGHT);
+        ImageView cancelImage = new ImageView(new Image("file:textures/cancel.png"));
+        cancelImage.setFitHeight(60);
+        cancelImage.setFitWidth(100);
 
-        vBox.getChildren().add(ok);
-        vBox.getChildren().add(cancel);
+        ok.setGraphic(okImage);
+        Label cancel = new Label();
+        cancel.relocate(BASE_X + 110, 10);
+        cancel.setGraphic(cancelImage);
+        cancel.setId("label_button");
+
+      /*  Label clear = new Label();
+        clear.relocate(BASE_X + 220, 10 );
+        ImageView clearImage = new ImageView(new Image("file:textures/clear.png"));
+        clearImage.setFitHeight(60);
+        clearImage.setFitWidth(100);
+        clear.setGraphic(cancelImage);
+        clear.setId("label_button");*/
+
+        buyGroup.getChildren().addAll(ok, cancel);
 
         cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 Game.getInstance().getHelicopter().clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -97,68 +128,87 @@ public class BuyMenu {
             public void handle(MouseEvent event) {
                 try {
                     Game.getInstance().go(Game.getInstance().getHelicopter());
-                    GameView.getInstance().getTruck().getImageView().setVisible(false);
-                    new AnimationTimer() {
-                        @Override
-                        public void handle(long now) {
-                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
-                                GameView.getInstance().getTruck().getImageView().setVisible(true);
-                            }
-                        }
-                    }.start();
-                }catch (Exception e){
+                } catch (Exception e) {
                     Game.getInstance().getHelicopter().clear();
                 }
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
 
+      /*  clear.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+
+            }
+        });*/
+
+        int numberOfItems = 0;
+
         for (String type : items) {
-            HBox hBox = new HBox();
-            hBox.setMinWidth(WIDTH );
+
+            int baseX = BASE_X + numberOfItems / NUM_OF_ROW * DIS_X;
+            int baseY = BASE_Y + numberOfItems % NUM_OF_ROW * DIS_Y;
+
             ImageView imageView = Images.getSpriteAnimation(type).getImageView();
             imageView.setFitHeight(HEIGHT);
             imageView.setFitWidth(WIDTH);
-            hBox.getChildren().add(imageView);
+            imageView.relocate(baseX, baseY);
 
-            Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice() + " (" + Entity.getNewEntity(type).getSize()+ ")");
-            price.setMinSize(WIDTH, HEIGHT);
-            price.setAlignment(Pos.CENTER);
-            hBox.getChildren().add(price);
+            Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice() + " (" + Entity.getNewEntity(type).getSize() + ")");
+            price.relocate(baseX + 70, baseY + 10);
 
-            ImageView buyOne = new ImageView(one);
-            buyOne.setFitWidth(WIDTH);
-            buyOne.setFitHeight(HEIGHT);
-            buyOne.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if(Game.getInstance().getHelicopter().getCurrentCapacity() >= Entity.getNewEntity(type).getSize()) {
-                        if(Game.getInstance().getHelicopter().getNeededMoney() + Entity.getNewEntity(type).getBuyPrice() <= Game.getInstance().getMoney()) {
-                            Game.getInstance().getHelicopter().add(type, 1);
-                            currentMoney -= Entity.getNewEntity(type).getBuyPrice();
-                            buyList.getChildren().add(Images.getSpriteAnimation(type).getImageView());
-                            update();
-                        }else {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.setTitle("Oooops");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Not Enough Money");
-                            alert.showAndWait();
-                        }
-                    }else{
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.setTitle("Oooops");
-                        alert.setHeaderText(null);
-                        alert.setContentText("Not Enough Space");
-                        alert.showAndWait();
+            ImageView buyOneImage = new ImageView(one);
+            buyOneImage.setFitWidth(WIDTH);
+            buyOneImage.setFitHeight(HEIGHT);
+            Label buyOne = new Label();
+            buyOne.setId("label_button");
+            buyOne.relocate(baseX + 150, baseY);
+            buyOne.setGraphic(buyOneImage);
+
+            buyGroup.getChildren().addAll(imageView, price, buyOne);
+
+
+            buyOne.setOnMouseClicked(event -> {
+                if (Game.getInstance().getHelicopter().getCurrentCapacity() >= Entity.getNewEntity(type).getSize()) {
+                    if (Game.getInstance().getHelicopter().getNeededMoney() + Entity.getNewEntity(type).getBuyPrice() <= Game.getInstance().getMoney()) {
+                        Game.getInstance().getHelicopter().add(type, 1);
+                        currentMoney -= Entity.getNewEntity(type).getBuyPrice();
+                        ImageView bought = Images.getSpriteAnimation(type).getImageView();
+                        bought.setFitWidth(30);
+                        bought.setFitHeight(30);
+                        // TODO flowPane
+                        int x = numBought % NUM_OF_BOUGHT * DIS_X_BOUGHT + BASE_X_BOUGHT;
+                        int y = numBought / NUM_OF_BOUGHT * DIS_Y_BOUGHT + BASE_Y_BOUGHT;
+                        bought.relocate(x, y);
+                        numBought++;
+                        buyGroup.getChildren().add(bought);
+                        update();
+                    } else {
+                        Pop pop = new Pop("Not Enough Money", view.getSnap());
+                        buyGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                buyGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
                     }
+                } else {
+                    Pop pop = new Pop("Not Enough Space", view.getSnap());
+                    buyGroup.getChildren().add(pop.getStackPane());
+                    pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            buyGroup.getChildren().remove(pop.getStackPane());
+                        }
+                    });
                 }
             });
-            hBox.getChildren().add(buyOne);
 
-            vBox.getChildren().add(hBox);
+            numberOfItems++;
+
         }
-        buyGroup.getChildren().add(vBox);
     }
 
 }

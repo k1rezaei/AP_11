@@ -1,55 +1,87 @@
-import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.Font;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class SellMenu {
-    public static final int BASE_X = 30;
-    public static final int DIS_X = 240;
-    public static final int NUM_IN_COL = 8;
-    public static final int BASE_Y = 60;
-    public static final int DIS_Y = 70;
+    private static final int BASE_X = 30;
+    private static final int DIS_X = 260;
+    private static final int NUM_IN_ROW = 8;
+    private static final int BASE_Y = 70;
+    private static final int DIS_Y = 65;
+    private static final Image BG = new Image("file:textures/shelf.jpg");
+    private static Image one = new Image("file:textures/one.png");
+    private static Image all = new Image("file:textures/all.png");
+    private final int WIDTH = 300;
+    private final int HEIGHT = 70;
+    private View view;
+    private HashMap<String, Integer> truck = new HashMap<>();
     private Group sellGroup = new Group();
-    final int WIDTH = 300;
-    final int HEIGHT = 70;
 
-    View view;
+    SellMenu(View view) {
+        this.view = view;
+    }
+
     Group getSellGroup() {
         view.setRoot(sellGroup);
         update();
         return sellGroup;
     }
 
-    SellMenu(View view){
-        this.view = view;
+    private void setCapAndMoney() {
+
+        Label cap = new Label("Capacity : " + Game.getInstance().getTruck().getCurrentCapacity());
+        Label money = new Label("Money : " + Game.getInstance().getTruck().getResultMoneyWithoutClear());
+
+        cap.setMinSize(50, HEIGHT);
+        cap.setFont(Font.font(20));
+        cap.setAlignment(Pos.CENTER);
+        cap.relocate(600, 20);
+
+        money.setMinSize(50, HEIGHT);
+        money.setFont(Font.font(20));
+        money.setAlignment(Pos.CENTER);
+        money.relocate(600, 0);
+
+        sellGroup.getChildren().add(cap);
+        sellGroup.getChildren().add(money);
     }
-    static Image one = new Image("file:textures/sell/one.png");
-    static Image all = new Image("file:textures/sell/all.png");
 
-
-    HashMap<String, Integer> truck = new HashMap<>();
-
-
-    void update() {
+    private void update() {
         sellGroup.getChildren().clear();
+
+        ImageView bg = new ImageView(BG);
+        bg.setFitWidth(800);
+        bg.setFitHeight(600);
+        sellGroup.getChildren().add(bg);
+
+        setCapAndMoney();
+
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
 
+        Label ok = new Label();
+        ok.relocate(BASE_X, 10);
+        ok.setId("label_button");
+        ImageView okImage = new ImageView(new Image("file:textures/sell.png"));
+        okImage.setFitHeight(60);
+        okImage.setFitWidth(100);
 
-        Button ok = new Button("Sell");
-        Button cancel = new Button("Cancel");
-        ok.relocate(350, 20);
-        cancel.relocate(400, 20);
+        ImageView cancelImage = new ImageView(new Image("file:textures/cancel.png"));
+        cancelImage.setFitHeight(60);
+        cancelImage.setFitWidth(100);
 
-
-        //ok.setMinSize(50, HEIGHT);
-        //cancel.setMinSize(50, HEIGHT);
+        ok.setGraphic(okImage);
+        Label cancel = new Label();
+        cancel.relocate(BASE_X + 110, 10);
+        cancel.setId("label_button");
+        cancel.setGraphic(cancelImage);
 
         sellGroup.getChildren().add(ok);
         sellGroup.getChildren().add(cancel);
@@ -60,6 +92,7 @@ public class SellMenu {
             public void handle(MouseEvent event) {
                 Game.getInstance().getTruck().clear();
                 truck.clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -69,19 +102,12 @@ public class SellMenu {
             public void handle(MouseEvent event) {
                 try {
                     Game.getInstance().go(Game.getInstance().getTruck());
-                    GameView.getInstance().getTruck().getImageView().setVisible(false);
-                    new AnimationTimer() {
-                        @Override
-                        public void handle(long now) {
-                            if (Game.getInstance().getTruck().getRemainingTime() == 0 ){
-                                GameView.getInstance().getTruck().getImageView().setVisible(true);
-                            }
-                        }
-                    }.start();
-                }catch (Exception e){
-
+                } catch (Exception e) {
+                    System.err.println("Truck problem");
+                    e.printStackTrace();
                 }
                 truck.clear();
+                GameView.getInstance().resume();
                 view.setRoot(GameView.getInstance().getRoot());
             }
         });
@@ -98,31 +124,58 @@ public class SellMenu {
             if (cnt == 0) continue;
 
             ImageView imageView = Images.getSpriteAnimation(pair.getKey()).getImageView();
-            imageView.setFitWidth(30); imageView.setFitHeight(30);
+            imageView.setFitWidth(30);
+            imageView.setFitHeight(30);
 
             Label label = new Label(Integer.toString(cnt));
 
             Label price = new Label(Integer.toString(Entity.getNewEntity(pair.getKey()).getSellPrice()));
 
-            ImageView sellOne = new ImageView(one); sellOne.setFitHeight(30); sellOne.setFitWidth(25);
-            ImageView sellAll = new ImageView(all); sellAll.setFitHeight(30); sellAll.setFitWidth(25);
+            ImageView so = new ImageView(one);
+            so.setFitHeight(30 * 7 / 5);
+            so.setFitWidth(25 * 7 / 5);
+            Label sellOne = new Label();
+            sellOne.setGraphic(so);
 
-            int baseX = numberOfItems / NUM_IN_COL * DIS_X + BASE_X;
-            int baseY = (numberOfItems % NUM_IN_COL) * DIS_Y + BASE_Y;
+            ImageView sa = new ImageView(all);
+            sa.setFitHeight(30 * 7 / 5);
+            sa.setFitWidth(25 * 7 / 5);
+            Label sellAll = new Label();
+            sellAll.setGraphic(sa);
+            sellAll.setId("label_button");
+            sellOne.setId("label_button");
+
+            int baseX = numberOfItems / NUM_IN_ROW * DIS_X + BASE_X;
+            int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
 
             imageView.relocate(baseX, baseY);
             label.relocate(baseX + 30, baseY);
-            price.relocate(baseX + 95, baseY + 10);
+            price.relocate(baseX + 75, baseY + 5);
             sellOne.relocate(baseX + 130, baseY);
-            sellAll.relocate(baseX + 160, baseY);
+            sellAll.relocate(baseX + 165, baseY);
 
             sellGroup.getChildren().addAll(imageView, label, price, sellAll, sellOne);
 
-            numberOfItems ++;
+            numberOfItems++;
 
             sellOne.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+
+                    if (Game.getInstance().getTruck().getCurrentCapacity() < Entity.getNewEntity(pair.getKey()).getSize()) {
+                        Pop pop = new Pop("Not Enough Space", view.getSnap());
+                        sellGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
+
+                        return;
+                    }
+
                     Game.getInstance().getTruck().add(pair.getKey(), 1);
                     if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
                     truck.put(pair.getKey(), truck.get(pair.getKey()) + 1);
@@ -133,10 +186,28 @@ public class SellMenu {
             sellAll.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    Game.getInstance().getTruck().add(pair.getKey(), cnt);
-                    if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
-                    truck.put(pair.getKey(), truck.get(pair.getKey()) + cnt);
-                    update();
+
+                    int k = cnt;
+                    if (Entity.getNewEntity(pair.getKey()).getSize() == 0) k = cnt;
+                    else if (k >= Game.getInstance().getTruck().getCurrentCapacity() / Entity.getNewEntity(pair.getKey()).getSize())
+                        k = Game.getInstance().getTruck().getCurrentCapacity() / Entity.getNewEntity(pair.getKey()).getSize();
+
+                    if (k == 0) {
+                        Pop pop = new Pop("Not Enough Space", view.getSnap());
+                        sellGroup.getChildren().add(pop.getStackPane());
+                        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                            @Override
+                            public void handle(MouseEvent event) {
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                                sellGroup.getChildren().remove(pop.getStackPane());
+                            }
+                        });
+                    } else {
+                        Game.getInstance().getTruck().add(pair.getKey(), k);
+                        if (truck.get(pair.getKey()) == null) truck.put(pair.getKey(), 0);
+                        truck.put(pair.getKey(), truck.get(pair.getKey()) + k);
+                        update();
+                    }
                 }
             });
 

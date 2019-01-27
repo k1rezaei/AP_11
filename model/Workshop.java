@@ -20,6 +20,17 @@ public class Workshop implements Upgradable {
         this.name = name;
     }
 
+    Workshop(Workshop workshop) {
+        output = workshop.output;
+        inputs = workshop.inputs;
+        x = workshop.x;
+        y = workshop.y;
+        duration = workshop.duration;
+        upgradeCost = workshop.upgradeCost;
+        startCost = workshop.startCost;
+        name = workshop.name;
+    }
+
     public int getStartCost() {
         return startCost;
     }
@@ -51,12 +62,12 @@ public class Workshop implements Upgradable {
     void turn() {
         if (remainTime == -1) return;
         int z = 0;
-        if(x > 200) z = -1;
+        if (x > 200) z = -1;
         else z = 1;
 
         if (remainTime == 0) {
             for (int i = 0; i < numberOfOutputs; i++) {
-                Entity entity = new Item(output, new Cell(x + 20 * i * z, y));
+                Entity entity = new Item(output, new Cell(z * 25 + x + 20 * i * z, y));
                 Game.getInstance().addEntity(entity);
             }
             remainTime = -1;
@@ -164,5 +175,10 @@ public class Workshop implements Upgradable {
 
     public void setNumberOfOutputs(int numberOfOutputs) {
         this.numberOfOutputs = numberOfOutputs;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

@@ -16,13 +16,13 @@ public class Images {
 
         loadImage("cat", 4, 24, new int[]{6, 4, 6, 4});
 
-        loadImage("chicken", 5, 24, new int[]{5, 5, 5, 5, 5});
+        loadImage("chicken", 6, 24, new int[]{5, 5, 5, 5, 5, 5});
 
-        loadImage("sheep", 5, 24, new int[]{5, 4, 5, 4, 4});
+        loadImage("sheep", 6, 24, new int[]{5, 4, 5, 4, 4, 4});
 
-        loadImage("cow", 5, 24, new int[]{4, 3, 3, 3, 4});
+        loadImage("cow", 6, 24, new int[]{4, 3, 3, 3, 3, 4});
 
-        loadImage("dog", 4, 24, new int[]{6, 6, 6, 6});
+        loadImage("dog", 5, 24, new int[]{6, 6, 6, 6, 5});
 
         loadImage("lion", 4, 24, new int[]{6, 3, 5, 3});
 
@@ -50,9 +50,6 @@ public class Images {
         images.add(new Image(BASE + "plant/plant.png"));
         loadImage("plant", images, 1, new int[]{1});
 
-
-        //loadImage("plant", images, 1, new int[]{1});
-
         loadImage("helicopter", 4, 1, new int[]{1, 1, 1, 1});
 
         loadImage("truck", 4, 1, new int[]{1, 1, 1, 1});
@@ -63,11 +60,12 @@ public class Images {
 
         for (int i = 0; i < 6; i++)
             loadImage("workshop" + i, 5, 16, new int[]{4, 4, 4, 4, 4});
-
+        loadImage("helicopterMini", 4, 6, new int[]{3, 3, 3, 3});
+        loadImage("truckMini", 4, 2, new int[]{2, 2, 2, 2});
     }
 
-    static void addImages(ArrayList<Image> images, String type, int n) {
-        String address = BASE;
+    private static void addImages(ArrayList<Image> images, String type, int n) {
+        String address;
         if (type.startsWith("workshop"))
             address = BASE + "workshops/" + type.charAt(type.length() - 1) + "/";
         else address = BASE + type + "/";
@@ -76,29 +74,34 @@ public class Images {
             images.add(new Image(address + i + ".png"));
     }
 
-    static void loadImage(String type, int n, int count, int[] column) {
+    private static void loadImage(String type, int n, int count, int[] column) {
         ArrayList<Image> images = new ArrayList<>();
         addImages(images, type, n);
         map.put(type, new LoadedImage(images, count, column));
     }
 
-    static void loadImage(String type, ArrayList<Image> images, int count, int[] column) {
+    private static void loadImage(String type, ArrayList<Image> images, int count, int[] column) {
         map.put(type, new LoadedImage(images, count, column));
     }
 
     static SpriteAnimation getSpriteAnimation(Entity entity) {
         return new SpriteAnimation(map.get(entity.getType()));
     }
-    static SpriteAnimation getSpriteAnimation (String type) {return new SpriteAnimation(map.get(type));}
+
+    static SpriteAnimation getSpriteAnimation(String type) {
+        return new SpriteAnimation(map.get(type));
+    }
+
     static ImageView getIcon(Entity entity) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + entity.getType() + ".png"));
     }
-    static ImageView getIcon(String type){
+
+    static ImageView getIcon(String type) {
         return new ImageView(new Image(BASE + "ui/Icons/Products/" + type + ".png"));
     }
+
+    static ImageView getImageForGoal(String type) {
+        if(type.equals("money")) return new ImageView(new Image("file:textures/goal/coin.gif"));
+        return new ImageView(new Image("file:textures/goal/" + type + ".png"));
+    }
 }
-
-
-/*Image image = new Image(new File(path).toURI().toString(), 150, 100, false, false);
-    ImageView imageView = new ImageView(image);
-    */

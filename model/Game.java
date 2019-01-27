@@ -8,10 +8,12 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class Game {
-    public static final int PLANT_DISTANCE = 20;
+    private static final int PLANT_DISTANCE = 20;
     private static Game game = new Game();
+    private static HashMap<String, Level> levels = new HashMap<>();
+    private static ArrayList<Workshop> workshopTemplates = new ArrayList<>();
     private Map map = new Map();
-    private int money;
+    private int money = 0;
     private Level level;
     private ArrayList<Workshop> workshops = new ArrayList<>();
     private Helicopter helicopter = new Helicopter();
@@ -20,9 +22,8 @@ public class Game {
     private Warehouse warehouse = new Warehouse();
     private ArrayList<Vehicle> vehicles;
     private ArrayList<Upgradable> upgradables;
-    private int currentTurn;
-    private HashMap<String, Level> levels = new HashMap<>();
-    private int catLevel;
+    private int currentTurn = 0;
+    private int catLevel = 0;
 
     private Game() {
         vehicles = new ArrayList<>();
@@ -30,7 +31,6 @@ public class Game {
         vehicles.add(truck);
         vehicles.add(helicopter);
         upgradables.add(warehouse);
-        upgradables.addAll(workshops);
         upgradables.add(well);
         upgradables.addAll(vehicles);
     }
@@ -49,24 +49,12 @@ public class Game {
         Cat.setLevel(catLevel);
         this.currentTurn = save.getCurrentTurn();
         map = new Map();
-        for (FarmAnimal farmAnimal : save.getFarmAnimals()) {
-            map.addEntity(farmAnimal);
-        }
-        for (WildAnimal wildAnimal : save.getWildAnimals()) {
-            map.addEntity(wildAnimal);
-        }
-        for (Dog dog : save.getDogs()) {
-            map.addEntity(dog);
-        }
-        for (Cat cat : save.getCats()) {
-            map.addEntity(cat);
-        }
-        for (Item item : save.getItems()) {
-            map.addEntity(item);
-        }
-        for (Plant plant : save.getPlants()) {
-            map.addEntity(plant);
-        }
+        for (FarmAnimal farmAnimal : save.getFarmAnimals()) map.addEntity(farmAnimal);
+        for (WildAnimal wildAnimal : save.getWildAnimals()) map.addEntity(wildAnimal);
+        for (Dog dog : save.getDogs()) map.addEntity(dog);
+        for (Cat cat : save.getCats()) map.addEntity(cat);
+        for (Item item : save.getItems()) map.addEntity(item);
+        for (Plant plant : save.getPlants()) map.addEntity(plant);
         vehicles = new ArrayList<>();
         upgradables = new ArrayList<>();
         vehicles.add(truck);
@@ -90,6 +78,59 @@ public class Game {
                 System.out.println("Level completed");//TODO clear ?
             }
         }
+    }
+
+    public static void runMap(Level level) {
+        game = new Game();
+        game.level = level;
+        Cell.setN(level.getN());
+        Cell.setM(level.getM());
+        game.money = level.getStartMoney();
+        for (Workshop workshop : workshopTemplates) {
+            game.workshops.add(new Workshop(workshop));
+        }
+        game.upgradables.addAll(game.workshops);
+    }
+
+    public static void loadCustom(String address) {
+        Gson gson = new Gson();
+        //TODO BUG.
+        if (workshopTemplates.isEmpty()) {
+            workshopTemplates.clear();
+            for (int i = 0; i < 6; i++) {
+                try {
+                    JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
+                    workshopTemplates.add(gson.fromJson(reader, Workshop.class));
+                    workshopTemplates.get(i).setName("workshop" + i);
+                } catch (Exception e) {
+                    workshopTemplates.clear();
+                    throw new RuntimeException("File not found");
+                }
+            }
+        }
+        levels.clear();
+        int i = 0;
+        while (true) {
+            try {
+                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
+                levels.put("level" + i, gson.fromJson(reader, Level.class));
+                i++;
+            } catch (Exception e) {
+                break;
+            }
+        }
+    }
+
+    public static Level getLevel(String name) {
+        return levels.get(name);
+    }
+
+    public static HashMap<String, Level> getLevels() {
+        return levels;
+    }
+
+    public static void setLevels(HashMap<String, Level> levels) {
+        Game.levels = levels;
     }
 
     public void run(String command) {
@@ -171,20 +212,7 @@ public class Game {
     }
 
     public void runMap(String mapName) {
-        level = levels.get(mapName);
-        Cell.setN(level.getN());
-        Cell.setM(level.getM());
-        this.money = level.getStartMoney();
-        upgradables.addAll(workshops);
-        //TODO initialize and clear
-    }
-
-    public void runMap(Level _level){
-        level = _level;
-        Cell.setN(level.getN());
-        Cell.setM(level.getM());
-        this.money = level.getStartMoney();
-        upgradables.addAll(workshops);
+        runMap(levels.get(mapName));
     }
 
     public void saveGame(String command) throws IOException {
@@ -201,35 +229,6 @@ public class Game {
         JsonReader reader = new JsonReader(new FileReader(address));
         Saver save = gson.fromJson(reader, Saver.class);
         game = new Game(save);
-    }
-
-    public void loadCustom(String address) {
-        Gson gson = new Gson();
-        //TODO BUG.
-        if (workshops.size() == 0) {
-            workshops.clear();
-            for (int i = 0; i < 6; i++) {
-                try {
-                    JsonReader reader = new JsonReader(new FileReader(address + "/workshop" + i + ".json"));
-                    workshops.add(gson.fromJson(reader, Workshop.class));
-                    workshops.get(i).setName("workshop" + i);
-                } catch (Exception e) {
-                    workshops.clear();
-                    throw new RuntimeException("File not found");
-                }
-            }
-        }
-        levels.clear();
-        int i = 0;
-        while (true) {
-            try {
-                JsonReader reader = new JsonReader(new FileReader(address + "/level" + i + ".json"));
-                levels.put("level" + i, gson.fromJson(reader, Level.class));
-                i++;
-            } catch (Exception e) {
-                break;
-            }
-        }
     }
 
     public void print(String name) {
@@ -338,7 +337,8 @@ public class Game {
 
     public void pickUp(int x, int y) {
         Item item = map.pickUp(new Cell(x, y));
-        if (item != null) {
+        if (item != null && warehouse.getCapacity() >= item.getSize()) {
+            item.destroy();
             warehouse.add(item);
         }
     }
@@ -502,9 +502,11 @@ public class Game {
         return currentTurn;
     }
 
+    public void setCurrentTurn(int currentTurn) {
+        this.currentTurn = currentTurn;
+    }
+
     public int getCatLevel() {
         return catLevel;
     }
-
-    public Level getLevel(String name){ return levels.get(name);}
 }

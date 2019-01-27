@@ -9,7 +9,68 @@ abstract public class Vehicle implements Upgradable {
     private int level = 0;
     private int maxLevel = 3;
     private int capacityIncrease;
-    private ArrayList<Entity> items = new ArrayList<>();
+    private int goTimeDecrease;
+    private ArrayList<String> items = new ArrayList<>();
+
+    public void add(String type, int count) {
+        if (remainingTime > 0) {
+            throw new RuntimeException("Vehicle in use");
+        }
+        Entity entity = Entity.getNewEntity(type);
+        if (currentCapacity >= entity.getSize() * count) {
+            currentCapacity -= entity.getSize() * count;
+            for (int i = 0; i < count; i++) {
+                items.add(type);
+            }
+        } else {
+            throw new RuntimeException("Not enough space");
+        }
+    }
+
+    public boolean turn() {
+        if (remainingTime > 0) {
+            remainingTime--;
+            return remainingTime == 0;
+        }
+        return false;
+    }
+
+    public void go() {
+        if (remainingTime > 0) {
+            throw new RuntimeException("Vehicle in use");
+        }
+        remainingTime = goTime;
+    }
+
+    public void upgrade() {
+        if (level < maxLevel) {
+            capacity += capacityIncrease;
+            currentCapacity += capacityIncrease;
+            goTime -= goTimeDecrease;
+            level++;
+        } else {
+            throw new RuntimeException("Already at max level");
+        }
+    }
+
+    public void clear() {
+        setCurrentCapacity(capacity);
+        items.clear();
+    }
+
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Item:\n");
+        for (String type : items) {
+            stringBuilder.append(type).append("\n");
+        }
+        if (remainingTime > 0) {
+            stringBuilder.append("Remaining time: ").append(remainingTime).append("\n");
+        } else if (items.size() > 0) {
+            stringBuilder.append("Ready to go!\n");
+        }
+        return stringBuilder.substring(0, stringBuilder.length() - 1);
+    }
 
     public int getCapacityIncrease() {
         return capacityIncrease;
@@ -60,7 +121,7 @@ abstract public class Vehicle implements Upgradable {
     }
 
     public int getUpgradeCost() {
-        return upgradeCost * level;
+        return upgradeCost * (level + 1);
     }
 
     public void setUpgradeCost(int upgradeCost) {
@@ -75,12 +136,16 @@ abstract public class Vehicle implements Upgradable {
         this.remainingTime = remainingTime;
     }
 
-    public ArrayList<Entity> getItems() {
-        return items;
+    public int getGoTimeDecrease() {
+        return goTimeDecrease;
     }
 
-    public void setItems(ArrayList<Entity> items) {
-        this.items = items;
+    public void setGoTimeDecrease(int goTimeDecrease) {
+        this.goTimeDecrease = goTimeDecrease;
+    }
+
+    public ArrayList<String> getItems() {
+        return items;
     }
 
     abstract public int getNeededMoney();
@@ -91,63 +156,8 @@ abstract public class Vehicle implements Upgradable {
 
     abstract public ArrayList<Entity> getResultItems();
 
-    public void add(String type, int count) {
-        if (remainingTime > 0) {
-            throw new RuntimeException("Vehicle in use");
-        }
-        Entity entity = Entity.getNewEntity(type);
-        if (currentCapacity >= entity.getSize() * count) {
-            currentCapacity -= entity.getSize() * count;
-            for (int i = 0; i < count; i++) {
-                items.add(Entity.getNewEntity(type));
-            }
-        } else {
-            throw new RuntimeException("Not enough space");
-        }
-    }
-
-    public boolean turn() {
-        if (remainingTime > 0) {
-            remainingTime--;
-            return remainingTime == 0;
-        }
-        return false;
-    }
-
-    public void go() {
-        if (remainingTime > 0) {
-            throw new RuntimeException("Vehicle in use");
-        }
-        remainingTime = goTime;
-    }
-
-    public void upgrade() {
-        if (level < maxLevel) {
-            capacity += capacityIncrease;
-            currentCapacity += capacityIncrease;
-            goTime--;
-            level++;
-        } else {
-            throw new RuntimeException("Already at max level");
-        }
-    }
-
-    public void clear() {
-        setCurrentCapacity(capacity);
-        items.clear();
-    }
-
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Item:\n");
-        for (Entity entity : items) {
-            stringBuilder.append(entity.getType()).append("\n");
-        }
-        if (remainingTime > 0) {
-            stringBuilder.append("Remaining time: ").append(remainingTime).append("\n");
-        } else if (items.size() > 0) {
-            stringBuilder.append("Ready to go!\n");
-        }
-        return stringBuilder.substring(0, stringBuilder.length() - 1);
+    @Override
+    public int hashCode() {
+        return 0;
     }
 }

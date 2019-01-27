@@ -1,18 +1,17 @@
-
-
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.scene.Group;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.File;
-
 public class View extends Application {
+    private static final boolean INTRO = true;
+    /// age ejra nashod true konid
+    private boolean mute = true;
     private Stage primaryStage;
     private Scene scene;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -23,21 +22,41 @@ public class View extends Application {
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
-        Menu menu = new Menu(this);
-        scene = new Scene(menu.getRoot(), 800, 600);
+        scene = new Scene(new Group(), 800, 600);
+        if (INTRO) {
+            setRoot(new Intro(this).getRoot());
+        } else {
+            setRoot(new Menu(this).getRoot());
+        }
+        scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
-
-        Media sound = new Media(new File("sounds/alt_main_theme.mp3").toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.setCycleCount(10000);
-
-        mediaPlayer.play();
-
+        Images.init();
+        if (!mute) Sounds.init();
+        Game.loadCustom("workshops");
+        GameView.getInstance().setView(this);
+        scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
         primaryStage.show();
 
-        /// TODO Fix this
+
+        if (!mute) {
+            Sounds.play("main_theme");
+        }
+
     }
+
+    boolean getMute() {
+        return mute;
+    }
+
+    void setMute(boolean mute) {
+        this.mute = mute;
+    }
+
+    public Image getSnap() {
+        return scene.snapshot(null);
+    }
+
     public void setRoot(Group root) {
         scene.setRoot(root);
     }

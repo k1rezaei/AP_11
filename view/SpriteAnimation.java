@@ -16,8 +16,7 @@ public class SpriteAnimation extends Transition {
     private final ArrayList<Integer> widths = new ArrayList<>();
     private final ArrayList<Integer> heights = new ArrayList<>();
     private ArrayList<ImageView> imageViews = new ArrayList<>();
-    private int state = 0;
-
+    private int state = 0, x, y;
     private int lastIndex;
 
     public SpriteAnimation(Duration duration,
@@ -25,8 +24,6 @@ public class SpriteAnimation extends Transition {
                            ArrayList<Integer> widths, ArrayList<Integer> heights) {
         this.counts = counts;
         this.columns = columns;
-
-
         for (int i = 0; i < widths.size(); i++) {
             this.widths.add(widths.get(i) / (columns.get(i)));
             this.heights.add(heights.get(i) / ((counts.get(i) + columns.get(i) - 1) / columns.get(i)));
@@ -35,6 +32,7 @@ public class SpriteAnimation extends Transition {
         setCycleDuration(duration);
         setCycleCount(Animation.INDEFINITE);
         setInterpolator(Interpolator.LINEAR);
+
     }
 
     public SpriteAnimation(LoadedImage loadedImage) {
@@ -47,8 +45,15 @@ public class SpriteAnimation extends Transition {
         }
     }
 
+    public int getLastIndex() {
+        return lastIndex;
+    }
+
     @Override
     protected void interpolate(double k) {
+        if (GameView.getInstance().getPaused()) {
+            return;
+        }
         final int index = Math.min((int) Math.floor(k * counts.get(state)), counts.get(state) - 1);
         if (index != lastIndex) {
             final int x = (index % columns.get(state)) * widths.get(state);
@@ -67,6 +72,14 @@ public class SpriteAnimation extends Transition {
         for (ImageView imageView : imageViews) imageView.setOnMouseClicked(eventHandler);
     }
 
+    public void setOnMouseEntered(EventHandler<MouseEvent> eventHandler) {
+        for (ImageView imageView : imageViews) imageView.setOnMouseEntered(eventHandler);
+    }
+
+    public void setOnMouseExited(EventHandler<MouseEvent> eventHandler) {
+        for (ImageView imageView : imageViews) imageView.setOnMouseExited(eventHandler);
+    }
+
     public ImageView getImageView() {
         return imageViews.get(state);
     }
@@ -81,5 +94,29 @@ public class SpriteAnimation extends Transition {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    public int getWidth() {
+        return widths.get(state);
+    }
+
+    public int getHeight() {
+        return heights.get(state);
     }
 }
