@@ -13,14 +13,18 @@ public class Scoreboard {
     }
 
     public void setContent(String input) {
+        System.err.println(input);
         String[] ranks = input.split("\n");
         for (int i = 0; i < ranks.length; i++)
             for (int j = 0; j < ranks.length - 1; j++) {
-                if (ranks[j].split(":")[1].compareTo(ranks[j].split(":")[1]) > 0) {
+                if (ranks[j].split(",")[1].compareTo(ranks[j].split(",")[1]) > 0) {
                     String temp = ranks[j];
                     ranks[j] = ranks[j + 1];
                     ranks[j + 1] = temp;
                 }
+            }
+            for(int i = 0; i < ranks.length; i++){
+                System.err.println(ranks[i]);
             }
         String content = "";
         for (int i = 0; i < ranks.length; i++) {

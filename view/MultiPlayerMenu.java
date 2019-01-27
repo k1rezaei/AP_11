@@ -40,7 +40,7 @@ public class MultiPlayerMenu {
         rank.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                //view.setRoot(Game.getInstance().getClient().getScoreboard());
+                view.setRoot(Game.getInstance().getClient().getScoreboard().getRoot());
             }
         });
     }
