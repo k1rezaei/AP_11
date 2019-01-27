@@ -13,7 +13,7 @@ public class Server {
 
     ArrayList<Profile> profiles = new ArrayList<>();
     Server me;
-    String text;
+    String text = "";
 
     String getText() {
         return text;

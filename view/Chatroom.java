@@ -4,12 +4,13 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
 
 public class Chatroom {
     private View view;
     private Group root = new Group();
-    private Label content = new Label();
+    private VBox content = new VBox();
     private Label send = new Label();
     private TextField textField = new TextField();
 
@@ -30,11 +31,20 @@ public class Chatroom {
         root.getChildren().addAll(content, send, textField);
     }
 
+    Label getLabel(String input){
+        return null;
+    }
+
     public void setContent(String input){
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                content.setText(input);
+                String[] inputs = input.split("\n");
+                content.getChildren().clear();
+                for(int i = 0; i < inputs.length; i++){
+
+                }
+                //content.setText(input);
             }
         });
     }
