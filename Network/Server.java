@@ -9,6 +9,20 @@ import java.util.Scanner;
 
 public class Server {
     ArrayList<Profile> profiles = new ArrayList<>();
+    Server me;
+    String text;
+
+    String getText() {
+        return text;
+    }
+
+    void setText(String text) {
+        this.text = text;
+    }
+
+    public Server() {
+        me = this;
+    }
 
     Task<Void> task = new Task<Void>() {
         @Override
@@ -55,6 +69,7 @@ public class Server {
                     Profile profile = new Profile(id, socket, new Formatter(socket.getOutputStream()),
                             new Scanner(socket.getInputStream()));
                     profiles.add(profile);
+                    profile.setServer(me);
                     new Thread(profile.getRead()).start();
                     System.err.println("User added");
 
@@ -72,6 +87,14 @@ public class Server {
 
     private boolean validId(String id) {
         return true;
+    }
+
+    synchronized public void appendText(String text) {
+        this.text += text;
+        for (Profile profile : profiles) {
+            String command = "set_text\n" + this.text + "#\n";
+            profile.command(command);
+        }
     }
 
 

@@ -5,11 +5,19 @@ import java.util.Formatter;
 import java.util.Scanner;
 
 public class Profile {
+
+    static String end = "#";
+
     String id;
     Socket socket;
     Formatter formatter;
     Scanner scanner;
+    Server server;
     int level = 1;
+
+    public void setServer(Server server) {
+        this.server = server;
+    }
 
     public String getId() {
         return id;
@@ -56,7 +64,16 @@ public class Profile {
         protected Void call() throws Exception {
             while(socket.isConnected()) {
                 String command = scanner.nextLine();
-                process(command);
+                StringBuilder s = new StringBuilder();
+                while(true) {
+                    String line = scanner.nextLine();
+                    if(line.equals(end)) {
+                        process(command, s.toString());
+                        break ;
+                    }
+                    s.append(line + "\n");
+                }
+                process(command, s.toString());
             }
             return null;
         }
@@ -67,7 +84,10 @@ public class Profile {
         formatter.flush();
     }
 
-    private void process(String command) {
+    private void process(String command, String data) {
+        if(command.equals("add_text")) {
+            server.appendText(data);
+        }
     }
 
     public void run() {
