@@ -1,10 +1,13 @@
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -91,7 +94,52 @@ public class Menu {
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.setId("label_button");
         vBox.getChildren().add(start);
-        start.setOnMouseClicked(event -> view.setRoot(new LevelSelect(view).getRoot()));
+        start.setOnMouseClicked(event -> {
+            Buttons buttons = new Buttons(view.getSnap(), 3);
+            Label[] labels = buttons.getLabels();
+            Label solo = labels[0];
+            solo.setText("solo");
+            Label join = labels[1];
+            join.setText("join");
+            Label host = labels[2];
+            host.setText("host");
+            menuGroup.getChildren().add(buttons.getStackPane());
+            solo.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    view.setRoot(new LevelSelect(view).getRoot());
+                }
+            });
+            join.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    TextField userName = new TextField();
+                    Button button = new Button();
+                    HBox hBox = new HBox();
+                    hBox.getChildren().addAll(userName, button);
+                    menuGroup.getChildren().addAll(hBox);
+                    button.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            Client client = new Client();
+                            client.initailize();
+                            if(client.checkId(userName.getText())){
+
+                            }else{
+                                userName.setText("");
+                            }
+                        }
+                    });
+                }
+            });
+            host.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+
+                }
+            });
+        });
+
     }
 
     private void setLoad() {
