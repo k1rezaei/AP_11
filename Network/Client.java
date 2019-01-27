@@ -42,15 +42,20 @@ public class Client {
     }
 
     boolean checkId(String id) throws IOException {
+        System.err.println("id is :" + id);
         formatter.format(id + "\n");
+        formatter.flush();
         String result = scanner.nextLine();
+        System.err.println("result is :" + result);
         if (result.equals("userName inValid")) {
             scanner.close();
             formatter.close();
             return false;
         } else {
             int port = scanner.nextInt();
+            System.err.println("port is " + port);
             formatter.format("Connected with port : " + port + '\n');
+            formatter.flush();
             formatter.close();
             scanner.close();
             while(true ){
