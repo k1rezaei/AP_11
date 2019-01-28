@@ -17,6 +17,7 @@ public class Profile {
     private static final String SELL_ITEM = "sell_item";
     private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
     private static final String ADD_FRIEND_REQUEST = "add_friend_request";
+    private static final String GET_PERSON = "get_person";
 
 
     Person person;
@@ -132,6 +133,10 @@ public class Profile {
             case ADD_FRIEND_REQUEST:
                 id = reader.nextLine();
                 server.addFriendRequest(person.getId(), id);
+            case GET_PERSON:
+                id = reader.nextLine();
+                command(server.getPersonCommand(id));
+
         }
     }
 
@@ -143,7 +148,5 @@ public class Profile {
     Task<Void> getRead() {
         return read;
     }
-
-    ;
 
 }

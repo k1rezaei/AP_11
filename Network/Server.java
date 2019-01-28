@@ -21,6 +21,7 @@ public class Server {
     private static final String SOLD_ITEM = "sold_item";
     private static final String DATA_INBOX = "data_inbox";
     private static final String DATA_FRIENDS = "data_friends";
+    private static final String DATA_PERSON = "data_person";
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -233,6 +234,12 @@ public class Server {
                 return;
             }
 
+    }
+
+    public String getPersonCommand(String id) {
+        Person person = getPerson(id);
+        String command = DATA_PERSON + "\n" + id + "\n" + new Gson().toJson(person) + "\n" + end + "\n";
+        return command;
     }
 
     //todo initialize item list.

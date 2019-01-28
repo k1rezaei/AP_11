@@ -26,6 +26,8 @@ public class Client {
     private static final String SOLD_ITEM = "sold_item";
     private static final String ADD_FRIEND_REQUEST = "add_friend_request";
     private static final String DATA_FRIENDS = "data_friends";
+    private static final String GET_PERSON = "get_person";
+    private static final String DATA_PERSON = "data_person";
 
 
     View view;
@@ -133,7 +135,7 @@ public class Client {
     //decoding what's server saying.
     private void process(String command, String text) {
         Scanner reader;
-        String item, price;
+        String item, price, id;
         switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
@@ -179,6 +181,11 @@ public class Client {
                 Person[] followers = new Gson().fromJson(reader.nextLine(), Person[].class);
                 Person[] friends = new Gson().fromJson(reader.nextLine(), Person[].class);
                 Person[] followings = new Gson().fromJson(reader.nextLine(), Person[].class);
+                //todo
+            case DATA_PERSON :
+                reader = new Scanner(text);
+                id = reader.nextLine();
+                Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                 //todo
             default:
                 System.err.println("FFFF");
@@ -230,6 +237,11 @@ public class Client {
         command(command);
     }
 
+    public void getPerson(String id) {
+        String command = GET_PERSON + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
     public Chatroom getChatroom() {
         return chatroom;
     }
@@ -245,6 +257,7 @@ public class Client {
     public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
         this.multiPlayerMenu = multiPlayerMenu;
     }
+
 
     public void closeSocket(){
         try {
