@@ -100,11 +100,11 @@ public class Menu {
     long lastTry = 0;
     final static public long GAP_TIME = 5 * 1000000000L;
     private void connect(String userName){
-      /*  if(lastTry + GAP_TIME > System.nanoTime()){
-            Pop pop = new Pop("You should wait " + (1+(GAP_TIME-System.nanoTime()+lastTry)/1000000000) + " second before trying again", view.getSnap(), menuGroup);
+        if(lastTry + GAP_TIME > System.nanoTime()){
+            new Pop("You should wait " + (1+(GAP_TIME-System.nanoTime()+lastTry)/1000000000) + " second before trying again", view.getSnap(), menuGroup);
             return;
         }
-        Platform.runLater(() -> lastTry = System.nanoTime());*/
+        Platform.runLater(() -> lastTry = System.nanoTime());
         Client client = new Client(view);
         client.initialize();
         try {

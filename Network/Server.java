@@ -109,10 +109,8 @@ public class Server {
                 } catch (Exception e) {
                     System.err.println("Server's problem");
                     e.printStackTrace();
-                    break;
                 }
             }
-            return null;
         }
     };
 
