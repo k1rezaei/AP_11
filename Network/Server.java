@@ -18,15 +18,11 @@ public class Server {
     private static final String DATA_SCOREBOARD = "data_scoreboard";
 
     ArrayList<Profile> profiles = new ArrayList<>();
-    Server me;
-    String text = "";
+    private Server me;
+    ArrayList<Talk> talks = new ArrayList<>();
 
-    String getText() {
-        return text;
-    }
-
-    void setText(String text) {
-        this.text = text;
+    public ArrayList<Talk> getTalks() {
+        return talks;
     }
 
     public Server() {
@@ -102,9 +98,9 @@ public class Server {
         return true;
     }
 
-    synchronized public void addMessageToChatRoom(String text) {
-        this.text += text;
-        String command = this.text;
+    synchronized public void addMessageToChatRoom(Talk talk) {
+        talks.add(talk);
+        String command = getChatRoom();
         for (Profile profile : profiles) {
             profile.command(command);
         }
@@ -127,6 +123,7 @@ public class Server {
     }
 
     public String getChatRoom() {
-        return DATA_CHAT_ROOM + '\n' + text + end + '\n';
+        Gson gson = new Gson();
+        return DATA_CHAT_ROOM + '\n' + gson.toJson(talks.toArray()) + '\n' + end + '\n';
     }
 }
