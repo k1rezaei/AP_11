@@ -31,9 +31,9 @@ public class MultiPlayerMenu {
             public void handle(MouseEvent event) {
                 System.err.println(view == null);
                 System.err.println(Game.getInstance().getClient() == null);
-                System.err.println(Game.getInstance().getClient().getChatroom() == null);
-                System.err.println(Game.getInstance().getClient().getChatroom().getRoot() == null);
-                view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
+                System.err.println(Game.getInstance().getClient().getChatRoom() == null);
+                System.err.println(Game.getInstance().getClient().getChatRoom().getRoot() == null);
+                view.setRoot(Game.getInstance().getClient().getChatRoom().getRoot());
             }
         });
 
