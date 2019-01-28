@@ -89,7 +89,6 @@ public class Chatroom {
         scrollPane.translateXProperty().bind(scrollPane.widthProperty().divide(2).negate());
         scrollPane.translateYProperty().bind(scrollPane.heightProperty().divide(2).negate());
         content.setSpacing(20);
-        content.setAlignment(Pos.TOP_LEFT);
         scrollPane.vvalueProperty().bind(content.heightProperty());
 
     }
