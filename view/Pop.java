@@ -38,7 +38,7 @@ public class Pop {
 
     Pop(Group root, Image bg) {
         root.setId("popVBox");
-        Node frost = Frost.freeze(bg);
+        frost = Frost.freeze(bg);
         stackPane.getChildren().addAll(frost, root);
     }
 
