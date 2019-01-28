@@ -31,6 +31,23 @@ public class Server {
 
     public Server() {
         me = this;
+        initialize();
+    }
+
+    private void initialize() {
+        String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
+                "Bear", "Cheese", "Horn", "SpruceBrownBear",
+                "BrightHorn", "ColoredPlume", "Intermediate", "SpruceGrizzly",
+                "CagedJaguar", "Curd", "MegaPie", "SpruceJaguar",
+                "CagedLion", "Egg", "Milk", "SpruceLion",
+                "CagedWhiteBear", "EggPowder", "Plume", "SpruceWhiteBear",
+                "Cake", "Fabric", "Sewing", "Varnish",
+                "CarnivalDress", "Flour", "SourCream", "Wool"};
+        for (String item : items) {
+            this.items.put(item, 10);
+            this.price.put(item, 200);
+            //todo cost.
+        }
     }
 
     Task<Void> task = new Task<Void>() {
