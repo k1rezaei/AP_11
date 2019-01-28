@@ -16,7 +16,7 @@ public class Profile {
     private static final String BUY_ITEM = "buy_item";
     private static final String SELL_ITEM = "sell_item";
     private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
-
+    private static final String ADD_FRIEND_REQUEST = "add_friend_request";
 
 
     Person person;
@@ -71,7 +71,6 @@ public class Profile {
             if(line.equals(end)) break;
             s.append(line + "\n");
         }
-        if(s.length() > 0) s.deleteCharAt(s.length() - 1);
         return s.toString();
     }
 
@@ -96,14 +95,17 @@ public class Profile {
 
     //decoding what's client saying;.
     private void process(String command, String data) {
-        String cmd;
+        String cmd, item, id;
+        Scanner reader = new Scanner(data);
+
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
                 Talk talk = new Talk(person, data);
                 server.addMessageToChatRoom(talk);
                 break;
             case UPDATE_SCOREBOARD:
-                person.setLevel(data);
+                String level = reader.nextLine();
+                person.setLevel(level);
                 server.updateScoreboard();
                 break;
             case INIT_SCOREBOARD:
@@ -113,20 +115,27 @@ public class Profile {
                 command(server.getChatRoom()) ;
                 break;
             case GET_ITEM_COST:
-                command(server.getItemCost(data));
+                item = reader.nextLine();
+                command(server.getItemCost(item));
             case BUY_ITEM:
-                cmd = server.buyItem(data);
+                item = reader.nextLine();
+                cmd = server.buyItem(item);
                 if(cmd.length() > 0) command(cmd);
             case SELL_ITEM:
-                cmd = server.sellItem(data);
+                item = reader.nextLine();
+                cmd = server.sellItem(item);
                 command(cmd);
             case SEND_PRIVATE_MESSAGE :
-                Scanner reader = new Scanner(data);
-                String id = reader.nextLine();
+                id = reader.nextLine();
                 data = data.substring(id.length() + 1);
                 server.sendPrivateMessage(person.getId(), id, data);
                 command(server.updateInbox(person.getId()));
                 command(server.updateInbox(id));
+            case ADD_FRIEND_REQUEST :
+                id = reader.nextLine();
+                server.addFriendRequest(person.getId(), id);
+                command(server.updateFriends(person.getId()));
+                command(server.updateFriends(id));
         }
     }
 

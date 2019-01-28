@@ -20,6 +20,7 @@ public class Server {
     private static final String BOUGHT_ITEM = "bought_item";
     private static final String SOLD_ITEM = "sold_item";
     private static final String DATA_INBOX = "data_inbox";
+    private static final String DATA_FRIENDS = "data_friends";
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -202,6 +203,23 @@ public class Server {
                 return profile.getPerson();
             }
         return null;
+    }
+
+    public void addFriendRequest(String id1, String id2) {
+        Person follower = getPerson(id1);
+        Person following = getPerson(id2);
+        follower.addFollowings(following);
+        following.addFollowers(follower);
+    }
+
+    public String updateFriends(String id) {
+        Person p = getPerson(id);
+        String command = DATA_FRIENDS + "\n" +
+                new Gson().toJson(p.getFollowers().toArray()) + "\n" +
+                new Gson().toJson(p.getFriends().toArray()) + "\n" +
+                new Gson().toJson(p.getFollowings().toArray()) + "\n" +
+                end + "\n";
+        return command;
     }
 
     //todo initialize item list.
