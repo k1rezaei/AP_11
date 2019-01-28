@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -94,6 +95,25 @@ public class Menu {
         menuGroup.getChildren().add(vBox);
     }
 
+    private void connect(String userName){
+        Client client = new Client(view);
+        client.initialize();
+        System.err.println(client.formatter == null);
+        try {
+            System.err.println(client.formatter == null);
+            if (client.checkId(userName)) {
+                view.setRoot(client.getMultiPlayerMenu().getRoot());
+                client.run();
+            } else {
+                new Pop("Invalid Usernam", view.getSnap(), menuGroup);
+            }
+        }catch (Exception e){
+            Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
+            System.err.println("something is wrong");
+            e.printStackTrace();
+        }
+    }
+
     private void setStart() {
         Label start = new Label();
         start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
@@ -161,26 +181,18 @@ public class Menu {
                     Platform.runLater( () -> menuGroup.requestFocus() );
 
                     menuGroup.getChildren().addAll(logIn.getStackPane());
+                    userName.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(KeyEvent event) {
+                            if(event.getCode() == KeyCode.ENTER) {
+                                connect(userName.getText());
+                            }
+                        }
+                    });
                     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            Client client = new Client(view);
-                            client.initialize();
-                            System.err.println(client.formatter == null);
-                            try {
-                                System.err.println(client.formatter == null);
-                                if (client.checkId(userName.getText())) {
-                                    view.setRoot(client.getMultiPlayerMenu().getRoot());
-                                    client.run();
-                                } else {
-                                    new Pop("Invalid Usernam", view.getSnap(), menuGroup);
-                                    userName.setText("");
-                                }
-                            }catch (Exception e){
-                                Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
-                                System.err.println("something is wrong");
-                                e.printStackTrace();
-                            }
+                            connect(userName.getText());
                         }
                     });
                 }
