@@ -4,6 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 
 public class ViewProfile {
     private View view;
@@ -29,20 +32,42 @@ public class ViewProfile {
         return labels[3];
     }
 
-    Label getBack(){
+    Label getBack() {
         return labels[4];
     }
 
     private void show(Group group) {
         Pop pop = new Pop(group, view.getSnap());
         root.getChildren().add(pop.getStackPane());
-        /*pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 root.getChildren().remove(pop.getStackPane());
             }
-        });*/
+        });
 
+
+    }
+
+    EventHandler<MouseEvent> getEvent(Set<Person> persons){
+        return  new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                VBox f = new VBox();
+                for(Person per : persons){
+                    Label label = new Label(per.getName());
+                    label.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            view.setRoot(new ViewProfile(view, client, per).getRoot());
+                        }
+                    });
+                    f.getChildren().add(label);
+                }
+                Pop pop = new Pop(f,view.getSnap(), root);
+
+            }
+        };
     }
 
     ViewProfile(View view, Client client, Person person) {
@@ -51,40 +76,31 @@ public class ViewProfile {
         this.person = person;
         for (int i = 0; i < CNT; i++) {
             labels[i] = new Label();
-            labels[i].setId("label_text");
+            labels[i].setId("label_button");
         }
         labels[0].setText("Following");
         labels[1].setText("Followers");
         labels[2].setText("Inbox");
         labels[3].setText("Friends");
         labels[4].setText("Back");
-        VBox vBox = new VBox(labels);
-        if(!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
+        Label name = new Label("Nickname : " + person.getName());
+        Label id = new Label("ID : " + person.getId());
+        Label level = new Label("Level : " + person.getLevel());
+        VBox vBox = new VBox();
+        vBox.getChildren().addAll(name, id, level);
+        vBox.getChildren().addAll(labels);
+        if (!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
         root.getChildren().add(vBox);
-        getFollowers().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
+        getFollowers().setOnMouseClicked(getEvent(person.getFollowers()));
 
-            }
-        });
+        getFollowing().setOnMouseClicked(getEvent(person.getFollowings()));
 
-        getFollowing().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-            }
-        });
-
-        getFriends().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-
-            }
-        });
+        getFriends().setOnMouseClicked(getEvent(person.getFriends()));
 
         getInbox().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+
                 show(new Inbox(client, view).getRoot());
             }
         });
