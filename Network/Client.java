@@ -21,6 +21,7 @@ public class Client {
     private static final String GET_ITEM_COST = "get_item_cost";
     private static final String BUY_ITEM = "buy_item";
     private static final String BOUGHT_ITEM = "bought_item";
+    private static final String SELL_ITEM = "sell_item";
     private static final String end = "#";
 
     View view;
@@ -157,6 +158,7 @@ public class Client {
             case BOUGHT_ITEM :
                 reader = new Scanner(text);
                 item = reader.nextLine();
+                price = reader.nextLine();
                 //todo
         }
     }
@@ -188,6 +190,11 @@ public class Client {
 
     public void buyItem(String item) {
         String command = BUY_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void sellItem(String item) {
+        String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
 

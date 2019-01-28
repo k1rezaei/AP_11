@@ -23,7 +23,7 @@ public class Server {
     private Server me;
     ArrayList<Talk> talks = new ArrayList<>();
 
-    Map<String, Integer> items = new HashMap<>(), price = new HashMap<>();
+    private Map<String, Integer> items, prices = new HashMap<>();
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -31,6 +31,24 @@ public class Server {
 
     public Server() {
         me = this;
+        initialize();
+        items = new HashMap<>();
+    }
+
+    private void initialize() {
+        String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
+                "Bear", "Cheese", "Horn", "SpruceBrownBear",
+                "BrightHorn", "ColoredPlume", "Intermediate", "SpruceGrizzly",
+                "CagedJaguar", "Curd", "MegaPie", "SpruceJaguar",
+                "CagedLion", "Egg", "Milk", "SpruceLion",
+                "CagedWhiteBear", "EggPowder", "Plume", "SpruceWhiteBear",
+                "Cake", "Fabric", "Sewing", "Varnish",
+                "CarnivalDress", "Flour", "SourCream", "Wool"};
+        for (String item : items) {
+            this.items.put(item, 10);
+            this.prices.put(item, 200);
+            //todo cost.
+        }
     }
 
     Task<Void> task = new Task<Void>() {
@@ -132,7 +150,7 @@ public class Server {
     }
 
     public String getItemCost(String item) {
-        return DATA_ITEM_COST + '\n' + item + '\n' + price.get(item) + '\n' + end + '\n';
+        return DATA_ITEM_COST + '\n' + item + '\n' + prices.get(item) + '\n' + end + '\n';
     }
 
     public synchronized String buyItem(String item) {
@@ -140,9 +158,26 @@ public class Server {
             int count = items.get(item);
             count --;
             items.put(item, count);
-            return BOUGHT_ITEM + "\n" + item + "\n" + end + "\n";
+            return BOUGHT_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
         }
         return "";
+    }
+
+    synchronized public void remove(Person person) {
+        for (Profile profile : profiles) {
+            if(profile.getPerson().equals(person)) {
+                profiles.remove(profile);
+                break;
+            }
+        }
+        updateScoreboard();
+    }
+
+    synchronized public void sellItem(String item) {
+        int count = 0;
+        if(items.get(item) != null) count = items.get(item);
+        count ++;
+        items.put(item, count);
     }
 
     //todo initialize item list.
