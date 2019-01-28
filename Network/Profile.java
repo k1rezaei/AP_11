@@ -18,6 +18,7 @@ public class Profile {
     private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
     private static final String ADD_FRIEND_REQUEST = "add_friend_request";
     private static final String GET_PERSON = "get_person";
+    private static final String ACCEPT_FRIEND_REQUEST = "accept_friend_request";
 
 
     Person person;
@@ -136,6 +137,9 @@ public class Profile {
             case GET_PERSON:
                 id = reader.nextLine();
                 command(server.getPersonCommand(id));
+            case ACCEPT_FRIEND_REQUEST :
+                id = reader.nextLine();
+                server.acceptFriendRequest(person.getId(), id);
 
         }
     }

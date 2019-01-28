@@ -34,6 +34,14 @@ public class Person {
         followers.add(person);
     }
 
+    synchronized public void removeFollowers(Person person) {
+        followers.remove(person);
+    }
+    
+    synchronized public void removeFollowing(Person person) {
+        followings.remove(person);
+    }
+
     synchronized public Set<Person> getFriends() {return friends;}
     synchronized public Set<Person> getFollowings() {return followings;}
     synchronized public Set<Person> getFollowers(){ return followers;}

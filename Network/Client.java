@@ -25,6 +25,7 @@ public class Client {
     private static final String DATA_INBOX = "data_inbox";
     private static final String SOLD_ITEM = "sold_item";
     private static final String ADD_FRIEND_REQUEST = "add_friend_request";
+    private static final String ACCEPT_FRIEND_REQUEST = "accept_friend_request";
     private static final String DATA_FRIENDS = "data_friends";
     private static final String GET_PERSON = "get_person";
     private static final String DATA_PERSON = "data_person";
@@ -241,6 +242,11 @@ public class Client {
 
     public void getPerson(String id) {
         String command = GET_PERSON + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void acceptFriendRequest(String id) {
+        String command = ACCEPT_FRIEND_REQUEST + "\n" + id + "\n" + end + "\n";
         command(command);
     }
 
