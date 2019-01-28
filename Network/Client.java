@@ -34,9 +34,9 @@ public class Client {
     Scanner scanner;
     Formatter formatter;
 
-    Chatroom chatroom ;
-    Scoreboard scoreboard ;
-    MultiPlayerMenu multiPlayerMenu ;
+    Chatroom chatroom;
+    Scoreboard scoreboard;
+    MultiPlayerMenu multiPlayerMenu;
     private String myId;
 
     public Scoreboard getScoreboard() {
@@ -51,7 +51,7 @@ public class Client {
         return chatroom;
     }
 
-    Client(View view){
+    Client(View view) {
         this.view = view;
         chatroom = new Chatroom(view, this);
         multiPlayerMenu = new MultiPlayerMenu(view, this);
@@ -60,9 +60,9 @@ public class Client {
 
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
-        while(true) {
+        while (true) {
             String line = scanner.nextLine();
-            if(line.equals(end)) break;
+            if (line.equals(end)) break;
             s.append(line + "\n");
         }
         return s.toString();
@@ -84,7 +84,7 @@ public class Client {
             socket = new Socket("localhost", 8050);
             scanner = new Scanner(socket.getInputStream());
             formatter = new Formatter(socket.getOutputStream());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -108,11 +108,12 @@ public class Client {
             formatter.flush();
             formatter.close();
             scanner.close();
-            while(true ){
+            while (true) {
                 try {
                     socket = new Socket("localhost", port);
-                    break ;
-                } catch(Exception e) {}
+                    break;
+                } catch (Exception e) {
+                }
             }
             scanner = new Scanner(socket.getInputStream());
             formatter = new Formatter(socket.getOutputStream());
@@ -156,10 +157,10 @@ public class Client {
                 item = reader.nextLine();
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
-                if(cost >= Game.getInstance().getMoney()) buyItem(item);
+                if (cost >= Game.getInstance().getMoney()) buyItem(item);
                 else System.err.println("not enough money");//TODO throw new Runtime exception
                 break;
-            case BOUGHT_ITEM :
+            case BOUGHT_ITEM:
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
@@ -167,27 +168,34 @@ public class Client {
                 Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
                 Game.getInstance().addEntity(Entity.getNewEntity(item));
                 //todo
-            case SOLD_ITEM :
+                break;
+            case SOLD_ITEM:
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
-                Game.getInstance().setMoney(Game.getInstance().getMoney()+ cost);
-             case DATA_INBOX :
+                Game.getInstance().setMoney(Game.getInstance().getMoney() + cost);
+                break;
+            case DATA_INBOX:
                 String json = text;
                 Talk[] inbox = new Gson().fromJson(text, Talk[].class);
                 //todo
-            case DATA_FRIENDS :
+                break;
+            case DATA_FRIENDS:
                 reader = new Scanner(text);
                 Person[] followers = new Gson().fromJson(reader.nextLine(), Person[].class);
                 Person[] friends = new Gson().fromJson(reader.nextLine(), Person[].class);
                 Person[] followings = new Gson().fromJson(reader.nextLine(), Person[].class);
                 //todo
-            case DATA_PERSON :
+                break;
+            case DATA_PERSON:
                 reader = new Scanner(text);
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
+                ViewProfile viewProfile = new ViewProfile(view, this, person);
+                view.setRoot(viewProfile.getRoot());
                 //todo
+                break;
             default:
                 System.err.println("FFFF");
         }
@@ -261,9 +269,14 @@ public class Client {
     }
 
 
-    public void closeSocket(){
+    public void closeSocket() {
         try {
             socket.close();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
+    }
+
+    public String getMyId() {
+        return myId;
     }
 }
