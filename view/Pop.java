@@ -10,73 +10,40 @@ import javafx.scene.layout.VBox;
 
 
 public class Pop {
-    private Label disabler;
+    private StackPane frost;
     private StackPane stackPane = new StackPane();
     private Label content;
+
+    {
+
+        stackPane.relocate(400, 300);
+        stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
+        stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
+        stackPane.setId("pop_stackPane");
+    }
 
     Pop(String text, Image bg) {
         content = new Label();
         content.setId("pop");
         content.setText(text);
-
-        stackPane.relocate(400, 300);
-        stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
-        stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
-        stackPane.setId("pop_stackPane");
-
-        if (bg != null) {
-            Node frost = Frost.freeze(bg);
-            stackPane.getChildren().addAll(frost, content);
-
-        } else {
-            disabler = new Label();
-            disabler.setMaxSize(800, 800);
-            disabler.setMinSize(800, 800);
-            stackPane.getChildren().addAll(disabler, content);
-        }
-
+        frost = Frost.freeze(bg);
+        stackPane.getChildren().addAll(frost, content);
     }
 
-    Pop(Node node, Image bg){
+    Pop(Node node, Image bg) {
         node.setId("popVBox");
-        stackPane.relocate(400, 300);
-        stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
-        stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
-        stackPane.setId("pop_stackPane");
-
-        if (bg != null) {
-            Node frost = Frost.freeze(bg);
-            stackPane.getChildren().addAll(frost, node);
-
-        } else {
-            disabler = new Label();
-            disabler.setMaxSize(800, 800);
-            disabler.setMinSize(800, 800);
-            stackPane.getChildren().addAll(disabler, node);
-        }
+        frost = Frost.freeze(bg);
+        stackPane.getChildren().addAll(frost, node);
     }
 
-    Pop(Group root, Image bg){
+    Pop(Group root, Image bg) {
         root.setId("popVBox");
-        stackPane.relocate(400, 300);
-        stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
-        stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
-        stackPane.setId("pop_stackPane");
-
-        if (bg != null) {
-            Node frost = Frost.freeze(bg);
-            stackPane.getChildren().addAll(frost, root);
-
-        } else {
-            disabler = new Label();
-            disabler.setMaxSize(800, 800);
-            disabler.setMinSize(800, 800);
-            stackPane.getChildren().addAll(disabler, root);
-        }
+        Node frost = Frost.freeze(bg);
+        stackPane.getChildren().addAll(frost, root);
     }
 
-    Pop(VBox vBox, Image bg, Group root){
-        this(vBox, bg);
+    Pop(Node node, Image bg, Group root) {
+        this(node, bg);
         root.getChildren().add(stackPane);
         stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -86,7 +53,7 @@ public class Pop {
         });
     }
 
-    Pop(String text, Image bg, Group root){
+    Pop(String text, Image bg, Group root) {
         this(text, bg);
         root.getChildren().add(stackPane);
         stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -101,5 +68,8 @@ public class Pop {
         return stackPane;
     }
 
-    public Label getDisabler(){ return disabler; }
+    public StackPane getDisabler() {
+        return frost;
+    }
+
 }
