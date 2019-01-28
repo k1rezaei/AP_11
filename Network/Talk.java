@@ -1,5 +1,5 @@
 public class Talk {
-    Person sender, reciever;
+    Person sender, recipient;
     String text;
 
     public Talk(Person sender, String text) {
@@ -10,10 +10,12 @@ public class Talk {
     public Talk(Person sender, String text, Person reciever) {
         this.sender = sender;
         this.text = text;
-        this.reciever = reciever;
+        this.recipient = reciever;
     }
 
     public String getText() {return text;}
     public Person getSender() {return sender;}
-
+    public Person getRecipient() {
+        return recipient;
+    }
 }

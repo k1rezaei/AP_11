@@ -29,7 +29,6 @@ public class Client {
     private static final String GET_PERSON = "get_person";
     private static final String DATA_PERSON = "data_person";
 
-
     View view;
     Socket socket;
     Scanner scanner;
@@ -38,6 +37,7 @@ public class Client {
     Chatroom chatroom ;
     Scoreboard scoreboard ;
     MultiPlayerMenu multiPlayerMenu ;
+    private String myId;
 
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -101,6 +101,7 @@ public class Client {
             formatter.close();
             return false;
         } else {
+            myId = id;
             int port = scanner.nextInt();
             System.err.println("port is " + port);
             formatter.format("Connected with port : " + port + '\n');
@@ -223,6 +224,7 @@ public class Client {
     }
 
     public void sellItem(String item) {
+        Game.getInstance().getWarehouse().remove(item);
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
