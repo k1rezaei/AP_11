@@ -20,6 +20,7 @@ public class Client {
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
     private static final String end = "#";
+    public static final String BUY_ITEM = "buy_item";
 
     View view;
     Socket socket;
@@ -38,7 +39,7 @@ public class Client {
         return multiPlayerMenu;
     }
 
-    public Chatroom getChatroom() {
+    public Chatroom getChatRoom() {
         return chatroom;
     }
 
@@ -173,9 +174,12 @@ public class Client {
     }
 
     public void getItemCost(String item) {
-        String command = GET_ITEM_COST + "\n" + end + "\n";
+        String command = GET_ITEM_COST + "\n" + item + "\n" + end + "\n";
         command(command);
     }
 
-
+    public void buyItem(String item) {
+        String command = BUY_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
 }

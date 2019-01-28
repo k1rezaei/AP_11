@@ -134,4 +134,6 @@ public class Server {
     public String getItemCost(String item) {
         return DATA_ITEM_COST + '\n' + item + '\n' + price.get(item) + '\n' + end + '\n';
     }
+
+    //todo initialize item list.
 }
