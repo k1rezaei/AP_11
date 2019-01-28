@@ -182,4 +182,28 @@ public class Client {
         String command = BUY_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
+
+    public Chatroom getChatroom() {
+        return chatroom;
+    }
+
+    public void setChatroom(Chatroom chatroom) {
+        this.chatroom = chatroom;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
+        this.multiPlayerMenu = multiPlayerMenu;
+    }
+
+    public void closeSocket(){
+        try {
+            socket.close();
+        }catch (Exception e){
+
+        }
+    }
 }
