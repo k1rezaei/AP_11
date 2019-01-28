@@ -169,7 +169,8 @@ public class Client {
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
-                //todo
+                cost = Integer.parseInt(price);
+                Game.getInstance().setMoney(Game.getInstance().getMoney()+ cost);
              case DATA_INBOX :
                 String json = text;
                 Talk[] inbox = new Gson().fromJson(text, Talk[].class);
@@ -230,4 +231,25 @@ public class Client {
         command(command);
     }
 
+    public Chatroom getChatroom() {
+        return chatroom;
+    }
+
+    public void setChatroom(Chatroom chatroom) {
+        this.chatroom = chatroom;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
+        this.multiPlayerMenu = multiPlayerMenu;
+    }
+
+    public void closeSocket(){
+        try {
+            socket.close();
+        }catch (Exception e){}
+    }
 }
