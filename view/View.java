@@ -66,7 +66,7 @@ public class View extends Application {
 
     public void goBack(){
         if(roots.size() > 1){
-            roots.remove(roots.get(roots.size() - 1));
+            roots.remove(roots.size() - 1);
             scene.setRoot(roots.get(roots.size() - 1));
         }
     }
