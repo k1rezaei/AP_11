@@ -30,13 +30,16 @@ public class MultiPlayerMenu {
         rank.setGraphic(new ImageView(new Image(BASE + "rank.png")));
         rank.setId("label_button");
 
+        Label profile = new Label("Profile");
+        profile.setId("label_button");
+
         Label logOut = new Label();
         ImageView temp = new ImageView(new Image(BASE + "logOut.png"));
         temp.setFitWidth(200);
         logOut.setGraphic(temp);
         logOut.setId("label_button");
 
-        VBox vBox = new VBox(rank, chat, logOut);
+        VBox vBox = new VBox(rank, chat, logOut, profile);
         vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
@@ -65,6 +68,12 @@ public class MultiPlayerMenu {
             public void handle(MouseEvent event) {
                 client.closeSocket();
                 view.setRoot(new Menu(view).getRoot());
+            }
+        });
+        profile.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                client.getPerson(client.getMyId());
             }
         });
     }
