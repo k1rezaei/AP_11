@@ -137,6 +137,7 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
+
         Scanner reader;
         String item, price, id;
         switch (command) {
@@ -192,8 +193,8 @@ public class Client {
             case DATA_PERSON:
                 reader = new Scanner(text);
                 id = reader.nextLine();
+                Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                 Platform.runLater(() -> {
-                    Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                     ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
                     view.setRoot(viewProfile.getRoot());
                 });
@@ -251,6 +252,7 @@ public class Client {
     }
 
     public void getPerson(String id) {
+        System.err.println("MFMF");
         String command = GET_PERSON + "\n" + id + "\n" + end + "\n";
         command(command);
     }

@@ -99,7 +99,6 @@ public class Profile {
     private void process(String command, String data) {
         String cmd, item, id;
         Scanner reader = new Scanner(data);
-
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
                 Talk talk = new Talk(person, data);
@@ -119,28 +118,34 @@ public class Profile {
             case GET_ITEM_COST:
                 item = reader.nextLine();
                 command(server.getItemCost(item));
+                break;
             case BUY_ITEM:
                 item = reader.nextLine();
                 cmd = server.buyItem(item);
                 if (cmd.length() > 0) command(cmd);
+                break;
             case SELL_ITEM:
                 item = reader.nextLine();
                 cmd = server.sellItem(item);
                 command(cmd);
+                break;
             case SEND_PRIVATE_MESSAGE:
                 id = reader.nextLine();
                 data = data.substring(id.length() + 1);
                 server.sendPrivateMessage(person.getId(), id, data);
+                break;
             case ADD_FRIEND_REQUEST:
                 id = reader.nextLine();
                 server.addFriendRequest(person.getId(), id);
+                break;
             case GET_PERSON:
                 id = reader.nextLine();
                 command(server.getPersonCommand(id));
+                break;
             case ACCEPT_FRIEND_REQUEST :
                 id = reader.nextLine();
                 server.acceptFriendRequest(person.getId(), id);
-
+                break;
         }
     }
 
