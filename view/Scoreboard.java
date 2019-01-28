@@ -60,6 +60,13 @@ public class Scoreboard {
             HBox hBox = new HBox();
             Label id = new Label(persons[i].getId());
             Label rank = new Label(persons[i].getLevel());
+            int finalI = i;
+            id.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    view.setRoot(new ViewProfile(view, client, persons[finalI]).getRoot());
+                }
+            });
             id.setId("sender");
             rank.setId("message");
             hBox.getChildren().addAll(id, rank);
