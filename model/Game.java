@@ -24,8 +24,6 @@ public class Game {
     private ArrayList<Upgradable> upgradables;
     private int currentTurn = 0;
     private int catLevel = 0;
-    private static Client client;
-
 
     private Game() {
         vehicles = new ArrayList<>();
@@ -512,11 +510,4 @@ public class Game {
         return catLevel;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
 }

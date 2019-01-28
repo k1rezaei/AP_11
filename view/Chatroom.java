@@ -9,13 +9,15 @@ import javafx.scene.layout.VBox;
 
 public class Chatroom {
     private View view;
+    private Client client;
     private Group root = new Group();
     private VBox content = new VBox();
     private Label send = new Label();
     private TextField textField = new TextField();
 
-    public Chatroom(View view) {
+    public Chatroom(View view,Client client) {
         this.view = view;
+        this.client = client;
         content.setId("chatBox");
         send.setId("label_button");
         send.setText("send");
@@ -24,7 +26,7 @@ public class Chatroom {
         send.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                Game.getInstance().getClient().addMessageToChatRoom(textField.getText());
+                client.addMessageToChatRoom(textField.getText());
                 textField.setText("");
             }
         });

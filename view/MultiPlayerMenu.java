@@ -11,10 +11,12 @@ import javafx.scene.layout.VBox;
 public class MultiPlayerMenu {
     private static String BASE = "file:textures/multiplayer";
     private Group root = new Group();
+    private Client client;
     private View view;
 
-    MultiPlayerMenu (View view){
+    MultiPlayerMenu (View view,Client client){
         this.view = view;
+        this.client = client;
         ImageView imageView = new ImageView(new Image(BASE + "back.jpg"));
 
         root.getChildren().add(imageView);
@@ -30,17 +32,17 @@ public class MultiPlayerMenu {
             @Override
             public void handle(MouseEvent event) {
                 System.err.println(view == null);
-                System.err.println(Game.getInstance().getClient() == null);
-                System.err.println(Game.getInstance().getClient().getChatroom() == null);
-                System.err.println(Game.getInstance().getClient().getChatroom().getRoot() == null);
-                view.setRoot(Game.getInstance().getClient().getChatroom().getRoot());
+                System.err.println(client == null);
+                System.err.println(client.getChatroom() == null);
+                System.err.println(client.getChatroom().getRoot() == null);
+                view.setRoot(client.getChatroom().getRoot());
             }
         });
 
         rank.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                view.setRoot(Game.getInstance().getClient().getScoreboard().getRoot());
+                view.setRoot(client.getScoreboard().getRoot());
             }
         });
     }

@@ -42,8 +42,8 @@ public class Client {
 
     Client(View view){
         this.view = view;
-        chatroom = new Chatroom(view);
-        multiPlayerMenu = new MultiPlayerMenu(view);
+        chatroom = new Chatroom(view,this);
+        multiPlayerMenu = new MultiPlayerMenu(view,this);
         scoreboard = new Scoreboard(view);
     }
 
