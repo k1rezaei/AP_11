@@ -139,7 +139,6 @@ public class Menu {
                             try {
                                 System.err.println(client.formatter == null);
                                 if (client.checkId(userName.getText())) {
-                                    Game.getInstance().setClient(client);
                                     view.setRoot(client.getMultiPlayerMenu().getRoot());
                                     client.run();
                                 } else {
