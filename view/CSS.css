@@ -294,7 +294,7 @@ HBox {
 #label_button {
     -fx-opacity: 1;
     -fx-text-fill: blue;
-    -fx-font-size: 70;
+    -fx-font-size: 30;
     -fx-font-family: "Showcard Gothic";
     -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
 }
