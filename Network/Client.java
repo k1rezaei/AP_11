@@ -130,10 +130,10 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-        switch (command) {
-            Scanner reader;
-            String item, price;
+        Scanner reader;
+        String item, price;
 
+        switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
