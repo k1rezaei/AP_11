@@ -53,7 +53,7 @@ public class Client {
         this.view = view;
         chatroom = new Chatroom(view, this);
         multiPlayerMenu = new MultiPlayerMenu(view, this);
-        scoreboard = new Scoreboard(view);
+        scoreboard = new Scoreboard(view, this);
     }
 
     private String getData(Scanner scanner) {
@@ -144,8 +144,8 @@ public class Client {
             case DATA_SCOREBOARD: {
                 Gson gson = new Gson();
                 Person[] people = gson.fromJson(text, Person[].class);
-                //scoreboard.setContent(people);
-                scoreboard.setContent(text);
+                Platform.runLater(() -> scoreboard.setContent(people));
+                //scoreboard.setContent(text);
                 break;
             }
             case DATA_ITEM_COST:
