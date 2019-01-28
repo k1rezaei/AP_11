@@ -45,13 +45,14 @@ public class ViewProfile {
         this.view = view;
         this.client = client;
         this.person = person;
+        for (int i = 0; i < CNT; i++) {
+            labels[i] = new Label();
+            labels[i].setId("label_text");
+        }
         labels[0].setText("Following");
         labels[1].setText("Followers");
         labels[2].setText("Inbox");
         labels[3].setText("Friends");
-        for (int i = 0; i < CNT; i++) {
-            labels[i].setId("label_text");
-        }
         VBox vBox = new VBox(labels);
         root.getChildren().add(vBox);
         getFollowers().setOnMouseClicked(new EventHandler<MouseEvent>() {

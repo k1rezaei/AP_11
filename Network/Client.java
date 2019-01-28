@@ -130,7 +130,7 @@ public class Client {
     }
 
     //talk to server.
-    synchronized void command(String command) {
+    synchronized void   command(String command) {
         formatter.format(command);
         formatter.flush();
     }
