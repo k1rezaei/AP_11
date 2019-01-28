@@ -12,6 +12,8 @@ public class Profile {
     private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
+    private static final String GET_ITEM_COST = "get_item_cost";
+
 
 
 
@@ -67,6 +69,7 @@ public class Profile {
             if(line.equals(end)) break;
             s.append(line + "\n");
         }
+        if(s.length() > 0) s.deleteCharAt(s.length() - 1);
         return s.toString();
     }
 
@@ -92,7 +95,8 @@ public class Profile {
     private void process(String command, String data) {
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
-                server.addMessageToChatRoom(person.getId() + " : " + data);
+                Talk talk = new Talk(person, data);
+                server.addMessageToChatRoom(talk);
                 break;
             case UPDATE_SCOREBOARD:
                 person.setLevel(data);
@@ -102,8 +106,10 @@ public class Profile {
                 command(server.getScoreboard());
                 break;
             case INIT_CHAT_ROOM:
-                command(server.getChatRoom());
+                command(server.getChatRoom()) ;
                 break;
+            case GET_ITEM_COST:
+                command(server.getItemCost(data));
         }
     }
 

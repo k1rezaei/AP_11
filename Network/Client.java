@@ -13,11 +13,14 @@ public class Client {
 
     private static final String DATA_CHAT_ROOM = "data_chat_room";
     private static final String DATA_SCOREBOARD = "data_scoreboard";
+    private static final String DATA_ITEM_COST = "data_item_cost";
     private static final String UPDATE_SCOREBOARD = "update_scoreboard";
     private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
+    private static final String GET_ITEM_COST = "get_item_cost";
     private static final String end = "#";
+    public static final String BUY_ITEM = "buy_item";
 
     View view;
     Socket socket;
@@ -36,7 +39,7 @@ public class Client {
         return multiPlayerMenu;
     }
 
-    public Chatroom getChatroom() {
+    public Chatroom getChatRoom() {
         return chatroom;
     }
 
@@ -126,13 +129,27 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-        if(command.equals(DATA_CHAT_ROOM)) {
-            chatroom.setContent(text);
-        } else {
-            Gson gson = new Gson();
-            Person[] people = gson.fromJson(text, Person[].class);
-            //scoreboard.setContent(people);
-            scoreboard.setContent(text);
+        switch (command) {
+            case DATA_CHAT_ROOM: {
+                Gson gson = new Gson();
+                Talk[] talks = gson.fromJson(text, Talk[].class);
+                //chatroom.setContent(talks);
+                chatroom.setContent(text);
+                break;
+            }
+            case DATA_SCOREBOARD: {
+                Gson gson = new Gson();
+                Person[] people = gson.fromJson(text, Person[].class);
+                //scoreboard.setContent(people);
+                scoreboard.setContent(text);
+                break;
+            }
+            case DATA_ITEM_COST:
+                Scanner scanner = new Scanner(text);
+                String item = scanner.nextLine();
+                String price = scanner.nextLine();
+                //todo.
+                break;
         }
     }
 
@@ -156,4 +173,13 @@ public class Client {
         command(command);
     }
 
+    public void getItemCost(String item) {
+        String command = GET_ITEM_COST + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void buyItem(String item) {
+        String command = BUY_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
 }
