@@ -10,6 +10,7 @@ import java.util.Scanner;
 
 public class Client {
 
+    private static final String end = "#";
     private static final String DATA_CHAT_ROOM = "data_chat_room";
     private static final String DATA_SCOREBOARD = "data_scoreboard";
     private static final String DATA_ITEM_COST = "data_item_cost";
@@ -21,7 +22,9 @@ public class Client {
     private static final String BUY_ITEM = "buy_item";
     private static final String BOUGHT_ITEM = "bought_item";
     private static final String SELL_ITEM = "sell_item";
-    private static final String end = "#";
+    private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
+    private static final String DATA_INBOX = "data_inbox";
+
 
     View view;
     Socket socket;
@@ -46,8 +49,8 @@ public class Client {
 
     Client(View view){
         this.view = view;
-        chatroom = new Chatroom(view,this);
-        multiPlayerMenu = new MultiPlayerMenu(view,this);
+        chatroom = new Chatroom(view);
+        multiPlayerMenu = new MultiPlayerMenu(view);
         scoreboard = new Scoreboard(view);
     }
 
@@ -159,6 +162,10 @@ public class Client {
                 Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
                 Game.getInstance().addEntity(Entity.getNewEntity(item));
                 //todo
+             case DATA_INBOX :
+                String json = text;
+                Talk[] inbox = new Gson().fromJson(text, Talk[].class);
+                //todo
             default:
                 System.err.println("FFFF");
         }
@@ -199,27 +206,9 @@ public class Client {
         command(command);
     }
 
-    public Chatroom getChatroom() {
-        return chatroom;
+    public void sendPrivateMessage(String id, String text) {
+        String command = SEND_PRIVATE_MESSAGE + "\n" + id + "\n" + text + "\n" + end + "\n";
+        command(command);
     }
 
-    public void setChatroom(Chatroom chatroom) {
-        this.chatroom = chatroom;
-    }
-
-    public void setScoreboard(Scoreboard scoreboard) {
-        this.scoreboard = scoreboard;
-    }
-
-    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
-        this.multiPlayerMenu = multiPlayerMenu;
-    }
-
-    public void closeSocket(){
-        try {
-            socket.close();
-        }catch (Exception e){
-
-        }
-    }
 }

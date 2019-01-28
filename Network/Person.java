@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Person {
     String id, name, level = "1";
 
@@ -5,11 +7,19 @@ public class Person {
     //ArrayList<Person> Following;
     //ArrayList<Person> Follower;
 
+    ArrayList<Talk> inbox = new ArrayList<>();
+
 
     public Person(String id, String name) {
         this.id = id;
         this.name = name;
     }
+
+    synchronized public void addToInbox(Talk talk) {
+        inbox.add(talk);
+    }
+
+    public ArrayList<Talk> getInbox() { return inbox;}
 
     public String getId() { return  id; }
 
@@ -18,6 +28,7 @@ public class Person {
     public String getLevel() { return level; }
 
     public void setLevel(String level) {this.level = level;}
+
 
     @Override
     public boolean equals(Object obj) {
