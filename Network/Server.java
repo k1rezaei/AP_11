@@ -145,5 +145,15 @@ public class Server {
         return "";
     }
 
+    synchronized public void remove(Person person) {
+        for (Profile profile : profiles) {
+            if(profile.getPerson().equals(person)) {
+                profiles.remove(profile);
+                break;
+            }
+        }
+        updateScoreboard();
+    }
+
     //todo initialize item list.
 }

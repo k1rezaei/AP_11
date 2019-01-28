@@ -79,6 +79,7 @@ public class Profile {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
             }
+            server.remove(person);
             return null;
         }
     };
