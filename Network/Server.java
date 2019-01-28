@@ -32,8 +32,8 @@ public class Server {
 
     public Server() {
         me = this;
-        initialize();
         items = new HashMap<>();
+        initialize();
     }
 
     private void initialize() {
@@ -137,7 +137,7 @@ public class Server {
     }
 
 
-        public String getScoreboard() {
+    public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());

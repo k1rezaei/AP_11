@@ -12,10 +12,11 @@ public class Buttons {
     private Node frost;
     private VBox vBox = new VBox();
     private StackPane stackPane = new StackPane();
-    private Label[] labels = new Label[3];
+    private Label[] labels;
 
     Buttons( Image bg, int cnt) {
         ImageView[] imageViews = new ImageView[cnt];
+        labels = new Label[cnt];
         vBox.setId("vBox_menu");
 
         for (int i = 0; i < cnt; i++) {
