@@ -15,7 +15,10 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Menu {
     private static final int NUM_SLIDES = 3;
@@ -94,13 +97,17 @@ public class Menu {
         menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
     }
-
+    long lastTry = 0;
+    final static public long GAP_TIME = 5 * 1000000000L;
     private void connect(String userName){
+      /*  if(lastTry + GAP_TIME > System.nanoTime()){
+            Pop pop = new Pop("You should wait " + (1+(GAP_TIME-System.nanoTime()+lastTry)/1000000000) + " second before trying again", view.getSnap(), menuGroup);
+            return;
+        }
+        Platform.runLater(() -> lastTry = System.nanoTime());*/
         Client client = new Client(view);
         client.initialize();
-        System.err.println(client.formatter == null);
         try {
-            System.err.println(client.formatter == null);
             if (client.checkId(userName)) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
                 client.run();
@@ -161,11 +168,15 @@ public class Menu {
                     userName.setMaxWidth(200);
                     userName.setPromptText("UserName");
                     userName.setId("inputBox");
-                    Button button = new Button("Join");
+                    Label button = new Label("Join");
+                    button.setId("label_button");
                     button.setMinWidth(200);
+                    Label cancel = new Label("Cancel");
+                    cancel.setId("label_button");
+                    cancel.setMinWidth(200);
 
                     Buttons logIn = new Buttons(view.getSnap(), 0);
-                    logIn.getVBox().getChildren().addAll(userName, button);
+                    logIn.getVBox().getChildren().addAll(userName, button, cancel);
 
 
                     logIn.getStackPane().relocate(400, 300);
@@ -195,17 +206,25 @@ public class Menu {
                             connect(userName.getText());
                         }
                     });
+                    cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            menuGroup.getChildren().remove(logIn.getStackPane());
+                        }
+                    });
                 }
             });
             host.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    new Pop("You are Host", view.getSnap(), menuGroup);
                     if(!isHost){
                         isHost = true;
                         Server server = new Server();
                         server.run();
                         System.err.println("U R HOST");
+                        new Pop("You are HOST now", view.getSnap(), menuGroup);
+                    }else{
+                        new Pop("You or someone else is host", view.getSnap(), menuGroup);
                     }
                 }
             });

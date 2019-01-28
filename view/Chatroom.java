@@ -2,6 +2,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -14,10 +15,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
+import java.awt.*;
 
 
 public class Chatroom {
@@ -99,11 +99,15 @@ public class Chatroom {
         for(int i = 0; i < talks.length; i++){
             HBox hBox = new HBox();
             Label sender = new Label(talks[i].getSender().getName());
+
             sender.setId("sender");
             Label text = new Label(talks[i].getText());
             text.setId("message");
-            hBox.getChildren().addAll(sender, text);
             hBox.setSpacing(25);
+            hBox.setMinWidth(WIDTH);
+            hBox.setMaxWidth(WIDTH);
+            hBox.getChildren().addAll(sender, text);
+
             content.getChildren().add(hBox);
         }
     }
