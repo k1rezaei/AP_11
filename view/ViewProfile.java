@@ -8,7 +8,7 @@ import javafx.scene.layout.VBox;
 public class ViewProfile {
     private View view;
     private Client client;
-    private Group root;
+    private Group root = new Group();
     final private static int CNT = 4;
     private Label[] labels = new Label[CNT];
     Person person;
@@ -32,12 +32,12 @@ public class ViewProfile {
     private void show(Group group) {
         Pop pop = new Pop(group, view.getSnap());
         root.getChildren().add(pop.getStackPane());
-        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        /*pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 root.getChildren().remove(pop.getStackPane());
             }
-        });
+        });*/
 
     }
 
