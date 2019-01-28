@@ -18,6 +18,7 @@ public class Server {
     private static final String DATA_SCOREBOARD = "data_scoreboard";
     private static final String DATA_ITEM_COST = "data_item_cost";
     private static final String BOUGHT_ITEM = "bought_item";
+    private static final String SOLD_ITEM = "sold_item";
     private static final String DATA_INBOX = "data_inbox";
 
     ArrayList<Profile> profiles = new ArrayList<>();
@@ -174,11 +175,12 @@ public class Server {
         updateScoreboard();
     }
 
-    synchronized public void sellItem(String item) {
+    synchronized public String sellItem(String item) {
         int count = 0;
         if(items.get(item) != null) count = items.get(item);
         count ++;
         items.put(item, count);
+        return SOLD_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
     }
 
     public void sendPrivateMessage(String senderId, String receiverId, String text) {

@@ -96,6 +96,7 @@ public class Profile {
 
     //decoding what's client saying;.
     private void process(String command, String data) {
+        String cmd;
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
                 Talk talk = new Talk(person, data);
@@ -114,10 +115,11 @@ public class Profile {
             case GET_ITEM_COST:
                 command(server.getItemCost(data));
             case BUY_ITEM:
-                String cmd = server.buyItem(data);
+                cmd = server.buyItem(data);
                 if(cmd.length() > 0) command(cmd);
             case SELL_ITEM:
-                server.sellItem(data);
+                cmd = server.sellItem(data);
+                command(cmd);
             case SEND_PRIVATE_MESSAGE :
                 Scanner reader = new Scanner(data);
                 String id = reader.nextLine();
