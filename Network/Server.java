@@ -136,7 +136,7 @@ public class Server {
     }
 
 
-        public String getScoreboard() {
+    public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());

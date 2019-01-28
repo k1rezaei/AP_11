@@ -1,11 +1,10 @@
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
+import com.sun.media.jfxmedia.events.PlayerEvent;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -65,7 +64,6 @@ public class Client {
     Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
-
             while (socket.isConnected()) {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
@@ -73,8 +71,6 @@ public class Client {
             return null;
         }
     };
-
-
 
     void initialize() {
         try {
@@ -133,12 +129,11 @@ public class Client {
     private void process(String command, String text) {
         Scanner reader;
         String item, price;
-
         switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
-                chatroom.setContent(talks);
+                Platform.runLater(() -> chatroom.setContent(talks));
                 break;
             }
             case DATA_SCOREBOARD: {
@@ -152,13 +147,20 @@ public class Client {
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
-                //todo.
+                int cost = Integer.parseInt(price);
+                if(cost >= Game.getInstance().getMoney()) buyItem(item);
+                else System.err.println("not enough money");//TODO throw new Runtime exception
                 break;
             case BOUGHT_ITEM :
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
+                cost = Integer.parseInt(price);
+                Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
+                Game.getInstance().addEntity(Entity.getNewEntity(item));
                 //todo
+            default:
+                System.err.println("FFFF");
         }
     }
 
