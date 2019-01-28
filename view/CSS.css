@@ -1,7 +1,28 @@
-.inputBox{
+#sender {
+    -fx-text-fill: black;
+    -fx-background-color: rgba(0,0,0, 0.5);
+    -fx-background-insets: -10 -10 -10 -10;
+}
+#message {
+    -fx-text-fill: rgb(50, 50, 50);
+    -fx-background-color: rgba(0,0,0, 0.3);
+    -fx-background-insets: -10 -10 -10 -10;
+}
+#sender .text {
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+    -fx-stroke-width: 0;
+}
+
+#message .text {
+    -fx-font-family: "Comic Sans MS";
+    -fx-stroke-width: 0;
+}
+
+.inputBox {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 18;
-    -fx-padding: 1,1,1,1;
+    -fx-padding: 1, 1, 1, 1;
     -fx-border-color: grey;
     -fx-border-width: 2;
     -fx-border-radius: 1;
@@ -11,12 +32,13 @@
 }
 
 .inputBox:focused {
-    -fx-background-color: -fx-focus-color, -fx-background ;
+    -fx-background-color: -fx-focus-color, -fx-background;
 }
 
 #input {
 
 }
+
 #chatBox {
     -fx-background-color: gray;
 }
@@ -46,7 +68,6 @@
     -fx-border-radius: 30 30 30 30;
 }
 
-
 #pop .text {
     -fx-stroke: firebrick;
     -fx-stroke-width: 2px;
@@ -65,6 +86,7 @@
     -fx-border-width: 2px;
     -fx-border-radius: 30 30 30 30;
 }
+
 #popVBox .label {
     -fx-padding: 10;
     -fx-text-fill: white;
@@ -75,10 +97,9 @@
     -fx-stroke: firebrick;
     -fx-stroke-width: 2px;
 }
+
 #pop_stackPane {
 }
-
-
 
 #tutorial {
     -fx-text-fill: blue;
@@ -250,6 +271,7 @@ HBox {
     -fx-scale-y: 1.2;
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
+
 #bar {
     -fx-background-color: blue;
     -fx-background-radius: 50;
@@ -260,13 +282,15 @@ HBox {
 #baseBar {
     -fx-background-color: white;
     -fx-background-radius: 50;
+
     -fx-border-color: darkblue;
     -fx-border-radius: 50;
 }
 
-#glow:hover{
+#glow:hover {
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
+
 #label_button {
     -fx-opacity: 1;
     -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
