@@ -23,7 +23,7 @@ public class Server {
     private Server me;
     ArrayList<Talk> talks = new ArrayList<>();
 
-    Map<String, Integer> items = new HashMap<>(), price = new HashMap<>();
+    private Map<String, Integer> items, prices = new HashMap<>();
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -32,6 +32,7 @@ public class Server {
     public Server() {
         me = this;
         initialize();
+        items = new HashMap<>();
     }
 
     private void initialize() {
@@ -45,7 +46,7 @@ public class Server {
                 "CarnivalDress", "Flour", "SourCream", "Wool"};
         for (String item : items) {
             this.items.put(item, 10);
-            this.price.put(item, 200);
+            this.prices.put(item, 200);
             //todo cost.
         }
     }
@@ -149,7 +150,7 @@ public class Server {
     }
 
     public String getItemCost(String item) {
-        return DATA_ITEM_COST + '\n' + item + '\n' + price.get(item) + '\n' + end + '\n';
+        return DATA_ITEM_COST + '\n' + item + '\n' + prices.get(item) + '\n' + end + '\n';
     }
 
     public synchronized String buyItem(String item) {
@@ -157,7 +158,7 @@ public class Server {
             int count = items.get(item);
             count --;
             items.put(item, count);
-            return BOUGHT_ITEM + "\n" + item + "\n" + end + "\n";
+            return BOUGHT_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
         }
         return "";
     }
@@ -170,6 +171,13 @@ public class Server {
             }
         }
         updateScoreboard();
+    }
+
+    synchronized public void sellItem(String item) {
+        int count = 0;
+        if(items.get(item) != null) count = items.get(item);
+        count ++;
+        items.put(item, count);
     }
 
     //todo initialize item list.
