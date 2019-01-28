@@ -138,8 +138,7 @@ public class Client {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
-                //chatroom.setContent(talks);
-                chatroom.setContent(text);
+                chatroom.setContent(talks);
                 break;
             }
             case DATA_SCOREBOARD: {

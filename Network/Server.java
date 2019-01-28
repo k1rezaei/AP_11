@@ -31,8 +31,8 @@ public class Server {
 
     public Server() {
         me = this;
-        initialize();
         items = new HashMap<>();
+        initialize();
     }
 
     private void initialize() {
