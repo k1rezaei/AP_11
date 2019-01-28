@@ -1,7 +1,10 @@
+import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -51,6 +54,28 @@ public class Pop {
             disabler.setMinSize(800, 800);
             stackPane.getChildren().addAll(disabler, vBox);
         }
+    }
+
+    Pop(VBox vBox, Image bg, Group root){
+        this(vBox, bg);
+        root.getChildren().add(stackPane);
+        stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(stackPane);
+            }
+        });
+    }
+
+    Pop(String text, Image bg, Group root){
+        this(text, bg);
+        root.getChildren().add(stackPane);
+        stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(stackPane);
+            }
+        });
     }
 
     public StackPane getStackPane() {
