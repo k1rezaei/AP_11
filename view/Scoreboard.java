@@ -28,7 +28,7 @@ public class Scoreboard {
         back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                view.setRoot(client.getMultiPlayerMenu().getRoot());
+                view.goBack();
             }
         });
         root.getChildren().add(back);
