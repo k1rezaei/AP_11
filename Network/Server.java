@@ -17,7 +17,7 @@ public class Server {
     private static final String DATA_CHAT_ROOM = "data_chat_room";
     private static final String DATA_SCOREBOARD = "data_scoreboard";
     private static final String DATA_ITEM_COST = "data_item_cost";
-
+    private static final String BOUGHT_ITEM = "bought_item";
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -118,7 +118,7 @@ public class Server {
     }
 
 
-    public String getScoreboard() {
+        public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());
@@ -133,6 +133,16 @@ public class Server {
 
     public String getItemCost(String item) {
         return DATA_ITEM_COST + '\n' + item + '\n' + price.get(item) + '\n' + end + '\n';
+    }
+
+    public synchronized String buyItem(String item) {
+        if(items.get(item) != null && items.get(item) > 0) {
+            int count = items.get(item);
+            count --;
+            items.put(item, count);
+            return BOUGHT_ITEM + "\n" + item + "\n" + end + "\n";
+        }
+        return "";
     }
 
     //todo initialize item list.
