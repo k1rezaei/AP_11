@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Alert;
@@ -22,6 +23,7 @@ public class Menu {
     private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
     private View view;
     private Group menuGroup = new Group();
+    private static boolean isHost = false;
 
 
     Menu(View view) {
@@ -98,8 +100,24 @@ public class Menu {
         start.setId("label_button");
         vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
-            Buttons buttons = new Buttons(view.getSnap(), 3);
+            Buttons buttons = new Buttons(view.getSnap(), 4);
+            buttons.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    menuGroup.getChildren().remove(buttons.getStackPane());
+                }
+            });
+            buttons.getLabels()[3].setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    menuGroup.getChildren().remove(buttons.getStackPane());
+                }
+            });
+
             Label[] labels = buttons.getLabels();
+            Label cancel = labels[3];
+            cancel.setGraphic(new ImageView(new Image("file:textures/cancel.png")));
+
             Label solo = labels[0];
             solo.setText("solo");
             solo.setGraphic(new ImageView(new Image("file:textures/solo.png")));
@@ -120,16 +138,29 @@ public class Menu {
                 @Override
                 public void handle(MouseEvent event) {
                     LimitedTextField userName = new LimitedTextField(16);
+                    userName.setMaxWidth(200);
+                    userName.setPromptText("UserName");
                     userName.setId("inputBox");
                     Button button = new Button("Join");
-                    HBox hBox = new HBox();
-                    hBox.getChildren().addAll(userName, button);
+                    button.setMinWidth(200);
 
-                    hBox.relocate(400, 300);
-                    hBox.translateXProperty().bind(hBox.widthProperty().divide(2).negate());
-                    hBox.translateYProperty().bind(hBox.heightProperty().divide(2).negate());
+                    Buttons logIn = new Buttons(view.getSnap(), 0);
+                    logIn.getVBox().getChildren().addAll(userName, button);
 
-                    menuGroup.getChildren().addAll(hBox);
+
+                    logIn.getStackPane().relocate(400, 300);
+                    logIn.getStackPane().translateXProperty().bind(logIn.getStackPane().widthProperty().divide(2).negate());
+                    logIn.getStackPane().translateYProperty().bind(logIn.getStackPane().heightProperty().divide(2).negate());
+                    logIn.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            menuGroup.getChildren().remove(logIn.getStackPane());
+                        }
+                    });
+
+                    Platform.runLater( () -> menuGroup.requestFocus() );
+
+                    menuGroup.getChildren().addAll(logIn.getStackPane());
                     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
@@ -142,17 +173,11 @@ public class Menu {
                                     view.setRoot(client.getMultiPlayerMenu().getRoot());
                                     client.run();
                                 } else {
+                                    new Pop("Invalid Usernam", view.getSnap(), menuGroup);
                                     userName.setText("");
                                 }
                             }catch (Exception e){
-                                Pop pop = new Pop("No one is Host", view.getSnap());
-                                menuGroup.getChildren().add(pop.getStackPane());
-                                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                    @Override
-                                    public void handle(MouseEvent event) {
-                                        menuGroup.getChildren().remove(pop.getStackPane());
-                                    }
-                                });
+                                Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
                                 System.err.println("something is wrong");
                                 e.printStackTrace();
                             }
@@ -163,9 +188,13 @@ public class Menu {
             host.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    Server server = new Server();
-                    server.run();
-                    System.err.println("Hey");
+                    new Pop("You are Host", view.getSnap(), menuGroup);
+                    if(!isHost){
+                        isHost = true;
+                        Server server = new Server();
+                        server.run();
+                        System.err.println("U R HOST");
+                    }
                 }
             });
         });

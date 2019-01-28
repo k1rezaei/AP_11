@@ -17,8 +17,8 @@ public class Client {
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
     private static final String BUY_ITEM = "buy_item";
-    private static final String SELL_ITEM = "sell_item";
     private static final String BOUGHT_ITEM = "bought_item";
+    private static final String SELL_ITEM = "sell_item";
     private static final String end = "#";
 
     View view;
@@ -134,8 +134,7 @@ public class Client {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
-                //chatroom.setContent(talks);
-                chatroom.setContent(text);
+                chatroom.setContent(talks);
                 break;
             }
             case DATA_SCOREBOARD: {
@@ -150,7 +149,7 @@ public class Client {
                 item = reader.nextLine();
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
-                if(cost >= Game.getInstance().getMoney()) buyItemCommand(item);
+                if(cost >= Game.getInstance().getMoney()) buyItem(item);
                 else System.err.println("not enough money");//TODO throw new Runtime exception
                 break;
             case BOUGHT_ITEM :
@@ -189,13 +188,14 @@ public class Client {
         command(command);
     }
 
-    public void buyItemCommand(String item) {
+    public void buyItem(String item) {
         String command = BUY_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
 
-    public void sellItem(String item){
+    public void sellItem(String item) {
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
     }
 
     public Chatroom getChatroom() {

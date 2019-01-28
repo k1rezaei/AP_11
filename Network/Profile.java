@@ -14,6 +14,8 @@ public class Profile {
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
     private static final String BUY_ITEM = "buy_item";
+    private static final String SELL_ITEM = "sell_item";
+
 
 
     Person person;
@@ -79,6 +81,7 @@ public class Profile {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
             }
+            server.remove(person);
             return null;
         }
     };
@@ -112,6 +115,8 @@ public class Profile {
             case BUY_ITEM:
                 String cmd = server.buyItem(data);
                 if(cmd.length() > 0) command(cmd);
+            case SELL_ITEM:
+                server.sellItem(data);
 
         }
     }
