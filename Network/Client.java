@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public class Client {
 
+    private static final String end = "#";
     private static final String DATA_CHAT_ROOM = "data_chat_room";
     private static final String DATA_SCOREBOARD = "data_scoreboard";
     private static final String DATA_ITEM_COST = "data_item_cost";
@@ -22,7 +23,9 @@ public class Client {
     private static final String BUY_ITEM = "buy_item";
     private static final String BOUGHT_ITEM = "bought_item";
     private static final String SELL_ITEM = "sell_item";
-    private static final String end = "#";
+    private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
+    private static final String DATA_INBOX = "data_inbox";
+
 
     View view;
     Socket socket;
@@ -160,6 +163,10 @@ public class Client {
                 item = reader.nextLine();
                 price = reader.nextLine();
                 //todo
+            case DATA_INBOX :
+                String json = text;
+                Talk[] inbox = new Gson().fromJson(text, Talk[].class);
+                //todo
         }
     }
 
@@ -195,6 +202,11 @@ public class Client {
 
     public void sellItem(String item) {
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void sendPrivateMessage(String id, String text) {
+        String command = SEND_PRIVATE_MESSAGE + "\n" + id + "\n" + text + "\n" + end + "\n";
         command(command);
     }
 

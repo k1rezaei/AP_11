@@ -15,6 +15,7 @@ public class Profile {
     private static final String GET_ITEM_COST = "get_item_cost";
     private static final String BUY_ITEM = "buy_item";
     private static final String SELL_ITEM = "sell_item";
+    private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
 
 
 
@@ -117,7 +118,13 @@ public class Profile {
                 if(cmd.length() > 0) command(cmd);
             case SELL_ITEM:
                 server.sellItem(data);
-
+            case SEND_PRIVATE_MESSAGE :
+                Scanner reader = new Scanner(data);
+                String id = reader.nextLine();
+                data = data.substring(id.length() + 1);
+                server.sendPrivateMessage(person.getId(), id, data);
+                command(server.updateInbox(person.getId()));
+                command(server.updateInbox(id));
         }
     }
 

@@ -18,6 +18,7 @@ public class Server {
     private static final String DATA_SCOREBOARD = "data_scoreboard";
     private static final String DATA_ITEM_COST = "data_item_cost";
     private static final String BOUGHT_ITEM = "bought_item";
+    private static final String DATA_INBOX = "data_inbox";
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -178,6 +179,27 @@ public class Server {
         if(items.get(item) != null) count = items.get(item);
         count ++;
         items.put(item, count);
+    }
+
+    public void sendPrivateMessage(String senderId, String receiverId, String text) {
+        Person sender = getPerson(senderId);
+        Person receiver = getPerson(receiverId);
+        Talk talk = new Talk(sender, text, receiver);
+        sender.addToInbox(talk);
+        receiver.addToInbox(talk);
+    }
+
+    public String updateInbox(String id) {
+        Person p = getPerson(id);
+        return DATA_INBOX + "\n" + new Gson().toJson(p.getInbox().toArray()) + "\n" + end + "\n";
+    }
+
+    private Person getPerson(String id) {
+        for (Profile profile : profiles)
+            if(profile.getPerson().getId().equals(id)) {
+                return profile.getPerson();
+            }
+        return null;
     }
 
     //todo initialize item list.
