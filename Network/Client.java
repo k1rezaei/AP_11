@@ -24,6 +24,7 @@ public class Client {
     private static final String SELL_ITEM = "sell_item";
     private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
     private static final String DATA_INBOX = "data_inbox";
+    private static final String SOLD_ITEM = "sold_item";
 
 
     View view;
@@ -49,8 +50,8 @@ public class Client {
 
     Client(View view){
         this.view = view;
-        chatroom = new Chatroom(view);
-        multiPlayerMenu = new MultiPlayerMenu(view);
+        chatroom = new Chatroom(view, this);
+        multiPlayerMenu = new MultiPlayerMenu(view, this);
         scoreboard = new Scoreboard(view);
     }
 
@@ -161,6 +162,11 @@ public class Client {
                 cost = Integer.parseInt(price);
                 Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
                 Game.getInstance().addEntity(Entity.getNewEntity(item));
+                //todo
+            case SOLD_ITEM :
+                reader = new Scanner(text);
+                item = reader.nextLine();
+                price = reader.nextLine();
                 //todo
              case DATA_INBOX :
                 String json = text;
