@@ -146,6 +146,14 @@ public class Menu {
                                     userName.setText("");
                                 }
                             }catch (Exception e){
+                                Pop pop = new Pop("No one is Host", view.getSnap());
+                                menuGroup.getChildren().add(pop.getStackPane());
+                                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        menuGroup.getChildren().remove(pop.getStackPane());
+                                    }
+                                });
                                 System.err.println("something is wrong");
                                 e.printStackTrace();
                             }
