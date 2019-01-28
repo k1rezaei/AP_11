@@ -1,8 +1,11 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -45,6 +48,18 @@ public class View extends Application {
             Sounds.play("main_theme");
         }
 
+        cheat();
+    }
+
+    void cheat(){
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.F1){
+                    Game.getInstance().setMoney(10*1000*1000 - 1);
+                }
+            }
+        });
     }
 
     boolean getMute() {
