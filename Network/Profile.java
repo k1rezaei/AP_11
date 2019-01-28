@@ -13,8 +13,7 @@ public class Profile {
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
-
-
+    private static final String BUY_ITEM = "buy_item";
 
 
     Person person;
@@ -110,6 +109,10 @@ public class Profile {
                 break;
             case GET_ITEM_COST:
                 command(server.getItemCost(data));
+            case BUY_ITEM:
+                String cmd = server.buyItem(data);
+                if(cmd.length() > 0) command(cmd);
+
         }
     }
 
