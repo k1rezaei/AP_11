@@ -19,8 +19,9 @@ public class Client {
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
+    private static final String BUY_ITEM = "buy_item";
+    private static final String BOUGHT_ITEM = "bought_item";
     private static final String end = "#";
-    public static final String BUY_ITEM = "buy_item";
 
     View view;
     Socket socket;
@@ -129,6 +130,9 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
+        Scanner reader;
+        String item, price;
+
         switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
@@ -145,11 +149,15 @@ public class Client {
                 break;
             }
             case DATA_ITEM_COST:
-                Scanner scanner = new Scanner(text);
-                String item = scanner.nextLine();
-                String price = scanner.nextLine();
+                reader = new Scanner(text);
+                item = reader.nextLine();
+                price = reader.nextLine();
                 //todo.
                 break;
+            case BOUGHT_ITEM :
+                reader = new Scanner(text);
+                item = reader.nextLine();
+                //todo
         }
     }
 
