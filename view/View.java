@@ -64,4 +64,8 @@ public class View extends Application {
     public void close() {
         primaryStage.close();
     }
+
+    public Scene getScene(){
+        return scene;
+    }
 }

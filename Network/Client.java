@@ -47,8 +47,8 @@ public class Client {
 
     Client(View view){
         this.view = view;
-        chatroom = new Chatroom(view);
-        multiPlayerMenu = new MultiPlayerMenu(view);
+        chatroom = new Chatroom(view,this);
+        multiPlayerMenu = new MultiPlayerMenu(view,this);
         scoreboard = new Scoreboard(view);
     }
 
@@ -198,4 +198,27 @@ public class Client {
         command(command);
     }
 
+    public Chatroom getChatroom() {
+        return chatroom;
+    }
+
+    public void setChatroom(Chatroom chatroom) {
+        this.chatroom = chatroom;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
+        this.multiPlayerMenu = multiPlayerMenu;
+    }
+
+    public void closeSocket(){
+        try {
+            socket.close();
+        }catch (Exception e){
+
+        }
+    }
 }
