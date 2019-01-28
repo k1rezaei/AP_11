@@ -157,9 +157,9 @@ public class Server {
     }
 
     public synchronized String buyItem(String item) {
-        if(items.get(item) != null && items.get(item) > 0) {
+        if (items.get(item) != null && items.get(item) > 0) {
             int count = items.get(item);
-            count --;
+            count--;
             items.put(item, count);
             return BOUGHT_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
         }
@@ -168,7 +168,7 @@ public class Server {
 
     synchronized public void remove(Person person) {
         for (Profile profile : profiles) {
-            if(profile.getPerson().equals(person)) {
+            if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
                 break;
             }
@@ -178,8 +178,8 @@ public class Server {
 
     synchronized public String sellItem(String item) {
         int count = 0;
-        if(items.get(item) != null) count = items.get(item);
-        count ++;
+        if (items.get(item) != null) count = items.get(item);
+        count++;
         items.put(item, count);
         return SOLD_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
     }
@@ -190,6 +190,8 @@ public class Server {
         Talk talk = new Talk(sender, text, receiver);
         sender.addToInbox(talk);
         receiver.addToInbox(talk);
+        command(updateInbox(senderId), senderId);
+        command(updateInbox(receiverId), receiverId);
     }
 
     public String updateInbox(String id) {
@@ -199,7 +201,7 @@ public class Server {
 
     private Person getPerson(String id) {
         for (Profile profile : profiles)
-            if(profile.getPerson().getId().equals(id)) {
+            if (profile.getPerson().getId().equals(id)) {
                 return profile.getPerson();
             }
         return null;
@@ -210,6 +212,8 @@ public class Server {
         Person following = getPerson(id2);
         follower.addFollowings(following);
         following.addFollowers(follower);
+        command(updateFriends(id1), id1);
+        command(updateFriends(id2), id2);
     }
 
     public String updateFriends(String id) {
@@ -220,6 +224,15 @@ public class Server {
                 new Gson().toJson(p.getFollowings().toArray()) + "\n" +
                 end + "\n";
         return command;
+    }
+
+    public void command(String command, String id) {
+        for (Profile profile : profiles)
+            if (profile.getPerson().getId().equals(id)) {
+                profile.command(command);
+                return;
+            }
+
     }
 
     //todo initialize item list.

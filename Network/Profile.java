@@ -66,9 +66,9 @@ public class Profile {
 
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
-        while(true) {
+        while (true) {
             String line = scanner.nextLine();
-            if(line.equals(end)) break;
+            if (line.equals(end)) break;
             s.append(line + "\n");
         }
         return s.toString();
@@ -77,7 +77,7 @@ public class Profile {
     Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
-            while(socket.isConnected()) {
+            while (socket.isConnected()) {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
             }
@@ -112,7 +112,7 @@ public class Profile {
                 command(server.getScoreboard());
                 break;
             case INIT_CHAT_ROOM:
-                command(server.getChatRoom()) ;
+                command(server.getChatRoom());
                 break;
             case GET_ITEM_COST:
                 item = reader.nextLine();
@@ -120,22 +120,18 @@ public class Profile {
             case BUY_ITEM:
                 item = reader.nextLine();
                 cmd = server.buyItem(item);
-                if(cmd.length() > 0) command(cmd);
+                if (cmd.length() > 0) command(cmd);
             case SELL_ITEM:
                 item = reader.nextLine();
                 cmd = server.sellItem(item);
                 command(cmd);
-            case SEND_PRIVATE_MESSAGE :
+            case SEND_PRIVATE_MESSAGE:
                 id = reader.nextLine();
                 data = data.substring(id.length() + 1);
                 server.sendPrivateMessage(person.getId(), id, data);
-                command(server.updateInbox(person.getId()));
-                command(server.updateInbox(id));
-            case ADD_FRIEND_REQUEST :
+            case ADD_FRIEND_REQUEST:
                 id = reader.nextLine();
                 server.addFriendRequest(person.getId(), id);
-                command(server.updateFriends(person.getId()));
-                command(server.updateFriends(id));
         }
     }
 
@@ -144,6 +140,10 @@ public class Profile {
         new Thread(read).start();
     }
 
-    Task<Void> getRead() {return read;};
+    Task<Void> getRead() {
+        return read;
+    }
+
+    ;
 
 }
