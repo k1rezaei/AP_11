@@ -127,6 +127,9 @@ public class Client {
     //decoding what's server saying.
     private void process(String command, String text) {
         if(command.equals(DATA_CHAT_ROOM)) {
+            Gson gson = new Gson();
+            Talk[] talks = gson.fromJson(text, Talk[].class);
+            //chatroom.setContent(talks);
             chatroom.setContent(text);
         } else {
             Gson gson = new Gson();

@@ -92,7 +92,8 @@ public class Profile {
     private void process(String command, String data) {
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
-                server.addMessageToChatRoom(person.getId() + " : " + data);
+                Talk talk = new Talk(person, data);
+                server.addMessageToChatRoom(talk);
                 break;
             case UPDATE_SCOREBOARD:
                 person.setLevel(data);
@@ -102,7 +103,7 @@ public class Profile {
                 command(server.getScoreboard());
                 break;
             case INIT_CHAT_ROOM:
-                command(server.getChatRoom());
+                command(server.getChatRoom()) ;
                 break;
         }
     }
