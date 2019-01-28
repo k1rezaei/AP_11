@@ -5,13 +5,15 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class View extends Application {
     private static final boolean INTRO = true;
     /// age ejra nashod true konid
     private boolean mute = true;
     private Stage primaryStage;
     private Scene scene;
-
+    ArrayList<Group> roots = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -59,6 +61,14 @@ public class View extends Application {
 
     public void setRoot(Group root) {
         scene.setRoot(root);
+        roots.add(root);
+    }
+
+    public void goBack(){
+        if(roots.size() > 1){
+            roots.remove(roots.get(roots.size() - 1));
+            scene.setRoot(roots.get(roots.size() - 1));
+        }
     }
 
     public void close() {
