@@ -211,8 +211,25 @@ public class Server {
     public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
+        if(follower.getFollowings().contains(follower)) return ;
+
         follower.addFollowings(following);
         following.addFollowers(follower);
+        command(updateFriends(id1), id1);
+        command(updateFriends(id2), id2);
+    }
+
+    public void acceptFriendRequest(String id1, String id2) {
+        Person follower = getPerson(id2);
+        Person following = getPerson(id1);
+        if(!follower.getFollowings().contains(following)) return ;
+
+        follower.removeFollowing(following);
+        following.removeFollowers(follower);
+
+        follower.addFriend(following);
+        following.addFriend(follower);
+
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
     }
