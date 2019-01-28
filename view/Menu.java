@@ -6,8 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 
@@ -117,10 +119,16 @@ public class Menu {
             join.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    TextField userName = new TextField();
-                    Button button = new Button();
+                    LimitedTextField userName = new LimitedTextField(16);
+                    userName.setId("inputBox");
+                    Button button = new Button("Join");
                     HBox hBox = new HBox();
                     hBox.getChildren().addAll(userName, button);
+
+                    hBox.relocate(400, 300);
+                    hBox.translateXProperty().bind(hBox.widthProperty().divide(2).negate());
+                    hBox.translateYProperty().bind(hBox.heightProperty().divide(2).negate());
+
                     menuGroup.getChildren().addAll(hBox);
                     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
