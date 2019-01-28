@@ -13,7 +13,6 @@ public class MultiPlayerMenu {
     private Client client;
     private View view;
     private String id;
-    private Client client;
 
     MultiPlayerMenu(View view, Client client) {
         this.view = view;
