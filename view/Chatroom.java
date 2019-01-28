@@ -44,7 +44,6 @@ public class Chatroom {
 
 
     public void setContent(Talk[] talks) {
-        System.err.println(talks.length);
         for(int i = 0; i < talks.length; i++){
             HBox hBox = new HBox();
             Label sender = new Label(talks[i].getSender().getName());

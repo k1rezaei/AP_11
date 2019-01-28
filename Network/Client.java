@@ -1,4 +1,6 @@
 import com.google.gson.Gson;
+import com.sun.media.jfxmedia.events.PlayerEvent;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -70,8 +72,6 @@ public class Client {
         }
     };
 
-
-
     void initialize() {
         try {
             socket = new Socket("localhost", 8050);
@@ -129,12 +129,11 @@ public class Client {
     private void process(String command, String text) {
         Scanner reader;
         String item, price;
-
         switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
-                chatroom.setContent(talks);
+                Platform.runLater(() -> chatroom.setContent(talks));
                 break;
             }
             case DATA_SCOREBOARD: {
@@ -160,6 +159,8 @@ public class Client {
                 Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
                 Game.getInstance().addEntity(Entity.getNewEntity(item));
                 //todo
+            default:
+                System.err.println("FFFF");
         }
     }
 
