@@ -6,8 +6,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import java.io.FileNotFoundException;
 
@@ -117,10 +119,16 @@ public class Menu {
             join.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    TextField userName = new TextField();
-                    Button button = new Button();
+                    LimitedTextField userName = new LimitedTextField(16);
+                    userName.setId("inputBox");
+                    Button button = new Button("Join");
                     HBox hBox = new HBox();
                     hBox.getChildren().addAll(userName, button);
+
+                    hBox.relocate(400, 300);
+                    hBox.translateXProperty().bind(hBox.widthProperty().divide(2).negate());
+                    hBox.translateYProperty().bind(hBox.heightProperty().divide(2).negate());
+
                     menuGroup.getChildren().addAll(hBox);
                     button.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
@@ -138,6 +146,14 @@ public class Menu {
                                     userName.setText("");
                                 }
                             }catch (Exception e){
+                                Pop pop = new Pop("No one is Host", view.getSnap());
+                                menuGroup.getChildren().add(pop.getStackPane());
+                                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                    @Override
+                                    public void handle(MouseEvent event) {
+                                        menuGroup.getChildren().remove(pop.getStackPane());
+                                    }
+                                });
                                 System.err.println("something is wrong");
                                 e.printStackTrace();
                             }
