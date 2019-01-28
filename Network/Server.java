@@ -255,6 +255,7 @@ public class Server {
 
     public String getPersonCommand(String id) {
         Person person = getPerson(id);
+        System.err.println("FFFFF");
         String command = DATA_PERSON + "\n" + id + "\n" + new Gson().toJson(person) + "\n" + end + "\n";
         return command;
     }
