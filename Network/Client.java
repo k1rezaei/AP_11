@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.Socket;
 import java.util.Formatter;
 import java.util.Scanner;
@@ -26,6 +25,8 @@ public class Client {
     private static final String SEND_PRIVATE_MESSAGE = "send_private_message";
     private static final String DATA_INBOX = "data_inbox";
     private static final String SOLD_ITEM = "sold_item";
+    private static final String ADD_FRIEND_REQUEST = "add_friend_request";
+    private static final String DATA_FRIENDS = "data_friends";
 
 
     View view;
@@ -174,6 +175,12 @@ public class Client {
                 String json = text;
                 Talk[] inbox = new Gson().fromJson(text, Talk[].class);
                 //todo
+            case DATA_FRIENDS :
+                reader = new Scanner(text);
+                Person[] followers = new Gson().fromJson(reader.nextLine(), Person[].class);
+                Person[] friends = new Gson().fromJson(reader.nextLine(), Person[].class);
+                Person[] followings = new Gson().fromJson(reader.nextLine(), Person[].class);
+                //todo
             default:
                 System.err.println("FFFF");
         }
@@ -217,6 +224,11 @@ public class Client {
 
     public void sendPrivateMessage(String id, String text) {
         String command = SEND_PRIVATE_MESSAGE + "\n" + id + "\n" + text + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void addFriendRequest(String id) {
+        String command = ADD_FRIEND_REQUEST + "\n" + id + "\n" + end + "\n";
         command(command);
     }
 
