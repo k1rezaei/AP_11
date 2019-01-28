@@ -16,10 +16,14 @@ public class Server {
     private static final String end = "#";
     private static final String DATA_CHAT_ROOM = "data_chat_room";
     private static final String DATA_SCOREBOARD = "data_scoreboard";
+    private static final String DATA_ITEM_COST = "data_item_cost";
+
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
     ArrayList<Talk> talks = new ArrayList<>();
+
+    Map<String, Integer> items = new HashMap<>(), price = new HashMap<>();
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -125,5 +129,9 @@ public class Server {
     public String getChatRoom() {
         Gson gson = new Gson();
         return DATA_CHAT_ROOM + '\n' + gson.toJson(talks.toArray()) + '\n' + end + '\n';
+    }
+
+    public String getItemCost(String item) {
+        return DATA_ITEM_COST + '\n' + item + '\n' + price.get(item) + '\n' + end + '\n';
     }
 }
