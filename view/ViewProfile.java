@@ -9,7 +9,7 @@ public class ViewProfile {
     private View view;
     private Client client;
     private Group root = new Group();
-    final private static int CNT = 4;
+    final private static int CNT = 5;
     private Label[] labels = new Label[CNT];
     Person person;
 
@@ -27,6 +27,10 @@ public class ViewProfile {
 
     Label getFriends() {
         return labels[3];
+    }
+
+    Label getBack(){
+        return labels[4];
     }
 
     private void show(Group group) {
@@ -53,7 +57,9 @@ public class ViewProfile {
         labels[1].setText("Followers");
         labels[2].setText("Inbox");
         labels[3].setText("Friends");
+        labels[4].setText("Back");
         VBox vBox = new VBox(labels);
+        if(!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
         root.getChildren().add(vBox);
         getFollowers().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -82,6 +88,13 @@ public class ViewProfile {
                 show(new Inbox(client, view).getRoot());
             }
         });
+        getBack().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.goBack();
+            }
+        });
+
     }
 
     public Group getRoot() {
