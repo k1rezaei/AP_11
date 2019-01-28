@@ -192,9 +192,11 @@ public class Client {
             case DATA_PERSON:
                 reader = new Scanner(text);
                 id = reader.nextLine();
-                Person person = new Gson().fromJson(reader.nextLine(), Person.class);
-                ViewProfile viewProfile = new ViewProfile(view, this, person);
-                view.setRoot(viewProfile.getRoot());
+                Platform.runLater(() -> {
+                    Person person = new Gson().fromJson(reader.nextLine(), Person.class);
+                    ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
+                    view.setRoot(viewProfile.getRoot());
+                });
                 //todo
                 break;
             default:
