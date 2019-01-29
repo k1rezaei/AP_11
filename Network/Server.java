@@ -44,7 +44,7 @@ public class Server {
         String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
                 "Bear", "Cheese", "Horn",
                 "BrightHorn", "ColoredPlume", "Intermediate",
-                "Curd", "MegaPie",
+                "Curd", "lion",
                 "Egg", "Milk",
                 "EggPowder", "Plume",
                 "Cake", "Fabric", "Sewing", "Varnish",
