@@ -10,6 +10,7 @@ public class Profile {
     private static final String end = "#";
     private static final String UPDATE_SCOREBOARD = "update_scoreboard";
     private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
+    private static final String ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY = "add_message_to_chat_room_with_reply";
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
@@ -20,6 +21,7 @@ public class Profile {
     private static final String GET_PERSON = "get_person";
     private static final String ACCEPT_FRIEND_REQUEST = "accept_friend_request";
     private static final String GET_WAREHOUSE = "get_warehouse";
+    private static final String SPLIT = "$$";
 
 
     Person person;
@@ -106,6 +108,23 @@ public class Profile {
             case ADD_MESSAGE_TO_CHAT_ROOM:
                 Talk talk = new Talk(person.getId(), data);
                 server.addMessageToChatRoom(talk);
+                break;
+            case ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY:
+                StringBuilder txt = new StringBuilder();
+                while(true) {
+                    String line = reader.nextLine();
+                    if(line.equals(SPLIT)) break ;
+                    txt.append(line + "\n");
+                }
+                Talk talkWithReply = new Talk(person.getId(), txt.toString());
+                txt = new StringBuilder();
+                while(true) {
+                    String line = reader.nextLine();
+                    if(line.equals(end)) break;
+                    txt.append(line + "\n");
+                }
+                talkWithReply.setRepliedText(txt.toString());
+                server.addMessageToChatRoom(talkWithReply);
                 break;
             case UPDATE_SCOREBOARD:
                 String level = reader.nextLine();
