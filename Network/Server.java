@@ -29,6 +29,7 @@ public class Server {
     ArrayList<Talk> talks = new ArrayList<>();
 
     private HashMap<String, Integer> items, prices = new HashMap<>();
+    private Gson gson = new Gson();
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -145,12 +146,10 @@ public class Server {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());
-        Gson gson = new Gson();
         return DATA_SCOREBOARD + '\n' + gson.toJson(people.toArray()) + '\n' + end + '\n';
     }
 
     public String getChatRoom() {
-        Gson gson = new Gson();
         return DATA_CHAT_ROOM + '\n' + gson.toJson(talks.toArray()) + '\n' + end + '\n';
     }
 
@@ -192,16 +191,18 @@ public class Server {
     public void sendPrivateMessage(String senderId, String receiverId, String text) {
         Person sender = getPerson(senderId);
         Person receiver = getPerson(receiverId);
-        Talk talk = new Talk(sender, text, receiver);
+
+        Talk talk = new Talk(senderId, text, receiverId);
         sender.addToInbox(talk);
         receiver.addToInbox(talk);
+
         command(updateInbox(senderId), senderId);
         command(updateInbox(receiverId), receiverId);
     }
 
     public String updateInbox(String id) {
         Person p = getPerson(id);
-        return DATA_INBOX + "\n" + new Gson().toJson(p.getInbox().toArray()) + "\n" + end + "\n";
+        return DATA_INBOX + "\n" + gson.toJson(p.getInbox().toArray(new Talk[0])) + "\n" + end + "\n";
     }
 
     private Person getPerson(String id) {
@@ -215,7 +216,7 @@ public class Server {
     public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
-        if(follower.getFollowings().contains(follower)) return ;
+        if(follower.getFollowings().contains(id1)) return ;
 
         follower.addFollowings(following);
         following.addFollowers(follower);
@@ -226,7 +227,7 @@ public class Server {
     public void acceptFriendRequest(String id1, String id2) {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
-        if(!follower.getFollowings().contains(following)) return ;
+        if(!follower.getFollowings().contains(id1)) return ;
 
         follower.removeFollowing(following);
         following.removeFollowers(follower);
@@ -241,9 +242,9 @@ public class Server {
     public String updateFriends(String id) {
         Person p = getPerson(id);
         String command = DATA_FRIENDS + "\n" +
-                new Gson().toJson(p.getFollowers().toArray()) + "\n" +
-                new Gson().toJson(p.getFriends().toArray()) + "\n" +
-                new Gson().toJson(p.getFollowings().toArray()) + "\n" +
+                gson.toJson(p.getFollowers().toArray()) + "\n" +
+                gson.toJson(p.getFriends().toArray()) + "\n" +
+                gson.toJson(p.getFollowings().toArray()) + "\n" +
                 end + "\n";
         return command;
     }
@@ -251,6 +252,7 @@ public class Server {
     synchronized public void command(String command, String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
+                System.err.println(command + " sendted to " + id);
                 profile.command(command);
                 return;
             }
@@ -260,7 +262,7 @@ public class Server {
     public String getPersonCommand(String id) {
         Person person = getPerson(id);
         System.err.println("FFFFF");
-        String command = DATA_PERSON + "\n" + id + "\n" + new Gson().toJson(person) + "\n" + end + "\n";
+        String command = DATA_PERSON + "\n" + id + "\n" + gson.toJson(person) + "\n" + end + "\n";
         return command;
     }
 
@@ -268,8 +270,8 @@ public class Server {
 
         System.err.println("GET_WAREHOUSE1");
         String command = DATA_WAREHOUSE + "\n" +
-                new Gson().toJson(items) + "\n" +
-                new Gson().toJson(prices) + "\n" +
+                gson.toJson(items) + "\n" +
+                gson.toJson(prices) + "\n" +
                 end + "\n";
         return command;
     }
