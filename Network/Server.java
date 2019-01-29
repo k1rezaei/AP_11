@@ -169,7 +169,6 @@ public class Server {
     }
 
     synchronized public void remove(Person person) {
-        System.err.println("FFFF");
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
@@ -248,6 +247,7 @@ public class Server {
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
     }
+
 
     public String updateFriends(String id) {
         Person p = getPerson(id);

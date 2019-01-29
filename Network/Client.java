@@ -225,8 +225,9 @@ public class Client {
                 break;
             case CHECK_CONNECT :
                 iAmConnected();
+                break ;
             default:
-                System.err.println("FFFF");
+                System.err.println(command);
         }
     }
 
