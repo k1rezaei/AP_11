@@ -112,6 +112,7 @@ public class Menu {
             if (client.checkId(userName)) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
                 client.run();
+                GameView.getInstance().setClient(client);
             } else {
                 new Pop("Invalid Usernam", view.getSnap(), menuGroup);
             }
@@ -161,6 +162,7 @@ public class Menu {
             solo.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
+                    GameView.getInstance().setClient(null);
                     view.setRoot(new LevelSelect(view).getRoot());
                 }
             });

@@ -22,6 +22,10 @@ public class MultiPlayerMenu {
         imageView.setFitHeight(600);
 
         root.getChildren().add(imageView);
+        Label start = new Label("START");
+        start.setId("label_button");
+
+
         Label chat = new Label("CHAT");
         //chat.setGraphic(new ImageView(new Image(BASE + "chat.png")));
         chat.setId("label_button");
@@ -74,6 +78,13 @@ public class MultiPlayerMenu {
             @Override
             public void handle(MouseEvent event) {
                 client.getPerson(client.getMyId());
+            }
+        });
+
+        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                view.setRoot(new LevelSelect(view).getRoot());
             }
         });
     }
