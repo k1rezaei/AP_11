@@ -210,11 +210,13 @@ public class Client {
                 //todo
                 break;
             case DATA_WAREHOUSE:
+                System.err.println("DATA_WAREHOUSE");
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 shop.update(items, prices);
                 //todo
+                break;
             default:
                 System.err.println("FFFF");
         }

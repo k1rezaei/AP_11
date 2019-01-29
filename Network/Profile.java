@@ -99,6 +99,7 @@ public class Profile {
 
     //decoding what's client saying;.
     private void process(String command, String data) {
+        System.err.println(command);
         String cmd, item, id;
         Scanner reader = new Scanner(data);
         switch (command) {
@@ -150,6 +151,7 @@ public class Profile {
                 break;
             case GET_WAREHOUSE :
                 command(server.getWarehouse());
+                break;
         }
     }
 

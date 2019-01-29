@@ -600,7 +600,6 @@ public class GameView {
         exit.setId("label_button_small");
         exit.setOnMouseClicked(event -> {
             pause();
-
             YesNoCancel menu = new YesNoCancel("Do you want to save before exit?", view.getSnap());
             root.getChildren().add(menu.getStackPane());
             menu.getNo().setOnMouseClicked(event1 -> {
@@ -653,9 +652,7 @@ public class GameView {
 
     private void setUpMenuButton() {
 
-        /*ImageView mn = new ImageView(new Image("file:textures/menu.png"));
-        mn.setFitWidth(MENU_WIDTH);
-        mn.setFitHeight(MENU_HEIGHT);*/
+
         Label menuButton = new Label("MENU");
         menuButton.setId("label_button_small");
         //menuButton.setGraphic(mn);
@@ -669,7 +666,8 @@ public class GameView {
             menu.getNo().setOnMouseClicked(event1 -> {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                view.setRoot(backMenu.getRoot());
+                if(client == null) view.setRoot(backMenu.getRoot());
+                else view.setRoot(client.getMultiPlayerMenu().getRoot());
                 game.stop();
             });
 
@@ -681,7 +679,8 @@ public class GameView {
                 }
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                view.setRoot(backMenu.getRoot());
+                if(client == null) view.setRoot(backMenu.getRoot());
+                else view.setRoot(client.getMultiPlayerMenu().getRoot());
                 game.stop();
             });
 

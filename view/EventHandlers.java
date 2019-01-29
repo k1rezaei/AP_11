@@ -173,6 +173,7 @@ public class EventHandlers {
                 case PRIMARY:
                     if(GameView.getInstance().getClient() != null){
                         GameView.getInstance().pause();
+                        GameView.getInstance().getClient().getShop().update();
                         view.setRoot(GameView.getInstance().getClient().getShop().getRoot());
                     }else {
                         if (Game.getInstance().getTruck().getRemainingTime() == 0) {

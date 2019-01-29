@@ -265,6 +265,8 @@ public class Server {
     }
 
     synchronized public String getWarehouse() {
+
+        System.err.println("GET_WAREHOUSE1");
         String command = DATA_WAREHOUSE + "\n" +
                 new Gson().toJson(items) + "\n" +
                 new Gson().toJson(prices) + "\n" +
