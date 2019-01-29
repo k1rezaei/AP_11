@@ -27,6 +27,13 @@ public class Chatroom {
     private VBox content = new VBox();
     private Label send = new Label();
     private TextField textField = new TextField();
+    private ImageView bg = new ImageView(new Image("file:textures/multiplayer/chat.jpg"));
+
+    {
+        bg.setFitHeight(600);
+        bg.setFitWidth(800);
+        root.getChildren().add(bg);
+    }
 
     final private static int HEIGHT = 400;
     final private static int WIDTH = 600;
@@ -82,13 +89,15 @@ public class Chatroom {
         scrollPane.setMaxWidth(WIDTH);
         scrollPane.setMinHeight(HEIGHT);
         scrollPane.setMinWidth(WIDTH);
-        scrollPane.setId("chatBox");
 
         root.getChildren().addAll(scrollPane, send, textField, back);
 
         scrollPane.relocate(400, 300);
         scrollPane.translateXProperty().bind(scrollPane.widthProperty().divide(2).negate());
         scrollPane.translateYProperty().bind(scrollPane.heightProperty().divide(2).negate());
+
+        content.setId("chat");
+
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
 

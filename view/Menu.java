@@ -13,6 +13,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.MediaPlayer;
+
 import java.io.FileNotFoundException;
 
 import java.sql.Time;
@@ -63,7 +65,8 @@ public class Menu {
                     Sounds.mute();
                 } else {
                     Sounds.init();
-                    Sounds.play("main_theme");
+                    Sounds.get("main_theme").setCycleCount(MediaPlayer.INDEFINITE);
+                    Sounds.get("main_theme").play();
                 }
             }
         });
