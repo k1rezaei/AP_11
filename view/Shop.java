@@ -45,7 +45,7 @@ public class Shop {
 
     }
 
-    Shop(Client client, View view) {
+    Shop(View view, Client client) {
         this.client = client;
         this.view = view;
         ImageView bg = new ImageView(BG);
@@ -129,5 +129,9 @@ public class Shop {
             });
 
         }
+    }
+
+    public Group getRoot() {
+        return root;
     }
 }
