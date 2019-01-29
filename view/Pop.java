@@ -36,11 +36,11 @@ public class Pop {
         stackPane.getChildren().addAll(frost, node);
     }
 
-    Pop(Group root, Image bg) {
+    /*Pop(Group root, Image bg) {
         root.setId("popVBox");
         frost = Frost.freeze(bg);
         stackPane.getChildren().addAll(frost, root);
-    }
+    }*/
 
     Pop(Node node, Image bg, Group root) {
         this(node, bg);
