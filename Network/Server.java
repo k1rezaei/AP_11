@@ -42,7 +42,7 @@ public class Server {
 
     private void initialize() {
         String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
-                "Bear", "Cheese", "Horn",
+                "bear", "Cheese", "Horn",
                 "BrightHorn", "ColoredPlume", "Intermediate",
                 "Curd", "lion",
                 "Egg", "Milk",
