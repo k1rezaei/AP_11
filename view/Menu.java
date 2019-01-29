@@ -80,16 +80,16 @@ public class Menu {
         vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
-        VBox fake = new VBox();
+      /*  VBox fake = new VBox();
 
         fake.relocate(400, 300);
         fake.translateXProperty().bind(fake.widthProperty().divide(2).negate());
         fake.translateYProperty().bind(fake.heightProperty().divide(2).negate());
 
-        fake.setId("menuFake");
+        fake.setId("menuFake");*/
         vBox.setId("menu");
 
-        menuGroup.getChildren().add(fake);
+      //  menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
     }
 
@@ -232,30 +232,7 @@ public class Menu {
     }
 
     private void setLoad() {
-        Label load = new Label("LOAD");
-        //load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
-        load.setId("label_button");
-        vBox.getChildren().add(load);
-        load.setOnMouseClicked(event -> {
-            try {
-                Game.getInstance().loadGame("SaveGame");
-                GameView gameView = GameView.getInstance();
-                for (Workshop workshop : Game.getInstance().getWorkshops())
-                    System.out.println(workshop.getName() + "," + workshop.getLevel());
-                gameView.runGame();
-                view.setRoot(gameView.getRoot());
-            } catch (Exception e) {
-                e.printStackTrace();
-                Pop pop = new Pop("Can't Find SaveGame", view.getSnap());
-                menuGroup.getChildren().add(pop.getStackPane());
-                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        menuGroup.getChildren().remove(pop.getStackPane());
-                    }
-                });
-            }
-        });
+
     }
 
     private void setInfo() {

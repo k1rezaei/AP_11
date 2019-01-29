@@ -1,9 +1,11 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 
@@ -28,15 +30,15 @@ public class LevelSelect {
         }
     }
 
-    public String getLevel(String name){
-        int mx = 0;
+    public String getLevel(String name) {
+        int mx = -1;
         try {
             InputStream inputStream = new FileInputStream(name);
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNext()) {
                 int level = scanner.nextInt();
                 levels[level] = true;
-                if(level > mx) mx = level;
+                if (level > mx) mx = level;
             }
             scanner.close();
             inputStream.close();
@@ -53,10 +55,10 @@ public class LevelSelect {
 
             isLock.add(lock);
         }
-        return "" + (mx+1);
+        return "" + (mx + 2);
     }
 
-    public String getLevel(){
+    public String getLevel() {
         return getLevel("Levels");
         /*if(GameView.getInstance().getClient() == null){
             return getLevel("Level");
@@ -80,6 +82,32 @@ public class LevelSelect {
         bg.setFitWidth(800);
         bg.setFitHeight(600);
         root.getChildren().add(bg);
+
+        Label load = new Label("LOAD");
+        load.setId("label_button");
+        root.getChildren().add(load);
+        load.relocate(20, 200);
+        load.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().loadGame("SaveGame");
+                GameView gameView = GameView.getInstance();
+                for (Workshop workshop : Game.getInstance().getWorkshops())
+                    System.out.println(workshop.getName() + "," + workshop.getLevel());
+                gameView.runGame();
+                GameView.getInstance().setClient(GameView.getInstance().getClient());
+                view.setRoot(gameView.getRoot());
+            } catch (Exception e) {
+                e.printStackTrace();
+                Pop pop = new Pop("Can't Find SaveGame", view.getSnap());
+                root.getChildren().add(pop.getStackPane());
+                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        root.getChildren().remove(pop.getStackPane());
+                    }
+                });
+            }
+        });
 
         Label backLabel = new Label("BACK");
         backLabel.setId("label_button");
@@ -114,7 +142,7 @@ public class LevelSelect {
 
             imageView.setFitWidth(SIZE);
             imageView.setFitHeight(SIZE);
-            if(!isLock.get(i))label.setText(""+(i+1));
+            if (!isLock.get(i)) label.setText("" + (i + 1));
             else label.setGraphic(imageView);
             //label.setGraphic(imageView);
             label.setMaxSize(SIZE, SIZE);

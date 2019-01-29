@@ -203,8 +203,11 @@ public class GameView {
                     else finish.setId("finish");
                     if (cnt == 5) {
                         Menu menu = new Menu(view);
-                        view.setRoot(menu.getRoot());
                         //TODO fix Back to MENU.
+                        client.updateScoreboard(new LevelSelect(view).getLevel());
+                        System.err.println(new LevelSelect(view).getLevel());
+                        if(client == null) view.setRoot(menu.getRoot());
+                        else view.setRoot(client.getMultiPlayerMenu().getRoot());
                         game.stop();
                         this.stop();
                     }

@@ -1,4 +1,5 @@
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -44,6 +45,8 @@ public class MultiPlayerMenu {
         logOut.setId("label_button");
 
         VBox vBox = new VBox(start, rank, chat, logOut, profile);
+        vBox.setId("menu");
+        vBox.setAlignment(Pos.CENTER);
         vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
