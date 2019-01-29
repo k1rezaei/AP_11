@@ -1,6 +1,6 @@
 public class Talk {
     String sender, recipient;
-    String text;
+    String text, repliedText = null;
 
     public Talk(String sender, String text) {
         this.sender = sender;
@@ -11,6 +11,10 @@ public class Talk {
         this.sender = sender;
         this.text = text;
         this.recipient = reciever;
+    }
+
+    public void setRepliedText(String repliedText) {
+        this.repliedText = repliedText;
     }
 
     public String getText() {return text;}
