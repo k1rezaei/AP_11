@@ -45,6 +45,7 @@ public class View extends Application {
         scene.getStylesheets().add("CSS.css");
         primaryStage.setScene(scene);
         primaryStage.setTitle("Farm Friendzy");
+        primaryStage.getIcons().add(new Image("file:textures/icon.png"));
         Images.init();
         if (!mute) Sounds.init();
         Game.loadCustom("workshops");

@@ -86,7 +86,7 @@ public class LevelSelect {
         Label load = new Label("LOAD");
         load.setId("label_button");
         root.getChildren().add(load);
-        load.relocate(20, 200);
+        load.relocate(30, 100);
         load.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().loadGame("SaveGame");

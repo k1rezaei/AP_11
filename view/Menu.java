@@ -62,7 +62,7 @@ public class Menu {
     }
 
     private void initializeMenu() {
-        ImageView background = new ImageView(new Image("file:textures/menu/back.jpg"));
+        ImageView background = new ImageView(new Image("file:textures/menu/back4.jpg"));
         background.setFitHeight(600);
         background.setFitWidth(800);
         menuGroup.getChildren().add(background);
@@ -73,9 +73,9 @@ public class Menu {
         setGuide();
         setInfo();
         setExit();
-        vBox.relocate(400, 300);
-        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
-        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        vBox.relocate(320, 200);
+       /* vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
+        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());*/
       /*  VBox fake = new VBox();
 
         fake.relocate(400, 300);
