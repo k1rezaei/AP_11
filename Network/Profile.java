@@ -172,9 +172,9 @@ public class Profile {
                 }
                 Talk talkWithReply = new Talk(person.getId(), txt.toString());
                 txt = new StringBuilder();
-                while(reader.hasNext()) {
+
+                while(reader.hasNextLine()) {
                     String line = reader.nextLine();
-                    if(line.equals(end)) break;
                     txt.append(line + "\n");
                 }
                 talkWithReply.setRepliedText(txt.toString());
