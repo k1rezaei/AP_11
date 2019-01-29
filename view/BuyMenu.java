@@ -87,7 +87,7 @@ public class BuyMenu {
         ArrayList<String> items = Game.getInstance().getLevel().getItemList();
 
 
-        Label ok = new Label();
+        Label ok = new Label("OK");
         ok.relocate(BASE_X, 10);
         ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
         okImage.setFitHeight(60);
@@ -98,10 +98,10 @@ public class BuyMenu {
         cancelImage.setFitHeight(60);
         cancelImage.setFitWidth(100);
 
-        ok.setGraphic(okImage);
-        Label cancel = new Label();
+        //ok.setGraphic(okImage);
+        Label cancel = new Label("CANCEL");
         cancel.relocate(BASE_X + 110, 10);
-        cancel.setGraphic(cancelImage);
+        //cancel.setGraphic(cancelImage);
         cancel.setId("label_button");
 
       /*  Label clear = new Label();
@@ -162,7 +162,7 @@ public class BuyMenu {
             buyOneImage.setFitWidth(WIDTH);
             buyOneImage.setFitHeight(HEIGHT);
             Label buyOne = new Label();
-            buyOne.setId("label_button");
+            buyOne.setId("label_button_small");
             buyOne.relocate(baseX + 150, baseY);
             buyOne.setGraphic(buyOneImage);
 

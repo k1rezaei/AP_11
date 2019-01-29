@@ -46,6 +46,7 @@ public class Menu {
         mute.setId("label_button");
         mute.setGraphic(imageView);
 
+
         mute.relocate(20, 20);
         mute.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -122,8 +123,8 @@ public class Menu {
     }
 
     private void setStart() {
-        Label start = new Label();
-        start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
+        Label start = new Label("START");
+        //start.setGraphic(new ImageView(new Image("file:textures/menu/start.png")));
         start.setId("label_button");
         vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
@@ -143,17 +144,18 @@ public class Menu {
 
             Label[] labels = buttons.getLabels();
             Label cancel = labels[3];
-            cancel.setGraphic(new ImageView(new Image("file:textures/cancel.png")));
+            cancel.setText("CANCEl");
+            //cancel.setGraphic(new ImageView(new Image("file:textures/cancel.png")));
 
             Label solo = labels[0];
-            solo.setText("solo");
-            solo.setGraphic(new ImageView(new Image("file:textures/solo.png")));
+            solo.setText("SOLO");
+            //solo.setGraphic(new ImageView(new Image("file:textures/solo.png")));
             Label join = labels[1];
-            join.setText("join");
-            join.setGraphic(new ImageView(new Image("file:textures/join.png")));
+            join.setText("JOIN");
+            //join.setGraphic(new ImageView(new Image("file:textures/join.png")));
             Label host = labels[2];
-            host.setText("host");
-            host.setGraphic(new ImageView(new Image("file:textures/host.png")));
+            host.setText("HOST");
+            //host.setGraphic(new ImageView(new Image("file:textures/host.png")));
             menuGroup.getChildren().add(buttons.getStackPane());
             solo.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
@@ -233,8 +235,8 @@ public class Menu {
     }
 
     private void setLoad() {
-        Label load = new Label();
-        load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
+        Label load = new Label("LOAD");
+        //load.setGraphic(new ImageView(new Image("file:textures/menu/load.png")));
         load.setId("label_button");
         vBox.getChildren().add(load);
         load.setOnMouseClicked(event -> {
@@ -260,8 +262,8 @@ public class Menu {
     }
 
     private void setInfo() {
-        Label info = new Label();
-        info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
+        Label info = new Label("INFO");
+        //info.setGraphic(new ImageView(new Image("file:textures/menu/info.png")));
         info.setId("label_button");
         vBox.getChildren().add(info);
         info.setOnMouseClicked(event -> {
@@ -380,8 +382,8 @@ public class Menu {
         }
 
 
-        Label guide = new Label();
-        guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
+        Label guide = new Label("GUIDE");
+        //guide.setGraphic(new ImageView(new Image("file:textures/menu/guide.png")));
         guide.setId("label_button");
         vBox.getChildren().add(guide);
         guide.setOnMouseClicked(event -> {
@@ -391,8 +393,8 @@ public class Menu {
     }
 
     private void setExit() {
-        Label exit = new Label();
-        exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
+        Label exit = new Label("EXIT");
+        //exit.setGraphic(new ImageView(new Image("file:textures/menu/exit.png")));
         exit.setId("label_button");
         vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
