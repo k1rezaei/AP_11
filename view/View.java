@@ -6,9 +6,17 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class View extends Application {
     private static final boolean INTRO = true;
@@ -24,6 +32,7 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
@@ -42,10 +51,18 @@ public class View extends Application {
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
         primaryStage.show();
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                close();
+            }
+        });
 
 
         if (!mute) {
-            Sounds.play("main_theme");
+
+            Sounds.get("main_theme").setCycleCount(MediaPlayer.INDEFINITE);
+            Sounds.get("main_theme").play();
         }
 
         cheat();
@@ -88,6 +105,7 @@ public class View extends Application {
 
     public void close() {
         primaryStage.close();
+        System.exit(0);
     }
 
     public Scene getScene(){
