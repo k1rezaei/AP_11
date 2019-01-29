@@ -21,11 +21,11 @@ public class ViewProfile {
     Person person;
 
     Label getFollowers() {
-        return labels[0];
+        return labels[1];
     }
 
     Label getFollowing() {
-        return labels[1];
+        return labels[0];
     }
 
     Label getInbox() {
