@@ -108,7 +108,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id) throws IOException {
+    boolean checkId(String id, String ip) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -129,7 +129,7 @@ public class Client {
             scanner.close();
             while (true) {
                 try {
-                    socket = new Socket("localhost", port);
+                    socket = new Socket(ip, port);
                     break;
                 } catch (Exception e) {
                 }

@@ -101,12 +101,12 @@ public class Menu {
         Client client = new Client(view);
         client.initialize(ip, port);
         try {
-            if (client.checkId(userName)) {
+            if (client.checkId(userName, ip)) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
                 client.run(new LevelSelect(view).getLevel());
                 GameView.getInstance().setClient(client);
             } else {
-                new Pop("Invalid Usernam", view.getSnap(), menuGroup);
+                new Pop("Invalid Username", view.getSnap(), menuGroup);
             }
         } catch (Exception e) {
             Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
