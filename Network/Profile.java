@@ -26,8 +26,8 @@ public class Profile {
     private static final String CHECK_CONNECT = "check_connect";
     private static final String I_AM_CONNECTED = "i_am_connected";
 
-    private static final long DURATION_IN_MILIS = 1000 * 1000 * 100;
-    private static final int TURN_OUT = 100;
+    private static final long DURATION_IN_MILLISECOND = 1000 * 100 * 100 * 10;
+    private static final int TURN_OUT = 30;
 
     private int counter = 0;
     private boolean bucketSent = false;
@@ -42,9 +42,10 @@ public class Profile {
         long lastTime = -1;
         @Override
         public void handle(long now) {
-            if(lastTime == -1 || now > lastTime + DURATION_IN_MILIS) {
+            if(lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
                 lastTime = now;
                 counter ++;
+                System.err.println(counter);
                 if(counter > TURN_OUT) {
                     checkConnection();
                 }
@@ -127,6 +128,7 @@ public class Profile {
                 try {
                     String command = scanner.nextLine();
                     clear();
+                    System.err.println("Cleared");
                     process(command, getData(scanner));
                 } catch (Exception e) {
                     break ;
