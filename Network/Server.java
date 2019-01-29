@@ -216,7 +216,8 @@ public class Server {
     public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
-        if(follower.getFollowings().contains(id1)) return ;
+        if(follower.getFollowings().contains(id2)) return ;
+        if(follower.getFriends().contains(id2)) return ;
 
         follower.addFollowings(following);
         following.addFollowers(follower);
