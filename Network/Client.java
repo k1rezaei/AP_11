@@ -39,10 +39,11 @@ public class Client {
     Scanner scanner;
     Formatter formatter;
 
-    Chatroom chatroom;
-    Scoreboard scoreboard;
-    MultiPlayerMenu multiPlayerMenu;
-    Inbox inbox;
+    private Chatroom chatroom;
+    private Scoreboard scoreboard;
+    private MultiPlayerMenu multiPlayerMenu;
+    private Inbox inbox;
+    private Shop shop;
     private String myId;
 
     public Scoreboard getScoreboard() {
@@ -62,7 +63,8 @@ public class Client {
         chatroom = new Chatroom(view, this);
         multiPlayerMenu = new MultiPlayerMenu(view, this);
         scoreboard = new Scoreboard(view, this);
-        inbox = new Inbox(view,this);
+        inbox = new Inbox(view, this);
+        shop = new Shop(view, this);
     }
 
     private String getData(Scanner scanner) {
@@ -136,7 +138,7 @@ public class Client {
     }
 
     //talk to server.
-    synchronized void   command(String command) {
+    synchronized void command(String command) {
         formatter.format(command);
         formatter.flush();
     }
@@ -207,10 +209,11 @@ public class Client {
                 });
                 //todo
                 break;
-            case DATA_WAREHOUSE :
+            case DATA_WAREHOUSE:
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
+                shop.update(items, prices);
                 //todo
             default:
                 System.err.println("FFFF");
@@ -312,5 +315,9 @@ public class Client {
 
     public void setInbox(Inbox inbox) {
         this.inbox = inbox;
+    }
+
+    public Shop getShop() {
+        return shop;
     }
 }
