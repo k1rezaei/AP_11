@@ -99,8 +99,7 @@ public class Chatroom {
         content.getChildren().clear();
         for(int i = 0; i < talks.length; i++){
             HBox hBox = new HBox();
-            Label sender = new Label(talks[i].getSender().getName());
-
+            Label sender = new Label(talks[i].getSender());
             sender.setId("sender");
             Label text = new Label(talks[i].getText());
             text.setId("message");
@@ -108,7 +107,6 @@ public class Chatroom {
             hBox.setMinWidth(WIDTH);
             hBox.setMaxWidth(WIDTH);
             hBox.getChildren().addAll(sender, text);
-
             content.getChildren().add(hBox);
         }
     }
