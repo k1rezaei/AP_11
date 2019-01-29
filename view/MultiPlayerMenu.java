@@ -22,21 +22,21 @@ public class MultiPlayerMenu {
         imageView.setFitHeight(600);
 
         root.getChildren().add(imageView);
-        Label chat = new Label();
-        chat.setGraphic(new ImageView(new Image(BASE + "chat.png")));
+        Label chat = new Label("CHAT");
+        //chat.setGraphic(new ImageView(new Image(BASE + "chat.png")));
         chat.setId("label_button");
 
-        Label rank = new Label();
-        rank.setGraphic(new ImageView(new Image(BASE + "rank.png")));
+        Label rank = new Label("RANK");
+        //rank.setGraphic(new ImageView(new Image(BASE + "rank.png")));
         rank.setId("label_button");
 
-        Label profile = new Label("Profile");
+        Label profile = new Label("PROFILE");
         profile.setId("label_button");
 
-        Label logOut = new Label();
+        Label logOut = new Label("LOGOUT");
         ImageView temp = new ImageView(new Image(BASE + "logOut.png"));
         temp.setFitWidth(200);
-        logOut.setGraphic(temp);
+        //logOut.setGraphic(temp);
         logOut.setId("label_button");
 
         VBox vBox = new VBox(rank, chat, logOut, profile);

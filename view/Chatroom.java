@@ -35,16 +35,17 @@ public class Chatroom {
         this.view = view;
         this.client = client;
 
-        Label back = new Label();
+        Label back = new Label("BACK");
         back.setId("label_button");
         ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
         temp2.relocate(20,20);
-        back.setGraphic(temp2);
-        send.setId("label_button");
+        //back.setGraphic(temp2);
+        send.setId("label_button_small");
         ImageView temp = new ImageView(new Image("file:textures/multiplayer/send.png"));
         temp.setFitWidth(60);
         temp.setFitHeight(30);
-        send.setGraphic(temp);
+        send.setText("SEND");
+        //send.setGraphic(temp);
         send.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

@@ -77,11 +77,13 @@ public class SellMenu {
         cancelImage.setFitHeight(60);
         cancelImage.setFitWidth(100);
 
-        ok.setGraphic(okImage);
+        //ok.setGraphic(okImage);
         Label cancel = new Label();
         cancel.relocate(BASE_X + 110, 10);
         cancel.setId("label_button");
-        cancel.setGraphic(cancelImage);
+        //cancel.setGraphic(cancelImage);
+        ok.setText("OK");
+        cancel.setText("CANCEL");
 
         sellGroup.getChildren().add(ok);
         sellGroup.getChildren().add(cancel);
@@ -142,8 +144,10 @@ public class SellMenu {
             sa.setFitWidth(25 * 7 / 5);
             Label sellAll = new Label();
             sellAll.setGraphic(sa);
-            sellAll.setId("label_button");
-            sellOne.setId("label_button");
+            sellAll.setId("label_button_small");
+            sellOne.setId("label_button_small");
+            sellOne.setStyle("-fx-font-size: 20");
+            sellAll.setStyle("-fx-font-size: 20");
 
             int baseX = numberOfItems / NUM_IN_ROW * DIS_X + BASE_X;
             int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
