@@ -45,6 +45,7 @@ public class Profile {
             if(lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
                 lastTime = now;
                 counter ++;
+                System.err.println(counter);
                 if(counter > TURN_OUT) {
                     checkConnection();
                 }
@@ -127,6 +128,7 @@ public class Profile {
                 try {
                     String command = scanner.nextLine();
                     clear();
+                    System.err.println("Cleared");
                     process(command, getData(scanner));
                 } catch (Exception e) {
                     break ;
