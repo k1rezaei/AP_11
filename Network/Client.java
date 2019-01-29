@@ -35,6 +35,9 @@ public class Client {
     private static final String GET_WAREHOUSE = "get_warehouse";
     private static final String DATA_WAREHOUSE = "data_warehouse";
     private static final String SPLIT = "$$";
+    private static final String CHECK_CONNECT = "check_connect";
+    private static final String I_AM_CONNECTED = "i_am_connected";
+
 
     View view;
     Socket socket;
@@ -220,9 +223,16 @@ public class Client {
                 shop.update(items, prices);
                 //todo
                 break;
+            case CHECK_CONNECT :
+                iAmConnected();
             default:
                 System.err.println("FFFF");
         }
+    }
+
+    private void iAmConnected() {
+        String command = I_AM_CONNECTED + "\n" + end + "\n";
+        command(command);
     }
 
     public void addMessageToChatRoom(String text, String repliedText) {

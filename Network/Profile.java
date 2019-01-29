@@ -1,3 +1,4 @@
+import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -22,13 +23,53 @@ public class Profile {
     private static final String ACCEPT_FRIEND_REQUEST = "accept_friend_request";
     private static final String GET_WAREHOUSE = "get_warehouse";
     private static final String SPLIT = "$$";
+    private static final String CHECK_CONNECT = "check_connect";
+    private static final String I_AM_CONNECTED = "i_am_connected";
 
+    private static final long DURATION_IN_MILIS = 1000 * 1000 * 100;
+    private static final int TURN_OUT = 100;
+
+    private int counter = 0;
+    private boolean bucketSent = false;
 
     Person person;
     Socket socket;
     Formatter formatter;
     Scanner scanner;
     Server server;
+
+    AnimationTimer connetChecker = new AnimationTimer() {
+        long lastTime = -1;
+        @Override
+        public void handle(long now) {
+            if(lastTime == -1 || now > lastTime + DURATION_IN_MILIS) {
+                lastTime = now;
+                counter ++;
+                if(counter > TURN_OUT) {
+                    checkConnection();
+                }
+            }
+        }
+    };
+
+    private void checkConnection() {
+        counter = 0;
+        if(bucketSent) disconnect();
+        else {
+            command(CHECK_CONNECT + "\n" + end + "\n");
+            bucketSent = true;
+        }
+    }
+
+    private void disconnect() {
+        System.err.println("DISCONNECTED");
+        try {
+            //socket.close();
+            scanner = null;
+        } catch(Exception e) {
+            System.err.println("Cannot close connection :/");
+        }
+    }
 
     public void setServer(Server server) {
         this.server = server;
@@ -82,15 +123,26 @@ public class Profile {
     Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
-            while (socket.isConnected()) {
-                String command = scanner.nextLine();
-                process(command, getData(scanner));
+            while (true) {
+                try {
+                    String command = scanner.nextLine();
+                    clear();
+                    process(command, getData(scanner));
+                } catch (Exception e) {
+                    break ;
+                }
             }
             System.err.println("Disconnected");
+            connetChecker.stop();
             server.remove(person);
             return null;
         }
     };
+
+    private void clear() {
+        bucketSent = false;
+        counter = 0;
+    }
 
 
     //talk with client;
@@ -170,11 +222,14 @@ public class Profile {
             case GET_WAREHOUSE :
                 command(server.getWarehouse());
                 break;
+            case I_AM_CONNECTED :
+                break;
         }
     }
 
     //start listening client's commands;
     public void run() {
+        connetChecker.start();
         new Thread(read).start();
     }
 
