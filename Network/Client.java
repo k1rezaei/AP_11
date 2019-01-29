@@ -37,6 +37,7 @@ public class Client {
     private static final String SPLIT = "$$";
     private static final String CHECK_CONNECT = "check_connect";
     private static final String I_AM_CONNECTED = "i_am_connected";
+    private static final String ADD_BEAR = "add_bear";
 
 
     View view;
@@ -309,6 +310,11 @@ public class Client {
 
     public void getWarehouse() {
         String command = GET_WAREHOUSE + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void addBear(String id) {
+        String command = ADD_BEAR + "\n" + id + "\n" + end + "\n";
         command(command);
     }
 

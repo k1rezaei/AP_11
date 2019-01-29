@@ -25,6 +25,7 @@ public class Profile {
     private static final String SPLIT = "$$";
     private static final String CHECK_CONNECT = "check_connect";
     private static final String I_AM_CONNECTED = "i_am_connected";
+    private static final String ADD_BEAR = "add_bear";
 
     private static final long DURATION_IN_MILLISECOND = 1000 * 100 * 100 * 10;
     private static final int TURN_OUT = 30;
@@ -67,6 +68,7 @@ public class Profile {
         try {
             //socket.close();
             scanner = null;
+            socket.close();
         } catch(Exception e) {
             System.err.println("Cannot close connection :/");
         }
@@ -226,6 +228,9 @@ public class Profile {
                 break;
             case I_AM_CONNECTED :
                 break;
+            //case ADD_BEAR :
+              //  id = reader.nextLine();
+                //server.command(ADD_BEAR + "\n" + person.getId() + "\n" + end + "\n", id);
         }
     }
 
