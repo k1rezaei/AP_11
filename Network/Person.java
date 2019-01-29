@@ -48,9 +48,11 @@ public class Person {
         followers.remove(person.getId());
     }
     
-    synchronized public void removeFollowing(Person person) {
+    synchronized public void removeFollowings(Person person) {
         followings.remove(person.getId());
     }
+
+    synchronized public void removeFriends(Person person) {friends.remove(person.getId());}
 
     synchronized public ArrayList<String> getFriends() {return friends;}
     synchronized public ArrayList<String> getFollowings() {return followings;}

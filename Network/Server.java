@@ -7,7 +7,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 
@@ -169,6 +168,13 @@ public class Server {
     }
 
     synchronized public void remove(Person person) {
+
+        for (Profile profile : profiles) {
+            profile.getPerson().removeFollowings(person);
+            profile.getPerson().removeFollowers(person);
+            profile.getPerson().removeFriends(person);
+        }
+
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
@@ -233,7 +239,7 @@ public class Server {
 
         if(!follower.getFollowings().contains(id1)) return ;
 
-        follower.removeFollowing(following);
+        follower.removeFollowings(following);
         following.removeFollowers(follower);
 
         follower.addFriend(following);
