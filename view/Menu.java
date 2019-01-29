@@ -1,26 +1,17 @@
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
-
 import java.io.FileNotFoundException;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Menu {
     private static final int NUM_SLIDES = 3;
@@ -101,11 +92,13 @@ public class Menu {
         menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
     }
+
     long lastTry = 0;
     final static public long GAP_TIME = 5 * 1000000000L;
-    private void connect(String userName){
-        if(lastTry + GAP_TIME > System.nanoTime()){
-            new Pop("You should wait " + (1+(GAP_TIME-System.nanoTime()+lastTry)/1000000000) + " second before trying again", view.getSnap(), menuGroup);
+
+    private void connect(String userName) {
+        if (lastTry + GAP_TIME > System.nanoTime()) {
+            new Pop("You should wait " + (1 + (GAP_TIME - System.nanoTime() + lastTry) / 1000000000) + " second before trying again", view.getSnap(), menuGroup);
             return;
         }
         Platform.runLater(() -> lastTry = System.nanoTime());
@@ -119,7 +112,7 @@ public class Menu {
             } else {
                 new Pop("Invalid Usernam", view.getSnap(), menuGroup);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
             System.err.println("something is wrong");
             e.printStackTrace();
@@ -197,13 +190,11 @@ public class Menu {
                         }
                     });
 
-                    Platform.runLater( () -> menuGroup.requestFocus() );
-
                     menuGroup.getChildren().addAll(logIn.getStackPane());
                     userName.setOnKeyPressed(new EventHandler<KeyEvent>() {
                         @Override
                         public void handle(KeyEvent event) {
-                            if(event.getCode() == KeyCode.ENTER) {
+                            if (event.getCode() == KeyCode.ENTER) {
                                 connect(userName.getText());
                             }
                         }
@@ -225,13 +216,13 @@ public class Menu {
             host.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if(!isHost){
+                    if (!isHost) {
                         isHost = true;
                         Server server = new Server();
                         server.run();
                         System.err.println("U R HOST");
                         new Pop("You are HOST now", view.getSnap(), menuGroup);
-                    }else{
+                    } else {
                         new Pop("You or someone else is host", view.getSnap(), menuGroup);
                     }
                 }

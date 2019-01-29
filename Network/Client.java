@@ -16,6 +16,7 @@ public class Client {
     private static final String DATA_ITEM_COST = "data_item_cost";
     private static final String UPDATE_SCOREBOARD = "update_scoreboard";
     private static final String ADD_MESSAGE_TO_CHAT_ROOM = "add_message_to_chat_room";
+    private static final String ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY = "add_message_to_chat_room_with_reply";
     private static final String INIT_SCOREBOARD = "init_scoreboard";
     private static final String INIT_CHAT_ROOM = "init_chat_room";
     private static final String GET_ITEM_COST = "get_item_cost";
@@ -33,6 +34,7 @@ public class Client {
     private static final String LOG_IN = "I am in!";
     private static final String GET_WAREHOUSE = "get_warehouse";
     private static final String DATA_WAREHOUSE = "data_warehouse";
+    private static final String SPLIT = "$$";
 
     View view;
     Socket socket;
@@ -135,7 +137,7 @@ public class Client {
         new Thread(read).start();
         addMessageToChatRoom(LOG_IN);
         updateScoreboard("1");
-        getWarehouse();
+        //getWarehouse();
     }
 
     //talk to server.
@@ -195,9 +197,9 @@ public class Client {
                 break;
             case DATA_FRIENDS:
                 reader = new Scanner(text);
-                Person[] followers = new Gson().fromJson(reader.nextLine(), Person[].class);
-                Person[] friends = new Gson().fromJson(reader.nextLine(), Person[].class);
-                Person[] followings = new Gson().fromJson(reader.nextLine(), Person[].class);
+                String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
+                String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
+                String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
                 //todo
                 break;
             case DATA_PERSON:
@@ -221,6 +223,15 @@ public class Client {
             default:
                 System.err.println("FFFF");
         }
+    }
+
+    public void addMessageToChatRoom(String text, String repliedText) {
+        String command = ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY + "\n" +
+                text + "\n"
+                + SPLIT + "\n"
+                + repliedText + "\n"
+                + end + "\n";
+        command(command);
     }
 
     public void addMessageToChatRoom(String text) {

@@ -1,21 +1,25 @@
 public class Talk {
-    Person sender, recipient;
-    String text;
+    String sender, recipient;
+    String text, repliedText = null;
 
-    public Talk(Person sender, String text) {
+    public Talk(String sender, String text) {
         this.sender = sender;
         this.text = text;
     }
 
-    public Talk(Person sender, String text, Person reciever) {
+    public Talk(String sender, String text, String reciever) {
         this.sender = sender;
         this.text = text;
         this.recipient = reciever;
     }
 
+    public void setRepliedText(String repliedText) {
+        this.repliedText = repliedText;
+    }
+
     public String getText() {return text;}
-    public Person getSender() {return sender;}
-    public Person getRecipient() {
+    public String getSender() {return sender;}
+    public String getRecipient() {
         return recipient;
     }
 }
