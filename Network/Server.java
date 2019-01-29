@@ -41,11 +41,11 @@ public class Server {
 
     private void initialize() {
         String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
-                "Bear", "Cheese", "Horn", "SpruceBrownBear",
-                "BrightHorn", "ColoredPlume", "Intermediate", "SpruceGrizzly",
-                "CagedJaguar", "Curd", "MegaPie", "SpruceJaguar",
-                "CagedLion", "Egg", "Milk", "SpruceLion",
-                "CagedWhiteBear", "EggPowder", "Plume", "SpruceWhiteBear",
+                "Bear", "Cheese", "Horn",
+                "BrightHorn", "ColoredPlume", "Intermediate",
+                "Curd", "MegaPie",
+                "Egg", "Milk",
+                "EggPowder", "Plume",
                 "Cake", "Fabric", "Sewing", "Varnish",
                 "CarnivalDress", "Flour", "SourCream", "Wool"};
         for (String item : items) {
