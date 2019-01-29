@@ -288,6 +288,7 @@ HBox {
 }
 
 #label_button {
+    -fx-alignment: center;
     -fx-opacity: 1;
     -fx-text-fill: rgb(63, 72, 204);
     -fx-font-size: 65;

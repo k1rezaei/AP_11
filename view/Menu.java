@@ -144,7 +144,8 @@ public class Menu {
 
             Label[] labels = buttons.getLabels();
             Label cancel = labels[3];
-            cancel.setText("CANCEl");
+            cancel.setText("CANCEL");
+            cancel.setStyle("-fx-font-size: 50");
             //cancel.setGraphic(new ImageView(new Image("file:textures/cancel.png")));
 
             Label solo = labels[0];

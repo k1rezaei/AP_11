@@ -105,8 +105,18 @@ public class GameView {
     private Focus focus;
     private Label fastForward;
     private Label save;
+    private Client client;
+
 
     private GameView() {
+    }
+
+    public void setClient(Client client){
+        this.client = client;
+    }
+
+    public Client getClient(){
+        return client;
     }
 
     public static GameView getInstance() {
@@ -219,6 +229,7 @@ public class GameView {
 
 
     private void initializeGame() {
+        client = null;
         root = new Group();
         entityRoot = new Group();
         infoRoot = new Group();
@@ -227,6 +238,10 @@ public class GameView {
         sprites.clear();
         deadSprites.clear();
         initializeNodes();
+    }
+    private void initializeGame(Client client){
+        initializeGame();
+        this.client = client;
     }
 
     private void updateWellFilledBar() {
