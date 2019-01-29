@@ -22,9 +22,9 @@ public class Scoreboard {
         this.view = view;
         this.client = client;
         vBox.setSpacing(20);
-        Label back = new Label();
+        Label back = new Label("BACK");
         back.relocate(10, 10);
-        back.setGraphic(new ImageView(new Image("file:textures/back_button.png")));
+        //back.setGraphic(new ImageView(new Image("file:textures/back_button.png")));
         back.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -64,7 +64,7 @@ public class Scoreboard {
             id.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    view.setRoot(new ViewProfile(view, client, persons[finalI]).getRoot());
+                    client.getPerson(persons[finalI].getId());
                 }
             });
             id.setId("sender");

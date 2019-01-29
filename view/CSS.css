@@ -266,11 +266,7 @@ HBox {
     -fx-opacity: 0.5;
 }
 
-#label_button:hover {
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
-}
+
 
 #bar {
     -fx-background-color: blue;
@@ -293,10 +289,40 @@ HBox {
 
 #label_button {
     -fx-opacity: 1;
-    -fx-text-fill: blue;
-    -fx-font-size: 30;
+    -fx-text-fill: rgb(63, 72, 204);
+    -fx-font-size: 65;
     -fx-font-family: "Showcard Gothic";
-    -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small {
+    -fx-opacity: 1;
+    -fx-text-fill: rgb(63, 72, 204);
+    -fx-font-size: 25;
+    -fx-font-family: "Showcard Gothic";
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small .text{
+
+    -fx-stroke-width: 0;
+    -fx-stroke: transparent;
+}
+
+#label_button .text {
+    -fx-stroke-width: 0;
+    -fx-stroke: transparent;
+}
+
+#label_button:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
 }
 
 #finish {

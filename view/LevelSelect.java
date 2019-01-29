@@ -69,10 +69,10 @@ public class LevelSelect {
         bg.setFitHeight(600);
         root.getChildren().add(bg);
 
-        Label backLabel = new Label();
+        Label backLabel = new Label("BACK");
         backLabel.setId("label_button");
-        ImageView backImageView = new ImageView(new Image("file:textures/back_button.png"));
-        backLabel.setGraphic(backImageView);
+        //ImageView backImageView = new ImageView(new Image("file:textures/back_button.png"));
+        //backLabel.setGraphic(backImageView);
         backLabel.relocate(30, 30);
         root.getChildren().add(backLabel);
         backLabel.setOnMouseClicked(event -> view.setRoot(new Menu(view).getRoot()));
@@ -102,7 +102,9 @@ public class LevelSelect {
 
             imageView.setFitWidth(SIZE);
             imageView.setFitHeight(SIZE);
-            label.setGraphic(imageView);
+            if(!isLock.get(i))label.setText(""+(i+1));
+            else label.setGraphic(imageView);
+            //label.setGraphic(imageView);
             label.setMaxSize(SIZE, SIZE);
             label.setMinSize(SIZE, SIZE);
 

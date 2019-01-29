@@ -49,7 +49,7 @@ public class GameView {
     private static final int FF_X = 360;
     private static final int FF_Y = 15;
     private static final int SAVE_X = 450;
-    private static final int SAVE_Y = 15;
+    private static final int SAVE_Y = 30;
     private static final int EXIT_X = 10;
     private static final int EXIT_Y = 550;
     private static final int MONEY_X = 600;
@@ -454,12 +454,12 @@ public class GameView {
 
     private void setUpGoals() {
         Level level = Game.getInstance().getLevel();
-        Label goals = new Label();
-        goals.setId(LABEL_BUTTON);
-        ImageView goal = new ImageView(new Image("file:textures/goals.png"));
+        Label goals = new Label("GOALS");
+        goals.setId("label_button_small");
+       /* ImageView goal = new ImageView(new Image("file:textures/goals.png"));
         goal.setFitWidth(GOALS_WIDTH);
-        goal.setFitHeight(GOALS_HEIGHT);
-        goals.setGraphic(goal);
+        goal.setFitHeight(GOALS_HEIGHT);*/
+        //goals.setGraphic(goal);
         goals.relocate(GOALS_X, GOALS_Y);
         root.getChildren().add(goals);
 
@@ -555,10 +555,11 @@ public class GameView {
     }
 
     private void setUpSaveButton() {
-        save = new Label();
-        save.setGraphic(new ImageView(new Image("file:textures/save.png")));
+        save = new Label("SAVE");
+
+        //save.setGraphic(new ImageView(new Image("file:textures/save.png")));
         save.relocate(SAVE_X, SAVE_Y);
-        save.setId("label_button");
+        save.setId("label_button_small");
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
@@ -580,10 +581,10 @@ public class GameView {
     private void setUpExitButton() {
 
 
-        Label exit = new Label();
-        exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
+        Label exit = new Label("EXIT");
+        //exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
         exit.relocate(EXIT_X, EXIT_Y);
-        exit.setId("label_button");
+        exit.setId("label_button_small");
         exit.setOnMouseClicked(event -> {
             pause();
 
@@ -639,12 +640,12 @@ public class GameView {
 
     private void setUpMenuButton() {
 
-        ImageView mn = new ImageView(new Image("file:textures/menu.png"));
+        /*ImageView mn = new ImageView(new Image("file:textures/menu.png"));
         mn.setFitWidth(MENU_WIDTH);
-        mn.setFitHeight(MENU_HEIGHT);
-        Label menuButton = new Label();
-        menuButton.setId("label_button");
-        menuButton.setGraphic(mn);
+        mn.setFitHeight(MENU_HEIGHT);*/
+        Label menuButton = new Label("MENU");
+        menuButton.setId("label_button_small");
+        //menuButton.setGraphic(mn);
         menuButton.relocate(MENU_X, MENU_Y);
         menuButton.setOnMouseClicked(event -> {
             pause();
