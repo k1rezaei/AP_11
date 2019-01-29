@@ -171,9 +171,14 @@ public class EventHandlers {
         return event -> {
             switch (event.getButton()) {
                 case PRIMARY:
-                    if (Game.getInstance().getTruck().getRemainingTime() == 0) {
+                    if(GameView.getInstance().getClient() != null){
                         GameView.getInstance().pause();
-                        view.setRoot(new SellMenu(view).getSellGroup());
+                        view.setRoot(GameView.getInstance().getClient().getShop());
+                    }else {
+                        if (Game.getInstance().getTruck().getRemainingTime() == 0) {
+                            GameView.getInstance().pause();
+                            view.setRoot(new SellMenu(view).getSellGroup());
+                        }
                     }
                     break;
                 case SECONDARY:
