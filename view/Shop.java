@@ -13,7 +13,7 @@ import java.util.Map;
 public class Shop {
     private Client client;
     private View view;
-    private Group root;
+    private Group root = new Group();
 
     private static final int BASE_X = 30;
     private static final int DIS_X = 260;
