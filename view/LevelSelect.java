@@ -75,7 +75,7 @@ public class LevelSelect {
         //backLabel.setGraphic(backImageView);
         backLabel.relocate(30, 30);
         root.getChildren().add(backLabel);
-        backLabel.setOnMouseClicked(event -> view.setRoot(new Menu(view).getRoot()));
+        backLabel.setOnMouseClicked(event -> view.goBack());
 
         flowPane.setPrefWrapLength(350);
 
