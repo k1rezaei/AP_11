@@ -29,7 +29,7 @@ public class Client {
     private static final String DATA_FRIENDS = "data_friends";
     private static final String GET_PERSON = "get_person";
     private static final String DATA_PERSON = "data_person";
-
+    private static final String LOG_IN = "I am in!";
     View view;
     Socket socket;
     Scanner scanner;
@@ -125,8 +125,8 @@ public class Client {
 
     public void run() {
         new Thread(read).start();
-        initChatRoom();
-        initScoreboard();
+        addMessageToChatRoom(LOG_IN);
+        updateScoreboard("1");
     }
 
     //talk to server.
