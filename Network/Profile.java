@@ -19,6 +19,7 @@ public class Profile {
     private static final String ADD_FRIEND_REQUEST = "add_friend_request";
     private static final String GET_PERSON = "get_person";
     private static final String ACCEPT_FRIEND_REQUEST = "accept_friend_request";
+    private static final String GET_WAREHOUSE = "get_warehouse";
 
 
     Person person;
@@ -147,6 +148,8 @@ public class Profile {
                 id = reader.nextLine();
                 server.acceptFriendRequest(person.getId(), id);
                 break;
+            case GET_WAREHOUSE :
+                command(server.getWarehouse());
         }
     }
 

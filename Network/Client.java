@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Client {
@@ -30,6 +31,9 @@ public class Client {
     private static final String GET_PERSON = "get_person";
     private static final String DATA_PERSON = "data_person";
     private static final String LOG_IN = "I am in!";
+    private static final String GET_WAREHOUSE = "get_warehouse";
+    private static final String DATA_WAREHOUSE = "data_warehouse";
+
     View view;
     Socket socket;
     Scanner scanner;
@@ -200,6 +204,11 @@ public class Client {
                 });
                 //todo
                 break;
+            case DATA_WAREHOUSE :
+                reader = new Scanner(text);
+                HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
+                HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
+                //todo
             default:
                 System.err.println("FFFF");
         }
@@ -259,6 +268,11 @@ public class Client {
 
     public void acceptFriendRequest(String id) {
         String command = ACCEPT_FRIEND_REQUEST + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void getWarehouse() {
+        String command = GET_WAREHOUSE + "\n" + end + "\n";
         command(command);
     }
 
