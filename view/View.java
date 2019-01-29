@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.net.Inet4Address;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -32,7 +33,6 @@ public class View extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-
         EventHandlers.setView(this);
         this.primaryStage = primaryStage;
         primaryStage.setResizable(false);
