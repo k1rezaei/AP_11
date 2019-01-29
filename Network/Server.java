@@ -22,12 +22,13 @@ public class Server {
     private static final String DATA_INBOX = "data_inbox";
     private static final String DATA_FRIENDS = "data_friends";
     private static final String DATA_PERSON = "data_person";
+    private static final String DATA_WAREHOUSE = "data_warehouse";
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
     ArrayList<Talk> talks = new ArrayList<>();
 
-    private Map<String, Integer> items, prices = new HashMap<>();
+    private HashMap<String, Integer> items, prices = new HashMap<>();
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -162,6 +163,7 @@ public class Server {
             int count = items.get(item);
             count--;
             items.put(item, count);
+            updateWarehouse();
             return BOUGHT_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
         }
         return "";
@@ -183,6 +185,7 @@ public class Server {
         if (items.get(item) != null) count = items.get(item);
         count++;
         items.put(item, count);
+        updateWarehouse();
         return SOLD_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
     }
 
@@ -245,7 +248,7 @@ public class Server {
         return command;
     }
 
-    public void command(String command, String id) {
+    synchronized public void command(String command, String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
                 profile.command(command);
@@ -259,6 +262,24 @@ public class Server {
         System.err.println("FFFFF");
         String command = DATA_PERSON + "\n" + id + "\n" + new Gson().toJson(person) + "\n" + end + "\n";
         return command;
+    }
+
+    synchronized public String getWarehouse() {
+        String command = DATA_WAREHOUSE + "\n" +
+                new Gson().toJson(items) + "\n" +
+                new Gson().toJson(prices) + "\n" +
+                end + "\n";
+        return command;
+    }
+
+    synchronized public void updateWarehouse() {
+        String command = getWarehouse();
+        sendToAll(command);
+    }
+
+    synchronized private void sendToAll(String command) {
+        for (Profile profile : profiles)
+            profile.command(command);
     }
 
     //todo initialize item list.
