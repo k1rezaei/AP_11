@@ -75,7 +75,15 @@ public class GameView {
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
     private static final float ITEM_FADE_TIME = 100;
-    private static Image info = new Image("file:textures/info.png");
+    private static final Image info = new Image("file:textures/info.png");
+    private static final Image END_GIF = new Image("file:textures/end3.gif");
+    private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
+    private ImageView pashe = null;
+    final private static Image pashImage = new Image("file:textures/mosquito.gif");
+    private int pasheX;
+    private int pasheY;
+    private int pasheDisX;
+    private int pasheDisY;
 
     static {
         REFRESHER.setVisible(false);
@@ -134,12 +142,7 @@ public class GameView {
     }
 
 
-    private ImageView pashe = null;
-    final private static Image pashImage = new Image("file:textures/mosquito.gif");
-    private int pasheX;
-    private int pasheY;
-    private int pasheDisX;
-    private int pasheDisY;
+
 
     void pash(){
         if(pashe != null){
@@ -204,13 +207,14 @@ public class GameView {
 
     private void endGame() {
         pause();
+        //TODO in chie namoooooosan? :D
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         root.getChildren().clear();
-        ImageView imageView = new ImageView(new Image("file:textures/end3.gif"));
+        ImageView imageView = new ImageView(END_GIF);
         imageView.setFitHeight(600);
         imageView.setFitWidth(800);
         root.getChildren().add(imageView);
@@ -241,7 +245,7 @@ public class GameView {
                     if (cnt == 5) {
                         Menu menu = new Menu(view);
                         //TODO fix Back to MENU.
-                        client.updateScoreboard(new LevelSelect(view).getLevel());
+                        if(client != null) client.updateScoreboard(new LevelSelect(view).getLevel());
                         System.err.println(new LevelSelect(view).getLevel());
                         if(client == null) view.setRoot(menu.getRoot());
                         else view.setRoot(client.getMultiPlayerMenu().getRoot());
@@ -949,7 +953,7 @@ public class GameView {
         Label buyPriceLabel = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
         buyPriceLabel.setId("gold");
         price.getChildren().add(buyPriceLabel);
-        ImageView coin = new ImageView(new Image("file:textures/coin3.gif"));
+        ImageView coin = new ImageView(COIN_GIF);
         coin.setFitHeight(18);
         coin.setFitWidth(18);
         price.getChildren().add(coin);
