@@ -1,13 +1,7 @@
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -15,9 +9,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
-
-import java.awt.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 
 public class Chatroom {
@@ -27,6 +20,8 @@ public class Chatroom {
     private VBox content = new VBox();
     private Label send = new Label();
     private TextField textField = new TextField();
+    private TextField reply = new TextField();
+    private boolean replied = false;
     private ImageView bg = new ImageView(new Image("file:textures/multiplayer/chat.jpg"));
 
     {
@@ -45,7 +40,7 @@ public class Chatroom {
         Label back = new Label("BACK");
         back.setId("label_button");
         ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
-        temp2.relocate(20,20);
+        temp2.relocate(20, 20);
         //back.setGraphic(temp2);
         send.setId("label_button_small");
         ImageView temp = new ImageView(new Image("file:textures/multiplayer/send.png"));
@@ -53,32 +48,18 @@ public class Chatroom {
         temp.setFitHeight(30);
         send.setText("SEND");
         //send.setGraphic(temp);
-        send.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                client.addMessageToChatRoom(textField.getText());
-                textField.setText("");
-            }
-        });
-        textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER) {
-                    client.addMessageToChatRoom(textField.getText());
-                    textField.setText("");
-                }
-            }
+        send.setOnMouseClicked(event -> sendMessage());
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) sendMessage();
         });
 
-        back.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setRoot(client.getMultiPlayerMenu().getRoot());
-            }
-        });
+        back.setOnMouseClicked(event -> view.setRoot(client.getMultiPlayerMenu().getRoot()));
         textField.relocate(400 - WIDTH / 2, 300 + HEIGHT / 2);
-        textField.setMinSize(WIDTH-60,30);
-        textField.setMaxSize(WIDTH-60, 30);
+        textField.setMinSize(WIDTH - 60, 30);
+        textField.setMaxSize(WIDTH - 60, 30);
+        reply.relocate(400 - WIDTH / 2, 350 + HEIGHT / 2);
+        reply.setMinSize(WIDTH - 60, 30);
+        reply.setMaxSize(WIDTH - 60, 30);
         send.relocate(400 + WIDTH / 2 - 60, 300 + HEIGHT / 2);
         ScrollPane scrollPane = new ScrollPane();
         scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
@@ -89,8 +70,7 @@ public class Chatroom {
         scrollPane.setMaxWidth(WIDTH);
         scrollPane.setMinHeight(HEIGHT);
         scrollPane.setMinWidth(WIDTH);
-
-        root.getChildren().addAll(scrollPane, send, textField, back);
+        reply.setDisable(true);
 
         scrollPane.relocate(400, 300);
         scrollPane.translateXProperty().bind(scrollPane.widthProperty().divide(2).negate());
@@ -100,23 +80,56 @@ public class Chatroom {
 
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
+        Label clear = setUpClear();
+        root.getChildren().addAll(scrollPane, send, textField, back,reply,clear);
+    }
 
+    private Label setUpClear() {
+        Label clear = new Label("Clear Reply");
+        clear.relocate(400 + WIDTH / 2 - 60, 350 + HEIGHT / 2);
+        clear.setId("label_button_small");
+        clear.setOnMouseClicked(mouseEvent -> clearReply());
+        return clear;
+    }
+
+    private void sendMessage() {
+        if(!replied) client.addMessageToChatRoom(textField.getText());
+        else client.addMessageToChatRoom(textField.getText(), reply.getText());
+        clearReply();
+        textField.setText("");
+    }
+
+    private void clearReply() {
+        replied = false;
+        reply.setText("");
     }
 
 
     public void setContent(Talk[] talks) {
         content.getChildren().clear();
-        for(int i = 0; i < talks.length; i++){
-            HBox hBox = new HBox();
+        for (int i = 0; i < talks.length; i++) {
+            VBox messageVBox = new VBox();
+            HBox messageHBox = new HBox();
+            messageHBox.setStyle("-fx-alignment: center-left");
             Label sender = new Label(talks[i].getSender());
             sender.setId("sender");
             Label text = new Label(talks[i].getText());
             text.setId("message");
-            hBox.setSpacing(25);
-            hBox.setMinWidth(WIDTH);
-            hBox.setMaxWidth(WIDTH);
-            hBox.getChildren().addAll(sender, text);
-            content.getChildren().add(hBox);
+            messageHBox.setSpacing(25);
+            messageHBox.setMinWidth(WIDTH);
+            messageHBox.setMaxWidth(WIDTH);
+            messageHBox.getChildren().addAll(sender, text);
+            text.setOnMouseClicked(mouseEvent -> {
+                replied = true;
+                reply.setText(text.getText());
+            });
+            if (talks[i].getRepliedText() != null) {
+                Label replyLabel = new Label(talks[i].getRepliedText());
+                messageVBox.getChildren().add(replyLabel);
+            }
+            messageHBox.setAlignment(Pos.CENTER_LEFT);
+            messageVBox.getChildren().add(messageHBox);
+            content.getChildren().add(messageVBox);
         }
     }
 
