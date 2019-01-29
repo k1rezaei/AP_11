@@ -11,7 +11,7 @@ public class Inbox {
     private Group root = new Group();
     private final HBox columns;
 
-    public Inbox(Client client, View view) {
+    public Inbox(View view,Client client) {
         this.client = client;
         this.view = view;
         ScrollPane scrollPane = new ScrollPane();

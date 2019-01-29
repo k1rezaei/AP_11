@@ -42,6 +42,7 @@ public class Client {
     Chatroom chatroom;
     Scoreboard scoreboard;
     MultiPlayerMenu multiPlayerMenu;
+    Inbox inbox;
     private String myId;
 
     public Scoreboard getScoreboard() {
@@ -61,6 +62,7 @@ public class Client {
         chatroom = new Chatroom(view, this);
         multiPlayerMenu = new MultiPlayerMenu(view, this);
         scoreboard = new Scoreboard(view, this);
+        inbox = new Inbox(view,this);
     }
 
     private String getData(Scanner scanner) {
@@ -184,8 +186,9 @@ public class Client {
                 break;
             case DATA_INBOX:
                 String json = text;
-                Talk[] inbox = new Gson().fromJson(text, Talk[].class);
-                //todo
+                Talk[] messages = new Gson().fromJson(text, Talk[].class);
+                System.err.println();
+                inbox.setContent(messages);
                 break;
             case DATA_FRIENDS:
                 reader = new Scanner(text);
@@ -261,7 +264,6 @@ public class Client {
     }
 
     public void getPerson(String id) {
-        System.err.println("MFMF");
         String command = GET_PERSON + "\n" + id + "\n" + end + "\n";
         command(command);
     }
@@ -302,5 +304,13 @@ public class Client {
 
     public String getMyId() {
         return myId;
+    }
+
+    public Inbox getInbox() {
+        return inbox;
+    }
+
+    public void setInbox(Inbox inbox) {
+        this.inbox = inbox;
     }
 }

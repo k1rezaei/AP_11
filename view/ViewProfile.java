@@ -1,7 +1,11 @@
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -12,7 +16,7 @@ public class ViewProfile {
     private View view;
     private Client client;
     private Group root = new Group();
-    final private static int CNT = 5;
+    final private static int CNT = 7;
     private Label[] labels = new Label[CNT];
     Person person;
 
@@ -28,15 +32,19 @@ public class ViewProfile {
         return labels[2];
     }
 
+    Label getPrivateMessage() {return labels[3];}
+
+    Label getAddFriend() {return labels[4];}
+
     Label getFriends() {
-        return labels[3];
+        return labels[5];
     }
 
     Label getBack() {
-        return labels[4];
+        return labels[6];
     }
 
-    private void show(Group group) {
+    /*private void show(Group group) {
         Pop pop = new Pop(group, view.getSnap());
         root.getChildren().add(pop.getStackPane());
         pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -45,8 +53,17 @@ public class ViewProfile {
                 root.getChildren().remove(pop.getStackPane());
             }
         });
+    }*/
 
-
+    private void show(Node node) {
+        Pop pop = new Pop(node, view.getSnap());
+        root.getChildren().add(pop.getStackPane());
+        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+            }
+        });
     }
 
     EventHandler<MouseEvent> getEvent(Set<Person> persons){
@@ -81,8 +98,10 @@ public class ViewProfile {
         labels[0].setText("Following");
         labels[1].setText("Followers");
         labels[2].setText("Inbox");
-        labels[3].setText("Friends");
-        labels[4].setText("Back");
+        labels[3].setText("Private Message");
+        labels[4].setText("Add Friend");
+        labels[5].setText("Friends");
+        labels[6].setText("Back");
         Label name = new Label("Nickname : " + person.getName());
         Label id = new Label("ID : " + person.getId());
         Label level = new Label("Level : " + person.getLevel());
@@ -90,18 +109,44 @@ public class ViewProfile {
         vBox.getChildren().addAll(name, id, level);
         vBox.getChildren().addAll(labels);
         if (!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
+        if(person.getId().equals(client.getMyId())){
+            vBox.getChildren().remove(getPrivateMessage());
+            vBox.getChildren().remove(getAddFriend());
+        }
         root.getChildren().add(vBox);
         getFollowers().setOnMouseClicked(getEvent(person.getFollowers()));
 
         getFollowing().setOnMouseClicked(getEvent(person.getFollowings()));
 
+        getAddFriend().setOnMouseClicked(mouseEvent -> client.addFriendRequest(person.getId()));
+
+        getPrivateMessage().setOnMouseClicked(mouseEvent -> {
+            HBox message = new HBox();
+            TextField textField = new TextField();
+            textField.setPromptText("message...");
+            Label send = new Label("Send");
+            send.setId("label_button_small");
+            send.setOnMouseClicked(sendEvent -> {
+                client.sendPrivateMessage(person.getId(),textField.getText());
+                textField.setText("");
+            });
+            textField.setOnKeyPressed(keyEvent -> {
+                if(keyEvent.getCode().equals(KeyCode.ENTER)) {
+                    client.sendPrivateMessage(person.getId(), textField.getText());
+                    textField.setText("");
+                }
+            });
+            message.getChildren().addAll(textField,send);
+            message.setMaxWidth(600);
+            message.setMaxHeight(200);
+            show(message);
+        });
         getFriends().setOnMouseClicked(getEvent(person.getFriends()));
 
         getInbox().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
-                show(new Inbox(client, view).getRoot());
+                show(client.getInbox().getRoot());
             }
         });
         getBack().setOnMouseClicked(new EventHandler<MouseEvent>() {
