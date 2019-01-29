@@ -83,6 +83,7 @@ public class Profile {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
             }
+            System.err.println("Disconnected");
             server.remove(person);
             return null;
         }

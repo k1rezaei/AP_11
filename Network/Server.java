@@ -168,6 +168,7 @@ public class Server {
     }
 
     synchronized public void remove(Person person) {
+        System.err.println("FFFF");
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
