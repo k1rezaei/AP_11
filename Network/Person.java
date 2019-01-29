@@ -64,9 +64,6 @@ public class Person {
 
     public String getLevel() { return level; }
 
-    public void ArrayListLevel(String level) {this.level = level;}
-
-
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof Person)) return false;
