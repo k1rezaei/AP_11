@@ -65,12 +65,9 @@ public class Shop {
         cancel.setId("label_button");
         cancel.setText("BACK");
         root.getChildren().add(cancel);
-        cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                GameView.getInstance().resume();
-                view.setRoot(GameView.getInstance().getRoot());
-            }
+        cancel.setOnMouseClicked(event -> {
+            GameView.getInstance().resume();
+            view.setRoot(GameView.getInstance().getRoot());
         });
         root.getChildren().add(itemsGroup);
     }
@@ -143,26 +140,23 @@ public class Shop {
         itemsGroup.getChildren().add(hBox);
 
         numberOfItems++;
-        buy.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if (Game.getInstance().getMoney() < cost) {
-                    new Pop("Not Enough Money", view.getSnap(), root);
-                    return;
-                }
-                if(Game.getInstance().getWarehouse().getCapacity() < Entity.getNewEntity(type).getSize()) {
-                    new Pop("Not Enough Space In Warehouse", view.getSnap(), root);
-                    return;
-                }
-                if(serverCnt.getText().equalsIgnoreCase("0")){
-                    new Pop("Khak bar Saret Baw :D", view.getSnap(), root);
-                    return;
-                }
-                Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
-                client.buyItem(type);
-                Game.getInstance().getWarehouse().add(Entity.getNewEntity(type));
-                update();
+        buy.setOnMouseClicked(event -> {
+            if (Game.getInstance().getMoney() < cost) {
+                new Pop("Not Enough Money", view.getSnap(), root);
+                return;
             }
+            if(Game.getInstance().getWarehouse().getCapacity() < Entity.getNewEntity(type).getSize()) {
+                new Pop("Not Enough Space In Warehouse", view.getSnap(), root);
+                return;
+            }
+            if(serverCnt.getText().equalsIgnoreCase("0")){
+                new Pop("Khak bar Saret Baw :D", view.getSnap(), root);
+                return;
+            }
+            Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
+            client.buyItem(type);
+            Game.getInstance().getWarehouse().add(Entity.getNewEntity(type));
+            update();
         });
 
         sell.relocate(baseX + 130, baseY);

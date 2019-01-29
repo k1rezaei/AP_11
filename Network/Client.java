@@ -140,7 +140,7 @@ public class Client {
         new Thread(read).start();
         addMessageToChatRoom(LOG_IN);
         updateScoreboard("1");
-        //getWarehouse();
+        getWarehouse();
     }
 
     //talk to server.
@@ -171,16 +171,16 @@ public class Client {
             case DATA_ITEM_COST:
                 reader = new Scanner(text);
                 item = reader.nextLine();
-                price = reader.nextLine();
+                price = reader.nextLine();/*
                 int cost = Integer.parseInt(price);
                 if (cost >= Game.getInstance().getMoney()) buyItem(item);
-                else System.err.println("not enough money");//TODO throw new Runtime exception
+                else System.err.println("not enough money");//TODO throw new Runtime exception*/
                 break;
             case BOUGHT_ITEM:
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
-                cost = Integer.parseInt(price);
+                int cost = Integer.parseInt(price);
                 Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
                 Game.getInstance().addEntity(Entity.getNewEntity(item));
                 //todo
@@ -219,6 +219,7 @@ public class Client {
                 System.err.println("DATA_WAREHOUSE");
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
+                System.out.println(new Gson().toJson(items));
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 shop.update(items, prices);
                 //todo
