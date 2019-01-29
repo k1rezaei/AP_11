@@ -133,6 +133,8 @@ public class GameView {
         game.start();
     }
 
+
+
     public void runGame() {
         initializeGame();
 
@@ -229,7 +231,6 @@ public class GameView {
 
 
     private void initializeGame() {
-        client = null;
         root = new Group();
         entityRoot = new Group();
         infoRoot = new Group();
@@ -239,10 +240,7 @@ public class GameView {
         deadSprites.clear();
         initializeNodes();
     }
-    private void initializeGame(Client client){
-        initializeGame();
-        this.client = client;
-    }
+
 
     private void updateWellFilledBar() {
         int h = (int)(70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
