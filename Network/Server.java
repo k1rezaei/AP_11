@@ -234,9 +234,6 @@ public class Server {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
 
-        System.err.println("HERE");
-        System.err.println(follower.getId() + " : " + following.getId());
-
         if(!follower.getFollowings().contains(id1)) return ;
 
         follower.removeFollowings(following);
@@ -245,11 +242,6 @@ public class Server {
         follower.addFriend(following);
         following.addFriend(follower);
 
-        System.err.println("HERE");
-
-        String cc = updateFriends(id1);
-        System.err.println(cc);
-
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
     }
@@ -257,7 +249,6 @@ public class Server {
 
     public String updateFriends(String id) {
         Person p = getPerson(id);
-        System.err.println("IN FUNCTION");
         String command = DATA_FRIENDS + "\n" +
                 gson.toJson(p.getFollowers().toArray(new String[0])) + "\n" +
                 gson.toJson(p.getFriends().toArray(new String[0])) + "\n" +
@@ -269,7 +260,6 @@ public class Server {
     synchronized public void command(String command, String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
-                System.err.println(command + " sendted to " + id);
                 profile.command(command);
                 return;
             }
@@ -278,7 +268,6 @@ public class Server {
 
     public String getPersonCommand(String id) {
         Person person = getPerson(id);
-        System.err.println("FFFFF");
         String command = DATA_PERSON + "\n" + id + "\n" + gson.toJson(person) + "\n" + end + "\n";
         return command;
     }

@@ -45,7 +45,6 @@ public class Profile {
             if(lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
                 lastTime = now;
                 counter ++;
-                System.err.println(counter);
                 if(counter > TURN_OUT) {
                     checkConnection();
                 }
