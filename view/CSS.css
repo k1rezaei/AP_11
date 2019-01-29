@@ -1,26 +1,57 @@
+#rank {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-radius: 30;
+    -fx-background-insets: -10;
+    -fx-padding: 20;
+    -fx-max-height: 500;
+}
+#rank_name {
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-background-insets: -4;
+    -fx-background-radius: 20;
+
+    -fx-font-size: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_name .text {
+    -fx-stroke: blue;
+}
+#rank_level {
+    -fx-font-size: 20;
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-background-insets: -4;
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_level .text {
+    -fx-stroke: red;
+}
 #sender {
-    -fx-text-fill: rgb(222, 222, 222);
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-insets: -10 -10 -10 -10;
     -fx-background-radius: 30;
+
 }
 
 #message {
-    -fx-text-fill: rgb(222, 222, 222);
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-background-color: rgba(0, 0, 0, 0.3);
     -fx-background-insets: -10 -10 -10 -10;
     -fx-background-radius: 30;
 }
 
 #sender .text {
+    -fx-text-fill: unset;
     -fx-font-family: "Comic Sans MS";
     -fx-font-weight: bold;
-    -fx-stroke-width: 0;
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
 }
 
 #message .text {
     -fx-font-family: "Comic Sans MS";
-    -fx-stroke-width: 0;
+    -fx-stroke: gray;
+    -fx-stroke-width: 1;
 }
 
 .inputBox {
@@ -65,6 +96,7 @@
 .scroll-pane > .corner {
     -fx-background-color: transparent;
 }
+
 
 #chatbox {
 
@@ -176,6 +208,8 @@
     -fx-background-color: transparent;
     -fx-opacity: 1;
     -fx-padding: 0;
+
+
 }
 
 #buyAnimal .text {

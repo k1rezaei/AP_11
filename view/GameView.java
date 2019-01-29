@@ -134,6 +134,42 @@ public class GameView {
     }
 
 
+    private ImageView pashe = null;
+    final private static Image pashImage = new Image("file:textures/mosquito.gif");
+    private int pasheX;
+    private int pasheY;
+    private int pasheDisX;
+    private int pasheDisY;
+
+    void pash(){
+        if(pashe != null){
+            if(pasheX != pasheDisX) pasheX += (pasheDisX-pasheX)/Math.abs(pasheDisX-pasheX);
+            if(pasheY != pasheDisY) pasheY += (pasheDisY-pasheY)/Math.abs(pasheDisY-pasheY);
+            pashe.relocate(pasheX, pasheY);
+            if(pasheX == pasheDisX && pasheY == pasheDisY){
+                root.getChildren().remove(pashe);
+                pashe = null;
+            }
+        }
+        if (Math.random() * 100 <= 1 && pashe == null){
+            pashe = new ImageView(pashImage);
+            pashe.setFitHeight(20);
+            pashe.setFitWidth(20);
+            root.getChildren().add(pashe);
+            pasheX = (int)(Math.random()*800);
+            pasheY = (int)(Math.random()*600);
+            pasheDisX = (int)(Math.random()*800);
+            if(pasheX < pasheDisX){
+                int temp = pasheDisX;
+                pasheDisX = pasheX;
+                pasheX = temp;
+            }
+            pasheDisY = (int)(Math.random()*600);
+            pashe.relocate(pasheX,pasheY);
+
+            System.err.println("pashe oomad");
+        }
+    }
 
     public void runGame() {
         initializeGame();
@@ -146,6 +182,7 @@ public class GameView {
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * speed)) {
+                    pash();
                     lastTime = now;
                     handleOverlaps();
                     updateWarehouse();
