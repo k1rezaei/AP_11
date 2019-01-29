@@ -43,5 +43,9 @@ public class Sounds {
         mediaPlayerHashMap.get(type).play();
     }
 
+    public static MediaPlayer get(String type){
+        return mediaPlayerHashMap.get(type);
+    }
+
 
 }
