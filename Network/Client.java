@@ -195,9 +195,9 @@ public class Client {
                 break;
             case DATA_FRIENDS:
                 reader = new Scanner(text);
-                Person[] followers = new Gson().fromJson(reader.nextLine(), Person[].class);
-                Person[] friends = new Gson().fromJson(reader.nextLine(), Person[].class);
-                Person[] followings = new Gson().fromJson(reader.nextLine(), Person[].class);
+                String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
+                String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
+                String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
                 //todo
                 break;
             case DATA_PERSON:

@@ -227,6 +227,10 @@ public class Server {
     public void acceptFriendRequest(String id1, String id2) {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
+
+        System.err.println("HERE");
+        System.err.println(follower.getId() + " : " + following.getId());
+
         if(!follower.getFollowings().contains(id1)) return ;
 
         follower.removeFollowing(following);
@@ -235,16 +239,22 @@ public class Server {
         follower.addFriend(following);
         following.addFriend(follower);
 
+        System.err.println("HERE");
+
+        String cc = updateFriends(id1);
+        System.err.println(cc);
+
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
     }
 
     public String updateFriends(String id) {
         Person p = getPerson(id);
+        System.err.println("IN FUNCTION");
         String command = DATA_FRIENDS + "\n" +
-                gson.toJson(p.getFollowers().toArray()) + "\n" +
-                gson.toJson(p.getFriends().toArray()) + "\n" +
-                gson.toJson(p.getFollowings().toArray()) + "\n" +
+                gson.toJson(p.getFollowers().toArray(new String[0])) + "\n" +
+                gson.toJson(p.getFriends().toArray(new String[0])) + "\n" +
+                gson.toJson(p.getFollowings().toArray(new String[0])) + "\n" +
                 end + "\n";
         return command;
     }
