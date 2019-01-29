@@ -15,7 +15,6 @@ public class Pop {
     private Label content;
 
     {
-
         stackPane.relocate(400, 300);
         stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
@@ -45,23 +44,13 @@ public class Pop {
     Pop(Node node, Image bg, Group root) {
         this(node, bg);
         root.getChildren().add(stackPane);
-        stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().remove(stackPane);
-            }
-        });
+        stackPane.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
     }
 
     Pop(String text, Image bg, Group root) {
         this(text, bg);
         root.getChildren().add(stackPane);
-        stackPane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().remove(stackPane);
-            }
-        });
+        stackPane.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
     }
 
     public StackPane getStackPane() {
