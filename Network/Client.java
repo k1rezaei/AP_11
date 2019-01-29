@@ -137,16 +137,14 @@ public class Client {
     }
 
     public void run() {
-        new Thread(read).start();
-        addMessageToChatRoom(LOG_IN);
-        updateScoreboard("1");
-        //getWarehouse();
+        run("1");
     }
 
     public void run(String level) {
         new Thread(read).start();
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
+        getWarehouse();
     }
 
     //talk to server.
@@ -177,18 +175,17 @@ public class Client {
             case DATA_ITEM_COST:
                 reader = new Scanner(text);
                 item = reader.nextLine();
-                price = reader.nextLine();
+                price = reader.nextLine();/*
                 int cost = Integer.parseInt(price);
                 if (cost >= Game.getInstance().getMoney()) buyItem(item);
-                else System.err.println("not enough money");//TODO throw new Runtime exception
+                else System.err.println("not enough money");//TODO throw new Runtime exception*/
                 break;
             case BOUGHT_ITEM:
                 reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
-                cost = Integer.parseInt(price);
-                Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
-                Game.getInstance().addEntity(Entity.getNewEntity(item));
+                int cost = Integer.parseInt(price);
+                System.err.println("bought " + item);
                 //todo
                 break;
             case SOLD_ITEM:
@@ -196,12 +193,11 @@ public class Client {
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
-                Game.getInstance().setMoney(Game.getInstance().getMoney() + cost);
+                System.err.println("sold " + item);
                 break;
             case DATA_INBOX:
                 String json = text;
                 Talk[] messages = new Gson().fromJson(text, Talk[].class);
-                System.err.println();
                 inbox.setContent(messages);
                 break;
             case DATA_FRIENDS:
@@ -222,16 +218,16 @@ public class Client {
                 //todo
                 break;
             case DATA_WAREHOUSE:
-                System.err.println("DATA_WAREHOUSE");
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
+                System.out.println(new Gson().toJson(items));
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
-                shop.update(items, prices);
+                Platform.runLater(() -> shop.update(items, prices));
                 //todo
                 break;
-            case CHECK_CONNECT :
+            case CHECK_CONNECT:
                 iAmConnected();
-                break ;
+                break;
             default:
                 System.err.println(command);
         }
@@ -282,7 +278,6 @@ public class Client {
     }
 
     public void sellItem(String item) {
-        //Game.getInstance().getWarehouse().remove(item);
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
