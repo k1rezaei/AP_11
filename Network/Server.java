@@ -25,8 +25,8 @@ public class Server {
 
     ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
-    ArrayList<Talk> talks = new ArrayList<>();
-
+    private ArrayList<Talk> talks = new ArrayList<>();
+    private int port;
     private HashMap<String, Integer> items, prices = new HashMap<>();
     private Gson gson = new Gson();
 
@@ -34,9 +34,10 @@ public class Server {
         return talks;
     }
 
-    public Server() {
+    public Server(int port) {
         me = this;
         items = new HashMap<>();
+        this.port = port;
         initialize();
     }
 
@@ -59,11 +60,11 @@ public class Server {
     Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
-            int cnt = 8051;
+            int cnt = port + 1;
             while (true) {
                 ServerSocket serverSocket;
                 try {
-                    serverSocket = new ServerSocket(8050);
+                    serverSocket = new ServerSocket(port);
                     Socket socket = serverSocket.accept();
                     System.err.println("connected new user");
                     Formatter formatter = new Formatter(socket.getOutputStream());
@@ -221,8 +222,8 @@ public class Server {
     public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
-        if(follower.getFollowings().contains(id2)) return ;
-        if(follower.getFriends().contains(id2)) return ;
+        if (follower.getFollowings().contains(id2)) return;
+        if (follower.getFriends().contains(id2)) return;
 
         follower.addFollowings(following);
         following.addFollowers(follower);
@@ -234,7 +235,7 @@ public class Server {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
 
-        if(!follower.getFollowings().contains(id1)) return ;
+        if (!follower.getFollowings().contains(id1)) return;
 
         follower.removeFollowings(following);
         following.removeFollowers(follower);

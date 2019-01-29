@@ -1,5 +1,6 @@
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -9,7 +10,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class Menu {
@@ -129,17 +133,12 @@ public class Menu {
             Label cancel = labels[3];
             cancel.setText("CANCEL");
             cancel.setStyle("-fx-font-size: 50");
-            //cancel.setGraphic(new ImageView(new Image("file:textures/cancel.png")));
-
             Label solo = labels[0];
             solo.setText("SOLO");
-            //solo.setGraphic(new ImageView(new Image("file:textures/solo.png")));
             Label join = labels[1];
             join.setText("JOIN");
-            //join.setGraphic(new ImageView(new Image("file:textures/join.png")));
             Label host = labels[2];
             host.setText("HOST");
-            //host.setGraphic(new ImageView(new Image("file:textures/host.png")));
             menuGroup.getChildren().add(buttons.getStackPane());
             solo.setOnMouseClicked(event15 -> {
                 GameView.getInstance().setClient(null);
@@ -182,18 +181,40 @@ public class Menu {
                 cancel1.setOnMouseClicked(event1314 -> menuGroup.getChildren().remove(logIn.getStackPane()));
             });
             host.setOnMouseClicked(event14 -> {
-                if (!isHost) {
-                    isHost = true;
-                    Server server = new Server();
-                    server.run();
-                    System.err.println("U R HOST");
-                    new Pop("You are HOST now", view.getSnap(), menuGroup);
-                } else {
-                    new Pop("You or someone else is host", view.getSnap(), menuGroup);
+                Label ip = new Label();
+                try {
+                    ip.setText(InetAddress.getLocalHost().getHostAddress());
+                } catch (Exception e) {
+                    ip.setText("127.0.0.1");
                 }
+
+                TextField port = new TextField();
+                port.setText("8050");
+                Label ok = new Label("Host");
+                ok.setId("label_button");
+                ok.setOnMouseClicked(mouseEvent -> {
+                    if (!isHost) {
+                        isHost = true;
+                        Server server = new Server(Integer.parseInt(port.getText()));
+                        server.run();
+                        System.err.println("U R HOST");
+                        new Pop("You are HOST now", view.getSnap(), menuGroup);
+                    } else {
+                        new Pop("You or someone else is host", view.getSnap(), menuGroup);
+                    }
+                });
+                Label cancel1 = new Label("Cancel");
+                cancel1.setId("label_button");
+                VBox hostVBox = new VBox();
+                hostVBox.setAlignment(Pos.CENTER);
+                hostVBox.setMaxWidth(500);
+                hostVBox.setMaxHeight(400);
+                hostVBox.getChildren().addAll(ip, port, ok, cancel1);
+                Pop pop = new Pop(hostVBox, view.getSnap(), menuGroup);
+                hostVBox.setId("vBox_menu");
+                cancel1.setOnMouseClicked(mouseEvent -> menuGroup.getChildren().remove(pop.getStackPane()));
             });
         });
-
     }
 
     private void setLoad() {
