@@ -56,34 +56,25 @@ public class ViewProfile {
     }*/
 
     private void show(Node node) {
-        Pop pop = new Pop(node, view.getSnap());
-        root.getChildren().add(pop.getStackPane());
+        Pop pop = new Pop(node, view.getSnap(),root);
+        /*root.getChildren().add(pop.getStackPane());
         pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 root.getChildren().remove(pop.getStackPane());
             }
-        });
+        });*/
     }
 
-    EventHandler<MouseEvent> getEvent(Set<Person> persons){
-        return  new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                VBox f = new VBox();
-                for(Person per : persons){
-                    Label label = new Label(per.getName());
-                    label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            view.setRoot(new ViewProfile(view, client, per).getRoot());
-                        }
-                    });
-                    f.getChildren().add(label);
-                }
-                Pop pop = new Pop(f,view.getSnap(), root);
-
+    EventHandler<MouseEvent> getEvent(ArrayList<String> persons){
+        return event -> {
+            VBox f = new VBox();
+            for (String id : persons) {
+                Label label = new Label(id);
+                label.setOnMouseClicked(event1 -> client.getPerson(id));
+                f.getChildren().add(label);
             }
+            Pop pop = new Pop(f, view.getSnap(), root);
         };
     }
 

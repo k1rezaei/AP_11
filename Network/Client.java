@@ -135,7 +135,7 @@ public class Client {
         new Thread(read).start();
         addMessageToChatRoom(LOG_IN);
         updateScoreboard("1");
-        getWarehouse();
+        //getWarehouse();
     }
 
     //talk to server.

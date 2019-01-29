@@ -37,8 +37,8 @@ public class Inbox {
         messages.getChildren().add(new Label("Message"));
         for (int i = talks.length - 1; i >= 0; i--) {
             Talk talk = talks[i];
-            Label senderName = new Label(talk.getSender().getName());
-            Label recipientName = new Label(talk.getRecipient().getName());
+            Label senderName = new Label(talk.getSender());
+            Label recipientName = new Label(talk.getRecipient());
             Label message = new Label(talk.getText());
             senderNames.getChildren().add(senderName);
             recipientNames.getChildren().add(recipientName);
