@@ -28,19 +28,15 @@ public class LevelSelect {
         }
     }
 
-    private ArrayList<Boolean> isLock = new ArrayList<>();
-    private boolean[] levels = new boolean[NUM_LEVELS];
-    private Group root = new Group();
-    private View view;
-    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
-
-    {
+    public String getLevel(String name){
+        int mx = 0;
         try {
-            InputStream inputStream = new FileInputStream("Levels");
+            InputStream inputStream = new FileInputStream(name);
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNext()) {
                 int level = scanner.nextInt();
                 levels[level] = true;
+                if(level > mx) mx = level;
             }
             scanner.close();
             inputStream.close();
@@ -57,11 +53,27 @@ public class LevelSelect {
 
             isLock.add(lock);
         }
+        return "" + (mx+1);
     }
+
+    public String getLevel(){
+        return getLevel("Levels");
+        /*if(GameView.getInstance().getClient() == null){
+            return getLevel("Level");
+        }else{
+            return getLevel("");
+        }*/
+    }
+
+    private ArrayList<Boolean> isLock = new ArrayList<>();
+    private boolean[] levels = new boolean[NUM_LEVELS];
+    private Group root = new Group();
+    private View view;
+    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
 
     LevelSelect(View view) {
         this.view = view;
-
+        getLevel();
         flowPane.setId("level_select");
 
         ImageView bg = new ImageView(BG);

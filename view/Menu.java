@@ -107,7 +107,7 @@ public class Menu {
         try {
             if (client.checkId(userName)) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
-                client.run();
+                client.run(new LevelSelect(view).getLevel());
                 GameView.getInstance().setClient(client);
             } else {
                 new Pop("Invalid Usernam", view.getSnap(), menuGroup);

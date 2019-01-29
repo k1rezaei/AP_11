@@ -28,6 +28,7 @@ public class Chatroom {
         bg.setFitHeight(600);
         bg.setFitWidth(800);
         root.getChildren().add(bg);
+
     }
 
     final private static int HEIGHT = 400;
@@ -109,6 +110,7 @@ public class Chatroom {
         content.getChildren().clear();
         for (int i = 0; i < talks.length; i++) {
             VBox messageVBox = new VBox();
+            messageVBox.setSpacing(20);
             HBox messageHBox = new HBox();
             messageHBox.setStyle("-fx-alignment: center-left");
             Label sender = new Label(talks[i].getSender());
@@ -125,6 +127,7 @@ public class Chatroom {
             });
             if (talks[i].getRepliedText() != null) {
                 Label replyLabel = new Label(talks[i].getRepliedText());
+                replyLabel.setId("reply");
                 messageVBox.getChildren().add(replyLabel);
             }
             messageHBox.setAlignment(Pos.CENTER_LEFT);
