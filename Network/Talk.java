@@ -22,4 +22,7 @@ public class Talk {
     public String getRecipient() {
         return recipient;
     }
+    public String getRepliedText() {
+        return repliedText;
+    }
 }
