@@ -72,6 +72,10 @@ public class Client {
         shop = new Shop(view, this);
     }
 
+    Client(View view, String ip, int port) {
+        this(view);
+    }
+
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
         while (true) {
@@ -93,9 +97,9 @@ public class Client {
         }
     };
 
-    void initialize() {
+    void initialize(String ip, int port) {
         try {
-            socket = new Socket("localhost", 8050);
+            socket = new Socket(ip, port);
             scanner = new Scanner(socket.getInputStream());
             formatter = new Formatter(socket.getOutputStream());
         } catch (Exception e) {
