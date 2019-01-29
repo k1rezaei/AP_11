@@ -143,6 +143,12 @@ public class Client {
         //getWarehouse();
     }
 
+    public void run(String level) {
+        new Thread(read).start();
+        addMessageToChatRoom(LOG_IN);
+        updateScoreboard(level);
+    }
+
     //talk to server.
     synchronized void command(String command) {
         formatter.format(command);
@@ -276,7 +282,7 @@ public class Client {
     }
 
     public void sellItem(String item) {
-        Game.getInstance().getWarehouse().remove(item);
+        //Game.getInstance().getWarehouse().remove(item);
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
         command(command);
     }
