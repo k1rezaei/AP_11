@@ -103,7 +103,7 @@ public class Profile {
         Scanner reader = new Scanner(data);
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
-                Talk talk = new Talk(person, data);
+                Talk talk = new Talk(person.getId(), data);
                 server.addMessageToChatRoom(talk);
                 break;
             case UPDATE_SCOREBOARD:
