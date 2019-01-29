@@ -43,7 +43,7 @@ public class MultiPlayerMenu {
         //logOut.setGraphic(temp);
         logOut.setId("label_button");
 
-        VBox vBox = new VBox(rank, chat, logOut, profile);
+        VBox vBox = new VBox(start, rank, chat, logOut, profile);
         vBox.relocate(400, 300);
         vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
