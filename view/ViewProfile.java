@@ -15,7 +15,7 @@ public class ViewProfile {
     private View view;
     private Client client;
     private Group root = new Group();
-    final private static int CNT = 7;
+    final private static int CNT = 8;
     private Label[] labels = new Label[CNT];
     Person person;
 
@@ -43,8 +43,12 @@ public class ViewProfile {
         return labels[5];
     }
 
-    Label getBack() {
+    Label getBear() {
         return labels[6];
+    }
+
+    Label getBack() {
+        return labels[7];
     }
 
     /*private void show(Group group) {
@@ -95,7 +99,8 @@ public class ViewProfile {
         labels[3].setText("Private Message");
         labels[4].setText("Add Friend");
         labels[5].setText("Friends");
-        labels[6].setText("Back");
+        labels[6].setText("Send Bear");
+        labels[7].setText("Back");
         Label name = new Label("Nickname : " + person.getName());
         Label id = new Label("ID : " + person.getId());
         Label level = new Label("Level : " + person.getLevel());
@@ -106,6 +111,7 @@ public class ViewProfile {
         if (person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getPrivateMessage());
             vBox.getChildren().remove(getAddFriend());
+            vBox.getChildren().remove(getBear());
         }
         root.getChildren().add(vBox);
         VBox followersBox = new VBox();
@@ -147,13 +153,9 @@ public class ViewProfile {
             show(message);
         });
         getFriends().setOnMouseClicked(getEvent(person.getFriends()));
-        getInbox().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                show(client.getInbox().getRoot());
-            }
-        });
+        getInbox().setOnMouseClicked(event -> show(client.getInbox().getRoot()));
         getBack().setOnMouseClicked(event -> view.goBack());
+        getBear().setOnMouseClicked(mouseEvent -> client.addBear(person.getId()));
 
     }
 

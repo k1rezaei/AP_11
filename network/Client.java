@@ -1,6 +1,8 @@
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -44,7 +46,9 @@ public class Client {
     private static final String BEAR_ADDED = "bear_added";
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
-
+    private static final String UPDATE_MONEY = "update_money";
+    //TODO get bear cost from server
+    private static final int BEAR_COST = 200;
     View view;
     Socket socket;
     Scanner scanner;
@@ -56,6 +60,9 @@ public class Client {
     private Inbox inbox;
     private Shop shop;
     private String myId;
+    //TODO make money
+    private int money = 1000;
+    private boolean inGame;
 
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -76,10 +83,6 @@ public class Client {
         scoreboard = new Scoreboard(view, this);
         inbox = new Inbox(view, this);
         shop = new Shop(view, this);
-    }
-
-    Client(View view, String ip, int port) {
-        this(view);
     }
 
     private String getData(Scanner scanner) {
@@ -232,7 +235,6 @@ public class Client {
             case DATA_WAREHOUSE:
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
-                System.out.println(new Gson().toJson(items));
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 Platform.runLater(() -> shop.update(items, prices));
                 //todo
@@ -244,23 +246,27 @@ public class Client {
                 reader = new Scanner(text);
                 String id1 = reader.nextLine();
                 String id2 = reader.nextLine();
-                if (true)
+                if (inGame)
                     command(I_CAN_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
                 else command(I_CAN_NOT_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
                 //todo sharte if bayad tabdil she be inke dare baazi mikone ya na?
                 break;
-            case BEAR_ADDED :
+            case BEAR_ADDED:
                 reader = new Scanner(text);
                 id = reader.nextLine();
-                //todo. bear you sent added to id's map.
+                //TODO DISABLE INGAME?
+                if (inGame) Game.getInstance().setMoney(Game.getInstance().getMoney() - BEAR_COST);
+                else money -= BEAR_COST;
+                showMessage("Sent a  bear to " + id + ".");
                 break;
-            case BEAR_DID_NOT_ADD :
+            case BEAR_DID_NOT_ADD:
                 reader = new Scanner(text);
                 id = reader.nextLine();
-                //todo. bear you sent did not add to id's map.
+                showMessage("Failed to send bear. " + id + " is not online");
                 break;
-            case ADD_BEAR_TO_YOUR_MAP :
-                //todo khers random ezafe she.
+            case ADD_BEAR_TO_YOUR_MAP:
+                if (!inGame) System.err.println("NOT IN GAME");
+                Game.getInstance().addEntity(Entity.getNewEntity("bear"));
                 break;
             default:
                 System.err.println(command);
@@ -288,6 +294,11 @@ public class Client {
 
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
+        command(command);
+    }
+
+    public void upgradeMoney() {
+        String command = UPDATE_MONEY + "\n" + money + "\n" + end + "\n";
         command(command);
     }
 
@@ -342,8 +353,16 @@ public class Client {
     }
 
     public void addBear(String id) {
+        if ((inGame && Game.getInstance().getMoney() < BEAR_COST) || (!inGame && money < BEAR_COST)) {
+            showMessage("Not enough Money.");
+            return;
+        }
         String command = ADD_BEAR + "\n" + id + "\n" + end + "\n";
         command(command);
+    }
+
+    private void showMessage(String message) {
+        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(), (Group) view.getScene().getRoot()));
     }
 
     public Chatroom getChatroom() {
@@ -361,7 +380,6 @@ public class Client {
     public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
         this.multiPlayerMenu = multiPlayerMenu;
     }
-
 
     public void closeSocket() {
         try {
@@ -384,5 +402,21 @@ public class Client {
 
     public Shop getShop() {
         return shop;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 }
