@@ -38,7 +38,12 @@ public class Client {
     private static final String CHECK_CONNECT = "check_connect";
     private static final String I_AM_CONNECTED = "i_am_connected";
     private static final String ADD_BEAR = "add_bear";
-
+    private static final String CAN_YOU_ADD_BEAR = "can_you_add_bear";
+    private static final String I_CAN_ADD_BEAR = "i_can_add_bear";
+    private static final String I_CAN_NOT_ADD_BEAR = "i_can_not_add_bear";
+    private static final String BEAR_ADDED = "bear_added";
+    private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
+    private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
 
     View view;
     Socket socket;
@@ -232,6 +237,28 @@ public class Client {
                 break;
             case CHECK_CONNECT:
                 iAmConnected();
+                break;
+            case CAN_YOU_ADD_BEAR:
+                reader = new Scanner(text);
+                String id1 = reader.nextLine();
+                String id2 = reader.nextLine();
+                if (true)
+                    command(I_CAN_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
+                else command(I_CAN_NOT_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
+                //todo sharte if bayad tabdil she be inke dare baazi mikone ya na?
+                break;
+            case BEAR_ADDED :
+                reader = new Scanner(text);
+                id = reader.nextLine();
+                //todo. bear you sent added to id's map.
+                break;
+            case BEAR_DID_NOT_ADD :
+                reader = new Scanner(text);
+                id = reader.nextLine();
+                //todo. bear you sent did not add to id's map.
+                break;
+            case ADD_BEAR_TO_YOUR_MAP :
+                //todo khers random ezafe she.
                 break;
             default:
                 System.err.println(command);
