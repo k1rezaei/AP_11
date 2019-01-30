@@ -111,7 +111,12 @@ public class ViewProfile {
         VBox vBox = new VBox();
         vBox.getChildren().addAll(name, id, level);
         vBox.getChildren().addAll(labels);
-        if (!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
+        if (!person.getId().equals(client.getMyId())) {
+            vBox.getChildren().remove(getInbox());
+            vBox.getChildren().remove(getFollowers());
+            vBox.getChildren().remove(getFollowing());
+            vBox.getChildren().remove(getFriends());
+        }
         if (person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getPrivateMessage());
             vBox.getChildren().remove(getAddFriend());

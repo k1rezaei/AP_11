@@ -211,7 +211,7 @@ public class Client {
                 String json = text;
                 Talk[] messages = new Gson().fromJson(text, Talk[].class);
                 System.err.println(text);
-                inbox.setContent(messages);
+                Platform.runLater(() -> inbox.setContent(messages));
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
@@ -293,6 +293,10 @@ public class Client {
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
         command(command);
+    }
+
+    public void updateMoney() {
+        command(UPDATE_MONEY + "\n" + money + "\n" + end + "\n");
     }
 
     public void getMoneyFromServer() {
