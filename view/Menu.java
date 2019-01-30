@@ -10,12 +10,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Menu {
     private static final int NUM_SLIDES = 3;
@@ -97,7 +94,7 @@ public class Menu {
     long lastTry = 0;
     final static public long GAP_TIME = 5 * 1000000000L;
 
-    private void connect(String userName, String ip, int port) {
+    private void connect(String userName, String ip, int port, int srcPort) {
         if (lastTry + GAP_TIME > System.nanoTime()) {
             new Pop("You should wait " + (1 + (GAP_TIME - System.nanoTime() + lastTry) / 1000000000) + " second before trying again", view.getSnap(), menuGroup, Pop.AddType.ALERT);
             return;
@@ -106,7 +103,7 @@ public class Menu {
         Client client = new Client(view);
         client.initialize(ip, port);
         try {
-            if (client.checkId(userName, ip,8000+ (int)(Math.random()*1000))) {
+            if (client.checkId(userName, ip, srcPort)) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
                 client.run(new LevelSelect(view).getLevel());
                 GameView.getInstance().setClient(client);
@@ -156,6 +153,10 @@ public class Menu {
                 port.setId("inputBox");
                 port.setMaxWidth(200);
                 port.setText("8050");
+                TextField srcPort = new TextField();
+                srcPort.setId("inputBox");
+                srcPort.setMaxWidth(200);
+                srcPort.setText(Integer.toString(8060 + (int) (Math.random() * 1000)));
                 Label button = new Label("Join");
                 button.setId("label_button");
                 button.setMinWidth(200);
@@ -165,16 +166,18 @@ public class Menu {
 
 
                 VBox vbox = new VBox();
-                vbox.getChildren().addAll(userName, ipAddress, port, button, cancel1);
+                vbox.getChildren().addAll(userName, ipAddress, port, srcPort, button, cancel1);
                 Pop logIn = new Pop(vbox, view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
 
                 logIn.getContent().setOnKeyPressed(event1312 -> {
                     if (event1312.getCode() == KeyCode.ENTER)
-                        connect(userName.getText(), ipAddress.getText(), Integer.parseInt(port.getText()));
+                        connect(userName.getText(), ipAddress.getText(),
+                                Integer.parseInt(port.getText()), Integer.parseInt(srcPort.getText()));
                 });
 
                 button.setOnMouseClicked(event1313 ->
-                        connect(userName.getText(), ipAddress.getText(), Integer.parseInt(port.getText())));
+                        connect(userName.getText(), ipAddress.getText(),
+                                Integer.parseInt(port.getText()), Integer.parseInt(srcPort.getText())));
                 cancel1.setOnMouseClicked(event1314 -> menuGroup.getChildren().remove(logIn.getStackPane()));
             });
             host.setOnMouseClicked(event14 -> {
@@ -371,7 +374,6 @@ public class Menu {
             Label no = new Label("no");
 
             Pop yesNoCancel = new Pop(new VBox(text, yes, no), view.getSnap(), menuGroup, Pop.AddType.BUTTONS_TEXT);
-
 
 
             yes.setOnMouseClicked(event13 -> {
