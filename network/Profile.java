@@ -262,6 +262,7 @@ public class Profile {
                 break;
             case GET_MONEY:
                 command(DATA_MONEY + "\n" + person.getMoney() + "\n" + end + "\n");
+                break;
             default:
                 System.err.println("Unknown command");
 
