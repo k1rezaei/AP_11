@@ -21,6 +21,8 @@ public class Person {
         this.money = money;
     }
 
+    public int getMoney(){ return money;}
+
     public Person(String id, String name) {
         this.id = id;
         this.name = name;
