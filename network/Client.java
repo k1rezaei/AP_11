@@ -364,7 +364,7 @@ public class Client {
     }
 
     private void showMessage(String message) {
-        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(), (Group) view.getScene().getRoot()));
+        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(), (Group) view.getScene().getRoot(), Pop.AddType.WINDOW));
     }
 
     public Chatroom getChatroom() {
