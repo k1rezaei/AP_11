@@ -47,7 +47,7 @@ public class Pop {
         root.getChildren().add(stackPane);
         if (addType == AddType.ALERT) stackPane.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
         else {
-            stackPane.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
+            frost.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
             node.setId("vBox_menu");
         }
         if (addType == AddType.BUTTONS || addType == AddType.BUTTONS_TEXT) {
