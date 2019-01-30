@@ -211,6 +211,7 @@ public class Client {
             case DATA_INBOX:
                 String json = text;
                 Talk[] messages = new Gson().fromJson(text, Talk[].class);
+                System.err.println(text);
                 inbox.setContent(messages);
                 break;
             case DATA_FRIENDS:
