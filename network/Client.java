@@ -221,6 +221,9 @@ public class Client {
                 reader = new Scanner(text);
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
+                System.err.println("BUG " + person.getId());
+                System.err.println("BUG " + person.getInbox().size());
+                System.err.println("BUG " + person.getInbox().get(0).getText());
                 Platform.runLater(() -> {
                     ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
                     view.setRoot(viewProfile.getRoot());
