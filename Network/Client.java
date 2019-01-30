@@ -46,6 +46,7 @@ public class Client {
     private static final String BEAR_ADDED = "bear_added";
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
+    private static final String UPDATE_MONEY = "update_money";
     //TODO get bear cost from server
     private static final int BEAR_COST = 200;
     View view;
@@ -291,6 +292,11 @@ public class Client {
 
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
+        command(command);
+    }
+
+    public void upgradeMoney() {
+        String command = UPDATE_MONEY + "\n" + money + "\n" + end + "\n";
         command(command);
     }
 
