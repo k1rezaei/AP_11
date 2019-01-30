@@ -26,9 +26,14 @@ public class Profile {
     private static final String CHECK_CONNECT = "check_connect";
     private static final String I_AM_CONNECTED = "i_am_connected";
     private static final String ADD_BEAR = "add_bear";
-
+    private static final String CAN_YOU_ADD_BEAR = "can_you_add_bear";
+    private static final String I_CAN_ADD_BEAR = "i_can_add_bear";
+    private static final String I_CAN_NOT_ADD_BEAR = "i_can_not_add_bear";
     private static final long DURATION_IN_MILLISECOND = 1000 * 100 * 100 * 10;
     private static final int TURN_OUT = 30;
+    private static final String BEAR_ADDED = "bear_added";
+    private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
+    private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
 
     private int counter = 0;
     private boolean bucketSent = false;
@@ -39,7 +44,7 @@ public class Profile {
     Scanner scanner;
     Server server;
 
-    AnimationTimer connetChecker = new AnimationTimer() {
+    AnimationTimer connectionChecker = new AnimationTimer() {
         long lastTime = -1;
         @Override
         public void handle(long now) {
@@ -136,7 +141,7 @@ public class Profile {
                 }
             }
             System.err.println("Disconnected");
-            connetChecker.stop();
+            connectionChecker.stop();
             server.remove(person);
             return null;
         }
@@ -157,7 +162,7 @@ public class Profile {
     //decoding what's client saying;.
     private void process(String command, String data) {
         System.err.println(command);
-        String cmd, item, id;
+        String cmd, item, id, id1, id2;
         Scanner reader = new Scanner(data);
         switch (command) {
             case ADD_MESSAGE_TO_CHAT_ROOM:
@@ -227,15 +232,27 @@ public class Profile {
                 break;
             case I_AM_CONNECTED :
                 break;
-            //case ADD_BEAR :
-              //  id = reader.nextLine();
-                //server.command(ADD_BEAR + "\n" + person.getId() + "\n" + end + "\n", id);
+            case ADD_BEAR :
+                id = reader.nextLine();
+                server.command(CAN_YOU_ADD_BEAR + "\n" + person.getId() + "\n" + id + "\n" + end + "\n", id);
+                break;
+            case I_CAN_ADD_BEAR :
+                id1 = reader.nextLine();
+                id2 = reader.nextLine();
+                server.command(BEAR_ADDED + "\n" + id2 + "\n" + end + "\n", id1);
+                server.command(ADD_BEAR_TO_YOUR_MAP + "\n" + end + "\n", id2);
+                break ;
+            case I_CAN_NOT_ADD_BEAR :
+                id1 = reader.nextLine();
+                id2 = reader.nextLine();
+                server.command(BEAR_DID_NOT_ADD + "\n" + id2 + "\n" + end + "\n", id1);
+                break;
         }
     }
 
     //start listening client's commands;
     public void run() {
-        connetChecker.start();
+        //connectionChecker.start();
         new Thread(read).start();
     }
 
