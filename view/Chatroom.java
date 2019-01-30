@@ -41,11 +41,12 @@ public class Chatroom {
     public Chatroom(View view, Client client) {
         this.view = view;
         this.client = client;
-
+        textField.setId("chat_field");
+        reply.setId("chat_field");
         Label back = new Label("BACK");
         back.setId("label_button");
-        ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
-        temp2.relocate(30, 30);
+        //ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
+        back.relocate(30, 30);
         //back.setGraphic(temp2);
         send.setId("label_button_small");
         ImageView temp = new ImageView(new Image("file:textures/multiplayer/send.png"));

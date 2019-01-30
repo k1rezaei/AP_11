@@ -54,20 +54,33 @@
     -fx-stroke-width: 1;
 }
 
-.inputBox {
+#inputBox {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 18;
     -fx-padding: 1, 1, 1, 1;
     -fx-border-color: grey;
     -fx-border-width: 2;
-    -fx-border-radius: 1;
+    -fx-border-radius: 20;
     -fx-border: gone;
     -fx-background-color: transparent;
-    -fx-text-fill: grey;
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(200,200,200);
+    -fx-alignment: center;
 }
-
-.inputBox:focused {
-    -fx-background-color: -fx-focus-color, -fx-background;
+#chat_field {
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 18;
+    -fx-padding: 5, 5, 5, 5;
+    -fx-border-color: grey;
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
+    -fx-border: gone;
+    -fx-background-color: rgba(100,100,100, 0.7);
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(235,230,230);
+}
+#inputBox:focused {
+    -fx-background-color: rgba(100,100,100,0.5);
 }
 
 #input {
@@ -263,6 +276,18 @@ HBox {
     -fx-border-width: 2px;
     -fx-border-radius: 50;
 }
+#prof_menu {
+    -fx-font-size: 30;
+    -fx-alignment: center;
+    -fx-padding: 10;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
+    -fx-background-radius: 50;
+    -fx-border-color: white;
+    -fx-border-width: 2px;
+    -fx-border-radius: 50;
+    -fx-scale-y: 0.9;
+    -fx-pref-width: 500;
+}
 
 #vBox_menu {
 
@@ -334,7 +359,7 @@ HBox {
 #label_button_small {
     -fx-opacity: 1;
     -fx-text-fill: rgb(63, 72, 204);
-    -fx-font-size: 25;
+    -fx-font-size: 23;
     -fx-font-family: "Showcard Gothic";
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
@@ -395,5 +420,29 @@ HBox {
 }
 
 
+
+
+.scroll-bar:vertical{
+    -fx-background-color:transparent;
+}
+
+.increment-button, .decrement-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:vertical .track{
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 0em;
+}
+
+.scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(50,50,50,0.8);
+    -fx-border-color: rgba(180,180,180,1);
+    -fx-border-width: 2;
+    -fx-border-radius: 5em;
+    -fx-background-radius: 5em;
+}
 
 

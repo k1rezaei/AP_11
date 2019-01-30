@@ -98,7 +98,7 @@ public class Menu {
 
     private void connect(String userName, String ip, int port) {
         if (lastTry + GAP_TIME > System.nanoTime()) {
-            new Pop("You should wait " + (1 + (GAP_TIME - System.nanoTime() + lastTry) / 1000000000) + " second before trying again", view.getSnap(), menuGroup);
+            new Pop("You should wait " + (1 + (GAP_TIME - System.nanoTime() + lastTry) / 1000000000) + " second before trying again", view.getSnap(), menuGroup, Pop.AddType.ALERT);
             return;
         }
         Platform.runLater(() -> lastTry = System.nanoTime());
@@ -110,10 +110,10 @@ public class Menu {
                 client.run(new LevelSelect(view).getLevel());
                 GameView.getInstance().setClient(client);
             } else {
-                new Pop("Invalid Username", view.getSnap(), menuGroup);
+                new Pop("Invalid Username", view.getSnap(), menuGroup, Pop.AddType.ALERT);
             }
         } catch (Exception e) {
-            Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup);
+            Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
             System.err.println("something is wrong");
             e.printStackTrace();
         }
@@ -125,34 +125,34 @@ public class Menu {
         start.setId("label_button");
         vBox.getChildren().add(start);
         start.setOnMouseClicked(event -> {
-            Buttons buttons = new Buttons(view.getSnap(), 4);
-            buttons.getDisabler().setOnMouseClicked(event12 -> menuGroup.getChildren().remove(buttons.getStackPane()));
-            buttons.getLabels()[3].setOnMouseClicked(event1 -> menuGroup.getChildren().remove(buttons.getStackPane()));
+            Label cancel = new Label("CANCEL");
+            Label solo = new Label("SOLO");
+            Label join = new Label("JOIN");
+            Label host = new Label("HOST");
 
-            Label[] labels = buttons.getLabels();
-            Label cancel = labels[3];
-            cancel.setText("CANCEL");
+
+            VBox vBox = new VBox();
+            vBox.getChildren().addAll(solo, join, host, cancel);
+            Pop buttons = new Pop(vBox, view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
             cancel.setStyle("-fx-font-size: 50");
-            Label solo = labels[0];
-            solo.setText("SOLO");
-            Label join = labels[1];
-            join.setText("JOIN");
-            Label host = labels[2];
-            host.setText("HOST");
-            menuGroup.getChildren().add(buttons.getStackPane());
+
+
             solo.setOnMouseClicked(event15 -> {
                 GameView.getInstance().setClient(null);
                 view.setRoot(new LevelSelect(view).getRoot());
             });
             join.setOnMouseClicked(event13 -> {
                 LimitedTextField userName = new LimitedTextField(16);
+                userName.setAlignment(Pos.CENTER);
                 userName.setMaxWidth(200);
                 userName.setPromptText("UserName");
                 userName.setId("inputBox");
                 TextField ipAddress = new TextField();
+                ipAddress.setId("inputBox");
                 ipAddress.setText("127.0.0.1");
                 ipAddress.setMaxWidth(200);
                 TextField port = new TextField();
+                port.setId("inputBox");
                 port.setMaxWidth(200);
                 port.setText("8050");
                 Label button = new Label("Join");
@@ -162,16 +162,12 @@ public class Menu {
                 cancel1.setId("label_button");
                 cancel1.setMinWidth(200);
 
-                Buttons logIn = new Buttons(view.getSnap(), 0);
-                logIn.getVBox().getChildren().addAll(userName, ipAddress, port, button, cancel1);
 
-                logIn.getStackPane().relocate(400, 300);
-                logIn.getStackPane().translateXProperty().bind(logIn.getStackPane().widthProperty().divide(2).negate());
-                logIn.getStackPane().translateYProperty().bind(logIn.getStackPane().heightProperty().divide(2).negate());
-                logIn.getDisabler().setOnMouseClicked(event131 -> menuGroup.getChildren().remove(logIn.getStackPane()));
+                VBox vbox = new VBox();
+                vbox.getChildren().addAll(userName, ipAddress, port, button, cancel1);
+                Pop logIn = new Pop(vbox, view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
 
-                menuGroup.getChildren().addAll(logIn.getStackPane());
-                logIn.getVBox().setOnKeyPressed(event1312 -> {
+                logIn.getContent().setOnKeyPressed(event1312 -> {
                     if (event1312.getCode() == KeyCode.ENTER)
                         connect(userName.getText(), ipAddress.getText(), Integer.parseInt(port.getText()));
                 });
@@ -189,7 +185,10 @@ public class Menu {
                 }
 
                 TextField port = new TextField();
+                port.setMaxWidth(200);
+                port.setAlignment(Pos.CENTER);
                 port.setText("8050");
+                port.setId("inputBox");
                 Label ok = new Label("Host");
                 ok.setId("label_button");
                 ok.setOnMouseClicked(mouseEvent -> {
@@ -198,9 +197,9 @@ public class Menu {
                         Server server = new Server(Integer.parseInt(port.getText()));
                         server.run();
                         System.err.println("U R HOST");
-                        new Pop("You are HOST now", view.getSnap(), menuGroup);
+                        new Pop("You are HOST now", view.getSnap(), menuGroup, Pop.AddType.ALERT);
                     } else {
-                        new Pop("You or someone else is host", view.getSnap(), menuGroup);
+                        new Pop("You or someone else is host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
                     }
                 });
                 Label cancel1 = new Label("Cancel");
@@ -210,7 +209,14 @@ public class Menu {
                 hostVBox.setMaxWidth(500);
                 hostVBox.setMaxHeight(400);
                 hostVBox.getChildren().addAll(ip, port, ok, cancel1);
-                Pop pop = new Pop(hostVBox, view.getSnap(), menuGroup);
+                Pop pop = new Pop(hostVBox, view.getSnap());
+                menuGroup.getChildren().add(pop.getStackPane());
+                pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        menuGroup.getChildren().remove(pop.getStackPane());
+                    }
+                });
                 hostVBox.setId("vBox_menu");
                 cancel1.setOnMouseClicked(mouseEvent -> menuGroup.getChildren().remove(pop.getStackPane()));
             });
@@ -359,20 +365,22 @@ public class Menu {
         vBox.getChildren().add(exit);
         exit.setOnMouseClicked(event -> {
 
-            YesNoCancel yesNoCancel = new YesNoCancel("Are you sure you want to exit?", view.getSnap());
+            Label text = new Label("Are you sure you want to exit?");
+            Label yes = new Label("yes");
+            Label no = new Label("no");
 
-            yesNoCancel.getVBox().getChildren().remove(yesNoCancel.getCancel());
+            Pop yesNoCancel = new Pop(new VBox(text, yes, no), view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
+            text.setId("vBox_menu");
 
             menuGroup.getChildren().add(yesNoCancel.getStackPane());
 
-            yesNoCancel.getYes().setOnMouseClicked(event13 -> {
+            yes.setOnMouseClicked(event13 -> {
                 menuGroup.getChildren().clear();
                 view.close();
             });
 
-            yesNoCancel.getNo().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
+            no.setOnMouseClicked(event1 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
 
-            yesNoCancel.getDisabler().setOnMouseClicked(event12 -> menuGroup.getChildren().remove(yesNoCancel.getStackPane()));
         });
     }
 
