@@ -142,15 +142,15 @@ public class Shop {
         numberOfItems++;
         buy.setOnMouseClicked(event -> {
             if (Game.getInstance().getMoney() < cost) {
-                new Pop("Not Enough Money", view.getSnap(), root);
+                new Pop("Not Enough Money", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
             if(Game.getInstance().getWarehouse().getCapacity() < Entity.getNewEntity(type).getSize()) {
-                new Pop("Not Enough Space In Warehouse", view.getSnap(), root);
+                new Pop("Not Enough Space In Warehouse", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
             if(serverCnt.getText().equalsIgnoreCase("0")){
-                new Pop("Khak bar Saret Baw :D", view.getSnap(), root);
+                new Pop("Khak bar Saret Baw :D", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
             Game.getInstance().setMoney(Game.getInstance().getMoney() - cost);
@@ -165,7 +165,7 @@ public class Shop {
             public void handle(MouseEvent event) {
                 System.err.println(clientCnt.getText());
                 if (clientCnt.getText().equalsIgnoreCase("0")) {
-                    new Pop("Nadari Baw :D", view.getSnap(), root);
+                    new Pop("Nadari Baw :D", view.getSnap(), root, Pop.AddType.ALERT);
                 } else {
                     client.sellItem(type);
                     Game.getInstance().getWarehouse().remove(type);

@@ -651,13 +651,19 @@ public class GameView {
         exit.setId("label_button_small");
         exit.setOnMouseClicked(event -> {
             pause();
-            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?", view.getSnap());
-            root.getChildren().add(menu.getStackPane());
-            menu.getNo().setOnMouseClicked(event1 -> {
+            VBox vBox = new VBox();
+            Label text = new Label("Do you want to save before exit?");
+            Label no = new Label("NO");
+            Label yes = new Label("YES");
+            Label cancel = new Label("CANCEL");
+            vBox.getChildren().addAll(text, yes, no, cancel);
+            Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
+
+            no.setOnMouseClicked(event1 -> {
                 root.getChildren().remove(menu.getStackPane());
                 view.close();
             });
-            menu.getYes().setOnMouseClicked(event12 -> {
+            yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
@@ -666,15 +672,17 @@ public class GameView {
                 root.getChildren().remove(menu.getStackPane());
                 view.close();
             });
-            menu.getCancel().setOnMouseClicked(event13 -> {
+            cancel.setOnMouseClicked(event13 -> {
                 resume();
                 root.getChildren().remove(menu.getStackPane());
             });
-            menu.getDisabler().setOnMouseClicked(event14 -> {
-                resume();
-                root.getChildren().remove(menu.getStackPane());
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
             });
-
 
         /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
@@ -711,10 +719,17 @@ public class GameView {
         menuButton.setOnMouseClicked(event -> {
             pause();
 
-            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?", view.getSnap());
-            root.getChildren().add(menu.getStackPane());
+            VBox vBox = new VBox();
+            Label text = new Label("Do you want to save before going to menu?");
+            Label yes = new Label("YES");
+            Label no = new Label("NO");
+            Label cancel = new Label("CANCEL");
+            vBox.getChildren().addAll(text, yes, no, cancel);
 
-            menu.getNo().setOnMouseClicked(event1 -> {
+            Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
+
+
+            no.setOnMouseClicked(event1 -> {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
                 if (client == null) view.setRoot(backMenu.getRoot());
@@ -725,7 +740,7 @@ public class GameView {
                 game.stop();
             });
 
-            menu.getYes().setOnMouseClicked(event12 -> {
+            yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
@@ -738,14 +753,17 @@ public class GameView {
                 game.stop();
             });
 
-            menu.getCancel().setOnMouseClicked(event13 -> {
+            cancel.setOnMouseClicked(event13 -> {
                 root.getChildren().remove(menu.getStackPane());
                 resume();
             });
 
-            menu.getDisabler().setOnMouseClicked(event14 -> {
-                root.getChildren().remove(menu.getStackPane());
-                resume();
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
             });
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);

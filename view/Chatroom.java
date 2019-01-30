@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -38,14 +39,17 @@ public class Chatroom {
     final private static int HEIGHT = 400;
     final private static int WIDTH = 600;
 
+    private static String[] emojis = {"\uD83D\uDE17", "\uD83D\uDE10", "\uD83D\uDE04", "\uD83D\uDE0D", "\uD83D\uDE09", "\uD83D\uDE33", "\uD83D\uDE14", "\uD83D\uDE02", "\uD83D\uDE22", "\uD83D\uDE28", "\uD83D\uDE20", "\uD83D\uDE0E",};
+
     public Chatroom(View view, Client client) {
         this.view = view;
         this.client = client;
-
+        textField.setId("chat_field");
+        reply.setId("chat_field");
         Label back = new Label("BACK");
         back.setId("label_button");
-        ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
-        temp2.relocate(30, 30);
+        //ImageView temp2 = new ImageView(new Image("file:textures/back_button.png"));
+        back.relocate(30, 30);
         //back.setGraphic(temp2);
         send.setId("label_button_small");
         ImageView temp = new ImageView(new Image("file:textures/multiplayer/send.png"));
@@ -59,9 +63,43 @@ public class Chatroom {
         });
 
         back.setOnMouseClicked(event -> view.setRoot(client.getMultiPlayerMenu().getRoot()));
-        textField.relocate(400 - WIDTH / 2, 300 + HEIGHT / 2);
-        textField.setMinSize(WIDTH - 60, 30);
-        textField.setMaxSize(WIDTH - 60, 30);
+        textField.relocate(30 + 400 - WIDTH / 2, 300 + HEIGHT / 2);
+        textField.setMinSize(WIDTH - 90, 30);
+        textField.setMaxSize(WIDTH - 90, 30);
+
+        Label emoji = new Label("\uD83D\uDE04");
+        emoji.setPrefSize(30, 30);
+        emoji.relocate(400 - WIDTH / 2, 300 + HEIGHT / 2);
+        emoji.setId("emoji");
+        emoji.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                FlowPane flowPane = new FlowPane();
+                flowPane.relocate(30 + 400 - WIDTH / 2, 300 + HEIGHT / 2 - 3*5 - 30 * 3);
+                flowPane.setVgap(5);
+                flowPane.setHgap(5);
+                flowPane.setMaxSize( 30 * 2 + 15 + 1, 5*3 + 30 * 4 + 1);
+                flowPane.setStyle("-fx-background-color: rgba(200,200,200,0.8);" +
+                        "-fx-padding: 5;" +
+                        "-fx-background-radius: 10");
+                for(int i = 0; i < emojis.length; i++){
+                    Label emoj = new Label(emojis[i]);
+                    emoj.setId("emoji");
+                    int finalI = i;
+                    emoj.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            System.err.println("WTF?");
+                            textField.setText(textField.getText() + emojis[finalI]);
+                            root.getChildren().remove(flowPane);
+                        }
+                    });
+                    flowPane.getChildren().add(emoj);
+                }
+                root.getChildren().add(flowPane);
+            }
+        });
+
         reply.relocate(400 - WIDTH / 2, 350 + HEIGHT / 2);
         reply.setMinSize(WIDTH - 60, 30);
         reply.setMaxSize(WIDTH - 60, 30);
@@ -86,7 +124,7 @@ public class Chatroom {
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
         Label clear = setUpClear();
-        root.getChildren().addAll(scrollPane, send, textField, back, reply, clear);
+        root.getChildren().addAll(scrollPane, emoji, send, textField, back, reply, clear);
     }
 
     private Label setUpClear() {
@@ -103,6 +141,7 @@ public class Chatroom {
         clearReply();
         textField.setText("");
     }
+
 
     private void clearReply() {
         replied = false;
