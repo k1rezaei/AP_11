@@ -118,7 +118,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id, String ip) throws IOException {
+    boolean checkId(String id, String ip,int srcPort) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -130,16 +130,17 @@ public class Client {
             formatter.close();
             return false;
         } else {
-            myId = id;
+            myId = id;/*
             int port = scanner.nextInt();
             System.err.println("port is " + port);
-            formatter.format("Connected with port : " + port + '\n');
+            formatter.format("Connected with port : " + port + '\n');*/
+            formatter.format(srcPort+"\n");
             formatter.flush();
             formatter.close();
             scanner.close();
             while (true) {
                 try {
-                    socket = new Socket(ip, port);
+                    socket = new Socket(ip, srcPort);
                     break;
                 } catch (Exception e) {
                 }

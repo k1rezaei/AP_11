@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Menu {
     private static final int NUM_SLIDES = 3;
@@ -105,7 +106,7 @@ public class Menu {
         Client client = new Client(view);
         client.initialize(ip, port);
         try {
-            if (client.checkId(userName, ip)) {
+            if (client.checkId(userName, ip,8000+ (int)(Math.random()*1000))) {
                 view.setRoot(client.getMultiPlayerMenu().getRoot());
                 client.run(new LevelSelect(view).getLevel());
                 GameView.getInstance().setClient(client);

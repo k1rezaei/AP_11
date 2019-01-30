@@ -72,7 +72,6 @@ public class Server {
     Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
-            int cnt = port + 1;
             while (true) {
                 ServerSocket serverSocket;
                 try {
@@ -102,20 +101,13 @@ public class Server {
                         formatter.flush();
                     }
 
-                    formatter.format(Integer.toString(cnt) + '\n');
-                    System.err.println("port is " + cnt);
-                    formatter.flush();
-
-                    System.err.println("waiting for finishing");
-                    String connected = scanner.nextLine();
-                    System.err.println("connected");
+                    int port = Integer.parseInt(scanner.nextLine());
 
                     formatter.close();
                     scanner.close();
 
                     serverSocket.close();
-                    serverSocket = new ServerSocket(cnt);
-                    cnt++;
+                    serverSocket = new ServerSocket(port);
                     socket = serverSocket.accept();
                     System.err.println("User adding");
 
