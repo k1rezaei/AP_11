@@ -34,6 +34,7 @@ public class Profile {
     private static final String BEAR_ADDED = "bear_added";
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
+    private static final String UPDATE_MONEY = "update_money";
 
     private int counter = 0;
     private boolean bucketSent = false;
@@ -46,12 +47,13 @@ public class Profile {
 
     AnimationTimer connectionChecker = new AnimationTimer() {
         long lastTime = -1;
+
         @Override
         public void handle(long now) {
-            if(lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
+            if (lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
                 lastTime = now;
-                counter ++;
-                if(counter > TURN_OUT) {
+                counter++;
+                if (counter > TURN_OUT) {
                     checkConnection();
                 }
             }
@@ -64,7 +66,7 @@ public class Profile {
 
     private void checkConnection() {
         counter = 0;
-        if(bucketSent) disconnect();
+        if (bucketSent) disconnect();
         else {
             command(CHECK_CONNECT + "\n" + end + "\n");
             bucketSent = true;
@@ -77,7 +79,7 @@ public class Profile {
             //socket.close();
             scanner = null;
             socket.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Cannot close connection :/");
         }
     }
@@ -141,7 +143,7 @@ public class Profile {
                     System.err.println("Cleared");
                     process(command, getData(scanner));
                 } catch (Exception e) {
-                    break ;
+                    break;
                 }
             }
             System.err.println("Disconnected");
@@ -175,14 +177,14 @@ public class Profile {
                 break;
             case ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY:
                 StringBuilder txt = new StringBuilder();
-                while(true) {
+                while (true) {
                     String line = reader.nextLine();
-                    if(line.equals(SPLIT)) break ;
+                    if (line.equals(SPLIT)) break;
                     txt.append(line + "\n");
                 }
                 Talk talkWithReply = new Talk(person.getId(), txt.toString());
                 txt = new StringBuilder();
-                while(reader.hasNextLine()) {
+                while (reader.hasNextLine()) {
                     String line = reader.nextLine();
                     txt.append(line + "\n");
                 }
@@ -227,30 +229,38 @@ public class Profile {
                 id = reader.nextLine();
                 command(server.getPersonCommand(id));
                 break;
-            case ACCEPT_FRIEND_REQUEST :
+            case ACCEPT_FRIEND_REQUEST:
                 id = reader.nextLine();
                 server.acceptFriendRequest(person.getId(), id);
                 break;
-            case GET_WAREHOUSE :
+            case GET_WAREHOUSE:
                 command(server.getWarehouse());
                 break;
-            case I_AM_CONNECTED :
+            case I_AM_CONNECTED:
                 break;
-            case ADD_BEAR :
+            case ADD_BEAR:
                 id = reader.nextLine();
                 server.command(CAN_YOU_ADD_BEAR + "\n" + person.getId() + "\n" + id + "\n" + end + "\n", id);
                 break;
-            case I_CAN_ADD_BEAR :
+            case I_CAN_ADD_BEAR:
                 id1 = reader.nextLine();
                 id2 = reader.nextLine();
                 server.command(BEAR_ADDED + "\n" + id2 + "\n" + end + "\n", id1);
                 server.command(ADD_BEAR_TO_YOUR_MAP + "\n" + end + "\n", id2);
-                break ;
-            case I_CAN_NOT_ADD_BEAR :
+                break;
+            case I_CAN_NOT_ADD_BEAR:
                 id1 = reader.nextLine();
                 id2 = reader.nextLine();
                 server.command(BEAR_DID_NOT_ADD + "\n" + id2 + "\n" + end + "\n", id1);
                 break;
+            case UPDATE_MONEY:
+                int money = reader.nextInt();
+                person.setMoney(money);
+                server.updateScoreboard();
+                break;
+            default:
+                System.err.println("Unknown command");
+
         }
     }
 
