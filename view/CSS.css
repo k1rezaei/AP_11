@@ -267,8 +267,11 @@ HBox {
 #focus {
     -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-border-width: 2;
+    -fx-border-color: rgba(200, 200, 200, 0.7);
     -fx-alignment: center;
-    -fx-padding: 1;
+    -fx-padding: 5;
     -fx-min-height: 80px;
     -fx-max-height: 80px;
     -fx-max-width: 110px;

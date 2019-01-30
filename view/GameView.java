@@ -676,7 +676,13 @@ public class GameView {
                 resume();
                 root.getChildren().remove(menu.getStackPane());
             });
-
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
 
         /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
@@ -752,6 +758,13 @@ public class GameView {
                 resume();
             });
 
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
+            });
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
             alert.setTitle("Back To Menu");

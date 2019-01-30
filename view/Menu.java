@@ -369,10 +369,9 @@ public class Menu {
             Label yes = new Label("yes");
             Label no = new Label("no");
 
-            Pop yesNoCancel = new Pop(new VBox(text, yes, no), view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
-            text.setId("vBox_menu");
+            Pop yesNoCancel = new Pop(new VBox(text, yes, no), view.getSnap(), menuGroup, Pop.AddType.BUTTONS_TEXT);
 
-            menuGroup.getChildren().add(yesNoCancel.getStackPane());
+
 
             yes.setOnMouseClicked(event13 -> {
                 menuGroup.getChildren().clear();
