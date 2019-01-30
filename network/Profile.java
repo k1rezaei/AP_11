@@ -35,6 +35,8 @@ public class Profile {
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
     private static final String UPDATE_MONEY = "update_money";
+    private static final String GET_MONEY = "get_money";
+    private static final String DATA_MONEY = "data_money";
 
     private int counter = 0;
     private boolean bucketSent = false;
@@ -257,6 +259,9 @@ public class Profile {
                 int money = reader.nextInt();
                 person.setMoney(money);
                 server.updateScoreboard();
+                break;
+            case GET_MONEY:
+                command(DATA_MONEY + "\n" + person.getMoney() + "\n" + end + "\n");
                 break;
             default:
                 System.err.println("Unknown command");
