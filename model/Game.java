@@ -509,4 +509,5 @@ public class Game {
     public int getCatLevel() {
         return catLevel;
     }
+
 }

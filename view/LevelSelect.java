@@ -1,9 +1,11 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 
@@ -28,19 +30,15 @@ public class LevelSelect {
         }
     }
 
-    private ArrayList<Boolean> isLock = new ArrayList<>();
-    private boolean[] levels = new boolean[NUM_LEVELS];
-    private Group root = new Group();
-    private View view;
-    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
-
-    {
+    public String getLevel(String name) {
+        int mx = -1;
         try {
-            InputStream inputStream = new FileInputStream("Levels");
+            InputStream inputStream = new FileInputStream(name);
             Scanner scanner = new Scanner(inputStream);
             while (scanner.hasNext()) {
                 int level = scanner.nextInt();
                 levels[level] = true;
+                if (level > mx) mx = level;
             }
             scanner.close();
             inputStream.close();
@@ -57,11 +55,27 @@ public class LevelSelect {
 
             isLock.add(lock);
         }
+        return "" + (mx + 2);
     }
+
+    public String getLevel() {
+        return getLevel("Levels");
+        /*if(GameView.getInstance().getClient() == null){
+            return getLevel("Level");
+        }else{
+            return getLevel("");
+        }*/
+    }
+
+    private ArrayList<Boolean> isLock = new ArrayList<>();
+    private boolean[] levels = new boolean[NUM_LEVELS];
+    private Group root = new Group();
+    private View view;
+    private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
 
     LevelSelect(View view) {
         this.view = view;
-
+        getLevel();
         flowPane.setId("level_select");
 
         ImageView bg = new ImageView(BG);
@@ -69,13 +83,39 @@ public class LevelSelect {
         bg.setFitHeight(600);
         root.getChildren().add(bg);
 
-        Label backLabel = new Label();
+        Label load = new Label("LOAD");
+        load.setId("label_button");
+        root.getChildren().add(load);
+        load.relocate(30, 100);
+        load.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().loadGame("SaveGame");
+                GameView gameView = GameView.getInstance();
+                for (Workshop workshop : Game.getInstance().getWorkshops())
+                    System.out.println(workshop.getName() + "," + workshop.getLevel());
+                gameView.runGame();
+                GameView.getInstance().setClient(GameView.getInstance().getClient());
+                view.setRoot(gameView.getRoot());
+            } catch (Exception e) {
+                e.printStackTrace();
+                Pop pop = new Pop("Can't Find SaveGame", view.getSnap());
+                root.getChildren().add(pop.getStackPane());
+                pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        root.getChildren().remove(pop.getStackPane());
+                    }
+                });
+            }
+        });
+
+        Label backLabel = new Label("BACK");
         backLabel.setId("label_button");
-        ImageView backImageView = new ImageView(new Image("file:textures/back_button.png"));
-        backLabel.setGraphic(backImageView);
+        //ImageView backImageView = new ImageView(new Image("file:textures/back_button.png"));
+        //backLabel.setGraphic(backImageView);
         backLabel.relocate(30, 30);
         root.getChildren().add(backLabel);
-        backLabel.setOnMouseClicked(event -> view.setRoot(new Menu(view).getRoot()));
+        backLabel.setOnMouseClicked(event -> view.goBack());
 
         flowPane.setPrefWrapLength(350);
 
@@ -102,7 +142,9 @@ public class LevelSelect {
 
             imageView.setFitWidth(SIZE);
             imageView.setFitHeight(SIZE);
-            label.setGraphic(imageView);
+            if (!isLock.get(i)) label.setText("" + (i + 1));
+            else label.setGraphic(imageView);
+            //label.setGraphic(imageView);
             label.setMaxSize(SIZE, SIZE);
             label.setMinSize(SIZE, SIZE);
 

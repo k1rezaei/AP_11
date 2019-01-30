@@ -1,3 +1,107 @@
+#rank {
+    -fx-background-color: rgba(0, 0, 0, 0.1);
+    -fx-background-radius: 30;
+    -fx-background-insets: -10;
+    -fx-padding: 20;
+    -fx-max-height: 500;
+}
+#rank_name {
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-background-insets: -4;
+    -fx-background-radius: 20;
+
+    -fx-font-size: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_name .text {
+    -fx-stroke: blue;
+}
+#rank_level {
+    -fx-font-size: 20;
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-background-insets: -4;
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_level .text {
+    -fx-stroke: red;
+}
+#sender {
+    -fx-background-color: rgba(0, 0, 0, 0.5);
+    -fx-background-insets: -10 -10 -10 -10;
+    -fx-background-radius: 30;
+
+}
+
+#message {
+    -fx-text-fill: rgb(255, 255, 255);
+    -fx-background-color: rgba(0, 0, 0, 0.3);
+    -fx-background-insets: -10 -10 -10 -10;
+    -fx-background-radius: 30;
+}
+
+#sender .text {
+    -fx-text-fill: unset;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-weight: bold;
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+}
+
+#message .text {
+    -fx-font-family: "Comic Sans MS";
+    -fx-stroke: gray;
+    -fx-stroke-width: 1;
+}
+
+.inputBox {
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 18;
+    -fx-padding: 1, 1, 1, 1;
+    -fx-border-color: grey;
+    -fx-border-width: 2;
+    -fx-border-radius: 1;
+    -fx-border: gone;
+    -fx-background-color: transparent;
+    -fx-text-fill: grey;
+}
+
+.inputBox:focused {
+    -fx-background-color: -fx-focus-color, -fx-background;
+}
+
+#input {
+
+}
+
+#chat {
+    -fx-background-color: transparent;
+    -fx-padding: 10;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: rgba(50, 50, 50, 0.5);
+    -fx-background-radius: 30;
+    -fx-padding: 20;
+}
+
+.scroll-pane > .corner {
+    -fx-background-color: transparent;
+}
+
+
+#chatbox {
+
+}
+
 .label {
     -fx-text-fill: white;
     -fx-font-size: 18;
@@ -14,15 +118,13 @@
     -fx-text-fill: white;
     -fx-font-size: 30;
 
-    -fx-background-color: rgb(203, 141, 79);
+    -fx-background-color: rgba(50, 50, 50, 0.7);
     -fx-background-radius: 30 30 30 30;
-    -fx-opacity: 0.7;
 
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 30 30 30 30;
 }
-
 
 #pop .text {
     -fx-stroke: firebrick;
@@ -34,14 +136,14 @@
     -fx-text-fill: white;
     -fx-font-size: 30;
 
-    -fx-background-color: rgb(203, 141, 79);
+    -fx-background-color: rgba(203, 141, 79, 0.7);
     -fx-background-radius: 30 30 30 30;
-    -fx-opacity: 0.7;
 
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 30 30 30 30;
 }
+
 #popVBox .label {
     -fx-padding: 10;
     -fx-text-fill: white;
@@ -52,15 +154,13 @@
     -fx-stroke: firebrick;
     -fx-stroke-width: 2px;
 }
+
 #pop_stackPane {
 }
 
-
-
 #tutorial {
     -fx-text-fill: blue;
-    -fx-background-color: black;
-    -fx-opacity: 0.7;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 30;
     -fx-padding: 10;
 }
@@ -71,9 +171,8 @@
 }
 
 #levelFlowPane {
-    -fx-background-color: black;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 30;
-    -fx-opacity: 0.7;
     -fx-padding: 10 10 10 10;
 }
 
@@ -109,6 +208,8 @@
     -fx-background-color: transparent;
     -fx-opacity: 1;
     -fx-padding: 0;
+
+
 }
 
 #buyAnimal .text {
@@ -144,8 +245,7 @@ HBox {
 }
 
 #focus {
-    -fx-background-color: black;
-    -fx-opacity: 0.7;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 30;
     -fx-alignment: center;
     -fx-padding: 1;
@@ -156,9 +256,8 @@ HBox {
 }
 
 #level_select {
-    -fx-background-color: black;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-padding: 10 -20 10 10;
-    -fx-opacity: 0.7;
     -fx-background-radius: 50;
     -fx-border-color: white;
     -fx-border-width: 2px;
@@ -173,18 +272,9 @@ HBox {
     -fx-max-height: 400px;
     -fx-max-width: 500px;
     -fx-min-width: 500px;
-}
 
-#vBox_menu_fake {
-    -fx-background-color: black;
-    -fx-opacity: 0.7;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 50;
-    -fx-alignment: center;
-    -fx-padding: 10;
-    -fx-min-height: 400px;
-    -fx-max-height: 400px;
-    -fx-max-width: 500px;
-    -fx-min-width: 500px;
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 50;
@@ -196,37 +286,23 @@ HBox {
 
 #menu {
     -fx-alignment: center;
-    -fx-padding: 10;
-    -fx-min-width: 300;
-    -fx-min-height: 500;
-}
-
-#menuFake {
-    -fx-background-color: black;
-    -fx-opacity: 0.7;
+    -fx-background-color: rgba(0, 0, 0, 0.7);
     -fx-background-radius: 50;
-    -fx-alignment: center;
-    -fx-padding: 10;
+    -fx-padding: 40;
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 50;
     -fx-min-width: 300;
-    -fx-min-height: 500;
+    -fx-min-height: 400;
 }
 
 #recBG {
     -fx-border-radius: 30;
     -fx-border-color: gray;
-    -fx-background-color: black;
+    -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-radius: 30;
-    -fx-opacity: 0.5;
 }
 
-#label_button:hover {
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
-}
 #bar {
     -fx-background-color: blue;
     -fx-background-radius: 50;
@@ -237,16 +313,65 @@ HBox {
 #baseBar {
     -fx-background-color: white;
     -fx-background-radius: 50;
+
     -fx-border-color: darkblue;
     -fx-border-radius: 50;
 }
 
-#glow:hover{
+#glow:hover {
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
+
 #label_button {
+    -fx-alignment: center;
     -fx-opacity: 1;
-    -fx-effect: innershadow(three-pass-box, rgba(200, 200, 0, 0.7), 6, 0.0, 0, 2);
+    -fx-text-fill: rgb(63, 72, 204);
+    -fx-font-size: 65;
+    -fx-font-family: "Showcard Gothic";
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small {
+    -fx-opacity: 1;
+    -fx-text-fill: rgb(63, 72, 204);
+    -fx-font-size: 25;
+    -fx-font-family: "Showcard Gothic";
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small .text {
+
+    -fx-stroke-width: 0;
+    -fx-stroke: transparent;
+}
+
+#label_button .text {
+    -fx-stroke-width: 0;
+    -fx-stroke: transparent;
+}
+
+#label_button:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_small:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+#chat_scroll_pane {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-border-width: 5;
+    -fx-border-color: rgba(200, 200, 200, 0.5);
+}
+
+#reply {
+    -fx-scale-x: 0.7;
+    -fx-scale-y: 0.7;
+    -fx-background-color: rgba(150, 150, 150, 0.5);
+    -fx-background-radius: 30;
 }
 
 #finish {

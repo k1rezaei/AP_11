@@ -49,7 +49,7 @@ public class GameView {
     private static final int FF_X = 360;
     private static final int FF_Y = 15;
     private static final int SAVE_X = 450;
-    private static final int SAVE_Y = 15;
+    private static final int SAVE_Y = 30;
     private static final int EXIT_X = 10;
     private static final int EXIT_Y = 550;
     private static final int MONEY_X = 600;
@@ -75,7 +75,15 @@ public class GameView {
     private static final int VEHICLE_MINI_TRAVEL = 130;
     private static final String LABEL_BUTTON = "label_button";
     private static final float ITEM_FADE_TIME = 100;
-    private static Image info = new Image("file:textures/info.png");
+    private static final Image info = new Image("file:textures/info.png");
+    private static final Image END_GIF = new Image("file:textures/end3.gif");
+    private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
+    private ImageView pashe = null;
+    final private static Image pashImage = new Image("file:textures/mosquito.gif");
+    private int pasheX;
+    private int pasheY;
+    private int pasheDisX;
+    private int pasheDisY;
 
     static {
         REFRESHER.setVisible(false);
@@ -105,8 +113,18 @@ public class GameView {
     private Focus focus;
     private Label fastForward;
     private Label save;
+    private Client client;
+
 
     private GameView() {
+    }
+
+    public void setClient(Client client){
+        this.client = client;
+    }
+
+    public Client getClient(){
+        return client;
     }
 
     public static GameView getInstance() {
@@ -123,6 +141,39 @@ public class GameView {
         game.start();
     }
 
+
+
+
+    void pash(){
+        if(pashe != null){
+            if(pasheX != pasheDisX) pasheX += (pasheDisX-pasheX)/Math.abs(pasheDisX-pasheX);
+            if(pasheY != pasheDisY) pasheY += (pasheDisY-pasheY)/Math.abs(pasheDisY-pasheY);
+            pashe.relocate(pasheX, pasheY);
+            if(pasheX == pasheDisX && pasheY == pasheDisY){
+                root.getChildren().remove(pashe);
+                pashe = null;
+            }
+        }
+        if (Math.random() * 100 <= 1 && pashe == null){
+            pashe = new ImageView(pashImage);
+            pashe.setFitHeight(20);
+            pashe.setFitWidth(20);
+            root.getChildren().add(pashe);
+            pasheX = (int)(Math.random()*800);
+            pasheY = (int)(Math.random()*600);
+            pasheDisX = (int)(Math.random()*800);
+            if(pasheX < pasheDisX){
+                int temp = pasheDisX;
+                pasheDisX = pasheX;
+                pasheX = temp;
+            }
+            pasheDisY = (int)(Math.random()*600);
+            pashe.relocate(pasheX,pasheY);
+
+            System.err.println("pashe oomad");
+        }
+    }
+
     public void runGame() {
         initializeGame();
 
@@ -134,6 +185,7 @@ public class GameView {
             public void handle(long now) {
                 if (lastTime == 0) lastTime = now;
                 if (now > lastTime + SECOND / (48 * speed)) {
+                    pash();
                     lastTime = now;
                     handleOverlaps();
                     updateWarehouse();
@@ -155,13 +207,14 @@ public class GameView {
 
     private void endGame() {
         pause();
+        //TODO in chie namoooooosan? :D
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         root.getChildren().clear();
-        ImageView imageView = new ImageView(new Image("file:textures/end3.gif"));
+        ImageView imageView = new ImageView(END_GIF);
         imageView.setFitHeight(600);
         imageView.setFitWidth(800);
         root.getChildren().add(imageView);
@@ -191,8 +244,11 @@ public class GameView {
                     else finish.setId("finish");
                     if (cnt == 5) {
                         Menu menu = new Menu(view);
-                        view.setRoot(menu.getRoot());
                         //TODO fix Back to MENU.
+                        if(client != null) client.updateScoreboard(new LevelSelect(view).getLevel());
+                        System.err.println(new LevelSelect(view).getLevel());
+                        if(client == null) view.setRoot(menu.getRoot());
+                        else view.setRoot(client.getMultiPlayerMenu().getRoot());
                         game.stop();
                         this.stop();
                     }
@@ -228,6 +284,7 @@ public class GameView {
         deadSprites.clear();
         initializeNodes();
     }
+
 
     private void updateWellFilledBar() {
         int h = (int)(70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
@@ -454,12 +511,12 @@ public class GameView {
 
     private void setUpGoals() {
         Level level = Game.getInstance().getLevel();
-        Label goals = new Label();
-        goals.setId(LABEL_BUTTON);
-        ImageView goal = new ImageView(new Image("file:textures/goals.png"));
+        Label goals = new Label("GOALS");
+        goals.setId("label_button_small");
+       /* ImageView goal = new ImageView(new Image("file:textures/goals.png"));
         goal.setFitWidth(GOALS_WIDTH);
-        goal.setFitHeight(GOALS_HEIGHT);
-        goals.setGraphic(goal);
+        goal.setFitHeight(GOALS_HEIGHT);*/
+        //goals.setGraphic(goal);
         goals.relocate(GOALS_X, GOALS_Y);
         root.getChildren().add(goals);
 
@@ -555,10 +612,11 @@ public class GameView {
     }
 
     private void setUpSaveButton() {
-        save = new Label();
-        save.setGraphic(new ImageView(new Image("file:textures/save.png")));
+        save = new Label("SAVE");
+
+        //save.setGraphic(new ImageView(new Image("file:textures/save.png")));
         save.relocate(SAVE_X, SAVE_Y);
-        save.setId("label_button");
+        save.setId("label_button_small");
         save.setOnMouseClicked(event -> {
             try {
                 Game.getInstance().saveGame("SaveGame");
@@ -580,13 +638,12 @@ public class GameView {
     private void setUpExitButton() {
 
 
-        Label exit = new Label();
-        exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
+        Label exit = new Label("EXIT");
+        //exit.setGraphic(new ImageView(new Image("file:textures/exit.png")));
         exit.relocate(EXIT_X, EXIT_Y);
-        exit.setId("label_button");
+        exit.setId("label_button_small");
         exit.setOnMouseClicked(event -> {
             pause();
-
             YesNoCancel menu = new YesNoCancel("Do you want to save before exit?", view.getSnap());
             root.getChildren().add(menu.getStackPane());
             menu.getNo().setOnMouseClicked(event1 -> {
@@ -639,12 +696,10 @@ public class GameView {
 
     private void setUpMenuButton() {
 
-        ImageView mn = new ImageView(new Image("file:textures/menu.png"));
-        mn.setFitWidth(MENU_WIDTH);
-        mn.setFitHeight(MENU_HEIGHT);
-        Label menuButton = new Label();
-        menuButton.setId("label_button");
-        menuButton.setGraphic(mn);
+
+        Label menuButton = new Label("MENU");
+        menuButton.setId("label_button_small");
+        //menuButton.setGraphic(mn);
         menuButton.relocate(MENU_X, MENU_Y);
         menuButton.setOnMouseClicked(event -> {
             pause();
@@ -655,7 +710,8 @@ public class GameView {
             menu.getNo().setOnMouseClicked(event1 -> {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                view.setRoot(backMenu.getRoot());
+                if(client == null) view.setRoot(backMenu.getRoot());
+                else view.setRoot(client.getMultiPlayerMenu().getRoot());
                 game.stop();
             });
 
@@ -667,7 +723,8 @@ public class GameView {
                 }
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                view.setRoot(backMenu.getRoot());
+                if(client == null) view.setRoot(backMenu.getRoot());
+                else view.setRoot(client.getMultiPlayerMenu().getRoot());
                 game.stop();
             });
 
@@ -896,7 +953,7 @@ public class GameView {
         Label buyPriceLabel = new Label(Integer.toString(Entity.getNewEntity(animalName).getBuyPrice()));
         buyPriceLabel.setId("gold");
         price.getChildren().add(buyPriceLabel);
-        ImageView coin = new ImageView(new Image("file:textures/coin3.gif"));
+        ImageView coin = new ImageView(COIN_GIF);
         coin.setFitHeight(18);
         coin.setFitWidth(18);
         price.getChildren().add(coin);

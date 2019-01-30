@@ -12,10 +12,11 @@ public class Buttons {
     private Node frost;
     private VBox vBox = new VBox();
     private StackPane stackPane = new StackPane();
-    private Label[] labels = new Label[3];
+    private Label[] labels;
 
     Buttons( Image bg, int cnt) {
         ImageView[] imageViews = new ImageView[cnt];
+        labels = new Label[cnt];
         vBox.setId("vBox_menu");
 
         for (int i = 0; i < cnt; i++) {
@@ -27,15 +28,12 @@ public class Buttons {
             vBox.getChildren().add(labels[i]);
         }
 
-        VBox fake = new VBox();
-        fake.setId("vBox_menu_fake");
 
         stackPane.relocate(400, 300);
         stackPane.translateXProperty().bind(stackPane.widthProperty().divide(2).negate());
         stackPane.translateYProperty().bind(stackPane.heightProperty().divide(2).negate());
-
         frost = Frost.freeze(bg);
-        stackPane.getChildren().addAll(frost, fake, vBox);
+        stackPane.getChildren().addAll(frost, vBox);
     }
 
     public StackPane getStackPane() {

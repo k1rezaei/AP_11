@@ -17,7 +17,7 @@ public class Warehouse implements Upgradable {
         return capacity;
     }
 
-    void add(String type) {
+    private void add(String type) {
         int count = 0;
         if (storables.get(type) != null) count = storables.get(type);
         count++;
