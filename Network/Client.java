@@ -232,7 +232,6 @@ public class Client {
             case DATA_WAREHOUSE:
                 reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
-                System.out.println(new Gson().toJson(items));
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 Platform.runLater(() -> shop.update(items, prices));
                 //todo
