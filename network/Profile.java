@@ -58,6 +58,10 @@ public class Profile {
         }
     };
 
+    public void setPerson(Person p) {
+        person = p;
+    }
+
     private void checkConnection() {
         counter = 0;
         if(bucketSent) disconnect();
