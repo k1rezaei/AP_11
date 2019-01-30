@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class Person {
     String id, name, level = "1";
+    int money = 0;
 
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> followings = new ArrayList<>();
@@ -15,6 +16,12 @@ public class Person {
     public void setLevel(String level) {
         this.level = level;
     }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getMoney(){ return money;}
 
     public Person(String id, String name) {
         this.id = id;

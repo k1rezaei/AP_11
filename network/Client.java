@@ -47,6 +47,8 @@ public class Client {
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
     private static final String UPDATE_MONEY = "update_money";
+    private static final String GET_MONEY = "get_money";
+    private static final String DATA_MONEY = "data_money";
     //TODO get bear cost from server
     private static final int BEAR_COST = 200;
     View view;
@@ -169,7 +171,7 @@ public class Client {
     //decoding what's server saying.
     private void process(String command, String text) {
 
-        Scanner reader;
+        Scanner reader = new Scanner(text);
         String item, price, id;
         switch (command) {
             case DATA_CHAT_ROOM: {
@@ -186,7 +188,6 @@ public class Client {
                 break;
             }
             case DATA_ITEM_COST:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();/*
                 int cost = Integer.parseInt(price);
@@ -194,7 +195,6 @@ public class Client {
                 else System.err.println("not enough money");//TODO throw new Runtime exception*/
                 break;
             case BOUGHT_ITEM:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
@@ -202,7 +202,6 @@ public class Client {
                 //todo
                 break;
             case SOLD_ITEM:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
@@ -215,14 +214,12 @@ public class Client {
                 inbox.setContent(messages);
                 break;
             case DATA_FRIENDS:
-                reader = new Scanner(text);
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
                 //todo
                 break;
             case DATA_PERSON:
-                reader = new Scanner(text);
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                 System.err.println("BUG " + person.getId());
@@ -234,7 +231,6 @@ public class Client {
                 //todo
                 break;
             case DATA_WAREHOUSE:
-                reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 Platform.runLater(() -> shop.update(items, prices));
@@ -244,7 +240,6 @@ public class Client {
                 iAmConnected();
                 break;
             case CAN_YOU_ADD_BEAR:
-                reader = new Scanner(text);
                 String id1 = reader.nextLine();
                 String id2 = reader.nextLine();
                 if (inGame)
@@ -253,7 +248,6 @@ public class Client {
                 //todo sharte if bayad tabdil she be inke dare baazi mikone ya na?
                 break;
             case BEAR_ADDED:
-                reader = new Scanner(text);
                 id = reader.nextLine();
                 //TODO DISABLE INGAME?
                 if (inGame) Game.getInstance().setMoney(Game.getInstance().getMoney() - BEAR_COST);
@@ -261,13 +255,16 @@ public class Client {
                 showMessage("Sent a  bear to " + id + ".");
                 break;
             case BEAR_DID_NOT_ADD:
-                reader = new Scanner(text);
                 id = reader.nextLine();
                 showMessage("Failed to send bear. " + id + " is not online");
                 break;
             case ADD_BEAR_TO_YOUR_MAP:
                 if (!inGame) System.err.println("NOT IN GAME");
                 Game.getInstance().addEntity(Entity.getNewEntity("bear"));
+                break;
+            case DATA_MONEY:
+                int money = reader.nextInt();
+                //todo
                 break;
             default:
                 System.err.println(command);
@@ -295,6 +292,11 @@ public class Client {
 
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
+        command(command);
+    }
+
+    public void getMoneyFromServer() {
+        String command = GET_MONEY + "\n" + end + "\n";
         command(command);
     }
 
