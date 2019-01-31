@@ -41,6 +41,7 @@ public class Profile {
     private static final String GET_INBOX = "get_inbox";
     private static final String DATA_INBOX = "data_inbox";
     private static final String UPDATE_PRICE = "update_price";
+
     private static final String ADD_MULTI_PLAYER_REQUEST = "add_multi_player_request";
     private static final String ACCEPT_MULTI_PLAYER_REQUEST = "accept_multi_player_request";
     private static final String START_MULTI_PLAYER = "start_multi_player";
@@ -52,7 +53,6 @@ public class Profile {
     private static final String IGNORE_PLAY_WITH_ME = "ignore_play_with_me";
     private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
     private static final String REQUEST_DECLINED = "request_declined";
-
 
     private Person person;
     private Socket socket;
