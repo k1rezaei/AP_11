@@ -51,7 +51,19 @@ public class Client {
     private static final String DATA_MONEY = "data_money";
     private static final String GET_INBOX = "get_inbox";
     private static final String UPDATE_PRICE = "update_price";
-    //TODO get bear cost from server
+    private static final String ADD_MULTI_PLAYER_REQUEST = "add_multi_player_request";
+    private static final String ACCEPT_MULTI_PLAYER_REQUEST = "accept_multi_player_request";
+    private static final String START_MULTI_PLAYER = "start_multi_player";
+    private static final String SEND_FOR_SERVER_MULTI_PLAYER = "send_for_server_multi_player";
+    private static final String WON_MULTI_PLAYER_GAME = "won_multi_player_game";
+    private static final String DATA_MULTI_PLAYER_GAME = "data_multi_player_game";
+    private static final String PLAY_MULTI_PLAYER_WITH_ME = "play_multi_player_with_me";
+    private static final String REMOVE_MULTI_PLAYER_REQUEST = "remove_multi_player_request";
+    private static final String IGNORE_PLAY_WITH_ME = "ignore_play_with_me";
+    private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
+    private static final String REQUEST_DECLINED = "request_declined";
+
+
     private static final int BEAR_COST = 200;
     private final boolean isHost;
     private View view;
@@ -69,7 +81,7 @@ public class Client {
     private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
-    private Task<Void> read = new Task<>() {
+    private Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() {
             while (socket.isConnected()) {
@@ -187,6 +199,7 @@ public class Client {
     private void process(String command, String text) {
         Scanner reader = new Scanner(text);
         String item, price, id;
+        TeamGame teamGame;
         switch (command) {
             case DATA_CHAT_ROOM: {
                 Gson gson = new Gson();
@@ -281,13 +294,59 @@ public class Client {
             case DATA_MONEY:
                 money = reader.nextInt();
                 break;
+            case START_MULTI_PLAYER :
+                teamGame = new Gson().fromJson(reader.nextLine(), TeamGame.class);
+                //todo. initial DATA.
+                break ;
+            case DATA_MULTI_PLAYER_GAME :
+                teamGame = new Gson().fromJson(reader.nextLine(), TeamGame.class);
+                //todo level details afger sell.
+                break ;
+            case IGNORE_PLAY_WITH_ME :
+                id = reader.nextLine();
+                //todo id nmikhad bahat baazi kone :)
+                break ;
+            case WON_MULTI_PLAYER_GAME :
+                //todo payaan bazi 2 nafare.
+                break ;
+            case PLAY_MULTI_PLAYER_WITH_ME :
+                id = reader.nextLine();
+                //todo id mikhad baazi kone bahat.
+                //age mikhai baazi koni, acceptMul request ro seda kon. shoroo mishe.
+                //vagarna decline ro seda kon.
+                break ;
+            case REQUEST_DECLINED :
+                //todo darkhaastet baazit rad shod.
+                break ;
             default:
                 System.err.println(command);
         }
     }
 
+
     private void iAmConnected() {
         String command = I_AM_CONNECTED + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void addMultiplayerRequest(String id) {
+        String command = ADD_MULTI_PLAYER_REQUEST + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void removeMultiPlayerRequest(String id) {
+        String command = REMOVE_MULTI_PLAYER_REQUEST + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+
+    public void acceptMultiPlayerRequest(String id) {
+        String command = ACCEPT_MULTI_PLAYER_REQUEST + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void declineMultiPlayerRequest(String id) {
+        String command = DECLINE_MULTI_PLAYER_REQUEST + "\n" + id + "\n" + end + "\n";
         command(command);
     }
 
@@ -346,6 +405,11 @@ public class Client {
 
     public void sellItem(String item) {
         String command = SELL_ITEM + "\n" + item + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void sendForServerMultiPlayer(String item) {
+        String command = SEND_FOR_SERVER_MULTI_PLAYER + "\n" + item + "\n" + end + "\n";
         command(command);
     }
 
