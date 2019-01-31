@@ -45,13 +45,7 @@ public class View extends Application {
         GameView.getInstance().setView(this);
         scene.setCursor(new ImageCursor(new Image("file:textures/cursor.png"), 20, 20));
         primaryStage.show();
-        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                close();
-            }
-        });
-
+        primaryStage.setOnCloseRequest(event -> close());
 
         if (!mute) {
 

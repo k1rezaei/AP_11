@@ -507,4 +507,12 @@ public class Client {
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
     }
+
+    public void sendTeamGameRequest(String id) {
+        //TODO
+    }
+
+    public void rescindTeamGameRequest(String id) {
+        //TODO
+    }
 }
