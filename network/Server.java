@@ -1,13 +1,10 @@
 import com.google.gson.Gson;
 import javafx.concurrent.Task;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Formatter;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Server {
@@ -23,44 +20,17 @@ public class Server {
     private static final String DATA_PERSON = "data_person";
     private static final String DATA_WAREHOUSE = "data_warehouse";
 
-    ArrayList<Profile> profiles = new ArrayList<>();
+    private ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
     private ArrayList<Talk> talks = new ArrayList<>();
     private int port;
     private HashMap<String, Integer> items, prices = new HashMap<>();
     private Gson gson = new Gson();
-
-    public ArrayList<Talk> getTalks() {
-        return talks;
-    }
-
-    public Server(int port) {
-        me = this;
-        items = new HashMap<>();
-        this.port = port;
-        initialize();
-    }
-
-    private void initialize() {
-        String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
-                "bear", "Cheese", "Horn",
-                "BrightHorn", "ColoredPlume", "Intermediate",
-                "Curd", "lion",
-                "Egg", "Milk",
-                "EggPowder", "Plume",
-                "Cake", "Fabric", "Sewing", "Varnish",
-                "CarnivalDress", "Flour", "SourCream", "Wool"};
-        for (String item : items) {
-            this.items.put(item, 10);
-            this.prices.put(item, 200);
-            //todo cost.
-        }
-    }
-
-    Task<Void> task = new Task<Void>() {
+    private String[] itemList;
+    private ArrayList<Person> users = new ArrayList<>();
+    private Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
-            int cnt = port + 1;
             while (true) {
                 ServerSocket serverSocket;
                 try {
@@ -71,37 +41,42 @@ public class Server {
                     Scanner scanner = new Scanner(socket.getInputStream());
                     String id = scanner.nextLine();
                     System.err.println("userid is : " + id);
-                    if (validId(id)) {
-                        System.err.println("valid");
+
+                    int status = validId(id);
+
+                    if (status == 2) {
+                        System.err.println("valid and new");
                         formatter.format("userName Valid\n");
                         formatter.flush();
-                    } else {
+                    } else if (status == 0) {
                         System.err.println("not valid");
                         formatter.format("userName inValid\n");
                         formatter.flush();
                         socket.close();
                         continue;
+                    } else if (status == 1) {
+                        System.err.println("valid but old");
+                        formatter.format("userName Valid\n");
+                        formatter.flush();
                     }
 
-                    formatter.format(Integer.toString(cnt) + '\n');
-                    System.err.println("port is " + cnt);
-                    formatter.flush();
-
-                    System.err.println("waiting for finishing");
-                    String connected = scanner.nextLine();
-                    System.err.println("connected");
+                    int port = Integer.parseInt(scanner.nextLine());
 
                     formatter.close();
                     scanner.close();
 
                     serverSocket.close();
-                    serverSocket = new ServerSocket(cnt);
-                    cnt++;
+                    serverSocket = new ServerSocket(port);
                     socket = serverSocket.accept();
                     System.err.println("User adding");
 
-                    Profile profile = new Profile(new Person(id, id), socket);
+                    Profile profile;
+                    if (status == 2) profile = new Profile(new Person(id, id), socket);
+                    else {
+                        profile = new Profile(getPersonByIdInData(id), socket);
+                    }
                     profiles.add(profile);
+                    if (!users.contains(profile.getPerson())) users.add(profile.getPerson());
                     profile.setServer(me);
 
                     profile.run();
@@ -116,48 +91,109 @@ public class Server {
         }
     };
 
+
+    public Server(int port) {
+        me = this;
+        items = new HashMap<>();
+        this.port = port;
+        initialize();
+    }
+
+    public ArrayList<Talk> getTalks() {
+        return talks;
+    }
+
+    private void initialize() {
+        itemList = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
+                "bear", "Cheese", "Horn",
+                "BrightHorn", "ColoredPlume", "Intermediate",
+                "Curd", "lion",
+                "Egg", "Milk",
+                "EggPowder", "Plume",
+                "Cake", "Fabric", "Sewing", "Varnish",
+                "CarnivalDress", "Flour", "SourCream", "Wool"};
+
+
+        try {
+            InputStream inputStream = new FileInputStream("data.txt");
+            Scanner scanner = new Scanner(inputStream);
+            users.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Person[].class)));
+            talks.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Talk[].class)));
+
+            String[] _items = gson.fromJson(scanner.nextLine(), String[].class);
+            Integer[] _counts = gson.fromJson(scanner.nextLine(), Integer[].class);
+            Integer[] _prices = gson.fromJson(scanner.nextLine(), Integer[].class);
+
+            for (int i = 0; i < _items.length; i++) {
+                this.items.put(_items[i], _counts[i]);
+                this.prices.put(_items[i], _prices[i]);
+            }
+
+            scanner.close();
+            inputStream.close();
+        } catch (Exception e) {
+            System.err.println("Can Not Find Data File Saved By Server.");
+            for (String item : itemList) {
+                this.items.put(item, 10);
+                this.prices.put(item, 200);
+            }
+        }
+
+    }
+
+    private Person getPersonByIdInData(String id) {
+        for (Person person : users)
+            if (person.getId().equals(id)) return person;
+        return null;
+    }
+
     void run() {
         new Thread(task).start();
     }
 
-    private boolean validId(String id) {
+    private int validId(String id) {
         for (Profile profile : profiles)
-            if (id.equals(profile.getPerson().getId())) return false;
-        return true;
+            if (id.equals(profile.getPerson().getId())) return 0;
+        for (Person person : users)
+            if (person.getId().equals(id)) return 1;
+        return 2;
     }
 
-    synchronized public void addMessageToChatRoom(Talk talk) {
+    synchronized void addMessageToChatRoom(Talk talk) {
         talks.add(talk);
         String command = getChatRoom();
         for (Profile profile : profiles) {
             profile.command(command);
         }
+        saveData();
+
     }
 
 
     synchronized public void updateScoreboard() {
+        saveData();
         String scoreboard = getScoreboard();
         for (Profile profile : profiles)
             profile.command(scoreboard);
     }
 
 
-    public String getScoreboard() {
+    synchronized public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());
         return DATA_SCOREBOARD + '\n' + gson.toJson(people.toArray()) + '\n' + end + '\n';
     }
 
-    public String getChatRoom() {
+    synchronized public String getChatRoom() {
         return DATA_CHAT_ROOM + '\n' + gson.toJson(talks.toArray()) + '\n' + end + '\n';
     }
 
-    public String getItemCost(String item) {
+    synchronized public String getItemCost(String item) {
         return DATA_ITEM_COST + '\n' + item + '\n' + prices.get(item) + '\n' + end + '\n';
     }
 
-    public synchronized String buyItem(String item) {
+    synchronized public String buyItem(String item) {
         if (items.get(item) != null && items.get(item) > 0) {
             int count = items.get(item);
             count--;
@@ -179,9 +215,13 @@ public class Server {
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
+                //todo host save kone adam haro. users.remove(profile.getPerson());
                 break;
             }
         }
+
+        saveData();
+
         updateScoreboard();
     }
 
@@ -194,7 +234,7 @@ public class Server {
         return SOLD_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
     }
 
-    public void sendPrivateMessage(String senderId, String receiverId, String text) {
+    synchronized public void sendPrivateMessage(String senderId, String receiverId, String text) {
         Person sender = getPerson(senderId);
         Person receiver = getPerson(receiverId);
 
@@ -202,16 +242,18 @@ public class Server {
         sender.addToInbox(talk);
         receiver.addToInbox(talk);
 
+        saveData();
+
         command(updateInbox(senderId), senderId);
         command(updateInbox(receiverId), receiverId);
     }
 
-    public String updateInbox(String id) {
+    synchronized public String updateInbox(String id) {
         Person p = getPerson(id);
         return DATA_INBOX + "\n" + gson.toJson(p.getInbox().toArray(new Talk[0])) + "\n" + end + "\n";
     }
 
-    private Person getPerson(String id) {
+    synchronized private Person getPerson(String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
                 return profile.getPerson();
@@ -219,7 +261,7 @@ public class Server {
         return null;
     }
 
-    public void addFriendRequest(String id1, String id2) {
+    synchronized public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
         if (follower.getFollowings().contains(id2)) return;
@@ -227,11 +269,14 @@ public class Server {
 
         follower.addFollowings(following);
         following.addFollowers(follower);
+
+        saveData();
+
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
     }
 
-    public void acceptFriendRequest(String id1, String id2) {
+    synchronized public void acceptFriendRequest(String id1, String id2) {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
 
@@ -242,6 +287,8 @@ public class Server {
 
         follower.addFriend(following);
         following.addFriend(follower);
+
+        saveData();
 
         command(updateFriends(id1), id1);
         command(updateFriends(id2), id2);
@@ -275,7 +322,6 @@ public class Server {
 
     synchronized public String getWarehouse() {
 
-        System.err.println("GET_WAREHOUSE1");
         String command = DATA_WAREHOUSE + "\n" +
                 gson.toJson(items) + "\n" +
                 gson.toJson(prices) + "\n" +
@@ -291,6 +337,34 @@ public class Server {
     synchronized private void sendToAll(String command) {
         for (Profile profile : profiles)
             profile.command(command);
+    }
+
+    synchronized private void saveData() {
+        try {
+            OutputStream outputStream = new FileOutputStream("data.txt");
+            Formatter formatter = new Formatter(outputStream);
+            formatter.format(gson.toJson(users.toArray()) + "\n");
+            formatter.format(gson.toJson(talks.toArray()) + "\n");
+            formatter.format(gson.toJson(items.keySet().toArray()) + "\n");
+            formatter.format(gson.toJson(items.values().toArray()) + "\n");
+
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (String type : items.keySet())
+                temp.add(prices.get(type));
+            formatter.format(gson.toJson(temp.toArray()));
+
+            formatter.flush();
+            formatter.close();
+            outputStream.close();
+        } catch (Exception e) {
+            System.err.println("Can Not Save File In Data");
+        }
+    }
+
+    synchronized public void changeCost(String type, int cost) {
+        prices.put(type, cost);
+        updateWarehouse();
+        saveData();
     }
 
     //todo initialize item list.

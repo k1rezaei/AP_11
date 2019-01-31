@@ -3,7 +3,7 @@
   "goalMoney": 50000,
   "goalEntity": {
     "Sheep": 3,
-    "Cow" : 5
+    "Cow": 5
   },
   "n": 300,
   "m": 200,

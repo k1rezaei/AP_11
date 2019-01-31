@@ -36,8 +36,9 @@ public class SpriteAnimation extends Transition {
     }
 
     public SpriteAnimation(LoadedImage loadedImage) {
-        this(Duration.millis(1000), loadedImage.count, loadedImage.column, loadedImage.width, loadedImage.height);
-        ArrayList<Image> images = loadedImage.images;
+        this(Duration.millis(1000), loadedImage.getCount(), loadedImage.getColumn(),
+                loadedImage.getWidth(), loadedImage.getHeight());
+        ArrayList<Image> images = loadedImage.getImages();
         for (int i = 0; i < images.size(); i++) {
             ImageView imageView = new ImageView(images.get(i));
             imageViews.add(imageView);

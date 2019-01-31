@@ -6,12 +6,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 public class Inbox {
+    private final HBox columns;
     private Client client;
     private View view;
     private Group root = new Group();
-    private final HBox columns;
 
-    public Inbox(View view,Client client) {
+    public Inbox(View view, Client client) {
         this.client = client;
         this.view = view;
         ScrollPane scrollPane = new ScrollPane();
@@ -44,9 +44,9 @@ public class Inbox {
             recipientNames.getChildren().add(recipientName);
             messages.getChildren().add(message);
         }
-        for(Node node:senderNames.getChildren()) node.setStyle("-fx-font-size : 20");
-        for(Node node:recipientNames.getChildren()) node.setStyle("-fx-font-size : 20");
-        for(Node node:messages.getChildren()) node.setStyle("-fx-font-size : 20");
+        for (Node node : senderNames.getChildren()) node.setStyle("-fx-font-size : 20");
+        for (Node node : recipientNames.getChildren()) node.setStyle("-fx-font-size : 20");
+        for (Node node : messages.getChildren()) node.setStyle("-fx-font-size : 20");
         columns.getChildren().addAll(senderNames, recipientNames, messages);
     }
 

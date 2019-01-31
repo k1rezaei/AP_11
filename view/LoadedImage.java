@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 public class LoadedImage {
 
-    ArrayList<Image> images;
-    ArrayList<Integer> count = new ArrayList<>(), column = new ArrayList<>(), width = new ArrayList<>(), height = new ArrayList<>();
+    private ArrayList<Image> images;
+    private ArrayList<Integer> count = new ArrayList<>(), column = new ArrayList<>(), width = new ArrayList<>(), height = new ArrayList<>();
 
 
     public LoadedImage(ArrayList<Image> images, int count, int[] column) {
@@ -22,4 +22,43 @@ public class LoadedImage {
         }
     }
 
+    public ArrayList<Image> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<Image> images) {
+        this.images = images;
+    }
+
+    public ArrayList<Integer> getCount() {
+        return count;
+    }
+
+    public void setCount(ArrayList<Integer> count) {
+        this.count = count;
+    }
+
+    public ArrayList<Integer> getColumn() {
+        return column;
+    }
+
+    public void setColumn(ArrayList<Integer> column) {
+        this.column = column;
+    }
+
+    public ArrayList<Integer> getWidth() {
+        return width;
+    }
+
+    public void setWidth(ArrayList<Integer> width) {
+        this.width = width;
+    }
+
+    public ArrayList<Integer> getHeight() {
+        return height;
+    }
+
+    public void setHeight(ArrayList<Integer> height) {
+        this.height = height;
+    }
 }

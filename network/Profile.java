@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 
@@ -34,33 +35,63 @@ public class Profile {
     private static final String BEAR_ADDED = "bear_added";
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
-
+    private static final String UPDATE_MONEY = "update_money";
+    private static final String GET_MONEY = "get_money";
+    private static final String DATA_MONEY = "data_money";
+    private static final String GET_INBOX = "get_inbox";
+    private static final String DATA_INBOX = "data_inbox";
+    private static final String UPDATE_PRICE = "update_price";
+    private Person person;
+    private Socket socket;
+    private Formatter formatter;
+    private Scanner scanner;
+    private Server server;
     private int counter = 0;
     private boolean bucketSent = false;
-
-    Person person;
-    Socket socket;
-    Formatter formatter;
-    Scanner scanner;
-    Server server;
-
-    AnimationTimer connectionChecker = new AnimationTimer() {
+    private AnimationTimer connectionChecker = new AnimationTimer() {
         long lastTime = -1;
+
         @Override
         public void handle(long now) {
-            if(lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
+            if (lastTime == -1 || now > lastTime + DURATION_IN_MILLISECOND) {
                 lastTime = now;
-                counter ++;
-                if(counter > TURN_OUT) {
+                counter++;
+                if (counter > TURN_OUT) {
                     checkConnection();
                 }
             }
         }
     };
+    private Task<Void> read = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            while (true) {
+                try {
+                    String command = scanner.nextLine();
+                    clear();
+                    System.err.println("Cleared");
+                    process(command, getData(scanner));
+                } catch (Exception e) {
+                    break;
+                }
+            }
+            System.err.println("Disconnected");
+            connectionChecker.stop();
+            server.remove(person);
+            return null;
+        }
+    };
+
+    public Profile(Person person, Socket socket) throws IOException {
+        this.person = person;
+        this.socket = socket;
+        this.formatter = new Formatter(socket.getOutputStream());
+        this.scanner = new Scanner(socket.getInputStream());
+    }
 
     private void checkConnection() {
         counter = 0;
-        if(bucketSent) disconnect();
+        if (bucketSent) disconnect();
         else {
             command(CHECK_CONNECT + "\n" + end + "\n");
             bucketSent = true;
@@ -73,7 +104,7 @@ public class Profile {
             //socket.close();
             scanner = null;
             socket.close();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.err.println("Cannot close connection :/");
         }
     }
@@ -84,6 +115,10 @@ public class Profile {
 
     public Person getPerson() {
         return person;
+    }
+
+    public void setPerson(Person p) {
+        person = p;
     }
 
     public Socket getSocket() {
@@ -110,13 +145,6 @@ public class Profile {
         this.scanner = scanner;
     }
 
-    public Profile(Person person, Socket socket) throws IOException {
-        this.person = person;
-        this.socket = socket;
-        this.formatter = new Formatter(socket.getOutputStream());
-        this.scanner = new Scanner(socket.getInputStream());
-    }
-
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
         while (true) {
@@ -126,26 +154,6 @@ public class Profile {
         }
         return s.toString();
     }
-
-    Task<Void> read = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            while (true) {
-                try {
-                    String command = scanner.nextLine();
-                    clear();
-                    System.err.println("Cleared");
-                    process(command, getData(scanner));
-                } catch (Exception e) {
-                    break ;
-                }
-            }
-            System.err.println("Disconnected");
-            connectionChecker.stop();
-            server.remove(person);
-            return null;
-        }
-    };
 
     private void clear() {
         bucketSent = false;
@@ -171,14 +179,14 @@ public class Profile {
                 break;
             case ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY:
                 StringBuilder txt = new StringBuilder();
-                while(true) {
+                while (true) {
                     String line = reader.nextLine();
-                    if(line.equals(SPLIT)) break ;
+                    if (line.equals(SPLIT)) break;
                     txt.append(line + "\n");
                 }
                 Talk talkWithReply = new Talk(person.getId(), txt.toString());
                 txt = new StringBuilder();
-                while(reader.hasNextLine()) {
+                while (reader.hasNextLine()) {
                     String line = reader.nextLine();
                     txt.append(line + "\n");
                 }
@@ -223,30 +231,49 @@ public class Profile {
                 id = reader.nextLine();
                 command(server.getPersonCommand(id));
                 break;
-            case ACCEPT_FRIEND_REQUEST :
+            case ACCEPT_FRIEND_REQUEST:
                 id = reader.nextLine();
                 server.acceptFriendRequest(person.getId(), id);
                 break;
-            case GET_WAREHOUSE :
+            case GET_WAREHOUSE:
                 command(server.getWarehouse());
                 break;
-            case I_AM_CONNECTED :
+            case I_AM_CONNECTED:
                 break;
-            case ADD_BEAR :
+            case ADD_BEAR:
                 id = reader.nextLine();
                 server.command(CAN_YOU_ADD_BEAR + "\n" + person.getId() + "\n" + id + "\n" + end + "\n", id);
                 break;
-            case I_CAN_ADD_BEAR :
+            case I_CAN_ADD_BEAR:
                 id1 = reader.nextLine();
                 id2 = reader.nextLine();
                 server.command(BEAR_ADDED + "\n" + id2 + "\n" + end + "\n", id1);
                 server.command(ADD_BEAR_TO_YOUR_MAP + "\n" + end + "\n", id2);
-                break ;
-            case I_CAN_NOT_ADD_BEAR :
+                break;
+            case I_CAN_NOT_ADD_BEAR:
                 id1 = reader.nextLine();
                 id2 = reader.nextLine();
                 server.command(BEAR_DID_NOT_ADD + "\n" + id2 + "\n" + end + "\n", id1);
                 break;
+            case UPDATE_MONEY:
+                int money = reader.nextInt();
+                person.setMoney(money);
+                server.updateScoreboard();
+                break;
+            case GET_MONEY:
+                command(DATA_MONEY + "\n" + person.getMoney() + "\n" + end + "\n");
+                break;
+            case GET_INBOX:
+                command(DATA_INBOX + "\n" + new Gson().toJson(person.getInbox().toArray()) + "\n" + end + "\n");
+                break;
+            case UPDATE_PRICE:
+                item = reader.nextLine();
+                int price = reader.nextInt();
+                server.changeCost(item, price);
+                break;
+            default:
+                System.err.println("Unknown command");
+
         }
     }
 

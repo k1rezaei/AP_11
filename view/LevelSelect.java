@@ -30,49 +30,11 @@ public class LevelSelect {
         }
     }
 
-    public String getLevel(String name) {
-        int mx = -1;
-        try {
-            InputStream inputStream = new FileInputStream(name);
-            Scanner scanner = new Scanner(inputStream);
-            while (scanner.hasNext()) {
-                int level = scanner.nextInt();
-                levels[level] = true;
-                if (level > mx) mx = level;
-            }
-            scanner.close();
-            inputStream.close();
-        } catch (Exception ignored) {
-            System.err.println("Level Select");
-        }
-
-
-        for (int i = 0; i < 1; i++) isLock.add(false);
-        for (int i = 1; i < 9; i++) {
-            boolean lock = false;
-            for (int j = 0; j < i; j++)
-                if (!levels[j]) lock = true;
-
-            isLock.add(lock);
-        }
-        return "" + (mx + 2);
-    }
-
-    public String getLevel() {
-        return getLevel("Levels");
-        /*if(GameView.getInstance().getClient() == null){
-            return getLevel("Level");
-        }else{
-            return getLevel("");
-        }*/
-    }
-
     private ArrayList<Boolean> isLock = new ArrayList<>();
     private boolean[] levels = new boolean[NUM_LEVELS];
     private Group root = new Group();
     private View view;
     private FlowPane flowPane = new FlowPane(Orientation.HORIZONTAL);
-
     LevelSelect(View view) {
         this.view = view;
         getLevel();
@@ -165,6 +127,43 @@ public class LevelSelect {
         }
 
         root.getChildren().addAll(flowPane);
+    }
+
+    public String getLevel(String name) {
+        int mx = -1;
+        try {
+            InputStream inputStream = new FileInputStream(name);
+            Scanner scanner = new Scanner(inputStream);
+            while (scanner.hasNext()) {
+                int level = scanner.nextInt();
+                levels[level] = true;
+                if (level > mx) mx = level;
+            }
+            scanner.close();
+            inputStream.close();
+        } catch (Exception ignored) {
+            System.err.println("Level Select");
+        }
+
+
+        for (int i = 0; i < 1; i++) isLock.add(false);
+        for (int i = 1; i < 9; i++) {
+            boolean lock = false;
+            for (int j = 0; j < i; j++)
+                if (!levels[j]) lock = true;
+
+            isLock.add(lock);
+        }
+        return "" + (mx + 2);
+    }
+
+    public String getLevel() {
+        return getLevel("Levels");
+        /*if(GameView.getInstance().getClient() == null){
+            return getLevel("Level");
+        }else{
+            return getLevel("");
+        }*/
     }
 
     public Group getRoot() {

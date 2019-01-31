@@ -101,7 +101,7 @@ public class Images {
     }
 
     static ImageView getImageForGoal(String type) {
-        if(type.equals("money")) return new ImageView(new Image("file:textures/goal/coin.gif"));
+        if (type.equals("money")) return new ImageView(new Image("file:textures/goal/coin.gif"));
         return new ImageView(new Image("file:textures/goal/" + type + ".png"));
     }
 }

@@ -1,6 +1,8 @@
 import com.google.gson.Gson;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.scene.Group;
+import javafx.scene.control.Label;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -44,11 +46,18 @@ public class Client {
     private static final String BEAR_ADDED = "bear_added";
     private static final String BEAR_DID_NOT_ADD = "bear_did_not_add";
     private static final String ADD_BEAR_TO_YOUR_MAP = "add_bear_to_your_map";
-
-    View view;
-    Socket socket;
-    Scanner scanner;
-    Formatter formatter;
+    private static final String UPDATE_MONEY = "update_money";
+    private static final String GET_MONEY = "get_money";
+    private static final String DATA_MONEY = "data_money";
+    private static final String GET_INBOX = "get_inbox";
+    private static final String UPDATE_PRICE = "update_price";
+    //TODO get bear cost from server
+    private static final int BEAR_COST = 200;
+    private final boolean isHost;
+    private View view;
+    private Socket socket;
+    private Scanner scanner;
+    private Formatter formatter;
 
     private Chatroom chatroom;
     private Scoreboard scoreboard;
@@ -56,30 +65,49 @@ public class Client {
     private Inbox inbox;
     private Shop shop;
     private String myId;
+    //TODO make money
+    private int money;
+    private boolean inGame;
+    private ViewProfile currentViewProfile;
+    private Task<Void> read = new Task<>() {
+        @Override
+        protected Void call() {
+            while (socket.isConnected()) {
+                String command = scanner.nextLine();
+                process(command, getData(scanner));
+            }
+            return null;
+        }
+    };
+
+    Client(View view, boolean isHost) {
+        this.view = view;
+        chatroom = new Chatroom(view, this);
+        multiPlayerMenu = new MultiPlayerMenu(view, this, isHost);
+        scoreboard = new Scoreboard(view, this);
+        inbox = new Inbox(view, this);
+        shop = new Shop(view, this);
+        this.isHost = isHost;
+    }
 
     public Scoreboard getScoreboard() {
         return scoreboard;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
     }
 
     public MultiPlayerMenu getMultiPlayerMenu() {
         return multiPlayerMenu;
     }
 
+    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
+        this.multiPlayerMenu = multiPlayerMenu;
+    }
+
     public Chatroom getChatRoom() {
         return chatroom;
-    }
-
-    Client(View view) {
-        this.view = view;
-        chatroom = new Chatroom(view, this);
-        multiPlayerMenu = new MultiPlayerMenu(view, this);
-        scoreboard = new Scoreboard(view, this);
-        inbox = new Inbox(view, this);
-        shop = new Shop(view, this);
-    }
-
-    Client(View view, String ip, int port) {
-        this(view);
     }
 
     private String getData(Scanner scanner) {
@@ -92,17 +120,6 @@ public class Client {
         return s.toString();
     }
 
-    Task<Void> read = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            while (socket.isConnected()) {
-                String command = scanner.nextLine();
-                process(command, getData(scanner));
-            }
-            return null;
-        }
-    };
-
     void initialize(String ip, int port) {
         try {
             socket = new Socket(ip, port);
@@ -113,7 +130,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id, String ip) throws IOException {
+    boolean checkId(String id, String ip, int srcPort) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -125,16 +142,17 @@ public class Client {
             formatter.close();
             return false;
         } else {
-            myId = id;
+            myId = id;/*
             int port = scanner.nextInt();
             System.err.println("port is " + port);
-            formatter.format("Connected with port : " + port + '\n');
+            formatter.format("Connected with port : " + port + '\n');*/
+            formatter.format(srcPort + "\n");
             formatter.flush();
             formatter.close();
             scanner.close();
             while (true) {
                 try {
-                    socket = new Socket(ip, port);
+                    socket = new Socket(ip, srcPort);
                     break;
                 } catch (Exception e) {
                 }
@@ -155,6 +173,8 @@ public class Client {
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
         getWarehouse();
+        getMoneyFromServer();
+        initInbox();
     }
 
     //talk to server.
@@ -165,8 +185,7 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-
-        Scanner reader;
+        Scanner reader = new Scanner(text);
         String item, price, id;
         switch (command) {
             case DATA_CHAT_ROOM: {
@@ -179,11 +198,9 @@ public class Client {
                 Gson gson = new Gson();
                 Person[] people = gson.fromJson(text, Person[].class);
                 Platform.runLater(() -> scoreboard.setContent(people));
-                //scoreboard.setContent(text);
                 break;
             }
             case DATA_ITEM_COST:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();/*
                 int cost = Integer.parseInt(price);
@@ -191,46 +208,46 @@ public class Client {
                 else System.err.println("not enough money");//TODO throw new Runtime exception*/
                 break;
             case BOUGHT_ITEM:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
                 System.err.println("bought " + item);
-                //todo
+                //todo go back to actually buying here?
                 break;
             case SOLD_ITEM:
-                reader = new Scanner(text);
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
                 System.err.println("sold " + item);
+                //todo go back
                 break;
             case DATA_INBOX:
-                String json = text;
-                Talk[] messages = new Gson().fromJson(text, Talk[].class);
-                inbox.setContent(messages);
+                Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
+                System.err.println(text);
+                Platform.runLater(() -> inbox.setContent(messages));
                 break;
             case DATA_FRIENDS:
-                reader = new Scanner(text);
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
-                //todo
+                //TODO undo refresh ?
+                if (currentViewProfile != null && view.getScene().getRoot() == currentViewProfile.getRoot() &&
+                        currentViewProfile.getPerson().getId().equals(myId)) {
+                    Platform.runLater(() -> view.goBack());
+                    getPerson(currentViewProfile.getPerson().getId());
+                }
                 break;
             case DATA_PERSON:
-                reader = new Scanner(text);
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                 Platform.runLater(() -> {
-                    ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
-                    view.setRoot(viewProfile.getRoot());
+                    currentViewProfile = new ViewProfile(view, Client.this, person);
+                    view.setRoot(currentViewProfile.getRoot());
                 });
                 //todo
                 break;
             case DATA_WAREHOUSE:
-                reader = new Scanner(text);
                 HashMap items = new Gson().fromJson(reader.nextLine(), HashMap.class);
-                System.out.println(new Gson().toJson(items));
                 HashMap prices = new Gson().fromJson(reader.nextLine(), HashMap.class);
                 Platform.runLater(() -> shop.update(items, prices));
                 //todo
@@ -239,26 +256,30 @@ public class Client {
                 iAmConnected();
                 break;
             case CAN_YOU_ADD_BEAR:
-                reader = new Scanner(text);
                 String id1 = reader.nextLine();
                 String id2 = reader.nextLine();
-                if (true)
+                if (inGame)
                     command(I_CAN_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
                 else command(I_CAN_NOT_ADD_BEAR + "\n" + id1 + "\n" + id2 + "\n" + end + "\n");
                 //todo sharte if bayad tabdil she be inke dare baazi mikone ya na?
                 break;
-            case BEAR_ADDED :
-                reader = new Scanner(text);
+            case BEAR_ADDED:
                 id = reader.nextLine();
-                //todo. bear you sent added to id's map.
+                //TODO DISABLE INGAME?
+                if (inGame) Game.getInstance().setMoney(Game.getInstance().getMoney() - BEAR_COST);
+                else setMoney(money - BEAR_COST);
+                showMessage("Sent a  bear to " + id + ".");
                 break;
-            case BEAR_DID_NOT_ADD :
-                reader = new Scanner(text);
+            case BEAR_DID_NOT_ADD:
                 id = reader.nextLine();
-                //todo. bear you sent did not add to id's map.
+                showMessage("Failed to send bear. " + id + " is not online");
                 break;
-            case ADD_BEAR_TO_YOUR_MAP :
-                //todo khers random ezafe she.
+            case ADD_BEAR_TO_YOUR_MAP:
+                if (!inGame) System.err.println("NOT IN GAME");
+                Game.getInstance().addEntity(Entity.getNewEntity("bear"));
+                break;
+            case DATA_MONEY:
+                money = reader.nextInt();
                 break;
             default:
                 System.err.println(command);
@@ -286,6 +307,20 @@ public class Client {
 
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
+        command(command);
+    }
+
+    public void updateMoney() {
+        command(UPDATE_MONEY + "\n" + money + "\n" + end + "\n");
+    }
+
+    public void getMoneyFromServer() {
+        String command = GET_MONEY + "\n" + end + "\n";
+        command(command);
+    }
+
+    public void upgradeMoney() {
+        String command = UPDATE_MONEY + "\n" + money + "\n" + end + "\n";
         command(command);
     }
 
@@ -340,8 +375,21 @@ public class Client {
     }
 
     public void addBear(String id) {
+        if ((inGame && Game.getInstance().getMoney() < BEAR_COST) || (!inGame && money < BEAR_COST)) {
+            showMessage("Not enough Money.");
+            return;
+        }
         String command = ADD_BEAR + "\n" + id + "\n" + end + "\n";
         command(command);
+    }
+
+    private void initInbox() {
+        String command = GET_INBOX + "\n" + end + "\n";
+        command(command);
+    }
+
+    private void showMessage(String message) {
+        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(), (Group) view.getScene().getRoot(), Pop.AddType.WINDOW));
     }
 
     public Chatroom getChatroom() {
@@ -351,15 +399,6 @@ public class Client {
     public void setChatroom(Chatroom chatroom) {
         this.chatroom = chatroom;
     }
-
-    public void setScoreboard(Scoreboard scoreboard) {
-        this.scoreboard = scoreboard;
-    }
-
-    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
-        this.multiPlayerMenu = multiPlayerMenu;
-    }
-
 
     public void closeSocket() {
         try {
@@ -382,5 +421,26 @@ public class Client {
 
     public Shop getShop() {
         return shop;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+        updateMoney();
+    }
+
+    public void setPrice(String item, int price) {
+        command(UPDATE_PRICE + "\n" + item + "\n" + price + "\n" + end + "\n");
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 }

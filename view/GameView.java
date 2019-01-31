@@ -9,7 +9,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.io.FileWriter;
@@ -24,6 +23,7 @@ public class GameView {
     public static final int BASE_Y = 210;
     public static final String FINISH = "finish";
     public static final Image BOX = new Image("file:textures/box.png");
+    public static final int REWARD_MULTIPLIER = 3000;
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
@@ -78,17 +78,17 @@ public class GameView {
     private static final Image info = new Image("file:textures/info.png");
     private static final Image END_GIF = new Image("file:textures/end3.gif");
     private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
-    private ImageView pashe = null;
     final private static Image pashImage = new Image("file:textures/mosquito.gif");
-    private int pasheX;
-    private int pasheY;
-    private int pasheDisX;
-    private int pasheDisY;
 
     static {
         REFRESHER.setVisible(false);
     }
 
+    private ImageView pashe = null;
+    private int pasheX;
+    private int pasheY;
+    private int pasheDisX;
+    private int pasheDisY;
     private ArrayList<SpriteAnimation> deadSprites = new ArrayList<>();
     private double speed = 1;
     private boolean paused = false;
@@ -119,16 +119,16 @@ public class GameView {
     private GameView() {
     }
 
-    public void setClient(Client client){
-        this.client = client;
+    public static GameView getInstance() {
+        return gameView;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 
-    public static GameView getInstance() {
-        return gameView;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void pause() {
@@ -142,33 +142,31 @@ public class GameView {
     }
 
 
-
-
-    void pash(){
-        if(pashe != null){
-            if(pasheX != pasheDisX) pasheX += (pasheDisX-pasheX)/Math.abs(pasheDisX-pasheX);
-            if(pasheY != pasheDisY) pasheY += (pasheDisY-pasheY)/Math.abs(pasheDisY-pasheY);
+    void pash() {
+        if (pashe != null) {
+            if (pasheX != pasheDisX) pasheX += (pasheDisX - pasheX) / Math.abs(pasheDisX - pasheX);
+            if (pasheY != pasheDisY) pasheY += (pasheDisY - pasheY) / Math.abs(pasheDisY - pasheY);
             pashe.relocate(pasheX, pasheY);
-            if(pasheX == pasheDisX && pasheY == pasheDisY){
+            if (pasheX == pasheDisX && pasheY == pasheDisY) {
                 root.getChildren().remove(pashe);
                 pashe = null;
             }
         }
-        if (Math.random() * 100 <= 1 && pashe == null){
+        if (Math.random() * 100 <= 1 && pashe == null) {
             pashe = new ImageView(pashImage);
             pashe.setFitHeight(20);
             pashe.setFitWidth(20);
             root.getChildren().add(pashe);
-            pasheX = (int)(Math.random()*800);
-            pasheY = (int)(Math.random()*600);
-            pasheDisX = (int)(Math.random()*800);
-            if(pasheX < pasheDisX){
+            pasheX = (int) (Math.random() * 800);
+            pasheY = (int) (Math.random() * 600);
+            pasheDisX = (int) (Math.random() * 800);
+            if (pasheX < pasheDisX) {
                 int temp = pasheDisX;
                 pasheDisX = pasheX;
                 pasheX = temp;
             }
-            pasheDisY = (int)(Math.random()*600);
-            pashe.relocate(pasheX,pasheY);
+            pasheDisY = (int) (Math.random() * 600);
+            pashe.relocate(pasheX, pasheY);
 
             System.err.println("pashe oomad");
         }
@@ -245,10 +243,16 @@ public class GameView {
                     if (cnt == 5) {
                         Menu menu = new Menu(view);
                         //TODO fix Back to MENU.
-                        if(client != null) client.updateScoreboard(new LevelSelect(view).getLevel());
+                        if (client != null) client.updateScoreboard(new LevelSelect(view).getLevel());
                         System.err.println(new LevelSelect(view).getLevel());
-                        if(client == null) view.setRoot(menu.getRoot());
-                        else view.setRoot(client.getMultiPlayerMenu().getRoot());
+                        if (client == null) view.setRoot(menu.getRoot());
+                        else {
+                            client.setInGame(false);
+                            int reward = Math.max(Game.getInstance().getLevel().getGoalMoney() * REWARD_MULTIPLIER
+                                    / Game.getInstance().getCurrentTurn(), 50);
+                            client.setMoney(client.getMoney() + reward);
+                            view.setRoot(client.getMultiPlayerMenu().getRoot());
+                        }
                         game.stop();
                         this.stop();
                     }
@@ -275,6 +279,7 @@ public class GameView {
 
 
     private void initializeGame() {
+        if (client != null) client.setInGame(true);
         root = new Group();
         entityRoot = new Group();
         infoRoot = new Group();
@@ -287,10 +292,13 @@ public class GameView {
 
 
     private void updateWellFilledBar() {
-        int h = (int)(70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
+        int h = (int) (70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
                 / Game.getInstance().getWell().getCapacity()));
+
         filled.setMaxHeight(h);
         filled.setMinHeight(h);
+
+        filled.relocate(WELL_X, WELL_Y + 50 + 70 - h);
     }
 
     private void stopWorkshops() {
@@ -472,13 +480,13 @@ public class GameView {
         root.getChildren().add(focus.getRoot());
     }
 
-    private void setStyle(SpriteAnimation spriteAnimation){
-        for(ImageView imageView : spriteAnimation.getImageViews()) {
+    private void setStyle(SpriteAnimation spriteAnimation) {
+        for (ImageView imageView : spriteAnimation.getImageViews()) {
             imageView.setId("glow");
         }
     }
 
-    private void setUpStructrues(){
+    private void setUpStructrues() {
         setStyle(warehouse);
         setStyle(well);
         setStyle(truck);
@@ -534,7 +542,7 @@ public class GameView {
         VBox vBox = new VBox();
 
         int cnt = 0;
-        while(scanner.hasNext()) {
+        while (scanner.hasNext()) {
             cnt++;
             String line = scanner.nextLine();
 
@@ -544,23 +552,25 @@ public class GameView {
             String type = s[0].split(":")[0];
 
             //System.out.println(type + " , " + s[1]);
-            if(type.startsWith("Req")) {
+            if (type.startsWith("Req")) {
                 Label label = new Label(s[2]);
                 label.setId("money");
 
                 ImageView img = Images.getImageForGoal("money");
-                img.setFitHeight(GOAL_ICONS_LENGTH); img.setFitWidth(GOAL_ICONS_LENGTH);
+                img.setFitHeight(GOAL_ICONS_LENGTH);
+                img.setFitWidth(GOAL_ICONS_LENGTH);
 
                 hBox.getChildren().addAll(img, label);
-            }else {
+            } else {
                 ImageView img = Images.getImageForGoal(type);
-                img.setFitHeight(GOAL_ICONS_LENGTH); img.setFitWidth(GOAL_ICONS_LENGTH);
+                img.setFitHeight(GOAL_ICONS_LENGTH);
+                img.setFitWidth(GOAL_ICONS_LENGTH);
                 Label number = new Label(s[1]);
                 hBox.getChildren().addAll(img, number);
             }
             vBox.getChildren().add(hBox);
         }
-        vBox.setMaxHeight(cnt*GOAL_ICONS_LENGTH);
+        vBox.setMaxHeight(cnt * GOAL_ICONS_LENGTH);
         vBox.setMaxWidth(300);
         return vBox;
     }
@@ -598,7 +608,7 @@ public class GameView {
         });
     }
 
-    void pop(VBox vBox){
+    void pop(VBox vBox) {
         pause();
         Pop pop = new Pop(vBox, view.getSnap());
         root.getChildren().add(pop.getStackPane());
@@ -644,13 +654,19 @@ public class GameView {
         exit.setId("label_button_small");
         exit.setOnMouseClicked(event -> {
             pause();
-            YesNoCancel menu = new YesNoCancel("Do you want to save before exit?", view.getSnap());
-            root.getChildren().add(menu.getStackPane());
-            menu.getNo().setOnMouseClicked(event1 -> {
+            VBox vBox = new VBox();
+            Label text = new Label("Do you want to save before exit?");
+            Label no = new Label("NO");
+            Label yes = new Label("YES");
+            Label cancel = new Label("CANCEL");
+            vBox.getChildren().addAll(text, yes, no, cancel);
+            Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
+
+            no.setOnMouseClicked(event1 -> {
                 root.getChildren().remove(menu.getStackPane());
                 view.close();
             });
-            menu.getYes().setOnMouseClicked(event12 -> {
+            yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
@@ -659,7 +675,7 @@ public class GameView {
                 root.getChildren().remove(menu.getStackPane());
                 view.close();
             });
-            menu.getCancel().setOnMouseClicked(event13 -> {
+            cancel.setOnMouseClicked(event13 -> {
                 resume();
                 root.getChildren().remove(menu.getStackPane());
             });
@@ -667,7 +683,6 @@ public class GameView {
                 resume();
                 root.getChildren().remove(menu.getStackPane());
             });
-
 
         /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
             ButtonType buttonTypeTwo = new ButtonType("Exit");
@@ -704,18 +719,28 @@ public class GameView {
         menuButton.setOnMouseClicked(event -> {
             pause();
 
-            YesNoCancel menu = new YesNoCancel("Do you want to save before going to menu?", view.getSnap());
-            root.getChildren().add(menu.getStackPane());
+            VBox vBox = new VBox();
+            Label text = new Label("Do you want to save before going to menu?");
+            Label yes = new Label("YES");
+            Label no = new Label("NO");
+            Label cancel = new Label("CANCEL");
+            vBox.getChildren().addAll(text, yes, no, cancel);
 
-            menu.getNo().setOnMouseClicked(event1 -> {
+            Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
+
+
+            no.setOnMouseClicked(event1 -> {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                if(client == null) view.setRoot(backMenu.getRoot());
-                else view.setRoot(client.getMultiPlayerMenu().getRoot());
+                if (client == null) view.setRoot(backMenu.getRoot());
+                else {
+                    client.setInGame(false);
+                    view.setRoot(client.getMultiPlayerMenu().getRoot());
+                }
                 game.stop();
             });
 
-            menu.getYes().setOnMouseClicked(event12 -> {
+            yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
@@ -723,19 +748,25 @@ public class GameView {
                 }
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
-                if(client == null) view.setRoot(backMenu.getRoot());
-                else view.setRoot(client.getMultiPlayerMenu().getRoot());
+                if (client == null) view.setRoot(backMenu.getRoot());
+                else {
+                    client.setInGame(false);
+                    view.setRoot(client.getMultiPlayerMenu().getRoot());
+                }
                 game.stop();
             });
 
-            menu.getCancel().setOnMouseClicked(event13 -> {
+            cancel.setOnMouseClicked(event13 -> {
                 root.getChildren().remove(menu.getStackPane());
                 resume();
             });
 
-            menu.getDisabler().setOnMouseClicked(event14 -> {
-                root.getChildren().remove(menu.getStackPane());
-                resume();
+            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    resume();
+                    root.getChildren().remove(menu.getStackPane());
+                }
             });
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
@@ -806,6 +837,7 @@ public class GameView {
     }
 
     private void setUpTruck() {
+        //if(client != null) return;
         truck = Images.getSpriteAnimation("truck");
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
         truck.setState(Game.getInstance().getTruck().getLevel());
@@ -815,6 +847,7 @@ public class GameView {
     }
 
     private void setUpTruckInfo() {
+        //if(client != null) return;
         ImageView img = new ImageView(info);
         img.setFitHeight(INFO_LENGTH);
         img.setFitWidth(INFO_LENGTH);
@@ -850,6 +883,7 @@ public class GameView {
     }
 
     private void setUpHelicopter() {
+        //if(client != null) return;
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
         helicopter.setState(Game.getInstance().getHelicopter().getLevel());
@@ -859,6 +893,7 @@ public class GameView {
     }
 
     private void setUpHelicopterInfo() {
+        //if(client != null) return;
         ImageView img = new ImageView(info);
         img.setFitWidth(INFO_LENGTH);
         img.setFitHeight(INFO_LENGTH);
@@ -880,7 +915,7 @@ public class GameView {
         waterBar.setId("baseBar");
         waterBar.relocate(WELL_X, WELL_Y + 50);
         waterBar.setMinSize(15, 70);
-        waterBar.setMaxSize(15,70);
+        waterBar.setMaxSize(15, 70);
         root.getChildren().add(waterBar);
 
 
@@ -959,7 +994,7 @@ public class GameView {
         price.getChildren().add(coin);
         infoBox.getChildren().add(name);
         infoBox.getChildren().add(price);
-        if (animalName.equalsIgnoreCase("cat") ) {
+        if (animalName.equalsIgnoreCase("cat")) {
             HBox upgrade = new HBox();
             Label upgradeLabel = new Label(Integer.toString(Cat.getUpgradeCost()));
             upgradeLabel.setId("gold");
