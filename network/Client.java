@@ -49,6 +49,7 @@ public class Client {
     private static final String UPDATE_MONEY = "update_money";
     private static final String GET_MONEY = "get_money";
     private static final String DATA_MONEY = "data_money";
+    private static final String GET_INBOX = "get_inbox";
     //TODO get bear cost from server
     private static final int BEAR_COST = 200;
     View view;
@@ -212,10 +213,10 @@ public class Client {
                 //todo go back
                 break;
             case DATA_INBOX:
-                String json = text;
-                Talk[] messages = new Gson().fromJson(text, Talk[].class);
+                Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 System.err.println(text);
                 Platform.runLater(() -> inbox.setContent(messages));
+                //todo.
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
@@ -375,6 +376,11 @@ public class Client {
             return;
         }
         String command = ADD_BEAR + "\n" + id + "\n" + end + "\n";
+        command(command);
+    }
+
+    private void initInbox() {
+        String command = GET_INBOX + "\n" + end + "\n";
         command(command);
     }
 

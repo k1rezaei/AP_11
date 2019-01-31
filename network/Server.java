@@ -50,21 +50,31 @@ public class Server {
                 "EggPowder", "Plume",
                 "Cake", "Fabric", "Sewing", "Varnish",
                 "CarnivalDress", "Flour", "SourCream", "Wool"};
-        for (String item : items) {
-            this.items.put(item, 10);
-            this.prices.put(item, 200);
-            //todo cost.
-        }
+
 
         try {
             InputStream inputStream = new FileInputStream("data.txt");
             Scanner scanner = new Scanner(inputStream);
             users.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Person[].class)));
             talks.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Talk[].class)));
+
+            String[] _items = gson.fromJson(scanner.nextLine(), String[].class);
+            Integer[] _counts = gson.fromJson(scanner.nextLine(), Integer[].class);
+            Integer[] _prices = gson.fromJson(scanner.nextLine(), Integer[].class);
+
+            for (int i=0; i<_items.length; i++) {
+                this.items.put(_items[i], _counts[i]);
+                this.prices.put(_items[i], _prices[i]);
+            }
+
             scanner.close();
             inputStream.close();
         } catch (Exception e) {
             System.err.println("Can Not Find Data File Saved By Server.");
+            for (String item : items) {
+                this.items.put(item, 10);
+                this.prices.put(item, 200);
+            }
         }
 
     }
@@ -205,7 +215,7 @@ public class Server {
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
-                users.remove(profile.getPerson());
+                //todo host save kone adam haro. users.remove(profile.getPerson());
                 break;
             }
         }
@@ -335,12 +345,25 @@ public class Server {
             Formatter formatter = new Formatter(outputStream);
             formatter.format(gson.toJson(users.toArray()) + "\n");
             formatter.format(gson.toJson(talks.toArray()) + "\n");
+            formatter.format(gson.toJson(items.keySet().toArray()) + "\n");
+            formatter.format(gson.toJson(items.values().toArray()) + "\n");
+
+            ArrayList<Integer> temp = new ArrayList<>();
+            for (String type : items.keySet())
+                temp.add(prices.get(type));
+            formatter.format(gson.toJson(temp.toArray()));
+
             formatter.flush();
             formatter.close();
             outputStream.close();
         } catch (Exception e) {
             System.err.println("Can Not Save File In Data");
         }
+    }
+
+    synchronized public void changeCost(String type, int cost) {
+        prices.put(type, cost);
+        saveData();
     }
 
     //todo initialize item list.

@@ -1,3 +1,4 @@
+import com.google.gson.Gson;
 import javafx.animation.AnimationTimer;
 import javafx.concurrent.Task;
 
@@ -37,6 +38,8 @@ public class Profile {
     private static final String UPDATE_MONEY = "update_money";
     private static final String GET_MONEY = "get_money";
     private static final String DATA_MONEY = "data_money";
+    private static final String GET_INBOX = "get_inbox";
+    private static final String DATA_INBOX = "data_inbox";
 
     private int counter = 0;
     private boolean bucketSent = false;
@@ -263,6 +266,9 @@ public class Profile {
             case GET_MONEY:
                 command(DATA_MONEY + "\n" + person.getMoney() + "\n" + end + "\n");
                 break;
+            case GET_INBOX:
+                command(DATA_INBOX + "\n" + new Gson().toJson(person.getInbox().toArray()) + "\n" + end + "\n");
+                break ;
             default:
                 System.err.println("Unknown command");
 
