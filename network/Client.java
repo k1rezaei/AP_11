@@ -64,7 +64,7 @@ public class Client {
     private Shop shop;
     private String myId;
     //TODO make money
-    private int money = 1000;
+    private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
 
@@ -163,7 +163,8 @@ public class Client {
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
         getWarehouse();
-        getMoney();
+        getMoneyFromServer();
+        initInbox();
     }
 
     //talk to server.
@@ -216,7 +217,6 @@ public class Client {
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 System.err.println(text);
                 Platform.runLater(() -> inbox.setContent(messages));
-                //todo.
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
@@ -232,10 +232,6 @@ public class Client {
             case DATA_PERSON:
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
-                //TODO remove this inbox refresher
-                if (id.equals(myId)) inbox.setContent(person.getInbox().toArray(new Talk[0]));
-                System.err.println("BUG " + person.getId());
-                System.err.println("BUG " + person.getInbox().size());
                 Platform.runLater(() -> {
                     currentViewProfile = new ViewProfile(view, Client.this, person);
                     view.setRoot(currentViewProfile.getRoot());

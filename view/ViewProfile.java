@@ -91,7 +91,7 @@ public class ViewProfile {
     }
 
     ViewProfile(View view, Client client, Person person) {
-
+        System.err.println();
         System.err.println(person.getId());
         System.err.println(person.getInbox().size());
 

@@ -52,39 +52,17 @@ public class MultiPlayerMenu {
         vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
         root.getChildren().addAll(vBox);
 
-        chat.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.err.println(view == null);
-                System.err.println(client == null);
-                System.err.println(client.getChatroom() == null);
-                System.err.println(client.getChatroom().getRoot() == null);
-                view.setRoot(client.getChatroom().getRoot());
-            }
-        });
+        chat.setOnMouseClicked(event -> view.setRoot(client.getChatroom().getRoot()));
 
         rank.setOnMouseClicked(event -> view.setRoot(client.getScoreboard().getRoot()));
 
-        logOut.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                client.closeSocket();
-                view.setRoot(new Menu(view).getRoot());
-            }
+        logOut.setOnMouseClicked(event -> {
+            client.closeSocket();
+            view.setRoot(new Menu(view).getRoot());
         });
-        profile.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                client.getPerson(client.getMyId());
-            }
-        });
+        profile.setOnMouseClicked(event -> client.getPerson(client.getMyId()));
 
-        start.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setRoot(new LevelSelect(view).getRoot());
-            }
-        });
+        start.setOnMouseClicked(event -> view.setRoot(new LevelSelect(view).getRoot()));
     }
 
     public Group getRoot() {
