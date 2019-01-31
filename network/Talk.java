@@ -1,6 +1,6 @@
 public class Talk {
-    String sender, recipient;
-    String text, repliedText = null;
+    private String sender, recipient;
+    private String text, repliedText = null;
 
     public Talk(String sender, String text) {
         this.sender = sender;

@@ -19,7 +19,7 @@ public class Menu {
     final static public long GAP_TIME = 5 * 1000000000L;
     private static final int NUM_SLIDES = 3;
     private static boolean isHost = false;
-    long lastTry = 0;
+    private long lastTry = 0;
     private VBox vBox = new VBox();
     private ArrayList<ImageView> slides = new ArrayList<>();
     private ArrayList<ArrayList<Label>> labels = new ArrayList<>();

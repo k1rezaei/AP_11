@@ -7,7 +7,7 @@ import javafx.scene.layout.VBox;
 
 
 public class Pop {
-    AddType addType;
+    private AddType addType;
     private StackPane frost;
     private StackPane stackPane = new StackPane();
     private Node content;

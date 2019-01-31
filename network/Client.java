@@ -54,10 +54,10 @@ public class Client {
     //TODO get bear cost from server
     private static final int BEAR_COST = 200;
     private final boolean isHost;
-    View view;
-    Socket socket;
-    Scanner scanner;
-    Formatter formatter;
+    private View view;
+    private Socket socket;
+    private Scanner scanner;
+    private Formatter formatter;
 
     private Chatroom chatroom;
     private Scoreboard scoreboard;
@@ -69,9 +69,9 @@ public class Client {
     private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
-    Task<Void> read = new Task<Void>() {
+    private Task<Void> read = new Task<>() {
         @Override
-        protected Void call() throws Exception {
+        protected Void call() {
             while (socket.isConnected()) {
                 String command = scanner.nextLine();
                 process(command, getData(scanner));
@@ -185,7 +185,6 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-        System.err.println(command);
         Scanner reader = new Scanner(text);
         String item, price, id;
         switch (command) {
@@ -199,7 +198,6 @@ public class Client {
                 Gson gson = new Gson();
                 Person[] people = gson.fromJson(text, Person[].class);
                 Platform.runLater(() -> scoreboard.setContent(people));
-                //scoreboard.setContent(text);
                 break;
             }
             case DATA_ITEM_COST:
