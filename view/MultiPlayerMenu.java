@@ -1,3 +1,4 @@
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -5,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -57,13 +59,24 @@ public class MultiPlayerMenu {
             TextField price = new TextField();
             price.setMaxWidth(100);
             TextField itemName = new TextField();
+            price.setId("inputBox");
+            itemName.setId("inputBox");
             itemName.setDisable(true);
             itemName.setMaxWidth(100);
             ImageView currentItem = new ImageView();
             Label send = new Label("Send");
             send.setId("label_button");
+            Label back = new Label("back");
+            back.setId("label_button");
             select.setSpacing(20);
             Pop pop = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
+
+            back.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    root.getChildren().remove(pop.getStackPane());
+                }
+            });
             send.setOnMouseClicked(mouseEvent1 -> sendItemPrice(price, itemName, pop));
             price.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)
@@ -84,7 +97,7 @@ public class MultiPlayerMenu {
                 });
                 items.getChildren().add(itemImage);
             }
-            vBox.getChildren().addAll(items, select);
+            vBox.getChildren().addAll(items, select, back);
         });
 
         VBox vBox = new VBox(start, rank, chat, profile, logOut);
