@@ -8,12 +8,17 @@ public class Person {
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> followings = new ArrayList<>();
     private ArrayList<String> followers = new ArrayList<>();
+    private ArrayList<String> teamGames = new ArrayList<>();
 
     private ArrayList<Talk> inbox = new ArrayList<>();
 
     public Person(String id, String name) {
         this.id = id;
         this.name = name;
+    }
+
+    synchronized public void addTeamGameWith(String id) {
+        teamGames.add(id);
     }
 
     public int getMoney() {
