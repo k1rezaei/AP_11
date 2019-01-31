@@ -118,7 +118,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id, String ip,int srcPort) throws IOException {
+    boolean checkId(String id, String ip, int srcPort) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -134,7 +134,7 @@ public class Client {
             int port = scanner.nextInt();
             System.err.println("port is " + port);
             formatter.format("Connected with port : " + port + '\n');*/
-            formatter.format(srcPort+"\n");
+            formatter.format(srcPort + "\n");
             formatter.flush();
             formatter.close();
             scanner.close();
@@ -161,6 +161,7 @@ public class Client {
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
         getWarehouse();
+        getMoney();
     }
 
     //talk to server.
@@ -200,13 +201,14 @@ public class Client {
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
                 System.err.println("bought " + item);
-                //todo
+                //todo go back to actually buying here?
                 break;
             case SOLD_ITEM:
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
                 System.err.println("sold " + item);
+                //todo go back
                 break;
             case DATA_INBOX:
                 String json = text;
@@ -252,7 +254,7 @@ public class Client {
                 id = reader.nextLine();
                 //TODO DISABLE INGAME?
                 if (inGame) Game.getInstance().setMoney(Game.getInstance().getMoney() - BEAR_COST);
-                else money -= BEAR_COST;
+                else setMoney(money - BEAR_COST);
                 showMessage("Sent a  bear to " + id + ".");
                 break;
             case BEAR_DID_NOT_ADD:
@@ -264,8 +266,7 @@ public class Client {
                 Game.getInstance().addEntity(Entity.getNewEntity("bear"));
                 break;
             case DATA_MONEY:
-                int money = reader.nextInt();
-                //todo
+                money = reader.nextInt();
                 break;
             default:
                 System.err.println(command);
