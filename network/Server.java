@@ -159,13 +159,14 @@ public class Server {
         return 2;
     }
 
-    synchronized public void addMessageToChatRoom(Talk talk) {
+    synchronized void addMessageToChatRoom(Talk talk) {
         talks.add(talk);
         String command = getChatRoom();
         for (Profile profile : profiles) {
             profile.command(command);
         }
         saveData();
+
     }
 
 
@@ -177,22 +178,22 @@ public class Server {
     }
 
 
-    public String getScoreboard() {
+    synchronized public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
         for (Profile profile : profiles)
             people.add(profile.getPerson());
         return DATA_SCOREBOARD + '\n' + gson.toJson(people.toArray()) + '\n' + end + '\n';
     }
 
-    public String getChatRoom() {
+    synchronized public String getChatRoom() {
         return DATA_CHAT_ROOM + '\n' + gson.toJson(talks.toArray()) + '\n' + end + '\n';
     }
 
-    public String getItemCost(String item) {
+    synchronized public String getItemCost(String item) {
         return DATA_ITEM_COST + '\n' + item + '\n' + prices.get(item) + '\n' + end + '\n';
     }
 
-    public synchronized String buyItem(String item) {
+    synchronized public String buyItem(String item) {
         if (items.get(item) != null && items.get(item) > 0) {
             int count = items.get(item);
             count--;
@@ -233,7 +234,7 @@ public class Server {
         return SOLD_ITEM + "\n" + item + "\n" + prices.get(item) + "\n" + end + "\n";
     }
 
-    public void sendPrivateMessage(String senderId, String receiverId, String text) {
+    synchronized public void sendPrivateMessage(String senderId, String receiverId, String text) {
         Person sender = getPerson(senderId);
         Person receiver = getPerson(receiverId);
 
@@ -247,12 +248,12 @@ public class Server {
         command(updateInbox(receiverId), receiverId);
     }
 
-    public String updateInbox(String id) {
+    synchronized public String updateInbox(String id) {
         Person p = getPerson(id);
         return DATA_INBOX + "\n" + gson.toJson(p.getInbox().toArray(new Talk[0])) + "\n" + end + "\n";
     }
 
-    private Person getPerson(String id) {
+    synchronized private Person getPerson(String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
                 return profile.getPerson();
@@ -260,7 +261,7 @@ public class Server {
         return null;
     }
 
-    public void addFriendRequest(String id1, String id2) {
+    synchronized public void addFriendRequest(String id1, String id2) {
         Person follower = getPerson(id1);
         Person following = getPerson(id2);
         if (follower.getFollowings().contains(id2)) return;
@@ -275,7 +276,7 @@ public class Server {
         command(updateFriends(id2), id2);
     }
 
-    public void acceptFriendRequest(String id1, String id2) {
+    synchronized public void acceptFriendRequest(String id1, String id2) {
         Person follower = getPerson(id2);
         Person following = getPerson(id1);
 
