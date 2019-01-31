@@ -69,7 +69,7 @@ public class Client {
     private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
-    private Task<Void> read = new Task<>() {
+    private Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() {
             while (socket.isConnected()) {
