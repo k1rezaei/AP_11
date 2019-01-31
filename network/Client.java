@@ -216,6 +216,7 @@ public class Client {
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 System.err.println(text);
                 Platform.runLater(() -> inbox.setContent(messages));
+                //todo.
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
