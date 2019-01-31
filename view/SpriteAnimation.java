@@ -3,6 +3,7 @@ import javafx.animation.Interpolator;
 import javafx.animation.Transition;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -18,6 +19,14 @@ public class SpriteAnimation extends Transition {
     private ArrayList<ImageView> imageViews = new ArrayList<>();
     private int state = 0, x, y;
     private int lastIndex;
+
+
+    private ProgressBar progressBar = new ProgressBar();
+    {
+        progressBar.setMaxHeight(10);
+        progressBar.setMaxWidth(50);
+        progressBar.setProgress(0);
+    }
 
     public SpriteAnimation(Duration duration,
                            ArrayList<Integer> counts, ArrayList<Integer> columns,
@@ -119,5 +128,13 @@ public class SpriteAnimation extends Transition {
 
     public int getHeight() {
         return heights.get(state);
+    }
+
+    public ProgressBar getProgressBar(double prog) {
+        progressBar.setProgress(prog);
+        return progressBar;
+    }
+    public ProgressBar getProgressBar() {
+        return progressBar;
     }
 }

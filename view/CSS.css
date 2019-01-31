@@ -164,7 +164,14 @@
 #chatbox {
 
 }
-
+#clock {
+    -fx-padding: 5;
+    -fx-background-radius: 20;
+    -fx-background-color: rgba(50,200,50,0.3);
+    -fx-border-width: 2;
+    -fx-border-color: rgba(50,255,50,0.3);
+    -fx-border-radius: 20;
+}
 .label {
     -fx-text-fill: white;
     -fx-font-size: 18;

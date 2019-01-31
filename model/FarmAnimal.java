@@ -73,7 +73,7 @@ public class FarmAnimal extends Animal {
         if (entity instanceof Plant) {
             if (rateOfHunger > MIN_HUNGER) return;
             ((Plant) (entity)).startTimer();
-            rateOfHunger += RATE_OF_HUNGER / hungrySpeed;
+            rateOfHunger += 6 * RATE_OF_HUNGER / hungrySpeed;
             if (rateOfHunger > RATE_OF_HUNGER) rateOfHunger = RATE_OF_HUNGER;
         }
     }
@@ -87,6 +87,9 @@ public class FarmAnimal extends Animal {
             return item;
         }
         return null;
+    }
+    double getHunger(){
+        return (double)rateOfHunger/RATE_OF_HUNGER;
     }
 }
 

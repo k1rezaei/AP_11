@@ -43,7 +43,7 @@ public class GameView {
     private static final int GOALS_WIDTH = 70;
     private static final int GOALS_HEIGHT = 50;
     private static final int GOALS_X = 720;
-    private static final int GOALS_Y = 550;
+    private static final int GOALS_Y = 500;
     private static final int FF_HEIGHT = 50;
     private static final int FF_WIDTH = 100;
     private static final int FF_X = 360;
@@ -114,6 +114,7 @@ public class GameView {
     private Label fastForward;
     private Label save;
     private Client client;
+    private Label clock;
     private VBox catInfoBox;
 
 
@@ -173,16 +174,29 @@ public class GameView {
         }
     }
 
+    String getXX(long t){
+        if(t < 10) return "0" + t;
+        else return "" + t;
+    }
+
+    void updateClock(long second){
+        clock.setText(getXX(second/60) + ":" + getXX(second%60));
+    }
+
     public void runGame() {
         initializeGame();
 
         game = new AnimationTimer() {
             private static final int SECOND = 1000000000;
             private long lastTime;
+            private long startTime;
 
             @Override
             public void handle(long now) {
-                if (lastTime == 0) lastTime = now;
+                if (lastTime == 0){
+                    lastTime = now;
+                    startTime = now;
+                }
                 if (now > lastTime + SECOND / (48 * speed)) {
                     pash();
                     lastTime = now;
@@ -196,6 +210,8 @@ public class GameView {
                     Game.getInstance().turn();
                     renderEntities();
                     stopWorkshops();
+                    updateClock(Game.getInstance().getCurrentTurn() / 40);
+                    //updateClock((now - startTime) / SECOND);
                     updateWellFilledBar();
                     moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
                     if (Game.getInstance().checkLevel()) endGame();
@@ -306,9 +322,12 @@ public class GameView {
 
     private void stopWorkshops() {
         for (Workshop workshop : Game.getInstance().getWorkshops()) {
+
             if (workshop.getRemainTime() == 0) {
                 getWorkshop(workshop).shutDown();
-            }
+            }else if(workshop.getRemainTime() == -1){
+                getWorkshop(workshop).getProgressBar(0);
+            }else getWorkshop(workshop).getProgressBar(1-(double)workshop.getRemainTime()/workshop.getDuration());
         }
     }
 
@@ -423,11 +442,19 @@ public class GameView {
         sprite.stop();
         sprite.getImageView().setVisible(false);
         entityRoot.getChildren().remove(sprite.getImageView());
+        entityRoot.getChildren().remove(sprite.getProgressBar(0));
         sprites.remove(entity);
     }
 
     private void renderSprite(Entity entity) {
+
         SpriteAnimation sprite = sprites.get(entity);
+        if(entity instanceof FarmAnimal){
+            int x = entity.getCell().getX() + BASE_X - 25;
+            int y = entity.getCell().getY() + BASE_Y + sprite.getHeight()/2;
+            sprite.getProgressBar(  ((FarmAnimal)entity).getHunger() ).relocate(x, y);
+
+        }
         if (sprite.getState() != entity.getState()) {
             entityRoot.getChildren().remove(sprite.getImageView());
             sprite.setState(entity.getState());
@@ -448,6 +475,9 @@ public class GameView {
         newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
         newSprite.play();
         entityRoot.getChildren().add(newSprite.getImageView());
+        if(entity instanceof FarmAnimal){
+            entityRoot.getChildren().add(newSprite.getProgressBar(0));
+        }
         if (entity.getType().equalsIgnoreCase("plant")) {
             ImageView plant = newSprite.getImageView();
             plant.toBack();
@@ -463,6 +493,7 @@ public class GameView {
 
     private void initializeNodes() {
         setUpBackground();
+        setUpClock();
         setUpRoadImage();
         setUpBuyIcons();
         setUpMoneyLabel();
@@ -819,10 +850,13 @@ public class GameView {
             if (i <= 2) {
                 x = LEFT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * i;
+                sprite.getProgressBar().relocate(x , y + sprite.getHeight());
             } else {
                 x = RIGHT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * (i - 3);
+                sprite.getProgressBar().relocate(x + 100, y + sprite.getHeight());
             }
+            root.getChildren().add(sprite.getProgressBar(0));
             fixSprite(sprite, x, y);
             setUpWorkshopInfo(workshop, x, y);
         }
@@ -950,6 +984,12 @@ public class GameView {
         root.getChildren().add(imageView);
     }
 
+    private void setUpClock(){
+        clock = new Label();
+        clock.setId("clock");
+        clock.relocate(GOALS_X, GOALS_Y+50);
+        root.getChildren().add(clock);
+    }
     private void setUpBuyIcons() {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
