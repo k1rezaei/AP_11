@@ -224,7 +224,7 @@ public class Client {
                 //TODO undo refresh ?
                 if (currentViewProfile != null && view.getScene().getRoot() == currentViewProfile.getRoot() &&
                         currentViewProfile.getPerson().getId().equals(myId)) {
-                    view.goBack();
+                    Platform.runLater(() -> view.goBack());
                     getPerson(currentViewProfile.getPerson().getId());
                 }
                 break;
@@ -427,6 +427,7 @@ public class Client {
 
     public void setMoney(int money) {
         this.money = money;
+        updateMoney();
     }
 
     public boolean isInGame() {
