@@ -18,10 +18,10 @@ public class Shop {
     private static final int BASE_Y = 70;
     private static final int DIS_Y = 65;
     private static final Image BG = new Image("file:textures/multiplayer/shelf.jpg");
-    private final static Image COIN = new Image("file:textures/coin.png");
+    private static final Image COIN = new Image("file:textures/coin.png");
     private final int WIDTH = 300;
     private final int HEIGHT = 70;
-    int numberOfItems = 0;
+    private int numberOfItems = 0;
     private Client client;
     private View view;
     private Group root = new Group();

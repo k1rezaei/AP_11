@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class View extends Application {
     private static final boolean INTRO = true;
-    ArrayList<Group> roots = new ArrayList<>();
+    private ArrayList<Group> roots = new ArrayList<>();
     /// age ejra nashod true konid
     private boolean mute = true;
     private Stage primaryStage;

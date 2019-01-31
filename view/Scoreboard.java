@@ -10,14 +10,12 @@ import javafx.scene.layout.VBox;
 public class Scoreboard {
     private static final int HEIGHT = 450;
     static private final int WIDTH = 200;
-    View view;
-    Group root = new Group();
-    Label rank = new Label();
-    BorderPane borderPane = new BorderPane();
-    //VBox vBox = new VBox();
-    Client client;
-    ScrollPane scrollPane = new ScrollPane();
-    SortType sortType = SortType.ID;
+    private View view;
+    private Group root = new Group();
+    private BorderPane borderPane = new BorderPane();
+    private Client client;
+    private ScrollPane scrollPane = new ScrollPane();
+    private SortType sortType = SortType.ID;
 
     Scoreboard(View view, Client client) {
         this.view = view;

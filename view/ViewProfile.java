@@ -196,7 +196,7 @@ public class ViewProfile {
                 client.acceptFriendRequest(followerId);
                 //TODO comment out refresh?
                 view.goBack();
-                client.getPerson(person.id);
+                client.getPerson(person.getId());
             });
         }
         Label back = new Label("back");
