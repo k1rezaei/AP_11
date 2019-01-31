@@ -42,8 +42,8 @@ public class GameView {
     private static final int BUY_ANIMAL_X_DIFF = 60;
     private static final int GOALS_WIDTH = 70;
     private static final int GOALS_HEIGHT = 50;
-    private static final int GOALS_X = 720;
-    private static final int GOALS_Y = 500;
+    private static final int GOALS_X = 640;
+    private static final int GOALS_Y = 560;
     private static final int FF_HEIGHT = 50;
     private static final int FF_WIDTH = 100;
     private static final int FF_X = 360;
@@ -987,7 +987,7 @@ public class GameView {
     private void setUpClock(){
         clock = new Label();
         clock.setId("clock");
-        clock.relocate(GOALS_X, GOALS_Y+50);
+        clock.relocate(GOALS_X + 80, GOALS_Y - 10);
         root.getChildren().add(clock);
     }
     private void setUpBuyIcons() {
