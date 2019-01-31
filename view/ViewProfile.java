@@ -69,7 +69,6 @@ public class ViewProfile {
     }*/
 
     private void show(Node node) {
-
         Pop pop = new Pop(node, view.getSnap(), root, Pop.AddType.WINDOW);
     }
 
@@ -87,12 +86,7 @@ public class ViewProfile {
             f.getChildren().add(label);
             Pop pop = new Pop(f, view.getSnap(), root, Pop.AddType.WINDOW);
 
-            label.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    root.getChildren().remove(pop.getStackPane());
-                }
-            });
+            label.setOnMouseClicked(event12 -> root.getChildren().remove(pop.getStackPane()));
         };
     }
 
@@ -130,34 +124,32 @@ public class ViewProfile {
         vBox.setId("prof_menu");
         vBox.getChildren().addAll(name, id, level);
         vBox.getChildren().addAll(labels);
-        if (!person.getId().equals(client.getMyId())) vBox.getChildren().remove(getInbox());
+        System.err.println("You're here");
+        System.err.println(person.getFriends());
+        System.err.println(person.getFollowings());
+        System.err.println(person.getFollowers());
+        System.err.println(person.getInbox());
+        if (!person.getId().equals(client.getMyId())) {
+            vBox.getChildren().remove(getInbox());
+            vBox.getChildren().remove(getFollowers());
+            vBox.getChildren().remove(getFollowing());
+            vBox.getChildren().remove(getFriends());
+        }
+        System.err.println("HOHOH0");
         if (person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getPrivateMessage());
             vBox.getChildren().remove(getAddFriend());
             vBox.getChildren().remove(getBear());
         }
+        System.err.println("what about here");
         root.getChildren().add(vBox);
-        VBox followersBox = new VBox();
-        followersBox.setPrefSize(BOX_WIDTH, BOX_HEIGHT);
-        for (String followerId : person.getFollowers()) {
-            HBox hBox = new HBox();
-            Label label = new Label(followerId);
-            label.setOnMouseClicked(event1 -> client.getPerson(followerId));
-            Label accept = new Label("Accept");
-            accept.setId("label_button_small");
-            hBox.getChildren().addAll(label, accept);
-            followersBox.getChildren().add(hBox);
-            Label back = new Label("back");
-            back.setId("label_button");
-            followersBox.getChildren().add(back);
-            accept.setOnMouseClicked(mouseEvent -> {
-                client.acceptFriendRequest(followerId);
-                followersBox.getChildren().remove(hBox);
-            });
-        }
-        getFollowers().setOnMouseClicked(event -> show(followersBox));
+        System.err.println("and here");
+        getFollowers().setOnMouseClicked(event -> popFollowers());
         getFollowing().setOnMouseClicked(getEvent(person.getFollowings()));
-        getAddFriend().setOnMouseClicked(mouseEvent -> client.addFriendRequest(person.getId()));
+        getAddFriend().setOnMouseClicked(mouseEvent -> {
+            client.addFriendRequest(person.getId());
+            new Pop(new Label("Friend Request Sent"), view.getSnap(), root, Pop.AddType.ALERT);
+        });
         getPrivateMessage().setOnMouseClicked(mouseEvent -> {
             HBox message = new HBox();
             TextField textField = new TextField();
@@ -184,10 +176,40 @@ public class ViewProfile {
         getInbox().setOnMouseClicked(event -> show(client.getInbox().getRoot()));
         getBack().setOnMouseClicked(event -> view.goBack());
         getBear().setOnMouseClicked(mouseEvent -> client.addBear(person.getId()));
+    }
 
+    private void popFollowers() {
+        VBox followersBox = new VBox();
+        followersBox.setPrefSize(BOX_WIDTH, BOX_HEIGHT);
+        for (String followerId : person.getFollowers()) {
+            HBox hBox = new HBox();
+            Label label = new Label(followerId);
+            label.setOnMouseClicked(mouseEvent -> client.getPerson(followerId));
+            label.setOnMouseClicked(event1 -> client.getPerson(followerId));
+            Label accept = new Label("Accept");
+            accept.setId("label_button_small");
+            hBox.setSpacing(30);
+            hBox.getChildren().addAll(label, accept);
+            followersBox.getChildren().add(hBox);
+            accept.setOnMouseClicked(mouseEvent -> {
+                client.acceptFriendRequest(followerId);
+                //TODO comment out refresh?
+                view.goBack();
+                client.getPerson(person.id);
+            });
+        }
+        Label back = new Label("back");
+        back.setId("label_button");
+        followersBox.getChildren().add(back);
+        Pop pop = new Pop(followersBox, view.getSnap(), root, Pop.AddType.WINDOW);
+        back.setOnMouseClicked(mouseEvent -> root.getChildren().remove(pop.getStackPane()));
     }
 
     public Group getRoot() {
         return root;
+    }
+
+    public Person getPerson() {
+        return person;
     }
 }

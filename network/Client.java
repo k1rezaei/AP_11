@@ -65,6 +65,7 @@ public class Client {
     //TODO make money
     private int money = 1000;
     private boolean inGame;
+    private ViewProfile currentViewProfile;
 
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -118,7 +119,7 @@ public class Client {
         }
     }
 
-    boolean checkId(String id, String ip) throws IOException {
+    boolean checkId(String id, String ip, int srcPort) throws IOException {
         System.err.println(socket.isConnected());
         System.err.println("id is :" + id);
         formatter.format(id + "\n");
@@ -130,16 +131,17 @@ public class Client {
             formatter.close();
             return false;
         } else {
-            myId = id;
+            myId = id;/*
             int port = scanner.nextInt();
             System.err.println("port is " + port);
-            formatter.format("Connected with port : " + port + '\n');
+            formatter.format("Connected with port : " + port + '\n');*/
+            formatter.format(srcPort + "\n");
             formatter.flush();
             formatter.close();
             scanner.close();
             while (true) {
                 try {
-                    socket = new Socket(ip, port);
+                    socket = new Socket(ip, srcPort);
                     break;
                 } catch (Exception e) {
                 }
@@ -160,6 +162,7 @@ public class Client {
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
         getWarehouse();
+        getMoney();
     }
 
     //talk to server.
@@ -170,7 +173,7 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-
+        System.err.println(command);
         Scanner reader = new Scanner(text);
         String item, price, id;
         switch (command) {
@@ -199,33 +202,42 @@ public class Client {
                 price = reader.nextLine();
                 int cost = Integer.parseInt(price);
                 System.err.println("bought " + item);
-                //todo
+                //todo go back to actually buying here?
                 break;
             case SOLD_ITEM:
                 item = reader.nextLine();
                 price = reader.nextLine();
                 cost = Integer.parseInt(price);
                 System.err.println("sold " + item);
+                //todo go back
                 break;
             case DATA_INBOX:
                 String json = text;
                 Talk[] messages = new Gson().fromJson(text, Talk[].class);
-                inbox.setContent(messages);
+                System.err.println(text);
+                Platform.runLater(() -> inbox.setContent(messages));
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
-                //todo
+                //TODO undo refresh ?
+                if (currentViewProfile != null && view.getScene().getRoot() == currentViewProfile.getRoot() &&
+                        currentViewProfile.getPerson().getId().equals(myId)) {
+                    Platform.runLater(() -> view.goBack());
+                    getPerson(currentViewProfile.getPerson().getId());
+                }
                 break;
             case DATA_PERSON:
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
+                //TODO remove this inbox refresher
+                if (id.equals(myId)) inbox.setContent(person.getInbox().toArray(new Talk[0]));
                 System.err.println("BUG " + person.getId());
                 System.err.println("BUG " + person.getInbox().size());
                 Platform.runLater(() -> {
-                    ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
-                    view.setRoot(viewProfile.getRoot());
+                    currentViewProfile = new ViewProfile(view, Client.this, person);
+                    view.setRoot(currentViewProfile.getRoot());
                 });
                 //todo
                 break;
@@ -250,7 +262,7 @@ public class Client {
                 id = reader.nextLine();
                 //TODO DISABLE INGAME?
                 if (inGame) Game.getInstance().setMoney(Game.getInstance().getMoney() - BEAR_COST);
-                else money -= BEAR_COST;
+                else setMoney(money - BEAR_COST);
                 showMessage("Sent a  bear to " + id + ".");
                 break;
             case BEAR_DID_NOT_ADD:
@@ -262,8 +274,7 @@ public class Client {
                 Game.getInstance().addEntity(Entity.getNewEntity("bear"));
                 break;
             case DATA_MONEY:
-                int money = reader.nextInt();
-                //todo
+                money = reader.nextInt();
                 break;
             default:
                 System.err.println(command);
@@ -292,6 +303,10 @@ public class Client {
     public void updateScoreboard(String level) {
         String command = UPDATE_SCOREBOARD + "\n" + level + '\n' + end + "\n";
         command(command);
+    }
+
+    public void updateMoney() {
+        command(UPDATE_MONEY + "\n" + money + "\n" + end + "\n");
     }
 
     public void getMoneyFromServer() {
@@ -412,6 +427,7 @@ public class Client {
 
     public void setMoney(int money) {
         this.money = money;
+        updateMoney();
     }
 
     public boolean isInGame() {

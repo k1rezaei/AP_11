@@ -44,7 +44,7 @@ public class MultiPlayerMenu {
         //logOut.setGraphic(temp);
         logOut.setId("label_button");
 
-        VBox vBox = new VBox(start, rank, chat, logOut, profile);
+        VBox vBox = new VBox(start, rank, chat, profile, logOut);
         vBox.setId("menu");
         vBox.setAlignment(Pos.CENTER);
         vBox.relocate(400, 300);
@@ -63,12 +63,7 @@ public class MultiPlayerMenu {
             }
         });
 
-        rank.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.setRoot(client.getScoreboard().getRoot());
-            }
-        });
+        rank.setOnMouseClicked(event -> view.setRoot(client.getScoreboard().getRoot()));
 
         logOut.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override

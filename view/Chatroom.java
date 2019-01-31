@@ -1,4 +1,3 @@
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -7,12 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.util.HashMap;
 
@@ -28,6 +24,8 @@ public class Chatroom {
     private boolean replied = false;
     private HashMap<String, String> colors = new HashMap<>();
     private ImageView bg = new ImageView(new Image("file:textures/multiplayer/chat.jpg"));
+    private Label clear;
+    private FlowPane emojiSelect;
 
     {
         bg.setFitHeight(600);
@@ -67,38 +65,6 @@ public class Chatroom {
         textField.setMinSize(WIDTH - 90, 30);
         textField.setMaxSize(WIDTH - 90, 30);
 
-        Label emoji = new Label("\uD83D\uDE04");
-        emoji.setPrefSize(30, 30);
-        emoji.relocate(400 - WIDTH / 2, 300 + HEIGHT / 2);
-        emoji.setId("emoji");
-        emoji.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                FlowPane flowPane = new FlowPane();
-                flowPane.relocate(30 + 400 - WIDTH / 2, 300 + HEIGHT / 2 - 3*5 - 30 * 3);
-                flowPane.setVgap(5);
-                flowPane.setHgap(5);
-                flowPane.setMaxSize( 30 * 2 + 15 + 1, 5*3 + 30 * 4 + 1);
-                flowPane.setStyle("-fx-background-color: rgba(200,200,200,0.8);" +
-                        "-fx-padding: 5;" +
-                        "-fx-background-radius: 10");
-                for(int i = 0; i < emojis.length; i++){
-                    Label emoj = new Label(emojis[i]);
-                    emoj.setId("emoji");
-                    int finalI = i;
-                    emoj.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            System.err.println("WTF?");
-                            textField.setText(textField.getText() + emojis[finalI]);
-                            root.getChildren().remove(flowPane);
-                        }
-                    });
-                    flowPane.getChildren().add(emoj);
-                }
-                root.getChildren().add(flowPane);
-            }
-        });
 
         reply.relocate(400 - WIDTH / 2, 350 + HEIGHT / 2);
         reply.setMinSize(WIDTH - 60, 30);
@@ -123,16 +89,50 @@ public class Chatroom {
 
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
-        Label clear = setUpClear();
-        root.getChildren().addAll(scrollPane, emoji, send, textField, back, reply, clear);
+        setUpClear();
+        Label emoji = setUpEmoji();
+        root.getChildren().addAll(scrollPane, emoji, send, textField, back, reply, clear, emojiSelect);
     }
 
-    private Label setUpClear() {
-        Label clear = new Label("Clear Reply");
+    private Label setUpEmoji() {
+        Label emoji = new Label("\uD83D\uDE04");
+        emoji.setPrefSize(30, 30);
+        emoji.relocate(400 - WIDTH / 2, 300 + HEIGHT / 2);
+        emoji.setId("emoji");
+        setUpEmojiSelect();
+        emoji.setOnMouseClicked(event -> emojiSelect.setVisible(!emojiSelect.isVisible()));
+        return emoji;
+    }
+
+    private void setUpEmojiSelect() {
+        emojiSelect = new FlowPane();
+        emojiSelect.relocate(30 + 400 - WIDTH / 2, 300 + HEIGHT / 2 - 3 * 5 - 30 * 3);
+        emojiSelect.setVgap(5);
+        emojiSelect.setHgap(5);
+        emojiSelect.setMaxSize(30 * 2 + 15 + 1, 5 * 3 + 30 * 4 + 1);
+        emojiSelect.setStyle("-fx-background-color: rgba(200,200,200,0.8);" +
+                "-fx-padding: 5;" +
+                "-fx-background-radius: 10");
+        for (int i = 0; i < emojis.length; i++) {
+            Label emoj = new Label(emojis[i]);
+            emoj.setId("emoji");
+            int finalI = i;
+            emoj.setOnMouseClicked(event1 -> {
+                System.err.println("WTF?");
+                int caretPosition = textField.getCaretPosition();
+                textField.replaceText(caretPosition, caretPosition, emojis[finalI]);
+                emojiSelect.setVisible(false);
+            });
+            emojiSelect.getChildren().add(emoj);
+        }
+        emojiSelect.setVisible(false);
+    }
+
+    private void setUpClear() {
+        clear = new Label("Clear");
         clear.relocate(400 + WIDTH / 2 - 60, 350 + HEIGHT / 2);
         clear.setId("label_button_small");
         clear.setOnMouseClicked(mouseEvent -> clearReply());
-        return clear;
     }
 
     private void sendMessage() {
@@ -146,6 +146,8 @@ public class Chatroom {
     private void clearReply() {
         replied = false;
         reply.setText("");
+        reply.setVisible(false);
+        clear.setVisible(false);
     }
 
 
@@ -159,7 +161,10 @@ public class Chatroom {
             messageHBox.setStyle("-fx-alignment: center-left");
             Label sender = new Label(talks[i].getSender());
             sender.setId("sender");
-
+            //TODO decide whether to add this if nonexistent account is handled
+            /*int finalI = i;
+            sender.setOnMouseClicked(mouseEvent -> client.getPerson(talks[finalI].getSender()));
+*/
             Label text = new Label(talks[i].getText());
             text.setId("message");
 
@@ -177,10 +182,7 @@ public class Chatroom {
 
 
             messageHBox.getChildren().addAll(sender, text);
-            text.setOnMouseClicked(mouseEvent -> {
-                replied = true;
-                reply.setText(text.getText());
-            });
+            text.setOnMouseClicked(mouseEvent -> addReply(text));
             if (talks[i].getRepliedText() != null) {
                 Label replyLabel = new Label(talks[i].getRepliedText());
                 replyLabel.setId("reply");
@@ -190,6 +192,13 @@ public class Chatroom {
             messageVBox.getChildren().add(messageHBox);
             content.getChildren().add(messageVBox);
         }
+    }
+
+    private void addReply(Label text) {
+        reply.setVisible(true);
+        clear.setVisible(true);
+        replied = true;
+        reply.setText(text.getText());
     }
 
     public Group getRoot() {

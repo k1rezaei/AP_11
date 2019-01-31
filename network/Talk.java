@@ -7,21 +7,28 @@ public class Talk {
         this.text = text;
     }
 
-    public Talk(String sender, String text, String reciever) {
+    public Talk(String sender, String text, String recipient) {
         this.sender = sender;
         this.text = text;
-        this.recipient = reciever;
+        this.recipient = recipient;
     }
 
     public void setRepliedText(String repliedText) {
         this.repliedText = repliedText;
     }
 
-    public String getText() {return text;}
-    public String getSender() {return sender;}
+    public String getText() {
+        return text;
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
     public String getRecipient() {
         return recipient;
     }
+
     public String getRepliedText() {
         return repliedText;
     }
