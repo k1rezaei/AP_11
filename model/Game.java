@@ -85,6 +85,7 @@ public class Game {
         game.level = level;
         Cell.setN(level.getN());
         Cell.setM(level.getM());
+        Cat.setLevel(0);
         game.money = level.getStartMoney();
         for (Workshop workshop : workshopTemplates) {
             game.workshops.add(new Workshop(workshop));

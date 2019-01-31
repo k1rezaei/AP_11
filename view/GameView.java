@@ -114,6 +114,7 @@ public class GameView {
     private Label fastForward;
     private Label save;
     private Client client;
+    private VBox catInfoBox;
 
 
     private GameView() {
@@ -185,6 +186,8 @@ public class GameView {
                 if (now > lastTime + SECOND / (48 * speed)) {
                     pash();
                     lastTime = now;
+                    catInfoBox.getChildren().clear();
+                    catInfoBox.getChildren().addAll(getBuyAnimalFocus("cat").getChildren());
                     handleOverlaps();
                     updateWarehouse();
                     refreshScreen();
@@ -327,6 +330,7 @@ public class GameView {
     }
 
     private void handleOverlaps() {
+        entityRoot.toFront();
         fastForward.toFront();
         save.toFront();
         infoRoot.toFront();
@@ -961,6 +965,7 @@ public class GameView {
             root.getChildren().add(priceLabel);
 
             VBox infoBox = getBuyAnimalFocus(animalName);
+            if (animalName.equalsIgnoreCase("cat")) catInfoBox = infoBox;
             infoBox.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i - 20, BUY_ANIMAL_Y + 70);
             priceLabel.setOnMouseEntered(mouseEvent -> {
                 focus.getRoot().getChildren().add(infoBox);
@@ -979,7 +984,7 @@ public class GameView {
     }
 
 
-    private VBox getBuyAnimalFocus(String animalName) {//TODO move to focus
+    private VBox getBuyAnimalFocus(String animalName) {
         VBox infoBox = new VBox();
         infoBox.setId("focus");
         Label name = new Label(animalName);
@@ -994,7 +999,7 @@ public class GameView {
         price.getChildren().add(coin);
         infoBox.getChildren().add(name);
         infoBox.getChildren().add(price);
-        if (animalName.equalsIgnoreCase("cat")) {
+        if (animalName.equalsIgnoreCase("cat") && Game.getInstance().getCatLevel() == 0) {
             HBox upgrade = new HBox();
             Label upgradeLabel = new Label(Integer.toString(Cat.getUpgradeCost()));
             upgradeLabel.setId("gold");
