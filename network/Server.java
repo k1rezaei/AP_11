@@ -27,7 +27,10 @@ public class Server {
     private HashMap<String, Integer> items, prices = new HashMap<>();
     private Gson gson = new Gson();
     private String[] itemList;
+
     private ArrayList<Person> users = new ArrayList<>();
+    private ArrayList<TeamGame> teamGames = new ArrayList<>();
+
     private Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
@@ -253,7 +256,7 @@ public class Server {
         return DATA_INBOX + "\n" + gson.toJson(p.getInbox().toArray(new Talk[0])) + "\n" + end + "\n";
     }
 
-    synchronized private Person getPerson(String id) {
+    synchronized public Person getPerson(String id) {
         for (Profile profile : profiles)
             if (profile.getPerson().getId().equals(id)) {
                 return profile.getPerson();
@@ -339,7 +342,7 @@ public class Server {
             profile.command(command);
     }
 
-    synchronized private void saveData() {
+    private void saveData() {
         try {
             OutputStream outputStream = new FileOutputStream("data.txt");
             Formatter formatter = new Formatter(outputStream);
@@ -365,6 +368,19 @@ public class Server {
         prices.put(type, cost);
         updateWarehouse();
         saveData();
+    }
+
+    synchronized public ArrayList<TeamGame> getTeamGames() {return teamGames;}
+
+    public ArrayList<String> getRandomGoals() {
+        Random random = new Random();
+        int number = 4, size = itemList.length;
+        ArrayList<String> goals = new ArrayList<>();
+        for (int i=0; i<number; i++) {
+            int c = random.nextInt(size);
+            goals.add(itemList[c]);
+        }
+        return goals;
     }
 
     //todo initialize item list.

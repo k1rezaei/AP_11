@@ -41,6 +41,19 @@ public class Profile {
     private static final String GET_INBOX = "get_inbox";
     private static final String DATA_INBOX = "data_inbox";
     private static final String UPDATE_PRICE = "update_price";
+
+    private static final String ADD_MULTI_PLAYER_REQUEST = "add_multi_player_request";
+    private static final String ACCEPT_MULTI_PLAYER_REQUEST = "accept_multi_player_request";
+    private static final String START_MULTI_PLAYER = "start_multi_player";
+    private static final String SEND_FOR_SERVER_MULTI_PLAYER = "send_for_server_multi_player";
+    private static final String WON_MULTI_PLAYER_GAME = "won_multi_player_game";
+    private static final String DATA_MULTI_PLAYER_GAME = "data_multi_player_game";
+    private static final String PLAY_MULTI_PLAYER_WITH_ME = "play_multi_player_with_me";
+    private static final String REMOVE_MULTI_PLAYER_REQUEST = "remove_multi_player_request";
+    private static final String IGNORE_PLAY_WITH_ME = "ignore_play_with_me";
+    private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
+    private static final String REQUEST_DECLINED = "request_declined";
+
     private Person person;
     private Socket socket;
     private Formatter formatter;
@@ -270,6 +283,62 @@ public class Profile {
                 item = reader.nextLine();
                 int price = reader.nextInt();
                 server.changeCost(item, price);
+                break;
+            case ADD_MULTI_PLAYER_REQUEST:
+                id = reader.nextLine();
+                server.command(PLAY_MULTI_PLAYER_WITH_ME + "\n" + person.getId() + "\n" + end + "\n", id);
+                break;
+            case REMOVE_MULTI_PLAYER_REQUEST :
+                id = reader.nextLine();
+                server.command(IGNORE_PLAY_WITH_ME + "\n" + person.getId() + "\n" + end + "\n", id);
+                break ;
+            case DECLINE_MULTI_PLAYER_REQUEST :
+                id = reader.nextLine();
+                server.command(REQUEST_DECLINED + "\n" + end + "\n", id);
+                break ;
+            case ACCEPT_MULTI_PLAYER_REQUEST:
+                id = reader.nextLine();
+                TeamGame teamGame = new TeamGame(person.getId(), id, server.getRandomGoals());
+
+                //save kardan baazi haaye dar haale ejra dar server.
+                server.getTeamGames().add(teamGame);
+
+                person.addTeamGameWith(id);
+                server.getPerson(id).addTeamGameWith(person.getId());
+
+                server.command(START_MULTI_PLAYER + "\n"
+                        + new Gson().toJson(teamGame) + "\n"
+                        + end + "\n", id);
+
+                server.command(START_MULTI_PLAYER + "\n"
+                        + new Gson().toJson(teamGame) + "\n"
+                        + end + "\n", person.getId());
+                break;
+            case SEND_FOR_SERVER_MULTI_PLAYER:
+                item = reader.nextLine();
+                TeamGame teamGameF = null;
+                boolean finished = false;
+
+                for (TeamGame t : server.getTeamGames())
+                    if (t.p1.equals(person.getId()) || t.p2.equals(person.getId())) {
+                        t.remove(item);
+                        teamGameF = t;
+                        if (t.getGoals().size() == 0) {
+                            finished = true;
+                            break;
+                        }
+                        break;
+                    }
+                if (finished) {
+                    command = WON_MULTI_PLAYER_GAME + "\n" + end + "\n";
+                    server.command(command, teamGameF.p1);
+                    server.command(command, teamGameF.p2);
+                    server.getTeamGames().remove(teamGameF);
+                } else {
+                    String json = new Gson().toJson(teamGameF);
+                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.p1);
+                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.p2);
+                }
                 break;
             default:
                 System.err.println("Unknown command");
