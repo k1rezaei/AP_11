@@ -13,10 +13,6 @@ public class Talk {
         this.recipient = recipient;
     }
 
-    public void setRepliedText(String repliedText) {
-        this.repliedText = repliedText;
-    }
-
     public String getText() {
         return text;
     }
@@ -31,5 +27,9 @@ public class Talk {
 
     public String getRepliedText() {
         return repliedText;
+    }
+
+    public void setRepliedText(String repliedText) {
+        this.repliedText = repliedText;
     }
 }

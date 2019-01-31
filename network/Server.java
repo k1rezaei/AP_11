@@ -27,59 +27,7 @@ public class Server {
     private HashMap<String, Integer> items, prices = new HashMap<>();
     private Gson gson = new Gson();
     private String[] itemList;
-
-    public ArrayList<Talk> getTalks() {
-        return talks;
-    }
-
     private ArrayList<Person> users = new ArrayList<>();
-
-
-    public Server(int port) {
-        me = this;
-        items = new HashMap<>();
-        this.port = port;
-        initialize();
-    }
-
-    private void initialize() {
-        itemList = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
-                "bear", "Cheese", "Horn",
-                "BrightHorn", "ColoredPlume", "Intermediate",
-                "Curd", "lion",
-                "Egg", "Milk",
-                "EggPowder", "Plume",
-                "Cake", "Fabric", "Sewing", "Varnish",
-                "CarnivalDress", "Flour", "SourCream", "Wool"};
-
-
-        try {
-            InputStream inputStream = new FileInputStream("data.txt");
-            Scanner scanner = new Scanner(inputStream);
-            users.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Person[].class)));
-            talks.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Talk[].class)));
-
-            String[] _items = gson.fromJson(scanner.nextLine(), String[].class);
-            Integer[] _counts = gson.fromJson(scanner.nextLine(), Integer[].class);
-            Integer[] _prices = gson.fromJson(scanner.nextLine(), Integer[].class);
-
-            for (int i = 0; i < _items.length; i++) {
-                this.items.put(_items[i], _counts[i]);
-                this.prices.put(_items[i], _prices[i]);
-            }
-
-            scanner.close();
-            inputStream.close();
-        } catch (Exception e) {
-            System.err.println("Can Not Find Data File Saved By Server.");
-            for (String item : itemList) {
-                this.items.put(item, 10);
-                this.prices.put(item, 200);
-            }
-        }
-
-    }
-
     Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
@@ -142,6 +90,56 @@ public class Server {
             }
         }
     };
+
+
+    public Server(int port) {
+        me = this;
+        items = new HashMap<>();
+        this.port = port;
+        initialize();
+    }
+
+    public ArrayList<Talk> getTalks() {
+        return talks;
+    }
+
+    private void initialize() {
+        itemList = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
+                "bear", "Cheese", "Horn",
+                "BrightHorn", "ColoredPlume", "Intermediate",
+                "Curd", "lion",
+                "Egg", "Milk",
+                "EggPowder", "Plume",
+                "Cake", "Fabric", "Sewing", "Varnish",
+                "CarnivalDress", "Flour", "SourCream", "Wool"};
+
+
+        try {
+            InputStream inputStream = new FileInputStream("data.txt");
+            Scanner scanner = new Scanner(inputStream);
+            users.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Person[].class)));
+            talks.addAll(Arrays.asList(gson.fromJson(scanner.nextLine(), Talk[].class)));
+
+            String[] _items = gson.fromJson(scanner.nextLine(), String[].class);
+            Integer[] _counts = gson.fromJson(scanner.nextLine(), Integer[].class);
+            Integer[] _prices = gson.fromJson(scanner.nextLine(), Integer[].class);
+
+            for (int i = 0; i < _items.length; i++) {
+                this.items.put(_items[i], _counts[i]);
+                this.prices.put(_items[i], _prices[i]);
+            }
+
+            scanner.close();
+            inputStream.close();
+        } catch (Exception e) {
+            System.err.println("Can Not Find Data File Saved By Server.");
+            for (String item : itemList) {
+                this.items.put(item, 10);
+                this.prices.put(item, 200);
+            }
+        }
+
+    }
 
     private Person getPersonByIdInData(String id) {
         for (Person person : users)

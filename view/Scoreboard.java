@@ -6,24 +6,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
-import java.util.Arrays;
-
 
 public class Scoreboard {
+    private static final int HEIGHT = 450;
+    static private final int WIDTH = 200;
     View view;
     Group root = new Group();
     Label rank = new Label();
     BorderPane borderPane = new BorderPane();
-    private static final int HEIGHT = 450;
     //VBox vBox = new VBox();
     Client client;
-    static private final int WIDTH = 200;
     ScrollPane scrollPane = new ScrollPane();
-
-    enum SortType {
-        ID, LEVEL, GOLD;
-    }
-
     SortType sortType = SortType.ID;
 
     Scoreboard(View view, Client client) {
@@ -88,7 +81,6 @@ public class Scoreboard {
             }
         }
     }
-
 
     public void setContent(Person[] persons) {
         /*switch (sortType) {
@@ -178,8 +170,12 @@ public class Scoreboard {
         }
     }
 
-
     Group getRoot() {
         return root;
+    }
+
+
+    enum SortType {
+        ID, LEVEL, GOLD;
     }
 }
