@@ -294,8 +294,11 @@ public class GameView {
     private void updateWellFilledBar() {
         int h = (int) (70 * (1.0 * Game.getInstance().getWell().getCurrentAmount()
                 / Game.getInstance().getWell().getCapacity()));
+
         filled.setMaxHeight(h);
         filled.setMinHeight(h);
+
+        filled.relocate(WELL_X, WELL_Y + 50 + 70 - h);
     }
 
     private void stopWorkshops() {
@@ -834,6 +837,7 @@ public class GameView {
     }
 
     private void setUpTruck() {
+        //if(client != null) return;
         truck = Images.getSpriteAnimation("truck");
         truck.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getTruck()));
         truck.setState(Game.getInstance().getTruck().getLevel());
@@ -843,6 +847,7 @@ public class GameView {
     }
 
     private void setUpTruckInfo() {
+        //if(client != null) return;
         ImageView img = new ImageView(info);
         img.setFitHeight(INFO_LENGTH);
         img.setFitWidth(INFO_LENGTH);
@@ -878,6 +883,7 @@ public class GameView {
     }
 
     private void setUpHelicopter() {
+        //if(client != null) return;
         helicopter = Images.getSpriteAnimation("helicopter");
         helicopter.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getHelicopter()));
         helicopter.setState(Game.getInstance().getHelicopter().getLevel());
@@ -887,6 +893,7 @@ public class GameView {
     }
 
     private void setUpHelicopterInfo() {
+        //if(client != null) return;
         ImageView img = new ImageView(info);
         img.setFitWidth(INFO_LENGTH);
         img.setFitHeight(INFO_LENGTH);

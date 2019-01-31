@@ -133,14 +133,19 @@ public class Menu {
             vBox.getChildren().addAll(solo, join, host, cancel);
             Pop buttons = new Pop(vBox, view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
             cancel.setStyle("-fx-font-size: 50");
-
+            cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    menuGroup.getChildren().remove(buttons.getStackPane());
+                }
+            });
 
             solo.setOnMouseClicked(event15 -> {
                 GameView.getInstance().setClient(null);
                 view.setRoot(new LevelSelect(view).getRoot());
             });
             join.setOnMouseClicked(event13 -> {
-                LimitedTextField userName = new LimitedTextField(16);
+                LimitedTextField userName = new LimitedTextField(10);
                 userName.setAlignment(Pos.CENTER);
                 userName.setMaxWidth(200);
                 userName.setPromptText("UserName");
