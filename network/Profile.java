@@ -40,7 +40,7 @@ public class Profile {
     private static final String DATA_MONEY = "data_money";
     private static final String GET_INBOX = "get_inbox";
     private static final String DATA_INBOX = "data_inbox";
-
+    private static final String UPDATE_PRICE = "update_price";
     private int counter = 0;
     private boolean bucketSent = false;
 
@@ -268,7 +268,12 @@ public class Profile {
                 break;
             case GET_INBOX:
                 command(DATA_INBOX + "\n" + new Gson().toJson(person.getInbox().toArray()) + "\n" + end + "\n");
-                break ;
+                break;
+            case UPDATE_PRICE:
+                item = reader.nextLine();
+                int price = reader.nextInt();
+                server.changeCost(item, price);
+                break;
             default:
                 System.err.println("Unknown command");
 

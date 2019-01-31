@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class Menu {
     private static final int NUM_SLIDES = 3;
+    public static final String LOCAL_HOST_ADDRESS = "127.0.0.1";
     private VBox vBox = new VBox();
     private ArrayList<ImageView> slides = new ArrayList<>();
     private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
@@ -100,7 +101,13 @@ public class Menu {
             return;
         }
         Platform.runLater(() -> lastTry = System.nanoTime());
-        Client client = new Client(view);
+        boolean hostIsMe = false;
+        try {
+            String myIp = InetAddress.getLocalHost().getHostAddress();
+            hostIsMe = myIp.equals(ip) || ip.equals(LOCAL_HOST_ADDRESS) || ip.equals("localhost");
+        } catch (Exception e) {
+        }
+        Client client = new Client(view, isHost && hostIsMe);
         client.initialize(ip, port);
         try {
             if (client.checkId(userName, ip, srcPort)) {
