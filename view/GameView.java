@@ -679,12 +679,9 @@ public class GameView {
                 resume();
                 root.getChildren().remove(menu.getStackPane());
             });
-            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    resume();
-                    root.getChildren().remove(menu.getStackPane());
-                }
+            menu.getDisabler().setOnMouseClicked(event14 -> {
+                resume();
+                root.getChildren().remove(menu.getStackPane());
             });
 
         /*  OLD_VERSION  ButtonType buttonTypeOne = new ButtonType("Save & Exit");
@@ -752,7 +749,10 @@ public class GameView {
                 root.getChildren().clear();
                 Menu backMenu = new Menu(view);
                 if (client == null) view.setRoot(backMenu.getRoot());
-                else view.setRoot(client.getMultiPlayerMenu().getRoot());
+                else {
+                    client.setInGame(false);
+                    view.setRoot(client.getMultiPlayerMenu().getRoot());
+                }
                 game.stop();
             });
 

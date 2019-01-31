@@ -50,8 +50,10 @@ public class Client {
     private static final String GET_MONEY = "get_money";
     private static final String DATA_MONEY = "data_money";
     private static final String GET_INBOX = "get_inbox";
+    private static final String UPDATE_PRICE = "update_price";
     //TODO get bear cost from server
     private static final int BEAR_COST = 200;
+    private final boolean isHost;
     View view;
     Socket socket;
     Scanner scanner;
@@ -64,7 +66,7 @@ public class Client {
     private Shop shop;
     private String myId;
     //TODO make money
-    private int money = 1000;
+    private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
 
@@ -80,13 +82,14 @@ public class Client {
         return chatroom;
     }
 
-    Client(View view) {
+    Client(View view, boolean isHost) {
         this.view = view;
         chatroom = new Chatroom(view, this);
-        multiPlayerMenu = new MultiPlayerMenu(view, this);
+        multiPlayerMenu = new MultiPlayerMenu(view, this, isHost);
         scoreboard = new Scoreboard(view, this);
         inbox = new Inbox(view, this);
         shop = new Shop(view, this);
+        this.isHost = isHost;
     }
 
     private String getData(Scanner scanner) {
@@ -163,7 +166,8 @@ public class Client {
         addMessageToChatRoom(LOG_IN);
         updateScoreboard(level);
         getWarehouse();
-        getMoney();
+        getMoneyFromServer();
+        initInbox();
     }
 
     //talk to server.
@@ -216,7 +220,6 @@ public class Client {
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 System.err.println(text);
                 Platform.runLater(() -> inbox.setContent(messages));
-                //todo.
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
@@ -232,10 +235,6 @@ public class Client {
             case DATA_PERSON:
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
-                //TODO remove this inbox refresher
-                if (id.equals(myId)) inbox.setContent(person.getInbox().toArray(new Talk[0]));
-                System.err.println("BUG " + person.getId());
-                System.err.println("BUG " + person.getInbox().size());
                 Platform.runLater(() -> {
                     currentViewProfile = new ViewProfile(view, Client.this, person);
                     view.setRoot(currentViewProfile.getRoot());
@@ -434,6 +433,10 @@ public class Client {
     public void setMoney(int money) {
         this.money = money;
         updateMoney();
+    }
+
+    public void setPrice(String item, int price) {
+        command(UPDATE_PRICE + "\n" + item + "\n" + price + "\n" + end + "\n");
     }
 
     public boolean isInGame() {

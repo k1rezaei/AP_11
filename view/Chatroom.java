@@ -119,8 +119,7 @@ public class Chatroom {
             int finalI = i;
             emoj.setOnMouseClicked(event1 -> {
                 System.err.println("WTF?");
-                int caretPosition = textField.getCaretPosition();
-                textField.replaceText(caretPosition, caretPosition, emojis[finalI]);
+                textField.replaceText(textField.getSelection(), emojis[finalI]);
                 emojiSelect.setVisible(false);
             });
             emojiSelect.getChildren().add(emoj);

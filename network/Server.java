@@ -26,6 +26,7 @@ public class Server {
     private int port;
     private HashMap<String, Integer> items, prices = new HashMap<>();
     private Gson gson = new Gson();
+    private String[] itemList;
 
     public ArrayList<Talk> getTalks() {
         return talks;
@@ -42,7 +43,7 @@ public class Server {
     }
 
     private void initialize() {
-        String[] items = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
+        itemList = new String[]{"Adornment", "CheeseFerment", "Cookie", "Souvenir",
                 "bear", "Cheese", "Horn",
                 "BrightHorn", "ColoredPlume", "Intermediate",
                 "Curd", "lion",
@@ -71,7 +72,7 @@ public class Server {
             inputStream.close();
         } catch (Exception e) {
             System.err.println("Can Not Find Data File Saved By Server.");
-            for (String item : items) {
+            for (String item : itemList) {
                 this.items.put(item, 10);
                 this.prices.put(item, 200);
             }
