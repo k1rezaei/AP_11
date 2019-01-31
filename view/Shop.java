@@ -1,7 +1,6 @@
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -9,50 +8,28 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Shop {
-    private Client client;
-    private View view;
-    private Group root = new Group();
-    private Group itemsGroup = new Group();
-
     private static final int BASE_X = 30;
     private static final int DIS_X = 260;
     private static final int NUM_IN_ROW = 8;
     private static final int BASE_Y = 70;
     private static final int DIS_Y = 65;
     private static final Image BG = new Image("file:textures/multiplayer/shelf.jpg");
+    private final static Image COIN = new Image("file:textures/coin.png");
     private final int WIDTH = 300;
     private final int HEIGHT = 70;
-    private final static Image COIN = new Image("file:textures/coin.png");
-    HashMap<String, Double> items = new HashMap<>();
-    HashMap<String, Double> prices = new HashMap<>();
-    Label cap;
-    Label money;
-
-    private void setCapAndMoney() {
-
-        cap = new Label("Capacity : " + Game.getInstance().getWarehouse().getCapacity());
-        money = new Label("Money : " + Game.getInstance().getMoney());
-
-        cap.setMinSize(50, HEIGHT);
-        cap.setFont(Font.font(20));
-        cap.setAlignment(Pos.CENTER);
-        cap.relocate(600, 20);
-
-        money.setMinSize(50, HEIGHT);
-        money.setFont(Font.font(20));
-        money.setAlignment(Pos.CENTER);
-        money.relocate(600, 0);
-
-        root.getChildren().add(cap);
-        root.getChildren().add(money);
-
-
-    }
+    int numberOfItems = 0;
+    private Client client;
+    private View view;
+    private Group root = new Group();
+    private Group itemsGroup = new Group();
+    private HashMap<String, Double> items = new HashMap<>();
+    private HashMap<String, Double> prices = new HashMap<>();
+    private Label cap;
+    private Label money;
 
     Shop(View view, Client client) {
         this.client = client;
@@ -77,7 +54,7 @@ public class Shop {
             @Override
             public void handle(MouseEvent event) {
                 for (Map.Entry<String, Integer> pair : Game.getInstance().getWarehouse().getStorables().entrySet()) {
-                    for(int i = 0; i < pair.getValue(); i++) {
+                    for (int i = 0; i < pair.getValue(); i++) {
                         client.sellItem(pair.getKey());
                         Game.getInstance().getWarehouse().remove(pair.getKey());
                     }
@@ -86,6 +63,27 @@ public class Shop {
             }
         });
         root.getChildren().add(itemsGroup);
+    }
+
+    private void setCapAndMoney() {
+
+        cap = new Label("Capacity : " + Game.getInstance().getWarehouse().getCapacity());
+        money = new Label("Money : " + Game.getInstance().getMoney());
+
+        cap.setMinSize(50, HEIGHT);
+        cap.setFont(Font.font(20));
+        cap.setAlignment(Pos.CENTER);
+        cap.relocate(600, 20);
+
+        money.setMinSize(50, HEIGHT);
+        money.setFont(Font.font(20));
+        money.setAlignment(Pos.CENTER);
+        money.relocate(600, 0);
+
+        root.getChildren().add(cap);
+        root.getChildren().add(money);
+
+
     }
 
     public void update() {
@@ -105,8 +103,6 @@ public class Shop {
         cap.setText("Capacity : " + Game.getInstance().getWarehouse().getCapacity());
         money.setText("Money : " + Game.getInstance().getMoney());
     }
-
-    int numberOfItems = 0;
 
     void show(String type, double doubleCnt, double doubleCost) {
         HBox hBox = new HBox();
@@ -146,7 +142,7 @@ public class Shop {
         int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
 
         imageView.relocate(baseX, baseY);
-        hBox.relocate(baseX-30, baseY);
+        hBox.relocate(baseX - 30, baseY);
         /* serverCnt.relocate(baseX + 30, baseY);*/
 
        /* price.relocate(baseX + 75, baseY + 5);
@@ -178,27 +174,24 @@ public class Shop {
         });
 
         sell.relocate(baseX + 130, baseY);
-        sell.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.err.println(clientCnt.getText());
-                if (clientCnt.getText().equalsIgnoreCase("0")) {
-                    new Pop("Nadari Baw :D", view.getSnap(), root, Pop.AddType.ALERT);
-                } else {
-                    client.sellItem(type);
-                    Game.getInstance().getWarehouse().remove(type);
-                    Game.getInstance().setMoney(Game.getInstance().getMoney() + cost);
-                    update();
-                }
-
+        sell.setOnMouseClicked(event -> {
+            System.err.println(clientCnt.getText());
+            if (clientCnt.getText().equalsIgnoreCase("0")) {
+                new Pop("Nadari Baw :D", view.getSnap(), root, Pop.AddType.ALERT);
+            } else {
+                client.sellItem(type);
+                Game.getInstance().getWarehouse().remove(type);
+                Game.getInstance().setMoney(Game.getInstance().getMoney() + cost);
+                update();
             }
+
         });
 
-        if(serverCnt.getText().equals("0x")){
+        if (serverCnt.getText().equals("0x")) {
             buy.setStyle("-fx-text-fill: grey;");
             buy.setOnMouseClicked(null);
         }
-        if(clientCnt.getText().equals("0x")){
+        if (clientCnt.getText().equals("0x")) {
             sell.setStyle("-fx-text-fill: grey;");
             sell.setOnMouseClicked(null);
         }

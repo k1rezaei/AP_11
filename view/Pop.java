@@ -1,23 +1,16 @@
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 
 public class Pop {
+    AddType addType;
     private StackPane frost;
     private StackPane stackPane = new StackPane();
     private Node content;
-    AddType addType;
-
-    enum AddType {
-        ALERT, WINDOW, BUTTONS, BUTTONS_TEXT;
-    }
 
     {
         stackPane.relocate(400, 300);
@@ -62,7 +55,6 @@ public class Pop {
         stackPane.setOnMouseClicked(event -> root.getChildren().remove(stackPane));
     }
 
-
     public StackPane getStackPane() {
         return stackPane;
     }
@@ -79,8 +71,8 @@ public class Pop {
         boolean first = true;
         if (content instanceof VBox) {
             for (Node node : ((VBox) content).getChildren()) {
-                if (node instanceof Label){
-                    if(addType == AddType.BUTTONS_TEXT && first){
+                if (node instanceof Label) {
+                    if (addType == AddType.BUTTONS_TEXT && first) {
                         first = false;
                         continue;
                     }
@@ -91,5 +83,9 @@ public class Pop {
             throw new RuntimeException("This is not button pop");
         }
 
+    }
+
+    enum AddType {
+        ALERT, WINDOW, BUTTONS, BUTTONS_TEXT;
     }
 }

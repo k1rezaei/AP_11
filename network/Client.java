@@ -69,18 +69,16 @@ public class Client {
     private int money;
     private boolean inGame;
     private ViewProfile currentViewProfile;
-
-    public Scoreboard getScoreboard() {
-        return scoreboard;
-    }
-
-    public MultiPlayerMenu getMultiPlayerMenu() {
-        return multiPlayerMenu;
-    }
-
-    public Chatroom getChatRoom() {
-        return chatroom;
-    }
+    Task<Void> read = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            while (socket.isConnected()) {
+                String command = scanner.nextLine();
+                process(command, getData(scanner));
+            }
+            return null;
+        }
+    };
 
     Client(View view, boolean isHost) {
         this.view = view;
@@ -92,6 +90,26 @@ public class Client {
         this.isHost = isHost;
     }
 
+    public Scoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public void setScoreboard(Scoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public MultiPlayerMenu getMultiPlayerMenu() {
+        return multiPlayerMenu;
+    }
+
+    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
+        this.multiPlayerMenu = multiPlayerMenu;
+    }
+
+    public Chatroom getChatRoom() {
+        return chatroom;
+    }
+
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
         while (true) {
@@ -101,17 +119,6 @@ public class Client {
         }
         return s.toString();
     }
-
-    Task<Void> read = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            while (socket.isConnected()) {
-                String command = scanner.nextLine();
-                process(command, getData(scanner));
-            }
-            return null;
-        }
-    };
 
     void initialize(String ip, int port) {
         try {
@@ -393,14 +400,6 @@ public class Client {
 
     public void setChatroom(Chatroom chatroom) {
         this.chatroom = chatroom;
-    }
-
-    public void setScoreboard(Scoreboard scoreboard) {
-        this.scoreboard = scoreboard;
-    }
-
-    public void setMultiPlayerMenu(MultiPlayerMenu multiPlayerMenu) {
-        this.multiPlayerMenu = multiPlayerMenu;
     }
 
     public void closeSocket() {

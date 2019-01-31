@@ -41,15 +41,13 @@ public class Profile {
     private static final String GET_INBOX = "get_inbox";
     private static final String DATA_INBOX = "data_inbox";
     private static final String UPDATE_PRICE = "update_price";
-    private int counter = 0;
-    private boolean bucketSent = false;
-
     Person person;
     Socket socket;
     Formatter formatter;
     Scanner scanner;
     Server server;
-
+    private int counter = 0;
+    private boolean bucketSent = false;
     AnimationTimer connectionChecker = new AnimationTimer() {
         long lastTime = -1;
 
@@ -64,9 +62,31 @@ public class Profile {
             }
         }
     };
+    Task<Void> read = new Task<Void>() {
+        @Override
+        protected Void call() throws Exception {
+            while (true) {
+                try {
+                    String command = scanner.nextLine();
+                    clear();
+                    System.err.println("Cleared");
+                    process(command, getData(scanner));
+                } catch (Exception e) {
+                    break;
+                }
+            }
+            System.err.println("Disconnected");
+            connectionChecker.stop();
+            server.remove(person);
+            return null;
+        }
+    };
 
-    public void setPerson(Person p) {
-        person = p;
+    public Profile(Person person, Socket socket) throws IOException {
+        this.person = person;
+        this.socket = socket;
+        this.formatter = new Formatter(socket.getOutputStream());
+        this.scanner = new Scanner(socket.getInputStream());
     }
 
     private void checkConnection() {
@@ -97,6 +117,10 @@ public class Profile {
         return person;
     }
 
+    public void setPerson(Person p) {
+        person = p;
+    }
+
     public Socket getSocket() {
         return socket;
     }
@@ -121,13 +145,6 @@ public class Profile {
         this.scanner = scanner;
     }
 
-    public Profile(Person person, Socket socket) throws IOException {
-        this.person = person;
-        this.socket = socket;
-        this.formatter = new Formatter(socket.getOutputStream());
-        this.scanner = new Scanner(socket.getInputStream());
-    }
-
     private String getData(Scanner scanner) {
         StringBuilder s = new StringBuilder();
         while (true) {
@@ -137,26 +154,6 @@ public class Profile {
         }
         return s.toString();
     }
-
-    Task<Void> read = new Task<Void>() {
-        @Override
-        protected Void call() throws Exception {
-            while (true) {
-                try {
-                    String command = scanner.nextLine();
-                    clear();
-                    System.err.println("Cleared");
-                    process(command, getData(scanner));
-                } catch (Exception e) {
-                    break;
-                }
-            }
-            System.err.println("Disconnected");
-            connectionChecker.stop();
-            server.remove(person);
-            return null;
-        }
-    };
 
     private void clear() {
         bucketSent = false;

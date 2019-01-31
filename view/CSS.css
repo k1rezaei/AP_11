@@ -5,6 +5,7 @@
     -fx-padding: 20;
     -fx-max-height: 400;
 }
+
 #rank_name {
     -fx-background-color: rgba(200, 200, 200, 0.3);
     -fx-padding: 7;
@@ -13,6 +14,7 @@
     -fx-font-size: 20;
     -fx-text-fill: rgb(255, 255, 255);
 }
+
 #rank_info {
     -fx-background-color: rgba(200, 200, 200, 0.3);
     -fx-padding: 7;
@@ -21,9 +23,11 @@
     -fx-font-size: 20;
     -fx-text-fill: rgb(255, 255, 255);
 }
-#rank_info .text{
+
+#rank_info .text {
     -fx-stroke: green;
 }
+
 #rank_level {
     -fx-font-size: 20;
     -fx-padding: 7;
@@ -41,6 +45,7 @@
     -fx-background-radius: 20;
     -fx-text-fill: rgb(255, 255, 255);
 }
+
 #rank_ {
     -fx-alignment: center;
     -fx-padding: 5;
@@ -48,6 +53,7 @@
     -fx-border-width: 2;
     -fx-border-radius: 20;
 }
+
 #rank_name .text {
     -fx-stroke: blue;
 }
@@ -59,6 +65,7 @@
 #rank_level .text {
     -fx-stroke: red;
 }
+
 #sender {
     -fx-background-color: rgba(0, 0, 0, 0.5);
     -fx-background-insets: -10 -10 -10 -10;
@@ -97,16 +104,19 @@
     -fx-border: gone;
     -fx-background-color: transparent;
     -fx-background-radius: 20;
-    -fx-text-fill: rgb(200,200,200);
+    -fx-text-fill: rgb(200, 200, 200);
     -fx-alignment: center;
 }
+
 #emoji {
     -fx-text-fill: yellow;
 }
+
 #emoji .text {
     -fx-stroke: transparent;
     -fx-stroke-width: 0;
 }
+
 #chat_field {
     -fx-font-family: "Comic Sans MS";
     -fx-font-size: 18;
@@ -115,12 +125,13 @@
     -fx-border-width: 2;
     -fx-border-radius: 20;
     -fx-border: gone;
-    -fx-background-color: rgba(100,100,100, 0.7);
+    -fx-background-color: rgba(100, 100, 100, 0.7);
     -fx-background-radius: 20;
-    -fx-text-fill: rgb(235,230,230);
+    -fx-text-fill: rgb(235, 230, 230);
 }
+
 #inputBox:focused {
-    -fx-background-color: rgba(100,100,100,0.5);
+    -fx-background-color: rgba(100, 100, 100, 0.5);
 }
 
 #input {
@@ -149,7 +160,6 @@
 .scroll-pane > .corner {
     -fx-background-color: transparent;
 }
-
 
 #chatbox {
 
@@ -262,7 +272,6 @@
     -fx-opacity: 1;
     -fx-padding: 0;
 
-
 }
 
 #buyAnimal .text {
@@ -319,6 +328,7 @@ HBox {
     -fx-border-width: 2px;
     -fx-border-radius: 50;
 }
+
 #prof_menu {
     -fx-font-size: 30;
     -fx-alignment: center;
@@ -462,11 +472,8 @@ HBox {
     -fx-stroke-width: 2px;
 }
 
-
-
-
-.scroll-bar:vertical{
-    -fx-background-color:transparent;
+.scroll-bar:vertical {
+    -fx-background-color: transparent;
 }
 
 .increment-button, .decrement-button {
@@ -474,15 +481,15 @@ HBox {
     -fx-border-color: transparent;
 }
 
-.scroll-bar:vertical .track{
+.scroll-bar:vertical .track {
     -fx-background-color: transparent;
     -fx-border-color: transparent;
     -fx-background-radius: 0em;
 }
 
 .scroll-bar:vertical .thumb {
-    -fx-background-color: rgba(50,50,50,0.8);
-    -fx-border-color: rgba(180,180,180,1);
+    -fx-background-color: rgba(50, 50, 50, 0.8);
+    -fx-border-color: rgba(180, 180, 180, 1);
     -fx-border-width: 2;
     -fx-border-radius: 5em;
     -fx-background-radius: 5em;

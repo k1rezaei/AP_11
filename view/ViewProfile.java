@@ -14,81 +14,16 @@ import java.util.ArrayList;
 
 
 public class ViewProfile {
-    private View view;
-    private Client client;
-    private Group root = new Group();
-    final private static int CNT = 8;
-    private Label[] labels = new Label[CNT];
-    private static final int POS_X = 270;
     public static final int POS_Y = 50;
     public static final int BOX_WIDTH = 600;
     public static final int BOX_HEIGHT = 500;
-    Person person;
-
-    Label getFollowing() {
-        return labels[0];
-    }
-
-    Label getFollowers() {
-        return labels[1];
-    }
-
-    Label getInbox() {
-        return labels[2];
-    }
-
-    Label getPrivateMessage() {
-        return labels[3];
-    }
-
-    Label getAddFriend() {
-        return labels[4];
-    }
-
-    Label getFriends() {
-        return labels[5];
-    }
-
-    Label getBear() {
-        return labels[6];
-    }
-
-    Label getBack() {
-        return labels[7];
-    }
-
-    /*private void show(Group group) {
-        Pop pop = new Pop(group, view.getSnap());
-        root.getChildren().add(pop.getStackPane());
-        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                root.getChildren().remove(pop.getStackPane());
-            }
-        });
-    }*/
-
-    private void show(Node node) {
-        Pop pop = new Pop(node, view.getSnap(), root, Pop.AddType.WINDOW);
-    }
-
-    EventHandler<MouseEvent> getEvent(ArrayList<String> persons) {
-        return event -> {
-            VBox f = new VBox();
-            f.setPrefSize(BOX_WIDTH, BOX_HEIGHT);
-            for (String id : persons) {
-                Label label = new Label(id);
-                label.setOnMouseClicked(event1 -> client.getPerson(id));
-                f.getChildren().add(label);
-            }
-            Label label = new Label("Back");
-            label.setId("label_button");
-            f.getChildren().add(label);
-            Pop pop = new Pop(f, view.getSnap(), root, Pop.AddType.WINDOW);
-
-            label.setOnMouseClicked(event12 -> root.getChildren().remove(pop.getStackPane()));
-        };
-    }
+    final private static int CNT = 8;
+    private static final int POS_X = 270;
+    private View view;
+    private Client client;
+    private Group root = new Group();
+    private Label[] labels = new Label[CNT];
+    private Person person;
 
     ViewProfile(View view, Client client, Person person) {
         System.err.println();
@@ -177,6 +112,71 @@ public class ViewProfile {
         getInbox().setOnMouseClicked(event -> show(client.getInbox().getRoot()));
         getBack().setOnMouseClicked(event -> view.goBack());
         getBear().setOnMouseClicked(mouseEvent -> client.addBear(person.getId()));
+    }
+
+    private Label getFollowing() {
+        return labels[0];
+    }
+
+    private Label getFollowers() {
+        return labels[1];
+    }
+
+    private Label getInbox() {
+        return labels[2];
+    }
+
+    private Label getPrivateMessage() {
+        return labels[3];
+    }
+
+    private Label getAddFriend() {
+        return labels[4];
+    }
+
+    private Label getFriends() {
+        return labels[5];
+    }
+
+    private Label getBear() {
+        return labels[6];
+    }
+
+    /*private void show(Group group) {
+        Pop pop = new Pop(group, view.getSnap());
+        root.getChildren().add(pop.getStackPane());
+        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                root.getChildren().remove(pop.getStackPane());
+            }
+        });
+    }*/
+
+    private Label getBack() {
+        return labels[7];
+    }
+
+    private void show(Node node) {
+        Pop pop = new Pop(node, view.getSnap(), root, Pop.AddType.WINDOW);
+    }
+
+    EventHandler<MouseEvent> getEvent(ArrayList<String> persons) {
+        return event -> {
+            VBox f = new VBox();
+            f.setPrefSize(BOX_WIDTH, BOX_HEIGHT);
+            for (String id : persons) {
+                Label label = new Label(id);
+                label.setOnMouseClicked(event1 -> client.getPerson(id));
+                f.getChildren().add(label);
+            }
+            Label label = new Label("Back");
+            label.setId("label_button");
+            f.getChildren().add(label);
+            Pop pop = new Pop(f, view.getSnap(), root, Pop.AddType.WINDOW);
+
+            label.setOnMouseClicked(event12 -> root.getChildren().remove(pop.getStackPane()));
+        };
     }
 
     private void popFollowers() {

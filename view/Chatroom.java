@@ -14,6 +14,9 @@ import java.util.HashMap;
 
 
 public class Chatroom {
+    final private static int HEIGHT = 400;
+    final private static int WIDTH = 600;
+    private static String[] emojis = {"\uD83D\uDE17", "\uD83D\uDE10", "\uD83D\uDE04", "\uD83D\uDE0D", "\uD83D\uDE09", "\uD83D\uDE33", "\uD83D\uDE14", "\uD83D\uDE02", "\uD83D\uDE22", "\uD83D\uDE28", "\uD83D\uDE20", "\uD83D\uDE0E",};
     private View view;
     private Client client;
     private Group root = new Group();
@@ -33,11 +36,6 @@ public class Chatroom {
         root.getChildren().add(bg);
 
     }
-
-    final private static int HEIGHT = 400;
-    final private static int WIDTH = 600;
-
-    private static String[] emojis = {"\uD83D\uDE17", "\uD83D\uDE10", "\uD83D\uDE04", "\uD83D\uDE0D", "\uD83D\uDE09", "\uD83D\uDE33", "\uD83D\uDE14", "\uD83D\uDE02", "\uD83D\uDE22", "\uD83D\uDE28", "\uD83D\uDE20", "\uD83D\uDE0E",};
 
     public Chatroom(View view, Client client) {
         this.view = view;
@@ -90,6 +88,7 @@ public class Chatroom {
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
         setUpClear();
+        clearReply();
         Label emoji = setUpEmoji();
         root.getChildren().addAll(scrollPane, emoji, send, textField, back, reply, clear, emojiSelect);
     }

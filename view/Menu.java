@@ -15,15 +15,16 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 
 public class Menu {
-    private static final int NUM_SLIDES = 3;
     public static final String LOCAL_HOST_ADDRESS = "127.0.0.1";
+    final static public long GAP_TIME = 5 * 1000000000L;
+    private static final int NUM_SLIDES = 3;
+    private static boolean isHost = false;
+    long lastTry = 0;
     private VBox vBox = new VBox();
     private ArrayList<ImageView> slides = new ArrayList<>();
     private ArrayList<ArrayList<Label>> labels = new ArrayList<>();
     private View view;
     private Group menuGroup = new Group();
-    private static boolean isHost = false;
-
 
     Menu(View view) {
         this.view = view;
@@ -91,9 +92,6 @@ public class Menu {
         //  menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
     }
-
-    long lastTry = 0;
-    final static public long GAP_TIME = 5 * 1000000000L;
 
     private void connect(String userName, String ip, int port, int srcPort) {
         if (lastTry + GAP_TIME > System.nanoTime()) {

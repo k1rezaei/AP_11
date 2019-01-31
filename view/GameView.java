@@ -23,6 +23,7 @@ public class GameView {
     public static final int BASE_Y = 210;
     public static final String FINISH = "finish";
     public static final Image BOX = new Image("file:textures/box.png");
+    public static final int REWARD_MULTIPLIER = 3000;
     private static final int INFO_LENGTH = 20;
     private static final int ONE_SECOND = 1000 * 1000 * 1000;
     private static final GameView gameView = new GameView();
@@ -77,18 +78,17 @@ public class GameView {
     private static final Image info = new Image("file:textures/info.png");
     private static final Image END_GIF = new Image("file:textures/end3.gif");
     private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
-    public static final int REWARD_MULTIPLIER = 3000;
-    private ImageView pashe = null;
     final private static Image pashImage = new Image("file:textures/mosquito.gif");
-    private int pasheX;
-    private int pasheY;
-    private int pasheDisX;
-    private int pasheDisY;
 
     static {
         REFRESHER.setVisible(false);
     }
 
+    private ImageView pashe = null;
+    private int pasheX;
+    private int pasheY;
+    private int pasheDisX;
+    private int pasheDisY;
     private ArrayList<SpriteAnimation> deadSprites = new ArrayList<>();
     private double speed = 1;
     private boolean paused = false;
@@ -119,16 +119,16 @@ public class GameView {
     private GameView() {
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public static GameView getInstance() {
+        return gameView;
     }
 
     public Client getClient() {
         return client;
     }
 
-    public static GameView getInstance() {
-        return gameView;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public void pause() {

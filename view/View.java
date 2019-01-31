@@ -10,22 +10,15 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.net.Inet4Address;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Base64;
 
 public class View extends Application {
     private static final boolean INTRO = true;
+    ArrayList<Group> roots = new ArrayList<>();
     /// age ejra nashod true konid
     private boolean mute = true;
     private Stage primaryStage;
     private Scene scene;
-    ArrayList<Group> roots = new ArrayList<>();
 
     public static void main(String[] args) {
         launch(args);
@@ -69,12 +62,12 @@ public class View extends Application {
         cheat();
     }
 
-    void cheat(){
+    void cheat() {
         scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.F1){
-                    Game.getInstance().setMoney(10*1000*1000 - 1);
+                if (event.getCode() == KeyCode.F1) {
+                    Game.getInstance().setMoney(10 * 1000 * 1000 - 1);
                 }
             }
         });
@@ -97,8 +90,8 @@ public class View extends Application {
         roots.add(root);
     }
 
-    public void goBack(){
-        if(roots.size() > 1){
+    public void goBack() {
+        if (roots.size() > 1) {
             roots.remove(roots.size() - 1);
             scene.setRoot(roots.get(roots.size() - 1));
         }
@@ -109,7 +102,7 @@ public class View extends Application {
         System.exit(0);
     }
 
-    public Scene getScene(){
+    public Scene getScene() {
         return scene;
     }
 }
