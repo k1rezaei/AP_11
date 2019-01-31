@@ -1,28 +1,61 @@
 #rank {
     -fx-background-color: rgba(0, 0, 0, 0.1);
-    -fx-background-radius: 30;
+    -fx-background-radius: 20;
     -fx-background-insets: -10;
     -fx-padding: 20;
-    -fx-max-height: 500;
+    -fx-max-height: 400;
 }
 #rank_name {
     -fx-background-color: rgba(200, 200, 200, 0.3);
-    -fx-background-insets: -4;
+    -fx-padding: 7;
+    -fx-background-insets: 2;
     -fx-background-radius: 20;
-
     -fx-font-size: 20;
     -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_info {
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-padding: 7;
+    -fx-background-insets: 2;
+    -fx-background-radius: 20;
+    -fx-font-size: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_info .text{
+    -fx-stroke: green;
+}
+#rank_level {
+    -fx-font-size: 20;
+    -fx-padding: 7;
+    -fx-background-insets: 2;
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+#rank_money {
+    -fx-font-size: 20;
+    -fx-background-color: rgba(200, 200, 200, 0.3);
+    -fx-padding: 7;
+    -fx-background-insets: 2;
+    -fx-background-radius: 20;
+    -fx-text-fill: rgb(255, 255, 255);
+}
+#rank_ {
+    -fx-alignment: center;
+    -fx-padding: 5;
+    -fx-border-color: rgb(200, 200, 200);
+    -fx-border-width: 2;
+    -fx-border-radius: 20;
 }
 #rank_name .text {
     -fx-stroke: blue;
 }
-#rank_level {
-    -fx-font-size: 20;
-    -fx-background-color: rgba(200, 200, 200, 0.3);
-    -fx-background-insets: -4;
-    -fx-background-radius: 20;
-    -fx-text-fill: rgb(255, 255, 255);
+
+#rank_money .text {
+    -fx-stroke: gold;
 }
+
 #rank_level .text {
     -fx-stroke: red;
 }

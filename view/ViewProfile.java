@@ -20,7 +20,7 @@ public class ViewProfile {
     final private static int CNT = 8;
     private Label[] labels = new Label[CNT];
     private static final int POS_X = 270;
-    public static final int POS_Y = 2;
+    public static final int POS_Y = 50;
     public static final int BOX_WIDTH = 600;
     public static final int BOX_HEIGHT = 500;
     Person person;
@@ -118,11 +118,12 @@ public class ViewProfile {
         Label name = new Label("Nickname : " + person.getName());
         Label id = new Label("ID : " + person.getId());
         Label level = new Label("Level : " + person.getLevel());
+        Label money = new Label("Money : " + person.getMoney());
 
         VBox vBox = new VBox();
         vBox.relocate(POS_X, POS_Y);
         vBox.setId("prof_menu");
-        vBox.getChildren().addAll(name, id, level);
+        vBox.getChildren().addAll(name, id, level, money);
         vBox.getChildren().addAll(labels);
         System.err.println("You're here");
         System.err.println(person.getFriends());

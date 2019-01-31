@@ -27,10 +27,12 @@ public class Shop {
     private static final Image BG = new Image("file:textures/multiplayer/shelf.jpg");
     private final int WIDTH = 300;
     private final int HEIGHT = 70;
+    private final static Image COIN = new Image("file:textures/coin.png");
     HashMap<String, Double> items = new HashMap<>();
     HashMap<String, Double> prices = new HashMap<>();
     Label cap;
     Label money;
+
     private void setCapAndMoney() {
 
         cap = new Label("Capacity : " + Game.getInstance().getWarehouse().getCapacity());
@@ -60,19 +62,33 @@ public class Shop {
         bg.setFitHeight(600);
         root.getChildren().add(bg);
         setCapAndMoney();
-        Label cancel = new Label();
-        cancel.relocate(BASE_X + 110, 10);
+        Label donate = new Label("donate");
+        donate.relocate(BASE_X, 5);
+        donate.setId("label_button");
+        Label cancel = new Label("BACK");
+        cancel.relocate(BASE_X + 300, 5);
         cancel.setId("label_button");
-        cancel.setText("BACK");
-        root.getChildren().add(cancel);
+        root.getChildren().addAll(cancel, donate);
         cancel.setOnMouseClicked(event -> {
-            GameView.getInstance().resume();
             view.setRoot(GameView.getInstance().getRoot());
+            GameView.getInstance().resume();
+        });
+        donate.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                for (Map.Entry<String, Integer> pair : Game.getInstance().getWarehouse().getStorables().entrySet()) {
+                    for(int i = 0; i < pair.getValue(); i++) {
+                        client.sellItem(pair.getKey());
+                        Game.getInstance().getWarehouse().remove(pair.getKey());
+                    }
+                }
+                update();
+            }
         });
         root.getChildren().add(itemsGroup);
     }
 
-    public void update(){
+    public void update() {
         numberOfItems = 0;
         itemsGroup.getChildren().clear();
         for (Map.Entry<String, Double> pair : items.entrySet()) {
@@ -92,22 +108,28 @@ public class Shop {
 
     int numberOfItems = 0;
 
-    void show(String type, double doubleCnt, double doubleCost ){
+    void show(String type, double doubleCnt, double doubleCost) {
         HBox hBox = new HBox();
-        int cnt = (int)(doubleCnt);
-        int cost = (int)(doubleCost);
+        int cnt = (int) (doubleCnt);
+        int cost = (int) (doubleCost);
         ImageView imageView = Images.getSpriteAnimation(type).getImageView();
         imageView.setFitWidth(30);
         imageView.setFitHeight(30);
 
-        Label serverCnt = new Label("" + cnt);
+        Label serverCnt = new Label("" + cnt + "x");
         Label clientCnt = new Label();
         Integer cntWarehouse = Game.getInstance().getWarehouse().getStorables().get(type);
-        if(cntWarehouse != null && cntWarehouse != 0){
-            clientCnt.setText(cntWarehouse.toString());
-        }else clientCnt.setText("0");
+        if (cntWarehouse != null && cntWarehouse != 0) {
+            clientCnt.setText(cntWarehouse.toString() + "x");
+        } else clientCnt.setText("0x");
 
+        HBox priceBox = new HBox();
         Label price = new Label("" + cost);
+        ImageView coin = new ImageView(COIN);
+        coin.setFitHeight(20);
+        coin.setFitWidth(20);
+        priceBox.getChildren().addAll(price, coin);
+        //priceBox.setSpacing(5);
 
 
         Label buy = new Label("buy");
@@ -124,32 +146,28 @@ public class Shop {
         int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
 
         imageView.relocate(baseX, baseY);
-        hBox.relocate(baseX, baseY);
-       /* serverCnt.relocate(baseX + 30, baseY);*/
+        hBox.relocate(baseX-30, baseY);
+        /* serverCnt.relocate(baseX + 30, baseY);*/
 
        /* price.relocate(baseX + 75, baseY + 5);
         buy.relocate(baseX + 165, baseY);
         sell.relocate(baseX + 165, baseY);*/
-       hBox.setSpacing(10);
+        hBox.setSpacing(10);
+        hBox.setMinWidth(230);
 
-        hBox.getChildren().addAll(imageView, price, serverCnt, clientCnt);
+        hBox.setStyle("-fx-scale-x: 0.8");
+        hBox.getChildren().addAll(imageView, priceBox, serverCnt, clientCnt, buy, sell);
 
-        hBox.getChildren().add(buy);
-
-        hBox.getChildren().add(sell);
-        itemsGroup.getChildren().add(hBox);
-
-        numberOfItems++;
         buy.setOnMouseClicked(event -> {
             if (Game.getInstance().getMoney() < cost) {
                 new Pop("Not Enough Money", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
-            if(Game.getInstance().getWarehouse().getCapacity() < Entity.getNewEntity(type).getSize()) {
+            if (Game.getInstance().getWarehouse().getCapacity() < Entity.getNewEntity(type).getSize()) {
                 new Pop("Not Enough Space In Warehouse", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
-            if(serverCnt.getText().equalsIgnoreCase("0")){
+            if (serverCnt.getText().equalsIgnoreCase("0")) {
                 new Pop("Khak bar Saret Baw :D", view.getSnap(), root, Pop.AddType.ALERT);
                 return;
             }
@@ -175,6 +193,19 @@ public class Shop {
 
             }
         });
+
+        if(serverCnt.getText().equals("0x")){
+            buy.setStyle("-fx-text-fill: grey;");
+            buy.setOnMouseClicked(null);
+        }
+        if(clientCnt.getText().equals("0x")){
+            sell.setStyle("-fx-text-fill: grey;");
+            sell.setOnMouseClicked(null);
+        }
+        itemsGroup.getChildren().add(hBox);
+
+        numberOfItems++;
+
     }
 
     public void update(HashMap<String, Double> items, HashMap<String, Double> prices) {
