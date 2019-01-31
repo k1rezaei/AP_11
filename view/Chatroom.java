@@ -90,6 +90,7 @@ public class Chatroom {
         content.setSpacing(20);
         scrollPane.vvalueProperty().bind(content.heightProperty());
         setUpClear();
+        clearReply();
         Label emoji = setUpEmoji();
         root.getChildren().addAll(scrollPane, emoji, send, textField, back, reply, clear, emojiSelect);
     }

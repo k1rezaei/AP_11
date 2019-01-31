@@ -63,7 +63,7 @@ public class Server {
             Integer[] _counts = gson.fromJson(scanner.nextLine(), Integer[].class);
             Integer[] _prices = gson.fromJson(scanner.nextLine(), Integer[].class);
 
-            for (int i=0; i<_items.length; i++) {
+            for (int i = 0; i < _items.length; i++) {
                 this.items.put(_items[i], _counts[i]);
                 this.prices.put(_items[i], _prices[i]);
             }
@@ -364,6 +364,7 @@ public class Server {
 
     synchronized public void changeCost(String type, int cost) {
         prices.put(type, cost);
+        updateWarehouse();
         saveData();
     }
 

@@ -1,13 +1,12 @@
-import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.Arrays;
 
 
 public class Scoreboard {
@@ -20,9 +19,11 @@ public class Scoreboard {
     Client client;
     static private final int WIDTH = 200;
     ScrollPane scrollPane = new ScrollPane();
+
     enum SortType {
         ID, LEVEL, GOLD;
     }
+
     SortType sortType = SortType.ID;
 
     Scoreboard(View view, Client client) {
@@ -35,12 +36,7 @@ public class Scoreboard {
         //vBox.setSpacing(20);
         Label back = new Label("BACK");
         back.relocate(20, 10);
-        back.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                view.goBack();
-            }
-        });
+        back.setOnMouseClicked(event -> view.goBack());
         root.getChildren().add(back);
         back.setId("label_button");
 
@@ -72,7 +68,7 @@ public class Scoreboard {
     private void sortById(Person[] persons) {
         for (int i = 0; i < persons.length; i++) {
             for (int j = 0; j < persons.length - 1; j++) {
-                if (persons[j].getId().compareToIgnoreCase(persons[j+1].getId()) > 0) {
+                if (persons[j].getId().compareToIgnoreCase(persons[j + 1].getId()) > 0) {
                     Person temp = persons[j];
                     persons[j] = persons[j + 1];
                     persons[j + 1] = temp;
@@ -95,7 +91,7 @@ public class Scoreboard {
 
 
     public void setContent(Person[] persons) {
-        switch (sortType){
+        /*switch (sortType) {
             case ID:
                 sortById(persons);
                 break;
@@ -105,37 +101,31 @@ public class Scoreboard {
             case LEVEL:
                 sortByLevel(persons);
                 break;
-        }
+        }*/
         borderPane.getChildren().clear();
         VBox IDS = new VBox();
         VBox levels = new VBox();
         VBox golds = new VBox();
         Label idInfo = new Label("ID");
-        idInfo.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sortById(persons);
-                sortType = SortType.ID;
-                setContent(persons);
-            }
+        idInfo.setOnMouseClicked(event -> {
+            if (sortType == SortType.ID) reversePersons(persons);
+            else sortById(persons);
+            sortType = SortType.ID;
+            setContent(persons);
         });
         Label levelInfo = new Label("Level");
-        levelInfo.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sortByLevel(persons);
-                sortType = SortType.LEVEL;
-                setContent(persons);
-            }
+        levelInfo.setOnMouseClicked(event -> {
+            if (sortType == SortType.LEVEL) reversePersons(persons);
+            else sortByLevel(persons);
+            sortType = SortType.LEVEL;
+            setContent(persons);
         });
         Label moenyInfo = new Label("Money");
-        moenyInfo.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                sortByMoney(persons);
-                sortType = SortType.GOLD;
-                setContent(persons);
-            }
+        moenyInfo.setOnMouseClicked(event -> {
+            if (sortType == SortType.GOLD) reversePersons(persons);
+            else sortByMoney(persons);
+            sortType = SortType.GOLD;
+            setContent(persons);
         });
         idInfo.setId("rank_info");
         levelInfo.setId("rank_info");
@@ -152,17 +142,12 @@ public class Scoreboard {
             Label money = new Label("" + persons[i].getMoney());
 
             int finalI = i;
-            id.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    client.getPerson(persons[finalI].getId());
-                }
-            });
+            id.setOnMouseClicked(event -> client.getPerson(persons[finalI].getId()));
             id.setId("rank_name");
             rank.setId("rank_level");
             money.setId("rank_money");
 
-            if(idInfo.getWidth() < id.getWidth()){
+            if (idInfo.getWidth() < id.getWidth()) {
                 idInfo.setMinWidth(id.getWidth());
             }
             IDS.getChildren().add(id);
@@ -181,6 +166,16 @@ public class Scoreboard {
         borderPane.getLeft().setId("rank_");
         borderPane.getRight().setId("rank_");
         borderPane.getCenter().setId("rank_");
+    }
+
+    private void reversePersons(Person[] persons) {
+        for (int i = 0; i < persons.length; i++) {
+            if (i < persons.length - i - 1) {
+                Person tmp = persons[i];
+                persons[i] = persons[persons.length - i - 1];
+                persons[persons.length - i - 1] = tmp;
+            }
+        }
     }
 
 
