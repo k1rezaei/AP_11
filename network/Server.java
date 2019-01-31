@@ -20,7 +20,7 @@ public class Server {
     private static final String DATA_PERSON = "data_person";
     private static final String DATA_WAREHOUSE = "data_warehouse";
 
-    ArrayList<Profile> profiles = new ArrayList<>();
+    private ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
     private ArrayList<Talk> talks = new ArrayList<>();
     private int port;
@@ -28,7 +28,7 @@ public class Server {
     private Gson gson = new Gson();
     private String[] itemList;
     private ArrayList<Person> users = new ArrayList<>();
-    Task<Void> task = new Task<Void>() {
+    private Task<Void> task = new Task<Void>() {
         @Override
         public Void call() throws IOException {
             while (true) {

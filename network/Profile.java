@@ -41,14 +41,14 @@ public class Profile {
     private static final String GET_INBOX = "get_inbox";
     private static final String DATA_INBOX = "data_inbox";
     private static final String UPDATE_PRICE = "update_price";
-    Person person;
-    Socket socket;
-    Formatter formatter;
-    Scanner scanner;
-    Server server;
+    private Person person;
+    private Socket socket;
+    private Formatter formatter;
+    private Scanner scanner;
+    private Server server;
     private int counter = 0;
     private boolean bucketSent = false;
-    AnimationTimer connectionChecker = new AnimationTimer() {
+    private AnimationTimer connectionChecker = new AnimationTimer() {
         long lastTime = -1;
 
         @Override
@@ -62,7 +62,7 @@ public class Profile {
             }
         }
     };
-    Task<Void> read = new Task<Void>() {
+    private Task<Void> read = new Task<Void>() {
         @Override
         protected Void call() throws Exception {
             while (true) {

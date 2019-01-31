@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Person {
-    String id, name, level = "1";
-    int money = 0;
+    private String id, name, level = "1";
+    private int money = 0;
 
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> followings = new ArrayList<>();
