@@ -187,7 +187,6 @@ public class Menu {
                 } catch (Exception e) {
                     ip.setText("127.0.0.1");
                 }
-
                 TextField port = new TextField();
                 port.setMaxWidth(200);
                 port.setAlignment(Pos.CENTER);
@@ -195,17 +194,6 @@ public class Menu {
                 port.setId("inputBox");
                 Label ok = new Label("Host");
                 ok.setId("label_button");
-                ok.setOnMouseClicked(mouseEvent -> {
-                    if (!isHost) {
-                        isHost = true;
-                        Server server = new Server(Integer.parseInt(port.getText()));
-                        server.run();
-                        System.err.println("U R HOST");
-                        new Pop("You are HOST now", view.getSnap(), menuGroup, Pop.AddType.ALERT);
-                    } else {
-                        new Pop("You or someone else is host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
-                    }
-                });
                 Label cancel1 = new Label("Cancel");
                 cancel1.setId("label_button");
                 VBox hostVBox = new VBox();
@@ -215,16 +203,28 @@ public class Menu {
                 hostVBox.getChildren().addAll(ip, port, ok, cancel1);
                 Pop pop = new Pop(hostVBox, view.getSnap());
                 menuGroup.getChildren().add(pop.getStackPane());
-                pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        menuGroup.getChildren().remove(pop.getStackPane());
-                    }
+                pop.getDisabler().setOnMouseClicked(event1 -> menuGroup.getChildren().remove(pop.getStackPane()));
+                ok.setOnMouseClicked(mouseEvent -> startHost(port, pop));
+                port.setOnKeyPressed(keyEvent -> {
+                    if (keyEvent.getCode() == KeyCode.ENTER) startHost(port, pop);
                 });
                 hostVBox.setId("vBox_menu");
                 cancel1.setOnMouseClicked(mouseEvent -> menuGroup.getChildren().remove(pop.getStackPane()));
             });
         });
+    }
+
+    private void startHost(TextField port, Pop pop) {
+        menuGroup.getChildren().remove(pop.getStackPane());
+        if (!isHost) {
+            isHost = true;
+            Server server = new Server(Integer.parseInt(port.getText()));
+            server.run();
+            System.err.println("U R HOST");
+            new Pop("You are HOST now", view.getSnap(), menuGroup, Pop.AddType.ALERT);
+        } else {
+            new Pop("You or someone else is host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
+        }
     }
 
     private void setLoad() {

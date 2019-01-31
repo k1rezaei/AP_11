@@ -65,6 +65,7 @@ public class Client {
     //TODO make money
     private int money = 1000;
     private boolean inGame;
+    private ViewProfile currentViewProfile;
 
     public Scoreboard getScoreboard() {
         return scoreboard;
@@ -172,7 +173,7 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
-
+        System.err.println(command);
         Scanner reader = new Scanner(text);
         String item, price, id;
         switch (command) {
@@ -220,16 +221,23 @@ public class Client {
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] friends = new Gson().fromJson(reader.nextLine(), String[].class);
                 String[] followings = new Gson().fromJson(reader.nextLine(), String[].class);
-                //todo
+                //TODO undo refresh ?
+                if (currentViewProfile != null && view.getScene().getRoot() == currentViewProfile.getRoot() &&
+                        currentViewProfile.getPerson().getId().equals(myId)) {
+                    view.goBack();
+                    getPerson(currentViewProfile.getPerson().getId());
+                }
                 break;
             case DATA_PERSON:
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
+                //TODO remove this inbox refresher
+                if (id.equals(myId)) inbox.setContent(person.getInbox().toArray(new Talk[0]));
                 System.err.println("BUG " + person.getId());
                 System.err.println("BUG " + person.getInbox().size());
                 Platform.runLater(() -> {
-                    ViewProfile viewProfile = new ViewProfile(view, Client.this, person);
-                    view.setRoot(viewProfile.getRoot());
+                    currentViewProfile = new ViewProfile(view, Client.this, person);
+                    view.setRoot(currentViewProfile.getRoot());
                 });
                 //todo
                 break;

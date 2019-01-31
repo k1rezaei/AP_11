@@ -124,18 +124,26 @@ public class ViewProfile {
         vBox.setId("prof_menu");
         vBox.getChildren().addAll(name, id, level);
         vBox.getChildren().addAll(labels);
+        System.err.println("You're here");
+        System.err.println(person.getFriends());
+        System.err.println(person.getFollowings());
+        System.err.println(person.getFollowers());
+        System.err.println(person.getInbox());
         if (!person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getInbox());
             vBox.getChildren().remove(getFollowers());
             vBox.getChildren().remove(getFollowing());
             vBox.getChildren().remove(getFriends());
         }
+        System.err.println("HOHOH0");
         if (person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getPrivateMessage());
             vBox.getChildren().remove(getAddFriend());
             vBox.getChildren().remove(getBear());
         }
+        System.err.println("what about here");
         root.getChildren().add(vBox);
+        System.err.println("and here");
         getFollowers().setOnMouseClicked(event -> popFollowers());
         getFollowing().setOnMouseClicked(getEvent(person.getFollowings()));
         getAddFriend().setOnMouseClicked(mouseEvent -> {
@@ -176,6 +184,7 @@ public class ViewProfile {
         for (String followerId : person.getFollowers()) {
             HBox hBox = new HBox();
             Label label = new Label(followerId);
+            label.setOnMouseClicked(mouseEvent -> client.getPerson(followerId));
             label.setOnMouseClicked(event1 -> client.getPerson(followerId));
             Label accept = new Label("Accept");
             accept.setId("label_button_small");
@@ -198,5 +207,9 @@ public class ViewProfile {
 
     public Group getRoot() {
         return root;
+    }
+
+    public Person getPerson() {
+        return person;
     }
 }

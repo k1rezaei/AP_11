@@ -161,7 +161,10 @@ public class Chatroom {
             messageHBox.setStyle("-fx-alignment: center-left");
             Label sender = new Label(talks[i].getSender());
             sender.setId("sender");
-
+            //TODO decide whether to add this if nonexistent account is handled
+            /*int finalI = i;
+            sender.setOnMouseClicked(mouseEvent -> client.getPerson(talks[finalI].getSender()));
+*/
             Label text = new Label(talks[i].getText());
             text.setId("message");
 
