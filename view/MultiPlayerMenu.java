@@ -1,4 +1,3 @@
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -6,7 +5,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -35,22 +33,29 @@ public class MultiPlayerMenu {
         imageView.setFitHeight(600);
 
         root.getChildren().add(imageView);
-        Label start = new Label("START");
-        start.setId("label_button");
 
+        Label start = setUpStart();
+        Label chat = setUpChat();
+        Label rank = setUpRank();
+        Label profile = setUpProfile();
+        Label logOut = setUpLogOut();
+        Label setPrice = setUpChangePrices();
 
-        Label chat = new Label("CHAT");
-        chat.setId("label_button");
+        VBox vBox = new VBox(start, rank, chat, profile, logOut);
+        if (isHost) {
+            vBox.getChildren().add(setPrice);
+            logOut.toFront();
+        }
+        vBox.setId("menu");
+        vBox.setAlignment(Pos.CENTER);
+        vBox.relocate(400, 300);
+        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
+        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
+        root.getChildren().addAll(vBox);
 
-        Label rank = new Label("RANK");
-        rank.setId("label_button");
+    }
 
-        Label profile = new Label("PROFILE");
-        profile.setId("label_button");
-
-        Label logOut = new Label("LOGOUT");
-        logOut.setId("label_button");
-
+    private Label setUpChangePrices() {
         Label setPrice = new Label("SET PRICE");
         setPrice.setId("label_button");
         setPrice.setOnMouseClicked(mouseEvent -> {
@@ -91,30 +96,45 @@ public class MultiPlayerMenu {
             }
             vBox.getChildren().addAll(items, select, back);
         });
+        return setPrice;
+    }
 
-        VBox vBox = new VBox(start, rank, chat, profile, logOut);
-        if (isHost) {
-            vBox.getChildren().add(setPrice);
-            logOut.toFront();
-        }
-        vBox.setId("menu");
-        vBox.setAlignment(Pos.CENTER);
-        vBox.relocate(400, 300);
-        vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
-        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());
-        root.getChildren().addAll(vBox);
-
-        chat.setOnMouseClicked(event -> view.setRoot(client.getChatroom().getRoot()));
-
-        rank.setOnMouseClicked(event -> view.setRoot(client.getScoreboard().getRoot()));
-
+    private Label setUpLogOut() {
+        Label logOut = new Label("LOGOUT");
+        logOut.setId("label_button");
         logOut.setOnMouseClicked(event -> {
             client.closeSocket();
             view.setRoot(new Menu(view).getRoot());
         });
-        profile.setOnMouseClicked(event -> client.getPerson(client.getMyId()));
+        return logOut;
+    }
 
+    private Label setUpProfile() {
+        Label profile = new Label("PROFILE");
+        profile.setId("label_button");
+        profile.setOnMouseClicked(event -> client.getPerson(client.getMyId()));
+        return profile;
+    }
+
+    private Label setUpRank() {
+        Label rank = new Label("RANK");
+        rank.setId("label_button");
+        rank.setOnMouseClicked(event -> view.setRoot(client.getScoreboard().getRoot()));
+        return rank;
+    }
+
+    private Label setUpStart() {
+        Label start = new Label("START");
+        start.setId("label_button");
         start.setOnMouseClicked(event -> view.setRoot(new LevelSelect(view).getRoot()));
+        return start;
+    }
+
+    private Label setUpChat() {
+        Label chat = new Label("CHAT");
+        chat.setId("label_button");
+        chat.setOnMouseClicked(event -> view.setRoot(client.getChatroom().getRoot()));
+        return chat;
     }
 
     private void sendItemPrice(TextField price, TextField itemName, Pop pop) {
