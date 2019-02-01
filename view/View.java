@@ -99,4 +99,5 @@ public class View extends Application {
     public Scene getScene() {
         return scene;
     }
+
 }

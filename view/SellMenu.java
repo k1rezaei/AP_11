@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class SellMenu {
     private static final Image BG = new Image("file:textures/shelf.jpg");
     private static Image one = new Image("file:textures/one.png");
     private static Image all = new Image("file:textures/all.png");
+    private static Image COIN = new Image("file:textures/coin.png");
     private final int WIDTH = 300;
     private final int HEIGHT = 70;
     private View view;
@@ -67,7 +69,7 @@ public class SellMenu {
         Map<String, Integer> storables = Game.getInstance().getWarehouse().getStorables();
 
         Label ok = new Label();
-        ok.relocate(BASE_X, 10);
+        ok.relocate(BASE_X, 5);
         ok.setId("label_button");
         ImageView okImage = new ImageView(new Image("file:textures/sell.png"));
         okImage.setFitHeight(60);
@@ -79,7 +81,7 @@ public class SellMenu {
 
         //ok.setGraphic(okImage);
         Label cancel = new Label();
-        cancel.relocate(BASE_X + 110, 10);
+        cancel.relocate(BASE_X + 110, 5);
         cancel.setId("label_button");
         //cancel.setGraphic(cancelImage);
         ok.setText("OK");
@@ -129,7 +131,9 @@ public class SellMenu {
             imageView.setFitWidth(30);
             imageView.setFitHeight(30);
 
-            Label label = new Label(Integer.toString(cnt));
+            Label label = new Label(Integer.toString(cnt) + "x");
+            label.setScaleX(0.7);
+            label.setScaleY(0.7);
 
             Label price = new Label(Integer.toString(Entity.getNewEntity(pair.getKey()).getSellPrice()));
 
@@ -153,12 +157,16 @@ public class SellMenu {
             int baseY = (numberOfItems % NUM_IN_ROW) * DIS_Y + BASE_Y;
 
             imageView.relocate(baseX, baseY);
-            label.relocate(baseX + 30, baseY);
-            price.relocate(baseX + 75, baseY + 5);
+            label.relocate(baseX + 30, baseY-5);
             sellOne.relocate(baseX + 130, baseY);
             sellAll.relocate(baseX + 165, baseY);
-
-            sellGroup.getChildren().addAll(imageView, label, price, sellAll, sellOne);
+            ImageView coin = new ImageView(COIN);
+            coin.setFitWidth(20);
+            coin.setFitHeight(20);
+            HBox priceBox = new HBox(price, coin);
+            priceBox.setSpacing(5);
+            priceBox.relocate(baseX + 50, baseY + 5);
+            sellGroup.getChildren().addAll(imageView, label, priceBox, sellAll, sellOne);
 
             numberOfItems++;
 
