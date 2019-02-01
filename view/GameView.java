@@ -631,7 +631,7 @@ public class GameView {
                         }
                     }
                 });
-                if(client != null && client.isInTeamGame() || true) hBox.getChildren().addAll(img, number, add);
+                if(client != null && client.isInTeamGame()) hBox.getChildren().addAll(img, number, add);
                 else hBox.getChildren().addAll(img, number);
             }
             vBox.getChildren().add(hBox);
