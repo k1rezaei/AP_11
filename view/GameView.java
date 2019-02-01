@@ -1038,19 +1038,10 @@ public class GameView {
             VBox infoBox = getBuyAnimalFocus(animalName);
             if (animalName.equalsIgnoreCase("cat")) catInfoBox = infoBox;
             infoBox.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i - 20, BUY_ANIMAL_Y + 70);
-            priceLabel.setOnMouseEntered(mouseEvent -> {
-                focus.getRoot().getChildren().add(infoBox);
-            });
-            priceLabel.setOnMouseExited(mouseEvent -> {
-                focus.getRoot().getChildren().remove(infoBox);
-            });
-            buyAnimal.setOnMouseEntered(mouseEvent -> {
-                focus.getRoot().getChildren().add(infoBox);
-            });
-            buyAnimal.setOnMouseExited(mouseEvent -> {
-                focus.getRoot().getChildren().remove(infoBox);
-            });
-
+            priceLabel.setOnMouseEntered(mouseEvent -> focus.getRoot().getChildren().add(infoBox));
+            priceLabel.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
+            buyAnimal.setOnMouseEntered(mouseEvent -> focus.getRoot().getChildren().add(infoBox));
+            buyAnimal.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
         }
     }
 
