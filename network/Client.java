@@ -252,7 +252,12 @@ public class Client {
             case DATA_INBOX:
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 System.err.println(text);
-                Platform.runLater(() -> inbox.setContent(messages));
+                Platform.runLater(() -> {
+                    inbox.setContent(messages);
+                    if (!inGame) {
+                        showMessage("You have a new private message.");
+                    }
+                });
                 break;
             case DATA_FRIENDS:
                 String[] followers = new Gson().fromJson(reader.nextLine(), String[].class);
