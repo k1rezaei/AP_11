@@ -103,7 +103,7 @@ public class MultiPlayerMenu {
         Label logOut = new Label("LOGOUT");
         logOut.setId("label_button");
         logOut.setOnMouseClicked(event -> {
-            client.closلeSocket();
+            client.closeSocket();
             view.setRoot(new Menu(view).getRoot());
         });
         return logOut;
