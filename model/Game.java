@@ -386,8 +386,10 @@ public class Game {
     public boolean checkLevel() {
         boolean result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
-            //TODO check type
-            result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
+            Entity entity = Entity.getNewEntity(name);
+            if (entity instanceof WildAnimal || entity instanceof Item)
+                result &= level.getNumber(name) <= warehouse.getNumber(name);
+            else result &= level.getNumber(name) <= map.getNumber(name);
         }
         return result;
     }
