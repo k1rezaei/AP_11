@@ -20,6 +20,7 @@ public class Server {
     private static final String DATA_PERSON = "data_person";
     private static final String DATA_WAREHOUSE = "data_warehouse";
     private static final int BASE_NUMBER_OF_ITEMS = 4;
+    private static final String WON_MULTI_PLAYER_GAME = "won_multi_player_game";
 
     private ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -226,10 +227,17 @@ public class Server {
             profile.getPerson().removeFriends(person);
         }
 
+        for (TeamGame teamGame : teamGames)
+            if (teamGame.hasPlayer(person.getId())) {
+                teamGames.remove(teamGame);
+                String command = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                if (teamGame.getPlayer1().equals(person.getId())) command(command, teamGame.getPlayer2());
+                else command(command,teamGame.getPlayer1());
+                break;
+            }
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
-                //todo host save kone adam haro. users.remove(profile.getPerson());
                 break;
             }
         }
