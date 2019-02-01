@@ -581,14 +581,9 @@ public class GameView {
             @Override
             public void handle(MouseEvent event) {
                 VBox vBox;
-                try {
-                    vBox = getGoals(level.toString());
-                    pop(vBox);
-                }catch (Exception e){
-                    if(e.getMessage().equals("refresh")){
-                        vBox = getGoals(level.toString());
-                    }
-                }
+                vBox = getGoals(level.toString());
+                pop(vBox);
+
             }
         });
     }
@@ -631,9 +626,7 @@ public class GameView {
                         try {
                             Game.getInstance().getWarehouse().remove(type);
                             client.sendForServerMultiPlayer(type);
-                            throw new RuntimeException("refresh");
                         }catch (Exception e){
-                            if(e.getMessage().equals("refresh")) throw new RuntimeException("refresh");
                             new Pop("You don't have any", view.getSnap(), root, Pop.AddType.ALERT);
                         }
                     }
