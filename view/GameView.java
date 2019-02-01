@@ -630,7 +630,7 @@ public class GameView {
                     public void handle(MouseEvent event) {
                         try {
                             Game.getInstance().getWarehouse().remove(type);
-                            client.sellItem(type);
+                            client.sendForServerMultiPlayer(type);
                             throw new RuntimeException("refresh");
                         }catch (Exception e){
                             if(e.getMessage().equals("refresh")) throw new RuntimeException("refresh");
