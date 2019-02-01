@@ -1,7 +1,9 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -122,7 +124,7 @@ public class GameView {
     private Label clock;
     private VBox catInfoBox;
     private VBox goalsVBox;
-
+    private ImageView[] buyAnimalIcons = new ImageView[5];
 
     private GameView() {
     }
@@ -217,8 +219,12 @@ public class GameView {
                     renderEntities();
                     stopWorkshops();
                     updateClock(Game.getInstance().getCurrentTurn() / 40);
-                    //updateClock((now - startTime) / SECOND);
                     updateWellFilledBar();
+                    for(int i = 0 ;i<5;i++){
+                        if(Game.getInstance().getMoney() < Entity.getNewEntity(NON_WILD[i]).getBuyPrice())
+                            applyGrayscale(buyAnimalIcons[i]);
+                        else buyAnimalIcons[i].setEffect(null);
+                    }
                     moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
                     if (Game.getInstance().checkLevel()) endGame();
                 }
@@ -1024,7 +1030,6 @@ public class GameView {
             priceLabel.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i + 10, BUY_ANIMAL_Y + 34);
             root.getChildren().add(buyAnimal);
             root.getChildren().add(priceLabel);
-
             VBox infoBox = getBuyAnimalFocus(animalName);
             if (animalName.equalsIgnoreCase("cat")) catInfoBox = infoBox;
             infoBox.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i - 20, BUY_ANIMAL_Y + 70);
@@ -1032,7 +1037,15 @@ public class GameView {
             priceLabel.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
             buyAnimal.setOnMouseEntered(mouseEvent -> focus.getRoot().getChildren().add(infoBox));
             buyAnimal.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
+            buyAnimalIcons[i] = buyAnimal;
         }
+    }
+
+    private void applyGrayscale(ImageView imageView) {
+        ColorAdjust grayscale = new ColorAdjust();
+        grayscale.setSaturation(-1);
+        grayscale.setBrightness(-0.5);
+        imageView.setEffect(grayscale);
     }
 
 
