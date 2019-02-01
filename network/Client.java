@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.Socket;
