@@ -79,6 +79,11 @@ public class GameView {
     private static final Image END_GIF = new Image("file:textures/end3.gif");
     private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
     final private static Image pashImage = new Image("file:textures/mosquito.gif");
+    private static final Image ROAD = new Image("file:textures/road.png");
+    private static final Image FF1 = new Image("file:textures/fastForward/fastForward1.png");
+    private static final Image FF2 = new Image("file:textures/fastForward/fastForward2.png");
+    private static final Image BACK = new Image("file:textures/back.png");
+    private static final Image UPGRADE_ICON = new Image("file:textures/upgradeIcon1.png");
 
     static {
         REFRESHER.setVisible(false);
@@ -540,7 +545,7 @@ public class GameView {
     }
 
     private void setUpRoadImage() {
-        ImageView imageView = new ImageView(new Image("file:textures/road.png"));
+        ImageView imageView = new ImageView(ROAD);
         imageView.relocate(ROAD_X, ROAD_Y);
         imageView.setScaleX(0.8);
         imageView.setScaleY(0.8);
@@ -622,10 +627,10 @@ public class GameView {
     private void setUpFastForward() {
         fastForward = new Label();
         fastForward.setId("label_button");
-        ImageView ff1 = new ImageView(new Image("file:textures/fastForward/fastForward1.png"));
+        ImageView ff1 = new ImageView(FF1);
         ff1.setFitHeight(FF_HEIGHT);
         ff1.setFitWidth(FF_WIDTH);
-        ImageView ff2 = new ImageView(new Image("file:textures/fastForward/fastForward2.png"));
+        ImageView ff2 = new ImageView(FF2);
         ff2.setFitHeight(FF_HEIGHT);
         ff2.setFitWidth(FF_WIDTH);
         fastForward.setGraphic(ff1);
@@ -987,7 +992,7 @@ public class GameView {
     }
 
     private void setUpBackground() {
-        Image backgroundImage = new Image("file:textures/back.png");
+        Image backgroundImage = BACK;
         ImageView imageView = new ImageView(backgroundImage);
         imageView.setOnMouseClicked(EventHandlers.getOnMouseClickedPlant(0, 0));
         root.getChildren().add(imageView);
@@ -1052,7 +1057,7 @@ public class GameView {
             HBox upgrade = new HBox();
             Label upgradeLabel = new Label(Integer.toString(Cat.getUpgradeCost()));
             upgradeLabel.setId("gold");
-            ImageView upgradeIcon = new ImageView(new Image("file:textures/upgradeIcon1.png"));
+            ImageView upgradeIcon = new ImageView(UPGRADE_ICON);
             upgradeIcon.setFitHeight(18);
             upgradeIcon.setFitWidth(18);
             upgrade.getChildren().add(upgradeLabel);
@@ -1067,7 +1072,7 @@ public class GameView {
         moneyLabel = new Label(Integer.toString(Game.getInstance().getMoney()));
         moneyLabel.setId("gold");
         hBox.getChildren().add(moneyLabel);
-        ImageView coin = new ImageView(new Image("file:textures/coin3.gif"));
+        ImageView coin = new ImageView(COIN_GIF);
         coin.setFitHeight(20);
         coin.setFitWidth(20);
         hBox.getChildren().add(coin);
