@@ -60,12 +60,22 @@ public class ViewProfile {
         vBox.relocate(POS_X, POS_Y);
         vBox.setId("prof_menu");
         vBox.getChildren().addAll(name, id, level, money);
+        if(!person.getId().equals(client.getMyId())){
+            int cnt = 0;
+            for(String ID : person.getTeamGames()){
+                if(ID.equals(client.getMyId())) cnt++;
+            }
+            Label commonGames = new Label("Common Games : " + cnt);
+            vBox.getChildren().add(commonGames);
+        }
         vBox.getChildren().addAll(labels);
         if (!person.getId().equals(client.getMyId())) {
             vBox.getChildren().remove(getInbox());
             vBox.getChildren().remove(getFollowers());
             vBox.getChildren().remove(getFollowing());
             vBox.getChildren().remove(getFriends());
+            vBox.getChildren().remove(getGamesList());
+
         }
         System.err.println("HOHOH0");
         if (person.getId().equals(client.getMyId())) {
@@ -89,20 +99,26 @@ public class ViewProfile {
                 VBox list = new VBox();
                 list.setId("middle");
                 list.setAlignment(Pos.CENTER);
-                int cnt = 0;
                 for(String id : person.getTeamGames()){
                     Label label = new Label(id);
                     if(person.getId().equals(client.getMyId())) list.getChildren().add(label);
-                    else if(id.equals(client.getMyId())) cnt++;
                 }
-                if(!person.getId().equals(client.getMyId())){
-                    Label label = new Label(cnt + "");
-                    list.getChildren().add(label);
-                }
+
                 scrollPane.setFitToHeight(true);
                 scrollPane.setFitToWidth(true);
+                Label back = new Label("back");
+                back.setId("label_button");
+                list.getChildren().add(back);
+
                 scrollPane.setContent(list);
+
                 Pop pop = new Pop(scrollPane, view.getSnap(), root, Pop.AddType.WINDOW);
+                back.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        root.getChildren().remove(pop.getStackPane());
+                    }
+                });
 
             }
         });
