@@ -259,8 +259,12 @@ public class Client {
                 id = reader.nextLine();
                 Person person = new Gson().fromJson(reader.nextLine(), Person.class);
                 Platform.runLater(() -> {
-                    currentViewProfile = new ViewProfile(view, Client.this, person);
-                    view.setRoot(currentViewProfile.getRoot());
+                    try {
+                        currentViewProfile = new ViewProfile(view, Client.this, person);
+                        view.setRoot(currentViewProfile.getRoot());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 });
                 //todo
                 break;
@@ -316,6 +320,7 @@ public class Client {
                 goalMap = new HashMap<>();
                 for (String goal : teamGame.getGoals()) goalMap.merge(goal, 1, (a, b) -> a + b);
                 Game.getInstance().getLevel().setGoalEntity(goalMap);
+                Platform.runLater(()->GameView.getInstance().refreshGoals(Game.getInstance().getLevel().toString()));
                 break;
             case IGNORE_PLAY_WITH_ME:
                 id = reader.nextLine();
@@ -323,6 +328,7 @@ public class Client {
                 break;
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
+                setMoney(money + reward);
                 //todo payaan bazi 2 nafare.
                 break;
             case PLAY_MULTI_PLAYER_WITH_ME:

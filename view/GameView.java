@@ -121,6 +121,7 @@ public class GameView {
     private Client client;
     private Label clock;
     private VBox catInfoBox;
+    private VBox goalsVBox;
 
 
     private GameView() {
@@ -179,13 +180,13 @@ public class GameView {
         }
     }
 
-    String getXX(long t){
-        if(t < 10) return "0" + t;
+    String getXX(long t) {
+        if (t < 10) return "0" + t;
         else return "" + t;
     }
 
-    void updateClock(long second){
-        clock.setText(getXX(second/60) + ":" + getXX(second%60));
+    void updateClock(long second) {
+        clock.setText(getXX(second / 60) + ":" + getXX(second % 60));
     }
 
     public void runGame() {
@@ -198,7 +199,7 @@ public class GameView {
 
             @Override
             public void handle(long now) {
-                if (lastTime == 0){
+                if (lastTime == 0) {
                     lastTime = now;
                     startTime = now;
                 }
@@ -229,16 +230,14 @@ public class GameView {
 
     private void endGame() {
         pause();
-        if(client!=null && client.isInTeamGame()){
-            HashMap<String,Integer> goals =Game.getInstance().getLevel().getGoalEntity();
-            for(Map.Entry<String,Integer> goal:goals.entrySet()){
-                for(int i = 0; i < goal.getValue();i++){
+        if (client != null && client.isInTeamGame()) {
+            HashMap<String, Integer> goals = Game.getInstance().getLevel().getGoalEntity();
+            for (Map.Entry<String, Integer> goal : goals.entrySet()) {
+                for (int i = 0; i < goal.getValue(); i++) {
                     client.sendForServerMultiPlayer(goal.getKey());
-                    System.err.println(goal.getKey());
                 }
             }
         }
-        //TODO in chie namoooooosan? :D
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -339,9 +338,9 @@ public class GameView {
 
             if (workshop.getRemainTime() == 0) {
                 getWorkshop(workshop).shutDown();
-            }else if(workshop.getRemainTime() == -1){
+            } else if (workshop.getRemainTime() == -1) {
                 getWorkshop(workshop).getProgressBar(0);
-            }else getWorkshop(workshop).getProgressBar(1-(double)workshop.getRemainTime()/workshop.getDuration());
+            } else getWorkshop(workshop).getProgressBar(1 - (double) workshop.getRemainTime() / workshop.getDuration());
         }
     }
 
@@ -463,10 +462,10 @@ public class GameView {
     private void renderSprite(Entity entity) {
 
         SpriteAnimation sprite = sprites.get(entity);
-        if(entity instanceof FarmAnimal){
+        if (entity instanceof FarmAnimal) {
             int x = entity.getCell().getX() + BASE_X - 25;
-            int y = entity.getCell().getY() + BASE_Y + sprite.getHeight()/2;
-            sprite.getProgressBar(  ((FarmAnimal)entity).getHunger() ).relocate(x, y);
+            int y = entity.getCell().getY() + BASE_Y + sprite.getHeight() / 2;
+            sprite.getProgressBar(((FarmAnimal) entity).getHunger()).relocate(x, y);
 
         }
         if (sprite.getState() != entity.getState()) {
@@ -489,7 +488,7 @@ public class GameView {
         newSprite.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(entity));
         newSprite.play();
         entityRoot.getChildren().add(newSprite.getImageView());
-        if(entity instanceof FarmAnimal){
+        if (entity instanceof FarmAnimal) {
             entityRoot.getChildren().add(newSprite.getProgressBar(0));
         }
         if (entity.getType().equalsIgnoreCase("plant")) {
@@ -576,22 +575,16 @@ public class GameView {
         //goals.setGraphic(goal);
         goals.relocate(GOALS_X, GOALS_Y);
         root.getChildren().add(goals);
-
-       goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                VBox vBox;
-                vBox = getGoals(level.toString());
-                pop(vBox);
-
-            }
+        goalsVBox = new VBox();
+        goals.setOnMouseClicked(event -> {
+            refreshGoals(level.toString());
+            pop(goalsVBox);
         });
     }
 
-    private VBox getGoals(String data) {
+    public void refreshGoals(String data) {
         Scanner scanner = new Scanner(data);
-        VBox vBox = new VBox();
-
+        goalsVBox.getChildren().clear();
         int cnt = 0;
         while (scanner.hasNext()) {
             cnt++;
@@ -620,25 +613,21 @@ public class GameView {
                 Label add = new Label("ADD");
                 add.setId("label_button");
                 add.setStyle("-fx-text-fill: rgb(63, 72, 204);");
-                add.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                    @Override
-                    public void handle(MouseEvent event) {
-                        try {
-                            Game.getInstance().getWarehouse().remove(type);
-                            client.sendForServerMultiPlayer(type);
-                        }catch (Exception e){
-                            new Pop("You don't have any", view.getSnap(), root, Pop.AddType.ALERT);
-                        }
+                add.setOnMouseClicked(event -> {
+                    try {
+                        Game.getInstance().getWarehouse().remove(type);
+                        client.sendForServerMultiPlayer(type);
+                    } catch (Exception e) {
+                        new Pop("You don't have any", view.getSnap(), root, Pop.AddType.ALERT);
                     }
                 });
-                if(client != null && client.isInTeamGame()) hBox.getChildren().addAll(img, number, add);
+                if (client != null && client.isInTeamGame()) hBox.getChildren().addAll(img, number, add);
                 else hBox.getChildren().addAll(img, number);
             }
-            vBox.getChildren().add(hBox);
+            goalsVBox.getChildren().add(hBox);
         }
-        vBox.setMaxHeight(cnt * GOAL_ICONS_LENGTH);
-        vBox.setMaxWidth(300);
-        return vBox;
+        goalsVBox.setMaxHeight(cnt * GOAL_ICONS_LENGTH);
+        goalsVBox.setMaxWidth(300);
     }
 
     private void setUpFastForward() {
@@ -881,7 +870,7 @@ public class GameView {
             if (i <= 2) {
                 x = LEFT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * i;
-                sprite.getProgressBar().relocate(x , y + sprite.getHeight());
+                sprite.getProgressBar().relocate(x, y + sprite.getHeight());
             } else {
                 x = RIGHT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * (i - 3);
@@ -1015,12 +1004,13 @@ public class GameView {
         root.getChildren().add(imageView);
     }
 
-    private void setUpClock(){
+    private void setUpClock() {
         clock = new Label();
         clock.setId("clock");
         clock.relocate(GOALS_X + 80, GOALS_Y - 10);
         root.getChildren().add(clock);
     }
+
     private void setUpBuyIcons() {
         for (int i = 0; i < NON_WILD.length; i++) {
             String animalName = NON_WILD[i];
@@ -1038,19 +1028,10 @@ public class GameView {
             VBox infoBox = getBuyAnimalFocus(animalName);
             if (animalName.equalsIgnoreCase("cat")) catInfoBox = infoBox;
             infoBox.relocate(BUY_ANIMAL_BASE_X + BUY_ANIMAL_X_DIFF * i - 20, BUY_ANIMAL_Y + 70);
-            priceLabel.setOnMouseEntered(mouseEvent -> {
-                focus.getRoot().getChildren().add(infoBox);
-            });
-            priceLabel.setOnMouseExited(mouseEvent -> {
-                focus.getRoot().getChildren().remove(infoBox);
-            });
-            buyAnimal.setOnMouseEntered(mouseEvent -> {
-                focus.getRoot().getChildren().add(infoBox);
-            });
-            buyAnimal.setOnMouseExited(mouseEvent -> {
-                focus.getRoot().getChildren().remove(infoBox);
-            });
-
+            priceLabel.setOnMouseEntered(mouseEvent -> focus.getRoot().getChildren().add(infoBox));
+            priceLabel.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
+            buyAnimal.setOnMouseEntered(mouseEvent -> focus.getRoot().getChildren().add(infoBox));
+            buyAnimal.setOnMouseExited(mouseEvent -> focus.getRoot().getChildren().remove(infoBox));
         }
     }
 

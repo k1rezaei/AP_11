@@ -224,10 +224,10 @@ public class Menu {
     private void startHost(TextField port, Pop pop) {
         menuGroup.getChildren().remove(pop.getStackPane());
         if (!isHost) {
-            isHost = true;
-            myPort = Integer.parseInt(port.getText());
             Server server = new Server(Integer.parseInt(port.getText()));
             server.run();
+            isHost = true;
+            myPort = Integer.parseInt(port.getText());
             System.err.println("U R HOST");
             new Pop("You are HOST now", view.getSnap(), menuGroup, Pop.AddType.ALERT);
         } else {
