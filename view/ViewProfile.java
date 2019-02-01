@@ -24,6 +24,7 @@ public class ViewProfile {
     private Group root = new Group();
     private Label[] labels = new Label[CNT];
     private Person person;
+    private Pop gameWaitPop;
 
     ViewProfile(View view, Client client, Person person) {
         this.view = view;
@@ -104,17 +105,17 @@ public class ViewProfile {
         getBack().setOnMouseClicked(event -> view.goBack());
         getBear().setOnMouseClicked(mouseEvent -> client.addBear(person.getId()));
         getTeamGame().setOnMouseClicked(mouseEvent -> {
-            client.sendTeamGameRequest(person.getId());
+            client.addMultiPlayerRequest(person.getId());
             Label stop = new Label("Stop Waiting");
             stop.setId("label_button");
-            Pop pop = new Pop(new VBox(stop), view.getSnap(), root, Pop.AddType.WINDOW);
-            pop.getDisabler().setOnMouseClicked(mouseEvent1 -> {
-                client.rescindTeamGameRequest(person.getId());
-                root.getChildren().remove(pop.getStackPane());
+            gameWaitPop = new Pop(new VBox(stop), view.getSnap(), root, Pop.AddType.WINDOW);
+            gameWaitPop.getDisabler().setOnMouseClicked(mouseEvent1 -> {
+                client.removeMultiPlayerRequest(person.getId());
+                root.getChildren().remove(gameWaitPop.getStackPane());
             });
             stop.setOnMouseClicked(mouseEvent1 -> {
-                client.rescindTeamGameRequest(person.getId());
-                root.getChildren().remove(pop.getStackPane());
+                client.removeMultiPlayerRequest(person.getId());
+                root.getChildren().remove(gameWaitPop.getStackPane());
             });
         });
     }
@@ -222,4 +223,9 @@ public class ViewProfile {
     public Person getPerson() {
         return person;
     }
+
+    public Pop getGameWaitPop() {
+        return gameWaitPop;
+    }
+
 }

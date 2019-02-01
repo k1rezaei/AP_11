@@ -19,6 +19,7 @@ public class Menu {
     final static public long GAP_TIME = 5 * 1000000000L;
     private static final int NUM_SLIDES = 3;
     private static boolean isHost = false;
+    private static int myPort = -1;
     private long lastTry = 0;
     private VBox vBox = new VBox();
     private ArrayList<ImageView> slides = new ArrayList<>();
@@ -105,6 +106,7 @@ public class Menu {
             hostIsMe = myIp.equals(ip) || ip.equals(LOCAL_HOST_ADDRESS) || ip.equals("localhost");
         } catch (Exception e) {
         }
+        hostIsMe &= port == myPort;
         Client client = new Client(view, isHost && hostIsMe);
         client.initialize(ip, port);
         try {
@@ -138,12 +140,7 @@ public class Menu {
             vBox.getChildren().addAll(solo, join, host, cancel);
             Pop buttons = new Pop(vBox, view.getSnap(), menuGroup, Pop.AddType.BUTTONS);
             cancel.setStyle("-fx-font-size: 50");
-            cancel.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    menuGroup.getChildren().remove(buttons.getStackPane());
-                }
-            });
+            cancel.setOnMouseClicked(event12 -> menuGroup.getChildren().remove(buttons.getStackPane()));
 
             solo.setOnMouseClicked(event15 -> {
                 GameView.getInstance().setClient(null);
@@ -228,6 +225,7 @@ public class Menu {
         menuGroup.getChildren().remove(pop.getStackPane());
         if (!isHost) {
             isHost = true;
+            myPort = Integer.parseInt(port.getText());
             Server server = new Server(Integer.parseInt(port.getText()));
             server.run();
             System.err.println("U R HOST");

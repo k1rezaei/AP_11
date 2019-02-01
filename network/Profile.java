@@ -320,24 +320,21 @@ public class Profile {
                 boolean finished = false;
 
                 for (TeamGame t : server.getTeamGames())
-                    if (t.p1.equals(person.getId()) || t.p2.equals(person.getId())) {
+                    if (t.getPlayer1().equals(person.getId()) || t.getPlayer2().equals(person.getId())) {
                         t.remove(item);
                         teamGameF = t;
-                        if (t.getGoals().size() == 0) {
-                            finished = true;
-                            break;
-                        }
+                        if (t.getGoals().size() == 0) finished = true;
                         break;
                     }
                 if (finished) {
                     command = WON_MULTI_PLAYER_GAME + "\n" + end + "\n";
-                    server.command(command, teamGameF.p1);
-                    server.command(command, teamGameF.p2);
+                    server.command(command, teamGameF.getPlayer1());
+                    server.command(command, teamGameF.getPlayer2());
                     server.getTeamGames().remove(teamGameF);
                 } else {
                     String json = new Gson().toJson(teamGameF);
-                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.p1);
-                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.p2);
+                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer1());
+                    server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer2());
                 }
                 break;
             default:
