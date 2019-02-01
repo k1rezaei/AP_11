@@ -2,11 +2,11 @@
   "startMoney": 100,
   "goalMoney": 20000,
   "goalEntity": {
-    "Sheep": 10,
-    "Chicken": 10,
-    "Cow": 10,
-    "Dog": 10,
-    "Cat": 10,
+    "sheep": 10,
+    "chicken": 10,
+    "cow": 10,
+    "dog": 10,
+    "cat": 10,
     "Cake": 10,
     "CarnivalDress": 5
   },

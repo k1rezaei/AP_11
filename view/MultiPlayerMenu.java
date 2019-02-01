@@ -71,12 +71,7 @@ public class MultiPlayerMenu {
             select.setSpacing(20);
             Pop pop = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
 
-            back.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    root.getChildren().remove(pop.getStackPane());
-                }
-            });
+            back.setOnMouseClicked(event -> root.getChildren().remove(pop.getStackPane()));
             send.setOnMouseClicked(mouseEvent1 -> sendItemPrice(price, itemName, pop));
             price.setOnKeyPressed(keyEvent -> {
                 if (keyEvent.getCode() == KeyCode.ENTER)
@@ -85,14 +80,11 @@ public class MultiPlayerMenu {
             select.getChildren().addAll(currentItem, itemName, price, send);
             FlowPane items = new FlowPane();
             for (String item : itemList) {
-                ImageView itemImage = Images.getSpriteAnimation(item).getImageView();
+                ImageView itemImage = Images.getImageForGoal(item);
                 itemImage.setFitWidth(50);
                 itemImage.setFitHeight(50);
                 itemImage.setOnMouseClicked(mouseEvent1 -> {
                     currentItem.setImage(itemImage.getImage());
-                    currentItem.setViewport(itemImage.getViewport());
-                    currentItem.setFitWidth(50);
-                    currentItem.setFitHeight(50);
                     itemName.setText(item);
                 });
                 items.getChildren().add(itemImage);

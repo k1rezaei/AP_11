@@ -2,7 +2,7 @@
   "startMoney": 500,
   "goalMoney": 10000,
   "goalEntity": {
-    "Chicken": 10
+    "chicken": 10
   },
   "n": 300,
   "m": 200,
