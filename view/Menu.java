@@ -70,21 +70,9 @@ public class Menu {
         ImageView background = new ImageView(new Image("file:textures/menu/back4.jpg"));
         background.setFitHeight(600);
         background.setFitWidth(800);
-        menuGroup.getChildren().add(background);
-        ImageView farmer = new ImageView(new Image("file:textures/farmer.gif"));
-        ImageView ll = new ImageView(new Image("file:textures/Untitled.png"));
-
-        ll.setFitWidth(390);
-        ll.setFitHeight(100);
-        Label logo = new Label();
-        logo.setGraphic(ll);
-        logo.relocate(280,100);
-        logo.setId("lgo");
-
-        farmer.relocate(-15,250);
-
-        menuGroup.getChildren().addAll(farmer, logo);
-
+        Label logo = setUpLogo();
+        ImageView farmer = setUpFarmer();
+        menuGroup.getChildren().addAll(background, farmer, logo);
         setMute();
         setStart();
         setLoad();
@@ -92,19 +80,25 @@ public class Menu {
         setInfo();
         setExit();
         vBox.relocate(320, 200);
-       /* vBox.translateXProperty().bind(vBox.widthProperty().divide(2).negate());
-        vBox.translateYProperty().bind(vBox.heightProperty().divide(2).negate());*/
-      /*  VBox fake = new VBox();
-
-        fake.relocate(400, 300);
-        fake.translateXProperty().bind(fake.widthProperty().divide(2).negate());
-        fake.translateYProperty().bind(fake.heightProperty().divide(2).negate());
-
-        fake.setId("menuFake");*/
         vBox.setId("menu");
-
-        //  menuGroup.getChildren().add(fake);
         menuGroup.getChildren().add(vBox);
+    }
+
+    private ImageView setUpFarmer() {
+        ImageView farmer = new ImageView(new Image("file:textures/farmer.gif"));
+        farmer.relocate(-15, 250);
+        return farmer;
+    }
+
+    private Label setUpLogo() {
+        ImageView ll = new ImageView(new Image("file:textures/Untitled.png"));
+        ll.setFitWidth(390);
+        ll.setFitHeight(100);
+        Label logo = new Label();
+        logo.setGraphic(ll);
+        logo.relocate(280, 100);
+        logo.setId("lgo");
+        return logo;
     }
 
     private void connect(String userName, String ip, int port, int srcPort) {
@@ -131,9 +125,7 @@ public class Menu {
                 new Pop("Invalid Username", view.getSnap(), menuGroup, Pop.AddType.ALERT);
             }
         } catch (Exception e) {
-            Pop pop = new Pop("No one is Host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
-            System.err.println("something is wrong");
-            e.printStackTrace();
+            new Pop("No one is Host", view.getSnap(), menuGroup, Pop.AddType.ALERT);
         }
     }
 
@@ -147,7 +139,6 @@ public class Menu {
             Label solo = new Label("SOLO");
             Label join = new Label("JOIN");
             Label host = new Label("HOST");
-
 
             VBox vBox = new VBox();
             vBox.getChildren().addAll(solo, join, host, cancel);
@@ -278,7 +269,6 @@ public class Menu {
             }
         };
     }
-
 
     private void setUpLabels(int i) {
         ArrayList<Label> labels = new ArrayList<>();

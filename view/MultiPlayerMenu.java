@@ -67,10 +67,10 @@ public class MultiPlayerMenu {
             price.setId("inputBox");
             itemName.setId("inputBox");
             itemName.setDisable(true);
-            itemName.setMaxWidth(100);
+            itemName.setMaxWidth(150);
             ImageView currentItem = new ImageView();
             Label send = new Label("Send");
-            send.setId("label_button");
+            send.setId("label_button_medium");
             Label back = new Label("back");
             back.setId("label_button");
             select.setSpacing(20);
@@ -86,6 +86,7 @@ public class MultiPlayerMenu {
             FlowPane items = new FlowPane();
             for (String item : itemList) {
                 ImageView itemImage = Images.getImageForGoal(item);
+                itemImage.setId("glow");
                 itemImage.setFitWidth(50);
                 itemImage.setFitHeight(50);
                 itemImage.setOnMouseClicked(mouseEvent1 -> {
