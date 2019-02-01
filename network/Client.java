@@ -63,7 +63,7 @@ public class Client {
     private static final String IGNORE_PLAY_WITH_ME = "ignore_play_with_me";
     private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
     private static final String REQUEST_DECLINED = "request_declined";
-
+    private static final String END_TEAM_GAME = "end_team_game";
     private static final String ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY = "add_message_to_in_game_chat_with_reply";
     private static final String ADD_MESSAGE_IN_GAME_CHAT = "add_message_in_game_chat";
     private static final String DATA_IN_GAME_CHAT = "data_in_game_chat";
@@ -344,7 +344,11 @@ public class Client {
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
                 setMoney(money + reward);
-                //todo payaan bazi 2 nafare.
+                if (inTeamGame) {
+                    setInGame(false);
+                    GameView.getInstance().pause();
+                    view.setRoot(multiPlayerMenu.getRoot());
+                }
                 break;
             case PLAY_MULTI_PLAYER_WITH_ME:
                 id = reader.nextLine();
@@ -605,4 +609,7 @@ public class Client {
         return inGameChat;
     }
 
+    public void suddenGameEnd() {
+        command(END_TEAM_GAME + "\n" + end + "\n");
+    }
 }

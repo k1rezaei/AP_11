@@ -54,6 +54,7 @@ public class Connection {
     private static final String IGNORE_PLAY_WITH_ME = "ignore_play_with_me";
     private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
     private static final String REQUEST_DECLINED = "request_declined";
+    private static final String END_TEAM_GAME = "end_team_game";
 
     private static final String ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY = "add_message_to_in_game_chat_with_reply";
     private static final String ADD_MESSAGE_IN_GAME_CHAT = "add_message_in_game_chat";
@@ -323,7 +324,7 @@ public class Connection {
                 boolean finished = false;
 
                 for (TeamGame t : server.getTeamGames())
-                    if (t.getPlayer1().equals(person.getId()) || t.getPlayer2().equals(person.getId())) {
+                    if (t.hasPlayer(person.getId())) {
                         t.remove(item);
                         teamGameF = t;
                         if (t.getGoals().isEmpty()) finished = true;
@@ -333,10 +334,35 @@ public class Connection {
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer1());
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer2());
                 if (finished) {
-                    command = WON_MULTI_PLAYER_GAME + "\n" + teamGameF.getReward() + "\n" + end + "\n";
-                    server.command(command, teamGameF.getPlayer1());
-                    server.command(command, teamGameF.getPlayer2());
+                    String command1 = WON_MULTI_PLAYER_GAME + "\n" + teamGameF.getReward() + "\n" + end + "\n";
+                    server.command(command1, teamGameF.getPlayer1());
+                    server.command(command1, teamGameF.getPlayer2());
                     server.getTeamGames().remove(teamGameF);
+                }
+                break;
+            case END_TEAM_GAME:
+                System.err.println(command);
+                teamGameF = null;
+                for (TeamGame t : server.getTeamGames()) {
+                    if (t.hasPlayer(person.getId())) {
+                        teamGameF = t;
+                    }
+                }
+                String command1 = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                try {
+                    server.command(command1, teamGameF.getPlayer1());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    server.command(command1, teamGameF.getPlayer2());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                try {
+                    server.getTeamGames().remove(teamGameF);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             default:

@@ -546,7 +546,7 @@ public class GameView {
             Label chat = new Label("CHAT");
             chat.setId(SMALL_BUTTON_ID);
             chat.setOnMouseClicked(mouseEvent -> view.setRoot(client.getInGameChat().getRoot()));
-            chat.relocate(CHAT_X,CHAT_Y);
+            chat.relocate(CHAT_X, CHAT_Y);
             root.getChildren().add(chat);
         }
     }
@@ -807,32 +807,14 @@ public class GameView {
 
             Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
 
-
-            no.setOnMouseClicked(event1 -> {
-                root.getChildren().clear();
-                Menu backMenu = new Menu(view);
-                if (client == null) view.setRoot(backMenu.getRoot());
-                else {
-                    client.setInGame(false);
-                    view.setRoot(client.getMultiPlayerMenu().getRoot());
-                }
-                game.stop();
-            });
+            no.setOnMouseClicked(event1 -> backToMenu());
 
             yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
-
                 }
-                root.getChildren().clear();
-                Menu backMenu = new Menu(view);
-                if (client == null) view.setRoot(backMenu.getRoot());
-                else {
-                    client.setInGame(false);
-                    view.setRoot(client.getMultiPlayerMenu().getRoot());
-                }
-                game.stop();
+                backToMenu();
             });
 
             cancel.setOnMouseClicked(event13 -> {
@@ -840,12 +822,9 @@ public class GameView {
                 resume();
             });
 
-            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    resume();
-                    root.getChildren().remove(menu.getStackPane());
-                }
+            menu.getDisabler().setOnMouseClicked(event14 -> {
+                resume();
+                root.getChildren().remove(menu.getStackPane());
             });
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
@@ -882,6 +861,18 @@ public class GameView {
         root.getChildren().add(menuButton);
     }
 
+    private void backToMenu() {
+        root.getChildren().clear();
+        Menu backMenu = new Menu(view);
+        if (client == null) view.setRoot(backMenu.getRoot());
+        else {
+            if (client.isInTeamGame()) client.suddenGameEnd();
+            client.setInGame(false);
+            view.setRoot(client.getMultiPlayerMenu().getRoot());
+        }
+        game.stop();
+    }
+
     private void setUpWorkshops() {
         workshops.clear();
         for (int i = 0; i < Game.getInstance().getWorkshops().size(); i++) {
@@ -898,11 +889,11 @@ public class GameView {
             } else {
                 x = RIGHT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * (i - 3);
-                sprite.getProgressBar().relocate(x + 120, y + sprite.getHeight() + (i-4) * 10);
+                sprite.getProgressBar().relocate(x + 120, y + sprite.getHeight() + (i - 4) * 10);
             }
-            for(int j = 0; j < sprite.getImageViews().size(); j++){
-                sprite.getImageViews().get(j).setFitHeight(520/4);
-                sprite.getImageViews().get(j).setFitWidth(600/4);
+            for (int j = 0; j < sprite.getImageViews().size(); j++) {
+                sprite.getImageViews().get(j).setFitHeight(520 / 4);
+                sprite.getImageViews().get(j).setFitWidth(600 / 4);
             }
             root.getChildren().add(sprite.getProgressBar(0));
             fixSprite(sprite, x, y);
@@ -994,7 +985,7 @@ public class GameView {
 
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
-        for(ImageView iv: well.getImageViews()){
+        for (ImageView iv : well.getImageViews()) {
             //iv.setFitHeight(100);
         }
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
