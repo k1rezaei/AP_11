@@ -22,7 +22,7 @@ public class Server {
     private static final int BASE_NUMBER_OF_ITEMS = 4;
     private static final String WON_MULTI_PLAYER_GAME = "won_multi_player_game";
 
-    private ArrayList<Profile> profiles = new ArrayList<>();
+    private ArrayList<Connection> connections = new ArrayList<>();
     private Server me;
     private ArrayList<Talk> talks = new ArrayList<>();
     private int port;
@@ -75,16 +75,16 @@ public class Server {
                     socket = serverSocket.accept();
                     System.err.println("User adding");
 
-                    Profile profile;
-                    if (status == 2) profile = new Profile(new Person(id, id), socket);
+                    Connection connection;
+                    if (status == 2) connection = new Connection(new Person(id, id), socket);
                     else {
-                        profile = new Profile(getPersonByIdInData(id), socket);
+                        connection = new Connection(getPersonByIdInData(id), socket);
                     }
-                    profiles.add(profile);
-                    if (!users.contains(profile.getPerson())) users.add(profile.getPerson());
-                    profile.setServer(me);
+                    connections.add(connection);
+                    if (!users.contains(connection.getPerson())) users.add(connection.getPerson());
+                    connection.setServer(me);
 
-                    profile.run();
+                    connection.run();
 
                     System.err.println("User added");
 
@@ -158,8 +158,8 @@ public class Server {
     }
 
     private int validId(String id) {
-        for (Profile profile : profiles)
-            if (id.equals(profile.getPerson().getId())) return 0;
+        for (Connection connection : connections)
+            if (id.equals(connection.getPerson().getId())) return 0;
         for (Person person : users)
             if (person.getId().equals(id)) return 1;
         return 2;
@@ -168,8 +168,8 @@ public class Server {
     synchronized void addMessageToChatRoom(Talk talk) {
         talks.add(talk);
         String command = getChatRoom();
-        for (Profile profile : profiles) {
-            profile.command(command);
+        for (Connection connection : connections) {
+            connection.command(command);
         }
         saveData();
 
@@ -179,15 +179,15 @@ public class Server {
     synchronized public void updateScoreboard() {
         saveData();
         String scoreboard = getScoreboard();
-        for (Profile profile : profiles)
-            profile.command(scoreboard);
+        for (Connection connection : connections)
+            connection.command(scoreboard);
     }
 
 
     synchronized public String getScoreboard() {
         ArrayList<Person> people = new ArrayList<>();
-        for (Profile profile : profiles)
-            people.add(profile.getPerson());
+        for (Connection connection : connections)
+            people.add(connection.getPerson());
         return DATA_SCOREBOARD + '\n' + gson.toJson(people.toArray()) + '\n' + end + '\n';
     }
 
@@ -221,15 +221,15 @@ public class Server {
 
     synchronized public void remove(Person person) {
 
-        for (Profile profile : profiles) {
-            profile.getPerson().removeFollowings(person);
-            profile.getPerson().removeFollowers(person);
-            profile.getPerson().removeFriends(person);
+        for (Connection connection : connections) {
+            connection.getPerson().removeFollowings(person);
+            connection.getPerson().removeFollowers(person);
+            connection.getPerson().removeFriends(person);
         }
 
-        for (Profile profile : profiles) {
-            if (profile.getPerson().equals(person)) {
-                profiles.remove(profile);
+        for (Connection connection : connections) {
+            if (connection.getPerson().equals(person)) {
+                connections.remove(connection);
                 break;
             }
         }
@@ -283,9 +283,9 @@ public class Server {
     }
 
     synchronized public Person getPerson(String id) {
-        for (Profile profile : profiles)
-            if (profile.getPerson().getId().equals(id)) {
-                return profile.getPerson();
+        for (Connection connection : connections)
+            if (connection.getPerson().getId().equals(id)) {
+                return connection.getPerson();
             }
         return null;
     }
@@ -335,9 +335,9 @@ public class Server {
     }
 
     synchronized public void command(String command, String id) {
-        for (Profile profile : profiles)
-            if (profile.getPerson().getId().equals(id)) {
-                profile.command(command);
+        for (Connection connection : connections)
+            if (connection.getPerson().getId().equals(id)) {
+                connection.command(command);
                 return;
             }
 
@@ -364,8 +364,8 @@ public class Server {
     }
 
     synchronized private void sendToAll(String command) {
-        for (Profile profile : profiles)
-            profile.command(command);
+        for (Connection connection : connections)
+            connection.command(command);
     }
 
     private void saveData() {

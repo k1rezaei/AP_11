@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
 
-public class Profile {
+public class Connection {
 
     private static final String end = "#";
     private static final String UPDATE_SCOREBOARD = "update_scoreboard";
@@ -101,7 +101,7 @@ public class Profile {
         }
     };
 
-    public Profile(Person person, Socket socket) throws IOException {
+    public Connection(Person person, Socket socket) throws IOException {
         this.person = person;
         this.socket = socket;
         this.formatter = new Formatter(socket.getOutputStream());
