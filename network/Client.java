@@ -323,6 +323,7 @@ public class Client {
                 Platform.runLater(() -> ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane()));
                 break;
             case WON_MULTI_PLAYER_GAME:
+                int reward = reader.nextInt();
                 //todo payaan bazi 2 nafare.
                 break;
             case PLAY_MULTI_PLAYER_WITH_ME:

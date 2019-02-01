@@ -208,6 +208,15 @@ public class Server {
         return "";
     }
 
+    synchronized public int getCost(ArrayList<String> goals) {
+        int cost = 0;
+        for (String item : goals)
+            if (prices.get(item) != null)
+                cost += prices.get(item);
+        cost *= 3;
+        return cost;
+    }
+
     synchronized public void remove(Person person) {
 
         for (Profile profile : profiles) {
@@ -371,12 +380,14 @@ public class Server {
         saveData();
     }
 
-    synchronized public ArrayList<TeamGame> getTeamGames() {return teamGames;}
+    synchronized public ArrayList<TeamGame> getTeamGames() {
+        return teamGames;
+    }
 
     public ArrayList<String> getRandomGoals() {
         int number = 4, size = itemList.length;
         ArrayList<String> goals = new ArrayList<>();
-        for (int i=0; i<number; i++) {
+        for (int i = 0; i < number; i++) {
             int c = random.nextInt(size);
             goals.add(itemList[c]);
         }
