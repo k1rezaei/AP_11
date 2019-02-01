@@ -227,17 +227,24 @@ public class Server {
             profile.getPerson().removeFriends(person);
         }
 
-        for (TeamGame teamGame : teamGames)
-            if (teamGame.hasPlayer(person.getId())) {
-                teamGames.remove(teamGame);
-                String command = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
-                if (teamGame.getPlayer1().equals(person.getId())) command(command, teamGame.getPlayer2());
-                else command(command,teamGame.getPlayer1());
-                break;
-            }
         for (Profile profile : profiles) {
             if (profile.getPerson().equals(person)) {
                 profiles.remove(profile);
+                break;
+            }
+        }
+        for (TeamGame teamGame : teamGames) {
+            if (teamGame.hasPlayer(person.getId())) {
+                teamGames.remove(teamGame);
+                String command = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                try {
+                    command(command, teamGame.getPlayer2());
+                } catch (Exception e) {
+                }
+                try {
+                    command(command, teamGame.getPlayer1());
+                } catch (Exception e) {
+                }
                 break;
             }
         }

@@ -605,7 +605,7 @@ public class Client {
         return inGameChat;
     }
 
-    private void suddenGameEnd() {
+    public void suddenGameEnd() {
         command(END_TEAM_GAME + "\n" + end + "\n");
     }
 }
