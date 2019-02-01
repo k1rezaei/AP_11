@@ -19,6 +19,7 @@ public class Server {
     private static final String DATA_FRIENDS = "data_friends";
     private static final String DATA_PERSON = "data_person";
     private static final String DATA_WAREHOUSE = "data_warehouse";
+    private static final int BASE_NUMBER_OF_ITEMS = 4;
 
     private ArrayList<Profile> profiles = new ArrayList<>();
     private Server me;
@@ -385,7 +386,7 @@ public class Server {
     }
 
     public ArrayList<String> getRandomGoals() {
-        int number = 4, size = itemList.length;
+        int number = random.nextInt(5) + BASE_NUMBER_OF_ITEMS, size = itemList.length;
         ArrayList<String> goals = new ArrayList<>();
         for (int i = 0; i < number; i++) {
             int c = random.nextInt(size);

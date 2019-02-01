@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 
 import java.util.ArrayList;
 
@@ -16,6 +17,8 @@ public class BuyMenu {
     private static final int DIS_X_BOUGHT = 30;
     private static Image one = new Image("file:textures/one.png");
     private static Image BG = new Image("file:textures/bglemon.gif");
+    private static Image COIN = new Image("file:textures/coin.png");
+    private static Image BOX = new Image("file:textures/cap.png");
     private final int WIDTH = 50, DIS_X = 270, DIS_Y = 95, NUM_OF_ROW = 5, BASE_X = 50, BASE_Y = 80;
     private final int HEIGHT = 50;
     private View view;
@@ -88,7 +91,7 @@ public class BuyMenu {
 
 
         Label ok = new Label("OK");
-        ok.relocate(BASE_X, 10);
+        ok.relocate(BASE_X, 5);
         ImageView okImage = new ImageView(new Image("file:textures/buy.png"));
         okImage.setFitHeight(60);
         okImage.setFitWidth(100);
@@ -100,7 +103,7 @@ public class BuyMenu {
 
         //ok.setGraphic(okImage);
         Label cancel = new Label("CANCEL");
-        cancel.relocate(BASE_X + 110, 10);
+        cancel.relocate(BASE_X + 110, 5);
         //cancel.setGraphic(cancelImage);
         cancel.setId("label_button");
 
@@ -152,15 +155,27 @@ public class BuyMenu {
             imageView.setFitWidth(WIDTH);
             imageView.relocate(baseX, baseY);
 
-            Label price = new Label("" + Entity.getNewEntity(type).getBuyPrice() + " (" + Entity.getNewEntity(type).getSize() + ")");
+            Label priceLabel = new Label("" + Entity.getNewEntity(type).getBuyPrice());
+            //priceLabel.relocate(baseX + 70, baseY + 10);
+            ImageView coin = new ImageView(COIN);
+            coin.setFitWidth(20);
+            coin.setFitHeight(20);
+            Label size = new Label(Entity.getNewEntity(type).getSize() + "");
+            ImageView box = new ImageView(BOX);
+            box.setFitHeight(20);
+            box.setFitWidth(20);
+
+            HBox price = new HBox(priceLabel, coin, size, box);
             price.relocate(baseX + 70, baseY + 10);
+            price.setSpacing(5);
+
 
             ImageView buyOneImage = new ImageView(one);
             buyOneImage.setFitWidth(WIDTH);
             buyOneImage.setFitHeight(HEIGHT);
             Label buyOne = new Label();
             buyOne.setId("label_button_small");
-            buyOne.relocate(baseX + 150, baseY);
+            buyOne.relocate(baseX + 190, baseY);
             buyOne.setGraphic(buyOneImage);
 
             buyGroup.getChildren().addAll(imageView, price, buyOne);

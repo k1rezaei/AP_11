@@ -897,7 +897,11 @@ public class GameView {
             } else {
                 x = RIGHT_WORKSHOP_X;
                 y = BASE_WORKSHOP + WORKSHOP_DIS * (i - 3);
-                sprite.getProgressBar().relocate(x + 100, y + sprite.getHeight());
+                sprite.getProgressBar().relocate(x + 120, y + sprite.getHeight() + (i-4) * 10);
+            }
+            for(int j = 0; j < sprite.getImageViews().size(); j++){
+                sprite.getImageViews().get(j).setFitHeight(520/4);
+                sprite.getImageViews().get(j).setFitWidth(600/4);
             }
             root.getChildren().add(sprite.getProgressBar(0));
             fixSprite(sprite, x, y);
@@ -989,6 +993,9 @@ public class GameView {
 
     private void setUpWell() {
         well = Images.getSpriteAnimation("well");
+        for(ImageView iv: well.getImageViews()){
+            //iv.setFitHeight(100);
+        }
         well.setOnMouseClicked(EventHandlers.getOnMouseClickedEventHandler(Game.getInstance().getWell()));
         well.setState(Game.getInstance().getWell().getLevel());
         fixSprite(well, WELL_X, WELL_Y);

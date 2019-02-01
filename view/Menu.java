@@ -71,6 +71,9 @@ public class Menu {
         background.setFitHeight(600);
         background.setFitWidth(800);
         menuGroup.getChildren().add(background);
+        ImageView farmer = new ImageView(new Image("file:textures/farmer.gif"));
+        farmer.relocate(-15,250);
+        menuGroup.getChildren().add(farmer);
 
         setMute();
         setStart();
