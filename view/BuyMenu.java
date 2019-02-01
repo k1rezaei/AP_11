@@ -123,17 +123,14 @@ public class BuyMenu {
             }
         });
 
-        ok.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                try {
-                    Game.getInstance().go(Game.getInstance().getHelicopter());
-                } catch (Exception e) {
-                    Game.getInstance().getHelicopter().clear();
-                }
-                GameView.getInstance().resume();
-                view.setRoot(GameView.getInstance().getRoot());
+        ok.setOnMouseClicked(event -> {
+            try {
+                Game.getInstance().go(Game.getInstance().getHelicopter());
+            } catch (Exception e) {
+                Game.getInstance().getHelicopter().clear();
             }
+            GameView.getInstance().resume();
+            view.setRoot(GameView.getInstance().getRoot());
         });
 
       /*  clear.setOnMouseClicked(new EventHandler<MouseEvent>() {
