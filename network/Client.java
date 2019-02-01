@@ -3,6 +3,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -65,6 +66,7 @@ public class Client {
 
 
     private static final int BEAR_COST = 200;
+    private static final int START_MONEY = 5000;
     private final boolean isHost;
     private View view;
     private Socket socket;
@@ -80,6 +82,7 @@ public class Client {
     //TODO make money
     private int money;
     private boolean inGame;
+    private boolean inTeamGame;
     private ViewProfile currentViewProfile;
     private Task<Void> read = new Task<Void>() {
         @Override
@@ -91,6 +94,7 @@ public class Client {
             return null;
         }
     };
+    private Pop gameRequest;
 
     Client(View view, boolean isHost) {
         this.view = view;
@@ -197,6 +201,7 @@ public class Client {
 
     //decoding what's server saying.
     private void process(String command, String text) {
+        System.err.println(command);
         Scanner reader = new Scanner(text);
         String item, price, id;
         TeamGame teamGame;
@@ -294,33 +299,72 @@ public class Client {
             case DATA_MONEY:
                 money = reader.nextInt();
                 break;
-            case START_MULTI_PLAYER :
+            case START_MULTI_PLAYER:
                 teamGame = new Gson().fromJson(reader.nextLine(), TeamGame.class);
-                //todo. initial DATA.
-                break ;
-            case DATA_MULTI_PLAYER_GAME :
+                HashMap<String, Integer> goalMap = new HashMap<>();
+                for (String goal : teamGame.getGoals()) goalMap.merge(goal, 1, (a, b) -> a + b);
+                Level level = new Level(300, 200, START_MONEY, 0, goalMap);
+                Game.runMap(level);
+                setInTeamGame(true);
+                Platform.runLater(() -> {
+                    GameView.getInstance().runGame();
+                    view.setRoot(GameView.getInstance().getRoot());
+                });
+                break;
+            case DATA_MULTI_PLAYER_GAME:
                 teamGame = new Gson().fromJson(reader.nextLine(), TeamGame.class);
-                //todo level details afger sell.
-                break ;
-            case IGNORE_PLAY_WITH_ME :
+                goalMap = new HashMap<>();
+                for (String goal : teamGame.getGoals()) goalMap.merge(goal, 1, (a, b) -> a + b);
+                Game.getInstance().getLevel().setGoalEntity(goalMap);
+                break;
+            case IGNORE_PLAY_WITH_ME:
                 id = reader.nextLine();
-                //todo id nmikhad bahat baazi kone :)
-                break ;
-            case WON_MULTI_PLAYER_GAME :
+                Platform.runLater(() -> ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane()));
+                break;
+            case WON_MULTI_PLAYER_GAME:
                 //todo payaan bazi 2 nafare.
-                break ;
-            case PLAY_MULTI_PLAYER_WITH_ME :
+                break;
+            case PLAY_MULTI_PLAYER_WITH_ME:
                 id = reader.nextLine();
-                //todo id mikhad baazi kone bahat.
-                //age mikhai baazi koni, acceptMul request ro seda kon. shoroo mishe.
-                //vagarna decline ro seda kon.
-                break ;
-            case REQUEST_DECLINED :
-                //todo darkhaastet baazit rad shod.
-                break ;
+                if (!inGame) {
+                    Platform.runLater(() -> showGameRequest(id));
+                } else {
+                    declineMultiPlayerRequest(id);
+                }
+                break;
+            case REQUEST_DECLINED:
+                Platform.runLater(this::stopWaitingForTeamGame);
+                break;
             default:
                 System.err.println(command);
         }
+    }
+
+    private boolean stopWaitingForTeamGame() {
+        return currentViewProfile.getRoot().getChildren().remove(currentViewProfile.getGameWaitPop().getStackPane());
+    }
+
+    private void showGameRequest(String id) {
+        HBox options = new HBox();
+        Label accept = new Label("ACCEPT");
+        accept.setId("label_button");
+        Label decline = new Label("DECLINE");
+        decline.setId("label_button");
+        options.getChildren().addAll(accept, decline);
+        options.setSpacing(20);
+        gameRequest = new Pop(options, view.getSnap(), (Group) view.getScene().getRoot(), Pop.AddType.WINDOW);
+        gameRequest.getDisabler().setOnMouseClicked(mouseEvent -> {
+            declineMultiPlayerRequest(id);
+            ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane());
+        });
+        accept.setOnMouseClicked(mouseEvent -> {
+            acceptMultiPlayerRequest(id);
+            ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane());
+        });
+        decline.setOnMouseClicked(mouseEvent -> {
+            declineMultiPlayerRequest(id);
+            ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane());
+        });
     }
 
 
@@ -329,7 +373,7 @@ public class Client {
         command(command);
     }
 
-    public void addMultiplayerRequest(String id) {
+    public void addMultiPlayerRequest(String id) {
         String command = ADD_MULTI_PLAYER_REQUEST + "\n" + id + "\n" + end + "\n";
         command(command);
     }
@@ -453,7 +497,8 @@ public class Client {
     }
 
     private void showMessage(String message) {
-        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(), (Group) view.getScene().getRoot(), Pop.AddType.WINDOW));
+        Platform.runLater(() -> new Pop(new Label(message), view.getSnap(),
+                (Group) view.getScene().getRoot(), Pop.AddType.WINDOW));
     }
 
     public Chatroom getChatroom() {
@@ -506,13 +551,22 @@ public class Client {
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
+        if (!inGame) setInTeamGame(false);
     }
 
-    public void sendTeamGameRequest(String id) {
-        //TODO
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
-    public void rescindTeamGameRequest(String id) {
-        //TODO
+    public void setMyId(String myId) {
+        this.myId = myId;
+    }
+
+    public boolean isInTeamGame() {
+        return inTeamGame;
+    }
+
+    public void setInTeamGame(boolean inTeamGame) {
+        this.inTeamGame = inTeamGame;
     }
 }

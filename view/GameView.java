@@ -208,6 +208,15 @@ public class GameView {
 
     private void endGame() {
         pause();
+        if(client!=null && client.isInTeamGame()){
+            HashMap<String,Integer> goals =Game.getInstance().getLevel().getGoalEntity();
+            for(Map.Entry<String,Integer> goal:goals.entrySet()){
+                for(int i = 0; i < goal.getValue();i++){
+                    client.sendForServerMultiPlayer(goal.getKey());
+                    System.err.println(goal.getKey());
+                }
+            }
+        }
         //TODO in chie namoooooosan? :D
         try {
             Thread.sleep(2000);
