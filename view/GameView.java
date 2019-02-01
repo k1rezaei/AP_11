@@ -619,7 +619,8 @@ public class GameView {
             String type = s[0].split(":")[0];
 
             //System.out.println(type + " , " + s[1]);
-            if (type.startsWith("Req")) {
+            if (type.startsWith("Req") ) {
+
                 Label label = new Label(s[2]);
                 label.setId("money");
 
@@ -627,7 +628,7 @@ public class GameView {
                 img.setFitHeight(GOAL_ICONS_LENGTH);
                 img.setFitWidth(GOAL_ICONS_LENGTH);
 
-                hBox.getChildren().addAll(img, label);
+                if(!s[2].equals("0"))hBox.getChildren().addAll(img, label);
             } else {
                 ImageView img = Images.getImageForGoal(type);
                 img.setFitHeight(GOAL_ICONS_LENGTH);
