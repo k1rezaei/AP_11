@@ -580,8 +580,15 @@ public class GameView {
         goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                VBox vBox = getGoals(level.toString());
-                pop(vBox);
+                VBox vBox;
+                try {
+                    vBox = getGoals(level.toString());
+                    pop(vBox);
+                }catch (Exception e){
+                    if(e.getMessage().equals("refresh")){
+                        vBox = getGoals(level.toString());
+                    }
+                }
             }
         });
     }
@@ -615,7 +622,23 @@ public class GameView {
                 img.setFitHeight(GOAL_ICONS_LENGTH);
                 img.setFitWidth(GOAL_ICONS_LENGTH);
                 Label number = new Label(s[1]);
-                hBox.getChildren().addAll(img, number);
+                Label add = new Label("ADD");
+                add.setId("label_button");
+                add.setStyle("-fx-text-fill: rgb(63, 72, 204);");
+                add.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        try {
+                            Game.getInstance().getWarehouse().remove(type);
+                            client.sellItem(type);
+                            throw new RuntimeException("refresh");
+                        }catch (Exception e){
+                            new Pop("You don't have any", view.getSnap(), root, Pop.AddType.ALERT);
+                        }
+                    }
+                });
+                if(client != null && client.isInTeamGame()) hBox.getChildren().addAll(img, number, add);
+                else hBox.getChildren().addAll(img, number);
             }
             vBox.getChildren().add(hBox);
         }
@@ -661,7 +684,7 @@ public class GameView {
         pause();
         Pop pop = new Pop(vBox, view.getSnap());
         root.getChildren().add(pop.getStackPane());
-        pop.getStackPane().setOnMouseClicked(new EventHandler<MouseEvent>() {
+        pop.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 root.getChildren().remove(pop.getStackPane());
