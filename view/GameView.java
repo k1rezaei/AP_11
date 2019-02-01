@@ -1,7 +1,6 @@
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -220,8 +219,8 @@ public class GameView {
                     stopWorkshops();
                     updateClock(Game.getInstance().getCurrentTurn() / 40);
                     updateWellFilledBar();
-                    for(int i = 0 ;i<5;i++){
-                        if(Game.getInstance().getMoney() < Entity.getNewEntity(NON_WILD[i]).getBuyPrice())
+                    for (int i = 0; i < 5; i++) {
+                        if (Game.getInstance().getMoney() < Entity.getNewEntity(NON_WILD[i]).getBuyPrice())
                             applyGrayscale(buyAnimalIcons[i]);
                         else buyAnimalIcons[i].setEffect(null);
                     }
