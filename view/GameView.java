@@ -633,6 +633,7 @@ public class GameView {
                             client.sellItem(type);
                             throw new RuntimeException("refresh");
                         }catch (Exception e){
+                            if(e.getMessage().equals("refresh")) throw new RuntimeException("refresh");
                             new Pop("You don't have any", view.getSnap(), root, Pop.AddType.ALERT);
                         }
                     }
