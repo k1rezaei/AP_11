@@ -416,6 +416,17 @@ HBox {
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
 
+#label_button .text {
+    -fx-stroke-width: 0;
+    -fx-stroke: transparent;
+}
+
+#label_button:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
 #label_button_small {
     -fx-opacity: 1;
     -fx-text-fill: rgb(63, 72, 204);
@@ -430,18 +441,26 @@ HBox {
     -fx-stroke: transparent;
 }
 
-#label_button .text {
+#label_button_small:hover {
+    -fx-scale-x: 1.2;
+    -fx-scale-y: 1.2;
+}
+
+#label_button_medium {
+    -fx-opacity: 1;
+    -fx-text-fill: rgb(63, 72, 204);
+    -fx-font-size: 40;
+    -fx-font-family: "Showcard Gothic";
+    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
+}
+
+#label_button_medium .text {
+
     -fx-stroke-width: 0;
     -fx-stroke: transparent;
 }
 
-#label_button:hover {
-    -fx-scale-x: 1.2;
-    -fx-scale-y: 1.2;
-    -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
-}
-
-#label_button_small:hover {
+#label_button_medium:hover {
     -fx-scale-x: 1.2;
     -fx-scale-y: 1.2;
 }

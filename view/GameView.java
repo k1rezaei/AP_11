@@ -577,12 +577,9 @@ public class GameView {
         goals.relocate(GOALS_X, GOALS_Y);
         root.getChildren().add(goals);
 
-        goals.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                VBox vBox = getGoals(level.toString());
-                pop(vBox);
-            }
+        goals.setOnMouseClicked(event -> {
+            VBox vBox = getGoals(level.toString());
+            pop(vBox);
         });
     }
 
