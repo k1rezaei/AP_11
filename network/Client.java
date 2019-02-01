@@ -344,7 +344,11 @@ public class Client {
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
                 setMoney(money + reward);
-                inTeamGame = false;
+                if (inTeamGame) {
+                    setInGame(false);
+                    GameView.getInstance().pause();
+                    view.setRoot(multiPlayerMenu.getRoot());
+                }
                 break;
             case PLAY_MULTI_PLAYER_WITH_ME:
                 id = reader.nextLine();

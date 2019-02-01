@@ -807,14 +807,12 @@ public class GameView {
 
             Pop menu = new Pop(vBox, view.getSnap(), root, Pop.AddType.BUTTONS_TEXT);
 
-
             no.setOnMouseClicked(event1 -> backToMenu());
 
             yes.setOnMouseClicked(event12 -> {
                 try {
                     Game.getInstance().saveGame("SaveGame");
                 } catch (Exception e) {
-
                 }
                 backToMenu();
             });
@@ -824,12 +822,9 @@ public class GameView {
                 resume();
             });
 
-            menu.getDisabler().setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    resume();
-                    root.getChildren().remove(menu.getStackPane());
-                }
+            menu.getDisabler().setOnMouseClicked(event14 -> {
+                resume();
+                root.getChildren().remove(menu.getStackPane());
             });
 
           /* OLD_VERISON Alert alert = new Alert(Alert.AlertType.NONE);
@@ -871,9 +866,9 @@ public class GameView {
         Menu backMenu = new Menu(view);
         if (client == null) view.setRoot(backMenu.getRoot());
         else {
+            if (client.isInTeamGame()) client.suddenGameEnd();
             client.setInGame(false);
             view.setRoot(client.getMultiPlayerMenu().getRoot());
-            if (client.isInTeamGame()) client.suddenGameEnd();
         }
         game.stop();
     }

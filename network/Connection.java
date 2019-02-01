@@ -334,27 +334,28 @@ public class Connection {
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer1());
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer2());
                 if (finished) {
-                    command = WON_MULTI_PLAYER_GAME + "\n" + teamGameF.getReward() + "\n" + end + "\n";
-                    server.command(command, teamGameF.getPlayer1());
-                    server.command(command, teamGameF.getPlayer2());
+                    String command1 = WON_MULTI_PLAYER_GAME + "\n" + teamGameF.getReward() + "\n" + end + "\n";
+                    server.command(command1, teamGameF.getPlayer1());
+                    server.command(command1, teamGameF.getPlayer2());
                     server.getTeamGames().remove(teamGameF);
                 }
                 break;
             case END_TEAM_GAME:
-                command = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                System.err.println(command);
                 teamGameF = null;
                 for (TeamGame t : server.getTeamGames()) {
                     if (t.hasPlayer(person.getId())) {
                         teamGameF = t;
                     }
                 }
+                String command1 = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
                 try {
-                    server.command(command, teamGameF.getPlayer1());
+                    server.command(command1, teamGameF.getPlayer1());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 try {
-                    server.command(command, teamGameF.getPlayer2());
+                    server.command(command1, teamGameF.getPlayer2());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -363,6 +364,7 @@ public class Connection {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                break;
             default:
                 System.err.println("Unknown command");
 
