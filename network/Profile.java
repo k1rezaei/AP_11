@@ -55,6 +55,10 @@ public class Profile {
     private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
     private static final String REQUEST_DECLINED = "request_declined";
 
+    private static final String ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY = "add_message_to_in_game_chat_with_reply";
+    private static final String ADD_MESSAGE_IN_GAME_CHAT = "add_message_in_game_chat";
+    private static final String DATA_IN_GAME_CHAT = "data_in_game_chat";
+
     private Person person;
     private Socket socket;
     private Formatter formatter;
@@ -192,20 +196,16 @@ public class Profile {
                 server.addMessageToChatRoom(talk);
                 break;
             case ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY:
-                StringBuilder txt = new StringBuilder();
-                while (true) {
-                    String line = reader.nextLine();
-                    if (line.equals(SPLIT)) break;
-                    txt.append(line + "\n");
-                }
-                Talk talkWithReply = new Talk(person.getId(), txt.toString());
-                txt = new StringBuilder();
-                while (reader.hasNextLine()) {
-                    String line = reader.nextLine();
-                    txt.append(line + "\n");
-                }
-                talkWithReply.setRepliedText(txt.toString());
+                Talk talkWithReply = getTalkWithReply(reader);
                 server.addMessageToChatRoom(talkWithReply);
+                break;
+            case ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY:
+                talkWithReply = getTalkWithReply(reader);
+                addInGameMessage(talkWithReply);
+                break;
+            case ADD_MESSAGE_IN_GAME_CHAT:
+                talk = new Talk(person.getId(), data);
+                addInGameMessage(talk);
                 break;
             case UPDATE_SCOREBOARD:
                 String level = reader.nextLine();
@@ -289,14 +289,14 @@ public class Profile {
                 id = reader.nextLine();
                 server.command(PLAY_MULTI_PLAYER_WITH_ME + "\n" + person.getId() + "\n" + end + "\n", id);
                 break;
-            case REMOVE_MULTI_PLAYER_REQUEST :
+            case REMOVE_MULTI_PLAYER_REQUEST:
                 id = reader.nextLine();
                 server.command(IGNORE_PLAY_WITH_ME + "\n" + person.getId() + "\n" + end + "\n", id);
-                break ;
-            case DECLINE_MULTI_PLAYER_REQUEST :
+                break;
+            case DECLINE_MULTI_PLAYER_REQUEST:
                 id = reader.nextLine();
                 server.command(REQUEST_DECLINED + "\n" + end + "\n", id);
-                break ;
+                break;
             case ACCEPT_MULTI_PLAYER_REQUEST:
                 id = reader.nextLine();
                 ArrayList<String> randomItems = server.getRandomGoals();
@@ -343,6 +343,36 @@ public class Profile {
                 System.err.println("Unknown command");
 
         }
+    }
+
+    private void addInGameMessage(Talk message) {
+        for (TeamGame teamGame : server.getTeamGames()) {
+            if (teamGame.hasPlayer(person.getId())) {
+                teamGame.addMessage(message);
+                String messageCommand = DATA_IN_GAME_CHAT + "\n" +
+                        new Gson().toJson(teamGame.getMessages().toArray(new Talk[0]), Talk[].class)
+                        + "\n" + end + "\n";
+                server.command(messageCommand, teamGame.getPlayer1());
+                server.command(messageCommand, teamGame.getPlayer2());
+            }
+        }
+    }
+
+    private Talk getTalkWithReply(Scanner reader) {
+        StringBuilder txt = new StringBuilder();
+        while (true) {
+            String line = reader.nextLine();
+            if (line.equals(SPLIT)) break;
+            txt.append(line + "\n");
+        }
+        Talk talkWithReply = new Talk(person.getId(), txt.toString());
+        txt = new StringBuilder();
+        while (reader.hasNextLine()) {
+            String line = reader.nextLine();
+            txt.append(line + "\n");
+        }
+        talkWithReply.setRepliedText(txt.toString());
+        return talkWithReply;
     }
 
     //start listening client's commands;

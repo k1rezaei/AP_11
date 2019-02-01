@@ -55,7 +55,7 @@ public class GameView {
     private static final int EXIT_Y = 550;
     private static final int MONEY_X = 600;
     private static final int MONEY_Y = 35;
-    private static final int MENU_X = 110;
+    private static final int MENU_X = 75;
     private static final int MENU_Y = 550;
     private static final int MENU_WIDTH = 100;
     private static final int MENU_HEIGHT = 50;
@@ -74,17 +74,20 @@ public class GameView {
     private static final int ROAD_Y = 10;
     private static final int TRUCK_MINI_Y = 35;
     private static final int VEHICLE_MINI_TRAVEL = 130;
+    private static final int CHAT_X = 150;
+    private static final int CHAT_Y = 550;
     private static final String LABEL_BUTTON = "label_button";
     private static final float ITEM_FADE_TIME = 100;
     private static final Image info = new Image("file:textures/info.png");
     private static final Image END_GIF = new Image("file:textures/end3.gif");
     private static final Image COIN_GIF = new Image("file:textures/coin3.gif");
-    final private static Image pashImage = new Image("file:textures/mosquito.gif");
+    private static final Image pashImage = new Image("file:textures/mosquito.gif");
     private static final Image ROAD = new Image("file:textures/road.png");
     private static final Image FF1 = new Image("file:textures/fastForward/fastForward1.png");
     private static final Image FF2 = new Image("file:textures/fastForward/fastForward2.png");
     private static final Image BACK = new Image("file:textures/back.png");
     private static final Image UPGRADE_ICON = new Image("file:textures/upgradeIcon1.png");
+    private static final String SMALL_BUTTON_ID = "label_button_small";
 
     static {
         REFRESHER.setVisible(false);
@@ -220,9 +223,13 @@ public class GameView {
                     updateClock(Game.getInstance().getCurrentTurn() / 40);
                     updateWellFilledBar();
                     for (int i = 0; i < 5; i++) {
-                        if (Game.getInstance().getMoney() < Entity.getNewEntity(NON_WILD[i]).getBuyPrice())
+                        if (Game.getInstance().getMoney() < Entity.getNewEntity(NON_WILD[i]).getBuyPrice()) {
                             applyGrayscale(buyAnimalIcons[i]);
-                        else buyAnimalIcons[i].setEffect(null);
+                            buyAnimalIcons[i].setId(null);
+                        } else {
+                            buyAnimalIcons[i].setEffect(null);
+                            buyAnimalIcons[i].setId("glow");
+                        }
                     }
                     moneyLabel.setText(Integer.toString(Game.getInstance().getMoney()));
                     if (Game.getInstance().checkLevel()) endGame();
@@ -528,9 +535,20 @@ public class GameView {
         setUpTruckMini();
         setUpMenuButton();
         setUpStructrues();
+        setUpChatButton();
         root.getChildren().add(entityRoot);
         root.getChildren().add(infoRoot);
         root.getChildren().add(focus.getRoot());
+    }
+
+    private void setUpChatButton() {
+        if (client != null && client.isInTeamGame()) {
+            Label chat = new Label("CHAT");
+            chat.setId(SMALL_BUTTON_ID);
+            chat.setOnMouseClicked(mouseEvent -> view.setRoot(client.getInGameChat().getRoot()));
+            chat.relocate(CHAT_X,CHAT_Y);
+            root.getChildren().add(chat);
+        }
     }
 
     private void setStyle(SpriteAnimation spriteAnimation) {

@@ -58,7 +58,7 @@ public class Chatroom {
             if (event.getCode() == KeyCode.ENTER) sendMessage();
         });
 
-        back.setOnMouseClicked(event -> view.setRoot(client.getMultiPlayerMenu().getRoot()));
+        back.setOnMouseClicked(event -> view.goBack());
         textField.relocate(30 + 400 - WIDTH / 2, 300 + HEIGHT / 2);
         textField.setMinSize(WIDTH - 90, 30);
         textField.setMaxSize(WIDTH - 90, 30);
@@ -159,8 +159,10 @@ public class Chatroom {
             messageHBox.setStyle("-fx-alignment: center-left");
             Label sender = new Label(talks[i].getSender());
             sender.setId("sender");
-            int finalI = i;
-            sender.setOnMouseClicked(mouseEvent -> client.getPerson(talks[finalI].getSender()));
+            if(!client.isInTeamGame()) {
+                int finalI = i;
+                sender.setOnMouseClicked(mouseEvent -> client.getPerson(talks[finalI].getSender()));
+            }
             Label text = new Label(talks[i].getText());
             text.setId("message");
 

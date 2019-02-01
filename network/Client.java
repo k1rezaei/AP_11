@@ -64,9 +64,14 @@ public class Client {
     private static final String DECLINE_MULTI_PLAYER_REQUEST = "decline_multi_player_request";
     private static final String REQUEST_DECLINED = "request_declined";
 
+    private static final String ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY = "add_message_to_in_game_chat_with_reply";
+    private static final String ADD_MESSAGE_IN_GAME_CHAT = "add_message_in_game_chat";
+    private static final String DATA_IN_GAME_CHAT = "data_in_game_chat";
+
 
     private static final int BEAR_COST = 200;
     private static final int START_MONEY = 5000;
+
     private final boolean isHost;
     private View view;
     private Socket socket;
@@ -78,6 +83,7 @@ public class Client {
     private MultiPlayerMenu multiPlayerMenu;
     private Inbox inbox;
     private Shop shop;
+    private Chatroom inGameChat;
     private String myId;
     //TODO make money
     private int money;
@@ -104,6 +110,7 @@ public class Client {
         inbox = new Inbox(view, this);
         shop = new Shop(view, this);
         this.isHost = isHost;
+        inGameChat = new Chatroom(view, this);
     }
 
     public Scoreboard getScoreboard() {
@@ -206,18 +213,21 @@ public class Client {
         String item, price, id;
         TeamGame teamGame;
         switch (command) {
-            case DATA_CHAT_ROOM: {
+            case DATA_CHAT_ROOM:
                 Gson gson = new Gson();
                 Talk[] talks = gson.fromJson(text, Talk[].class);
                 Platform.runLater(() -> chatroom.setContent(talks));
                 break;
-            }
-            case DATA_SCOREBOARD: {
-                Gson gson = new Gson();
+            case DATA_IN_GAME_CHAT:
+                gson = new Gson();
+                talks = gson.fromJson(text, Talk[].class);
+                Platform.runLater(() -> inGameChat.setContent(talks));
+                break;
+            case DATA_SCOREBOARD:
+                gson = new Gson();
                 Person[] people = gson.fromJson(text, Person[].class);
                 Platform.runLater(() -> scoreboard.setContent(people));
                 break;
-            }
             case DATA_ITEM_COST:
                 item = reader.nextLine();
                 price = reader.nextLine();/*
@@ -311,6 +321,7 @@ public class Client {
                 Game.runMap(level);
                 setInTeamGame(true);
                 Platform.runLater(() -> {
+                    inGameChat.setContent(new Talk[0]);
                     GameView.getInstance().runGame();
                     view.setRoot(GameView.getInstance().getRoot());
                 });
@@ -320,7 +331,7 @@ public class Client {
                 goalMap = new HashMap<>();
                 for (String goal : teamGame.getGoals()) goalMap.merge(goal, 1, (a, b) -> a + b);
                 Game.getInstance().getLevel().setGoalEntity(goalMap);
-                Platform.runLater(()->GameView.getInstance().refreshGoals(Game.getInstance().getLevel().toString()));
+                Platform.runLater(() -> GameView.getInstance().refreshGoals(Game.getInstance().getLevel().toString()));
                 break;
             case IGNORE_PLAY_WITH_ME:
                 id = reader.nextLine();
@@ -402,7 +413,13 @@ public class Client {
     }
 
     public void addMessageToChatRoom(String text, String repliedText) {
-        String command = ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY + "\n" +
+        String command;
+        if (!isInTeamGame()) command = ADD_MESSAGE_TO_CHAT_ROOM_WITH_REPLY + "\n" +
+                text + "\n"
+                + SPLIT + "\n"
+                + repliedText + "\n"
+                + end + "\n";
+        else command = ADD_MESSAGE_TO_IN_GAME_CHAT_WITH_REPLY + "\n" +
                 text + "\n"
                 + SPLIT + "\n"
                 + repliedText + "\n"
@@ -411,7 +428,10 @@ public class Client {
     }
 
     public void addMessageToChatRoom(String text) {
-        String command = ADD_MESSAGE_TO_CHAT_ROOM + "\n" + text + '\n' + end + "\n";
+        String command;
+        if (!isInTeamGame())
+            command = ADD_MESSAGE_TO_CHAT_ROOM + "\n" + text + '\n' + end + "\n";
+        else command = ADD_MESSAGE_IN_GAME_CHAT + "\n" + text + '\n' + end + "\n";
         command(command);
     }
 
@@ -576,4 +596,9 @@ public class Client {
     public void setInTeamGame(boolean inTeamGame) {
         this.inTeamGame = inTeamGame;
     }
+
+    public Chatroom getInGameChat() {
+        return inGameChat;
+    }
+
 }
