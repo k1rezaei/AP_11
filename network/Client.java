@@ -320,6 +320,7 @@ public class Client {
                 goalMap = new HashMap<>();
                 for (String goal : teamGame.getGoals()) goalMap.merge(goal, 1, (a, b) -> a + b);
                 Game.getInstance().getLevel().setGoalEntity(goalMap);
+                Platform.runLater(()->GameView.getInstance().refreshGoals(Game.getInstance().getLevel().toString()));
                 break;
             case IGNORE_PLAY_WITH_ME:
                 id = reader.nextLine();
