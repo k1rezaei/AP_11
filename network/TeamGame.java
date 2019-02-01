@@ -3,12 +3,17 @@ import java.util.ArrayList;
 public class TeamGame {
     private String player1, player2;
     private ArrayList<String> goals = new ArrayList<>();
+    private int reward = 0;
 
-    public TeamGame(String player1, String player2, ArrayList<String> goals) {
+    public TeamGame(String player1, String player2, ArrayList<String> goals, int reward) {
         this.player1 = player1;
         this.player2 = player2;
         this.goals = goals;
+        this.reward = reward;
+
     }
+
+    public int getReward() {return reward; }
 
     public void remove(String goal) {
         goals.remove(goal);

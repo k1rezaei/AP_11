@@ -6,7 +6,7 @@ public class Level {
     private int goalMoney;
     private HashMap<String, Integer> goalEntity;
     private int n, m;
-    private ArrayList<String> itemList;
+    private ArrayList<String> itemList = new ArrayList<>();
 
     //TODO Initial Entities
     public Level(int n, int m, int startMoney, int goalMoney, HashMap<String, Integer> goalEntity) {

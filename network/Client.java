@@ -4,7 +4,6 @@ import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -323,6 +322,7 @@ public class Client {
                 Platform.runLater(() -> ((Group) view.getScene().getRoot()).getChildren().remove(gameRequest.getStackPane()));
                 break;
             case WON_MULTI_PLAYER_GAME:
+                int reward = reader.nextInt();
                 //todo payaan bazi 2 nafare.
                 break;
             case PLAY_MULTI_PLAYER_WITH_ME:
