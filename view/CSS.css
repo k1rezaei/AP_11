@@ -402,7 +402,9 @@ HBox {
     -fx-border-color: darkblue;
     -fx-border-radius: 50;
 }
-
+#middle {
+    -fx-alignment: center;
+}
 #glow:hover {
     -fx-effect: innershadow(three-pass-box, rgba(255, 255, 255, 0.7), 6, 0.0, 0, 2);
 }
