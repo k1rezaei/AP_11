@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -347,9 +348,9 @@ public class Client {
     private void showGameRequest(String id) {
         HBox options = new HBox();
         Label accept = new Label("ACCEPT");
-        accept.setId("label_button");
+        accept.setId("label_button_medium");
         Label decline = new Label("DECLINE");
-        decline.setId("label_button");
+        decline.setId("label_button_medium");
         options.getChildren().addAll(accept, decline);
         options.setSpacing(20);
         gameRequest = new Pop(options, view.getSnap(), (Group) view.getScene().getRoot(), Pop.AddType.WINDOW);

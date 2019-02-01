@@ -93,6 +93,7 @@ public class Server {
             }
         }
     };
+    private Random random = new Random();
 
 
     public Server(int port) {
@@ -373,7 +374,6 @@ public class Server {
     synchronized public ArrayList<TeamGame> getTeamGames() {return teamGames;}
 
     public ArrayList<String> getRandomGoals() {
-        Random random = new Random();
         int number = 4, size = itemList.length;
         ArrayList<String> goals = new ArrayList<>();
         for (int i=0; i<number; i++) {

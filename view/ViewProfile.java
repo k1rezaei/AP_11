@@ -107,7 +107,7 @@ public class ViewProfile {
         getTeamGame().setOnMouseClicked(mouseEvent -> {
             client.addMultiPlayerRequest(person.getId());
             Label stop = new Label("Stop Waiting");
-            stop.setId("label_button");
+            stop.setId("label_button_medium");
             gameWaitPop = new Pop(new VBox(stop), view.getSnap(), root, Pop.AddType.WINDOW);
             gameWaitPop.getDisabler().setOnMouseClicked(mouseEvent1 -> {
                 client.removeMultiPlayerRequest(person.getId());
