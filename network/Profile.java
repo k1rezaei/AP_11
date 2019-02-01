@@ -4,6 +4,7 @@ import javafx.concurrent.Task;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Formatter;
 import java.util.Scanner;
 
@@ -298,7 +299,9 @@ public class Profile {
                 break ;
             case ACCEPT_MULTI_PLAYER_REQUEST:
                 id = reader.nextLine();
-                TeamGame teamGame = new TeamGame(person.getId(), id, server.getRandomGoals());
+                ArrayList<String> randomItems = server.getRandomGoals();
+                int reward = server.getCost(randomItems);
+                TeamGame teamGame = new TeamGame(person.getId(), id, randomItems, reward);
 
                 //save kardan baazi haaye dar haale ejra dar server.
                 server.getTeamGames().add(teamGame);
@@ -330,7 +333,7 @@ public class Profile {
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer1());
                 server.command(DATA_MULTI_PLAYER_GAME + "\n" + json + "\n" + end + "\n", teamGameF.getPlayer2());
                 if (finished) {
-                    command = WON_MULTI_PLAYER_GAME + "\n" + end + "\n";
+                    command = WON_MULTI_PLAYER_GAME + "\n" + teamGameF.getReward() + "\n" + end + "\n";
                     server.command(command, teamGameF.getPlayer1());
                     server.command(command, teamGameF.getPlayer2());
                     server.getTeamGames().remove(teamGameF);
