@@ -2,7 +2,7 @@
   "startMoney": 5000,
   "goalMoney": 5000,
   "goalEntity": {
-    "Cow": 3
+    "cow": 3
   },
   "n": 300,
   "m": 200,

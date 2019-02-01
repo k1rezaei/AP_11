@@ -81,6 +81,7 @@ public class Game {
     }
 
     public static void runMap(Level level) {
+        System.err.println(level.toString());
         game = new Game();
         game.level = level;
         Cell.setN(level.getN());
@@ -385,6 +386,7 @@ public class Game {
     public boolean checkLevel() {
         boolean result = money >= level.getGoalMoney();
         for (String name : level.getGoalEntity().keySet()) {
+            //TODO check type
             result &= level.getNumber(name) <= warehouse.getNumber(name) + map.getNumber(name);
         }
         return result;

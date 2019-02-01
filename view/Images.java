@@ -102,6 +102,9 @@ public class Images {
 
     static ImageView getImageForGoal(String type) {
         if (type.equals("money")) return new ImageView(new Image("file:textures/goal/coin.gif"));
-        return new ImageView(new Image("file:textures/goal/" + type + ".png"));
+        ImageView imageView = getSpriteAnimation(type).getImageView();
+        imageView.setFitHeight(70);
+        imageView.setFitWidth(70);
+        return imageView;
     }
 }
