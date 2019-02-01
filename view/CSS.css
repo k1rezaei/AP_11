@@ -363,7 +363,10 @@ HBox {
     -fx-border-color: white;
     -fx-border-width: 2px;
     -fx-border-radius: 50;
+
 }
+
+
 
 #vBox_menu .label .text {
     -fx-stroke: blue;
@@ -524,3 +527,8 @@ HBox {
 }
 
 
+#lgo {
+    -fx-background-color: rgba(0,50,0,1);
+    -fx-background-radius: 30;
+    -fx-background-insets: -5;
+}

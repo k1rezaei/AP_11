@@ -72,8 +72,18 @@ public class Menu {
         background.setFitWidth(800);
         menuGroup.getChildren().add(background);
         ImageView farmer = new ImageView(new Image("file:textures/farmer.gif"));
+        ImageView ll = new ImageView(new Image("file:textures/Untitled.png"));
+
+        ll.setFitWidth(390);
+        ll.setFitHeight(100);
+        Label logo = new Label();
+        logo.setGraphic(ll);
+        logo.relocate(280,100);
+        logo.setId("lgo");
+
         farmer.relocate(-15,250);
-        menuGroup.getChildren().add(farmer);
+
+        menuGroup.getChildren().addAll(farmer, logo);
 
         setMute();
         setStart();
