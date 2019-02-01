@@ -8,6 +8,9 @@ public class Person {
     private ArrayList<String> friends = new ArrayList<>();
     private ArrayList<String> followings = new ArrayList<>();
     private ArrayList<String> followers = new ArrayList<>();
+
+
+
     private ArrayList<String> teamGames = new ArrayList<>();
 
     private ArrayList<Talk> inbox = new ArrayList<>();
@@ -74,6 +77,8 @@ public class Person {
     synchronized public ArrayList<String> getFollowers() {
         return followers;
     }
+
+    synchronized public ArrayList<String> getTeamGames() { return teamGames; }
 
     public ArrayList<Talk> getInbox() {
         return inbox;

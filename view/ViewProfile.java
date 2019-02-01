@@ -1,7 +1,9 @@
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -17,7 +19,7 @@ public class ViewProfile {
     public static final int POS_Y = 50;
     public static final int BOX_WIDTH = 600;
     public static final int BOX_HEIGHT = 500;
-    final private static int CNT = 9;
+    final private static int CNT = 10;
     private static final int POS_X = 270;
     private View view;
     private Client client;
@@ -47,7 +49,8 @@ public class ViewProfile {
         labels[5].setText("Friends");
         labels[6].setText("Send Bear");
         labels[7].setText("Team Game");
-        labels[8].setText("Back");
+        labels[8].setText("Games List");
+        labels[9].setText("Back");
         Label name = new Label("Nickname : " + person.getName());
         Label id = new Label("ID : " + person.getId());
         Label level = new Label("Level : " + person.getLevel());
@@ -77,6 +80,31 @@ public class ViewProfile {
         getAddFriend().setOnMouseClicked(mouseEvent -> {
             client.addFriendRequest(person.getId());
             new Pop(new Label("Friend Request Sent"), view.getSnap(), root, Pop.AddType.ALERT);
+        });
+        getGamesList().setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                ScrollPane scrollPane = new ScrollPane();
+                scrollPane.setId("middle");
+                VBox list = new VBox();
+                list.setId("middle");
+                list.setAlignment(Pos.CENTER);
+                int cnt = 0;
+                for(String id : person.getTeamGames()){
+                    Label label = new Label(id);
+                    if(person.getId().equals(client.getMyId())) list.getChildren().add(label);
+                    else if(id.equals(client.getMyId())) cnt++;
+                }
+                if(!person.getId().equals(client.getMyId())){
+                    Label label = new Label(cnt + "");
+                    list.getChildren().add(label);
+                }
+                scrollPane.setFitToHeight(true);
+                scrollPane.setFitToWidth(true);
+                scrollPane.setContent(list);
+                Pop pop = new Pop(scrollPane, view.getSnap(), root, Pop.AddType.WINDOW);
+
+            }
         });
         getPrivateMessage().setOnMouseClicked(mouseEvent -> {
             HBox message = new HBox();
@@ -152,9 +180,12 @@ public class ViewProfile {
         return labels[7];
     }
 
+    private Label getGamesList(){ return labels[8];}
+
     private Label getBack() {
-        return labels[8];
+        return labels[9];
     }
+
 
     /*private void show(Group group) {
         Pop pop = new Pop(group, view.getSnap());
