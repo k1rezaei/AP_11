@@ -369,8 +369,9 @@ public class Client {
         }
     }
 
-    private boolean stopWaitingForTeamGame() {
-        return currentViewProfile.getRoot().getChildren().remove(currentViewProfile.getGameWaitPop().getStackPane());
+    private void stopWaitingForTeamGame() {
+        currentViewProfile.getRoot().getChildren().remove(currentViewProfile.getGameWaitPop().getStackPane());
+        showMessage("Game Request Declined");
     }
 
     private void showGameRequest(String id) {
