@@ -252,10 +252,11 @@ public class Client {
             case DATA_INBOX:
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 Platform.runLater(() -> {
-                    inbox.setContent(messages);
-                    if (!inGame && messages.length > 0 && !messages[messages.length - 1].getSender().equals(myId)) {
+                    if (!inGame && inbox.isInitialized() &&
+                            messages.length > 0 && !messages[messages.length - 1].getSender().equals(myId)) {
                         showMessage("You have a new private message.");
                     }
+                    inbox.setContent(messages);
                 });
                 break;
             case DATA_FRIENDS:
@@ -344,7 +345,9 @@ public class Client {
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
                 setMoney(money + reward);
-                if (inTeamGame && !Game.getInstance().checkLevel()) {
+                break;
+            case END_TEAM_GAME:
+                if (inTeamGame) {
                     setInGame(false);
                     GameView.getInstance().pause();
                     view.setRoot(multiPlayerMenu.getRoot());

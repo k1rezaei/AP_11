@@ -10,6 +10,7 @@ public class Inbox {
     private Client client;
     private View view;
     private Group root = new Group();
+    private boolean initialized = false;
 
     public Inbox(View view, Client client) {
         this.client = client;
@@ -28,6 +29,7 @@ public class Inbox {
     }
 
     public void setContent(Talk[] talks) {
+        initialized |= talks.length > 0;
         VBox senderNames = new VBox();
         VBox recipientNames = new VBox();
         VBox messages = new VBox();
@@ -56,5 +58,9 @@ public class Inbox {
 
     public void setRoot(Group root) {
         this.root = root;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }
