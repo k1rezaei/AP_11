@@ -68,7 +68,9 @@ public class SpriteAnimation extends Transition {
         if (index != lastIndex) {
             int x = (index % columns.get(state)) * widths.get(state);
             int y = (index / columns.get(state)) * heights.get(state);
-            if(state == 1) x = (columns.get(state)  - 1) * widths.get(state) - x;
+            if(state == 1 && counts.get(state) == 24) x = (columns.get(state)  - 1) * widths.get(state) - x;
+
+
             imageViews.get(state).setViewport(new Rectangle2D(x, y, widths.get(state), heights.get(state)));
             lastIndex = index;
         }
