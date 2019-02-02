@@ -250,10 +250,12 @@ public class GameView {
                 }
             }
         }
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        if(view.BUG_KHORD) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         root.getChildren().clear();
         ImageView imageView = new ImageView(END_GIF);
