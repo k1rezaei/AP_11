@@ -19,6 +19,7 @@ public class View extends Application {
     private boolean mute = true;
     private Stage primaryStage;
     private Scene scene;
+    final public static boolean BUG_KHORD = false;
 
     public static void main(String[] args) {
         launch(args);
