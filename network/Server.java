@@ -20,7 +20,7 @@ public class Server {
     private static final String DATA_PERSON = "data_person";
     private static final String DATA_WAREHOUSE = "data_warehouse";
     private static final int BASE_NUMBER_OF_ITEMS = 4;
-    private static final String WON_MULTI_PLAYER_GAME = "won_multi_player_game";
+    private static final String END_TEAM_GAME = "end_team_game";
 
     private ArrayList<Connection> connections = new ArrayList<>();
     private Server me;
@@ -236,7 +236,7 @@ public class Server {
         for (TeamGame teamGame : teamGames) {
             if (teamGame.hasPlayer(person.getId())) {
                 teamGames.remove(teamGame);
-                String command = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                String command = END_TEAM_GAME + "\n" + end + "\n";
                 try {
                     command(command, teamGame.getPlayer2());
                 } catch (Exception e) {

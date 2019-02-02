@@ -348,7 +348,7 @@ public class Connection {
                         teamGameF = t;
                     }
                 }
-                String command1 = WON_MULTI_PLAYER_GAME + "\n" + 0 + "\n" + end + "\n";
+                String command1 = END_TEAM_GAME + "\n" + end + "\n";
                 try {
                     server.command(command1, teamGameF.getPlayer1());
                 } catch (Exception e) {

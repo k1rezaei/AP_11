@@ -252,10 +252,11 @@ public class Client {
             case DATA_INBOX:
                 Talk[] messages = new Gson().fromJson(reader.nextLine(), Talk[].class);
                 Platform.runLater(() -> {
-                    inbox.setContent(messages);
-                    if (!inGame && messages.length > 0 && !messages[messages.length - 1].getSender().equals(myId)) {
+                    if (!inGame && inbox.isInitialized() &&
+                            messages.length > 0 && !messages[messages.length - 1].getSender().equals(myId)) {
                         showMessage("You have a new private message.");
                     }
+                    inbox.setContent(messages);
                 });
                 break;
             case DATA_FRIENDS:
@@ -308,7 +309,7 @@ public class Client {
                 break;
             case BEAR_DID_NOT_ADD:
                 id = reader.nextLine();
-                showMessage("Failed to send bear. " + id + " is not online");
+                showMessage("Failed to send bear. " + id + " is not in game.");
                 break;
             case ADD_BEAR_TO_YOUR_MAP:
                 if (!inGame) System.err.println("NOT IN GAME");
@@ -344,7 +345,9 @@ public class Client {
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
                 setMoney(money + reward);
-                if (inTeamGame && !Game.getInstance().checkLevel()) {
+                break;
+            case END_TEAM_GAME:
+                if (inTeamGame) {
                     setInGame(false);
                     GameView.getInstance().pause();
                     view.setRoot(multiPlayerMenu.getRoot());
@@ -366,8 +369,9 @@ public class Client {
         }
     }
 
-    private boolean stopWaitingForTeamGame() {
-        return currentViewProfile.getRoot().getChildren().remove(currentViewProfile.getGameWaitPop().getStackPane());
+    private void stopWaitingForTeamGame() {
+        currentViewProfile.getRoot().getChildren().remove(currentViewProfile.getGameWaitPop().getStackPane());
+        showMessage("Game Request Declined");
     }
 
     private void showGameRequest(String id) {
