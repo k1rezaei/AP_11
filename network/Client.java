@@ -344,7 +344,7 @@ public class Client {
             case WON_MULTI_PLAYER_GAME:
                 int reward = reader.nextInt();
                 setMoney(money + reward);
-                if (inTeamGame) {
+                if (inTeamGame && !Game.getInstance().checkLevel()) {
                     setInGame(false);
                     GameView.getInstance().pause();
                     view.setRoot(multiPlayerMenu.getRoot());
