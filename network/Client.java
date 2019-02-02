@@ -309,7 +309,7 @@ public class Client {
                 break;
             case BEAR_DID_NOT_ADD:
                 id = reader.nextLine();
-                showMessage("Failed to send bear. " + id + " is not online");
+                showMessage("Failed to send bear. " + id + " is not in game.");
                 break;
             case ADD_BEAR_TO_YOUR_MAP:
                 if (!inGame) System.err.println("NOT IN GAME");
